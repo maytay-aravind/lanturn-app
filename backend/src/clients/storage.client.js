@@ -45,8 +45,6 @@ export async function signUploadUrl({ uid, kind, mimeType, sizeBytes }) {
     contentType: mimeType,
   });
 
-  // Make publicly readable (for display in the app)
-  await file.makePublic();
   const publicUrl = file.publicUrl();
 
   return {
