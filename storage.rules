@@ -1,0 +1,9 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Development: allow all access in emulator. Tighten for production.
+    match /{allPaths=**} {
+      allow read, write: if true;
+    }
+  }
+}
