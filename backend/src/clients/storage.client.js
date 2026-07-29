@@ -45,7 +45,8 @@ export async function signUploadUrl({ uid, kind, mimeType, sizeBytes }) {
     contentType: mimeType,
   });
 
-  const publicUrl = file.publicUrl();
+  // Use Firebase URL format which is free and respects Firebase Security Rules
+  const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(objectPath)}?alt=media`;
 
   return {
     uploadUrl: signedUrl,
@@ -63,8 +64,7 @@ export function getPublicUrl(objectPath) {
     const emulatorHost = env.STORAGE_EMULATOR_HOST || 'localhost:9199';
     return `http://${emulatorHost}/v0/b/${bucket.name}/o/${encodeURIComponent(objectPath)}?alt=media`;
   }
-  const file = bucket.file(objectPath);
-  return file.publicUrl();
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(objectPath)}?alt=media`;
 }
 
 function mimeTypeToExt(mime) {
