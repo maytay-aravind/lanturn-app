@@ -37,6 +37,22 @@ function toDbPayload(data) {
   return p;
 }
 
+/** Minimal default row for a student who skipped onboarding details */
+function defaultStudentRow(uid) {
+  return {
+    uid,
+    personal:           {},
+    academic:           {},
+    professional:       { skills: [], projects: [], experience: [], certifications: [] },
+    social:             {},
+    searchable_skills:  [],
+    graduation_year:    null,
+    profile_photo_url:  '',
+    resume_url:         '',
+    resume_text:        '',
+  };
+}
+
 export const studentsRepo = {
   async getById(uid) {
     const { data, error } = await supabase
@@ -59,6 +75,11 @@ export const studentsRepo = {
     return rowToStudent(upserted);
   },
 
+  /**
+   * Update an existing student row.
+   * Uses maybeSingle() so it doesn't throw when 0 rows are matched
+   * (which happens when the student skipped onboarding details).
+   */
   async update(uid, data) {
     const payload = toDbPayload(data);
     const { data: updated, error } = await supabase
@@ -66,9 +87,23 @@ export const studentsRepo = {
       .update(payload)
       .eq('uid', uid)
       .select()
-      .single();
+      .maybeSingle();
     if (error) throw error;
     return rowToStudent(updated);
+  },
+
+  /**
+   * Ensure a student row exists, then apply the update.
+   * Safe to call for users who skipped onboarding — creates the row
+   * with sensible defaults first if it doesn't exist, then updates it.
+   */
+  async ensureAndUpdate(uid, data) {
+    // Try to upsert a default row (no-op if already exists)
+    await supabase
+      .from('students')
+      .upsert(defaultStudentRow(uid), { onConflict: 'uid', ignoreDuplicates: true });
+
+    return this.update(uid, data);
   },
 
   async list({ graduationYear, limit = 20 } = {}) {

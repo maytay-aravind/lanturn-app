@@ -11,6 +11,7 @@ function rowToEmployer(row) {
     description: row.description   || '',
     website:     row.website        || '',
     industry:    row.industry       || '',
+    companySize: row.company_size  || '',
     location:    row.location       || {},
     hrContact:   row.hr_contact     || {},
     logoURL:     row.logo_url       || '',
@@ -26,6 +27,7 @@ function toDbPayload(data) {
   if (data.description !== undefined) p.description  = data.description;
   if (data.website     !== undefined) p.website      = data.website;
   if (data.industry    !== undefined) p.industry     = data.industry;
+  if (data.companySize !== undefined) p.company_size = data.companySize;
   if (data.location    !== undefined) p.location     = data.location;
   if (data.hrContact   !== undefined) p.hr_contact   = data.hrContact;
   if (data.logoURL     !== undefined) p.logo_url     = data.logoURL;

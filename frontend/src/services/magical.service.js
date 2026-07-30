@@ -7,6 +7,8 @@ export const magicalService = {
   reviewResume: () => apiClient.post('/magical/resume-review').then(unwrap),
   // Match resume against a job
   matchJob: (body) => apiClient.post('/magical/resume-match', body).then(unwrap),
+  // Extract profile fields from resume for auto-fill
+  extractResume: () => apiClient.post('/magical/resume-extract').then(unwrap),
 };
 
 export const joobleService = {

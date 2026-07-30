@@ -53,10 +53,12 @@ export async function onboard(uid, { role, profile: profileData }) {
     });
   } else if (role === ROLES.EMPLOYER) {
     await employersRepo.set(uid, {
-      companyName: profileData.companyName || 'My Company',
+      companyName: profileData.companyName || '',
       description: profileData.description || '',
       location: profileData.location || {},
       industry: profileData.industry || '',
+      companySize: profileData.companySize || '',
+      website: profileData.website || '',
       hrContact: profileData.hrContact || {},
       verified: false,
     });

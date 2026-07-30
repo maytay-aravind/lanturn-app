@@ -2,9 +2,10 @@ import { z } from 'zod';
 
 export const employerProfileSchema = z
   .object({
-    companyName: z.string().min(1).max(160),
+    companyName: z.string().max(160).optional(),
     website: z.string().url().or(z.literal('')).optional(),
     description: z.string().max(5000).optional(),
+    companySize: z.string().max(60).optional(),
     location: z
       .object({
         city: z.string().max(120).optional(),

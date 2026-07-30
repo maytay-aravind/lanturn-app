@@ -27,16 +27,21 @@ export async function signUpload(uid, { kind, mimeType, sizeBytes }) {
 
 /** Step 2: commit the upload — persist the URL onto the profile */
 export async function commitUpload(uid, role, { kind, objectPath }) {
-  const publicUrl = getPublicUrl(objectPath);
+  // Always pass `kind` so the correct bucket is resolved — never rely on
+  // path-prefix inference which breaks if prefixes drift.
+  const publicUrl = getPublicUrl(objectPath, kind);
 
   if (kind === UPLOAD_KINDS.RESUME) {
-    await studentsRepo.update(uid, { resumeUrl: publicUrl });
-    return { url: publicUrl, attachedTo: 'students.me.resumeUrl' };
+    // Resumes live in a private Supabase bucket — public URLs return 403.
+    // Store the raw objectPath instead; signed download URLs are generated
+    // on demand in profile.service when the profile is fetched.
+    await studentsRepo.ensureAndUpdate(uid, { resumeUrl: objectPath });
+    return { objectPath, attachedTo: 'students.me.resumeUrl' };
   }
 
   if (kind === UPLOAD_KINDS.PROFILE_PHOTO) {
     if (role === ROLES.STUDENT) {
-      await studentsRepo.update(uid, { profilePhotoURL: publicUrl });
+      await studentsRepo.ensureAndUpdate(uid, { profilePhotoURL: publicUrl });
     } else if (role === ROLES.EMPLOYER) {
       await employersRepo.update(uid, { logoURL: publicUrl });
     }
