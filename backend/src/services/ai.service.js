@@ -3,7 +3,7 @@ import { studentsRepo } from '#repositories/students.repository.js';
 import { jobsRepo } from '#repositories/jobs.repository.js';
 import { AppError } from '#utils/httpErrors.js';
 import { generateId } from '#utils/ids.js';
-import { db } from '#firebase';
+import { supabase } from '#supabase';
 import { logger_for } from '#utils/logger.js';
 
 const log = logger_for('ai.service');
@@ -122,40 +122,48 @@ export async function careerChat(uid, { threadId, message, mode = 'general', job
   let thread = null;
 
   if (threadId) {
-    const snap = await db.collection('chat_threads').doc(threadId).get();
-    if (snap.exists) thread = { threadId: snap.id, ...snap.data() };
+    const { data } = await supabase
+      .from('chat_threads')
+      .select('*')
+      .eq('thread_id', threadId)
+      .maybeSingle();
+    if (data) thread = { threadId: data.thread_id, ...data };
   }
 
   if (!thread) {
     threadId = generateId('thr');
     const job = jobId ? await jobsRepo.getById(jobId) : null;
-    const data = {
-      userId: uid,
-      title: message.slice(0, 60),
+    const payload = {
+      thread_id:            threadId,
+      user_id:              uid,
+      title:                message.slice(0, 60),
       mode,
-      context: jobId ? { jobId, jobTitle: job?.title } : {},
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastMessagePreview: message,
-      lastMessageAt: new Date(),
+      context:              jobId ? { jobId, jobTitle: job?.title } : {},
+      last_message_preview: message,
+      last_message_at:      new Date().toISOString(),
     };
-    await db.collection('chat_threads').doc(threadId).set(data);
-    thread = { threadId, ...data };
+    const { error } = await supabase.from('chat_threads').insert(payload);
+    if (error) throw error;
+    thread = { threadId, ...payload };
   }
 
   // Save user message
-  const userMsg = { threadId, role: 'user', content: message, createdAt: new Date() };
-  await db.collection('chat_messages').add(userMsg);
+  const { error: msgErr } = await supabase.from('chat_messages').insert({
+    thread_id: threadId,
+    role:      'user',
+    content:   message,
+  });
+  if (msgErr) throw msgErr;
 
   // Build conversation history (last 10 messages)
-  const history = await db
-    .collection('chat_messages')
-    .where('threadId', '==', threadId)
-    .orderBy('createdAt', 'asc')
-    .limit(10)
-    .get();
-  const messages = history.docs.map((d) => `${d.data().role}: ${d.data().content}`).join('\n');
+  const { data: history } = await supabase
+    .from('chat_messages')
+    .select('role, content')
+    .eq('thread_id', threadId)
+    .order('created_at', { ascending: true })
+    .limit(10);
 
+  const messages = (history || []).map((m) => `${m.role}: ${m.content}`).join('\n');
   const contextStr = thread.context?.jobTitle ? `\nJob context: ${thread.context.jobTitle}` : '';
   const userContent = `Conversation:\n${messages}\n\nUser: ${message}`;
 
@@ -166,54 +174,63 @@ export async function careerChat(uid, { threadId, message, mode = 'general', job
   });
 
   // Save assistant message
-  const assistantMsg = { threadId, role: 'assistant', content: reply, createdAt: new Date() };
-  await db.collection('chat_messages').add(assistantMsg);
-
-  // Update thread
-  await db.collection('chat_threads').doc(threadId).update({
-    updatedAt: new Date(),
-    lastMessagePreview: reply.slice(0, 60),
-    lastMessageAt: new Date(),
+  await supabase.from('chat_messages').insert({
+    thread_id: threadId,
+    role:      'assistant',
+    content:   reply,
   });
+
+  // Update thread metadata
+  await supabase.from('chat_threads').update({
+    last_message_preview: reply.slice(0, 60),
+    last_message_at:      new Date().toISOString(),
+  }).eq('thread_id', threadId);
 
   return { threadId, reply };
 }
 
 export async function listChatThreads(uid) {
-  const snaps = await db
-    .collection('chat_threads')
-    .where('userId', '==', uid)
-    .orderBy('updatedAt', 'desc')
-    .limit(50)
-    .get();
-  return snaps.docs.map((s) => {
-    const d = s.data();
-    return {
-      threadId: s.id,
-      title: d.title,
-      mode: d.mode,
-      lastMessagePreview: d.lastMessagePreview,
-      lastMessageAt: d.lastMessageAt?.toDate?.() ?? d.lastMessageAt,
-      createdAt: d.createdAt?.toDate?.() ?? d.createdAt,
-    };
-  });
+  const { data, error } = await supabase
+    .from('chat_threads')
+    .select('thread_id, title, mode, last_message_preview, last_message_at, created_at')
+    .eq('user_id', uid)
+    .order('updated_at', { ascending: false })
+    .limit(50);
+  if (error) throw error;
+
+  return (data || []).map((d) => ({
+    threadId:           d.thread_id,
+    title:              d.title,
+    mode:               d.mode,
+    lastMessagePreview: d.last_message_preview,
+    lastMessageAt:      d.last_message_at,
+    createdAt:          d.created_at,
+  }));
 }
 
 export async function getChatMessages(threadId, uid) {
   // Verify ownership
-  const thread = await db.collection('chat_threads').doc(threadId).get();
-  if (!thread.exists || thread.data().userId !== uid) {
-    throw AppError.forbidden('Not your thread');
-  }
-  const snaps = await db
-    .collection('chat_messages')
-    .where('threadId', '==', threadId)
-    .orderBy('createdAt', 'asc')
-    .limit(100)
-    .get();
-  return snaps.docs.map((s) => ({
-    messageId: s.id,
-    ...s.data(),
-    createdAt: s.data().createdAt?.toDate?.() ?? s.data().createdAt,
+  const { data: thread, error: threadErr } = await supabase
+    .from('chat_threads')
+    .select('user_id')
+    .eq('thread_id', threadId)
+    .maybeSingle();
+  if (threadErr) throw threadErr;
+  if (!thread || thread.user_id !== uid) throw AppError.forbidden('Not your thread');
+
+  const { data, error } = await supabase
+    .from('chat_messages')
+    .select('id, role, content, created_at')
+    .eq('thread_id', threadId)
+    .order('created_at', { ascending: true })
+    .limit(100);
+  if (error) throw error;
+
+  return (data || []).map((m) => ({
+    messageId: m.id,
+    role:      m.role,
+    content:   m.content,
+    createdAt: m.created_at,
   }));
 }
+

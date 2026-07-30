@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { db } from '#firebase';
+import { supabase } from '#supabase';
 
 const router = Router();
 
@@ -8,10 +8,11 @@ router.get('/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Readiness (Firebase reachable)
+// Readiness (Supabase reachable)
 router.get('/health/ready', async (_req, res) => {
   try {
-    await db.collection('users').limit(1).get();
+    const { error } = await supabase.from('users').select('uid').limit(1);
+    if (error) throw error;
     res.json({ status: 'ready', timestamp: new Date().toISOString() });
   } catch (err) {
     res.status(503).json({ status: 'not_ready', error: err.message });
@@ -24,3 +25,4 @@ router.get('/version', (_req, res) => {
 });
 
 export default router;
+

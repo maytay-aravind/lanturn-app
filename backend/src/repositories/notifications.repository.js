@@ -1,58 +1,102 @@
-import { db, FieldValue } from '#firebase';
+import { supabase } from '#supabase';
 import { logger_for } from '#utils/logger.js';
 
 const log = logger_for('notifications.repo');
-const col = () => db.collection('notifications');
 
-function snapToData(snap) {
+function rowToNotification(row) {
+  if (!row) return null;
   return {
-    notificationId: snap.id,
-    ...snap.data(),
-    createdAt: snap.data().createdAt?.toDate?.() ?? snap.data().createdAt,
+    notificationId: row.notification_id,
+    userId:         row.user_id,
+    type:           row.type,
+    title:          row.title         || '',
+    body:           row.body          || '',
+    link:           row.link          || '',
+    data:           row.data          || {},
+    channel:        row.channel       || 'both',
+    read:           row.read          ?? false,
+    emailStatus:    row.email_status  || 'skipped',
+    createdAt:      row.created_at,
   };
 }
 
 export const notificationsRepo = {
   async create(id, data) {
-    const now = new Date();
-    await col().doc(id).set({
-      ...data,
-      read: false,
-      emailStatus: data.channel === 'email' || data.channel === 'both' ? 'pending' : 'skipped',
-      createdAt: now,
-    });
-    return this.getById(id);
+    const payload = {
+      notification_id: id,
+      user_id:         data.userId,
+      type:            data.type,
+      title:           data.title    || '',
+      body:            data.body     || '',
+      link:            data.link     || '',
+      data:            data.data     || {},
+      channel:         data.channel  || 'both',
+      read:            false,
+      email_status:    (data.channel === 'email' || data.channel === 'both') ? 'pending' : 'skipped',
+    };
+    const { data: created, error } = await supabase
+      .from('notifications')
+      .insert(payload)
+      .select()
+      .single();
+    if (error) throw error;
+    return rowToNotification(created);
   },
 
   async getById(id) {
-    const snap = await col().doc(id).get();
-    return snap.exists ? snapToData(snap) : null;
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*')
+      .eq('notification_id', id)
+      .maybeSingle();
+    if (error) throw error;
+    return rowToNotification(data);
   },
 
   async markRead(id) {
-    await col().doc(id).update({ read: true });
+    const { error } = await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('notification_id', id);
+    if (error) throw error;
   },
 
+  /** Single SQL UPDATE replaces Firestore batch writes */
   async markAllRead(userId) {
-    const batch = db.batch();
-    const snaps = await col().where('userId', '==', userId).where('read', '==', false).limit(100).get();
-    for (const snap of snaps.docs) {
-      batch.update(snap.ref, { read: true });
-    }
-    await batch.commit();
+    const { error } = await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('user_id', userId)
+      .eq('read', false);
+    if (error) throw error;
   },
 
   async countUnread(userId) {
-    const snaps = await col().where('userId', '==', userId).where('read', '==', false).count().get();
-    return snaps.data().count;
+    const { count, error } = await supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', userId)
+      .eq('read', false);
+    if (error) throw error;
+    return count ?? 0;
   },
 
   async listByUser(userId, { limit = 20 } = {}) {
-    const snaps = await col().where('userId', '==', userId).orderBy('createdAt', 'desc').limit(limit).get();
-    return snaps.docs.map(snapToData);
+    const { data, error } = await supabase
+      .from('notifications')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return (data || []).map(rowToNotification);
   },
 
   async updateEmailStatus(id, status) {
-    await col().doc(id).update({ emailStatus: status });
+    const { error } = await supabase
+      .from('notifications')
+      .update({ email_status: status })
+      .eq('notification_id', id);
+    if (error) throw error;
   },
 };

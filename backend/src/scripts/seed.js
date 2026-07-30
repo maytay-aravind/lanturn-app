@@ -1,15 +1,12 @@
 /**
- * Seed script — populates the Firestore EMULATOR with demo data.
- * Run with:  npm run seed   (after `firebase emulators:start`)
+ * Seed script — DEPRECATED (Firestore emulator version).
+ * This script was written for Firestore. The project now uses Supabase PostgreSQL.
+ * Database schema is set up via: src/supabase/migrations/001_initial_schema.sql
+ * Storage buckets are set up via: node src/supabase/setup-storage.js
  *
- * Creates:
- *  - 1 admin user
- *  - 2 employers (with company profiles)
- *  - 3 students (with profiles)
- *  - several active jobs
- *  - a few applications + notifications
+ * TODO: Rewrite this seed script for Supabase if demo data is needed.
  */
-import { db, FieldValue, auth } from '#firebase';
+import { supabase } from '#supabase';
 import { ROLES, USER_STATUS, JOB_STATUS, JOB_TYPE, EXPERIENCE_LEVEL } from '#config';
 
 const DEMO = {

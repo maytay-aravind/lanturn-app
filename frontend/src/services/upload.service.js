@@ -18,8 +18,8 @@ export const uploadService = {
    * @returns {Promise<{ url: string, attachedTo: string }>}
    */
   async uploadFile(file, kind, onProgress) {
-    // Step 1: Get signed upload URL
-    const { uploadUrl, objectPath } = await uploadService.signUpload({
+    // Step 1: Get signed upload URL and token
+    const { uploadUrl, token, objectPath } = await uploadService.signUpload({
       kind,
       mimeType: file.type,
       sizeBytes: file.size,
@@ -30,6 +30,9 @@ export const uploadService = {
       const xhr = new XMLHttpRequest();
       xhr.open('PUT', uploadUrl, true);
       xhr.setRequestHeader('Content-Type', file.type);
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
 
       xhr.upload.addEventListener('progress', (e) => {
         if (e.lengthComputable && onProgress) {

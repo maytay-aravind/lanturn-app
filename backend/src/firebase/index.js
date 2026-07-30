@@ -1,44 +1,40 @@
 import admin from 'firebase-admin';
 import { env } from '#config';
+import { logger_for } from '#utils/logger.js';
 
-let app = null;
+const log = logger_for('firebase-auth');
+
+let _app = null;
 
 function init() {
-  if (app) return app;
+  if (_app) return _app;
 
-  // When using the emulator (no projectId), use a placeholder application.
-  if (env.FIREBASE_USE_EMULATOR || !env.FIREBASE_PROJECT_ID) {
-    // Point the Admin SDK at the local emulator.
-    process.env.FIRESTORE_EMULATOR_HOST = env.FIRESTORE_EMULATOR_HOST;
-    process.env.FIREBASE_AUTH_EMULATOR_HOST = env.FIREBASE_AUTH_EMULATOR_HOST;
-    process.env.STORAGE_EMULATOR_HOST = env.STORAGE_EMULATOR_HOST;
-
-    app = admin.initializeApp({
-      projectId: env.FIREBASE_PROJECT_ID || 'lanturn-dev',
-      storageBucket: env.FIREBASE_STORAGE_BUCKET || 'lanturn-dev.appspot.com',
-    });
+  if (!env.FIREBASE_PROJECT_ID) {
+    // Dev fallback: use emulator
+    process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
+    _app = admin.initializeApp({ projectId: 'lanturn-dev' });
+    log.warn('Firebase Admin initialized against local Auth emulator');
   } else {
-    // Production: use a service account from env vars.
-    app = admin.initializeApp({
+    // Production: service account credentials
+    _app = admin.initializeApp({
       credential: admin.credential.cert({
         projectId: env.FIREBASE_PROJECT_ID,
         clientEmail: env.FIREBASE_CLIENT_EMAIL,
-        // The private key is stored with literal "\n" in env; convert to real newlines.
+        // Env stores literal \n — convert to real newlines
         privateKey: env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
       }),
-      storageBucket: env.FIREBASE_STORAGE_BUCKET,
     });
+    log.info({ projectId: env.FIREBASE_PROJECT_ID }, 'Firebase Admin Auth initialized');
   }
 
-  return app;
+  return _app;
 }
 
 init();
 
-export const firebaseApp = app;
+/**
+ * Firebase Admin Auth instance.
+ * Used ONLY for verifying Firebase ID tokens (Google Sign-In).
+ * All database and storage operations go through Supabase.
+ */
 export const auth = admin.auth();
-export const db = admin.firestore();
-export const bucket = admin.storage().bucket();
-
-// Conventional Firestore field values.
-export const FieldValue = admin.firestore.FieldValue;

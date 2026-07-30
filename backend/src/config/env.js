@@ -45,15 +45,14 @@ const envSchema = z.object({
     .default('http://localhost:5173')
     .transform((s) => s.split(',').map((o) => o.trim()).filter(Boolean)),
 
-  // Firebase
+  // Firebase Auth (kept for Google Login token verification)
   FIREBASE_PROJECT_ID: z.string().optional().default(''),
   FIREBASE_CLIENT_EMAIL: z.string().optional().default(''),
   FIREBASE_PRIVATE_KEY: z.string().optional().default(''),
-  FIREBASE_STORAGE_BUCKET: z.string().optional().default(''),
-  FIREBASE_USE_EMULATOR: boolString.default('true'),
-  FIRESTORE_EMULATOR_HOST: z.string().default('localhost:8081'),
-  FIREBASE_AUTH_EMULATOR_HOST: z.string().default('localhost:9099'),
-  STORAGE_EMULATOR_HOST: z.string().default('localhost:9199'),
+
+  // Supabase (database + storage)
+  SUPABASE_URL: z.string().url().optional().default('https://placeholder.supabase.co'),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().optional().default(''),
 
   // Gemini
   GEMINI_API_KEY: z.string().optional().default(''),

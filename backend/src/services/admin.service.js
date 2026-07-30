@@ -1,6 +1,7 @@
 import { usersRepo } from '#repositories/users.repository.js';
 import { AppError } from '#utils/httpErrors.js';
 import { analyticsRepo } from '#repositories/analytics.repository.js';
+import { supabase } from '#supabase';
 import { logger_for } from '#utils/logger.js';
 
 const log = logger_for('admin.service');
@@ -12,7 +13,6 @@ export async function listUsers(query) {
 export async function updateUserStatus(uid, status) {
   const user = await usersRepo.getById(uid);
   if (!user) throw AppError.notFound('User not found');
-  // Prevent disabling self
   return usersRepo.update(uid, { status });
 }
 
@@ -32,13 +32,34 @@ export async function getAnalyticsSeries(query) {
   return analyticsRepo.seriesByType(type, days);
 }
 
+const DEFAULT_CONFIG = { signupEnabled: true, maintenanceMode: false, aiDailyLimit: 20 };
+
 export async function getPlatformConfig() {
-  const snap = await (await import('#firebase')).db.collection('platform_config').doc('default').get();
-  return snap.exists ? snap.data() : { signupEnabled: true, maintenanceMode: false, aiDailyLimit: 20 };
+  const { data, error } = await supabase
+    .from('platform_config')
+    .select('*')
+    .eq('id', 'default')
+    .maybeSingle();
+  if (error) throw error;
+  if (!data) return DEFAULT_CONFIG;
+  return {
+    signupEnabled:   data.signup_enabled,
+    maintenanceMode: data.maintenance_mode,
+    aiDailyLimit:    data.ai_daily_limit,
+  };
 }
 
-export async function updatePlatformConfig(data) {
-  const { db } = await import('#firebase');
-  await db.collection('platform_config').doc('default').set(data, { merge: true });
+export async function updatePlatformConfig(incoming) {
+  const payload = {};
+  if (incoming.signupEnabled   !== undefined) payload.signup_enabled   = incoming.signupEnabled;
+  if (incoming.maintenanceMode !== undefined) payload.maintenance_mode = incoming.maintenanceMode;
+  if (incoming.aiDailyLimit    !== undefined) payload.ai_daily_limit   = incoming.aiDailyLimit;
+
+  const { error } = await supabase
+    .from('platform_config')
+    .update(payload)
+    .eq('id', 'default');
+  if (error) throw error;
   return getPlatformConfig();
 }
+

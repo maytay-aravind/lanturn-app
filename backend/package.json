@@ -28,10 +28,12 @@
     "#schemas/*": "./src/schemas/*",
     "#utils/*": "./src/utils/*",
     "#firebase": "./src/firebase/index.js",
-    "#firebase/*": "./src/firebase/*"
+    "#firebase/*": "./src/firebase/*",
+    "#supabase": "./src/supabase/index.js",
+    "#supabase/*": "./src/supabase/*"
   },
   "dependencies": {
-    "@google-cloud/storage": "^7.11.1",
+    "@supabase/supabase-js": "^2.111.0",
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-rate-limit": "^7.4.0",
