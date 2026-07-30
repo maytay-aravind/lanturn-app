@@ -37,6 +37,17 @@ export function AuthProvider({ children }) {
 
   const loginWithGoogle = useCallback(async () => {
     const result = await signInWithPopup(auth, googleProvider);
+    // Immediately fetch the backend session after a successful Google sign-in
+    // so that state is populated before the onAuthStateChanged listener fires.
+    // This prevents a brief window where role/profileComplete are null for
+    // existing users, which was causing them to be incorrectly sent to /onboarding.
+    try {
+      const s = await authService.session();
+      setSession(s);
+    } catch (err) {
+      // Non-fatal: onAuthStateChanged will retry. Log for debugging.
+      console.warn('Immediate post-login session fetch failed (will retry):', err);
+    }
     return result.user;
   }, []);
 
@@ -61,7 +72,11 @@ export function AuthProvider({ children }) {
     session,
     loading,
     role: session?.role ?? null,
-    isOnboarded: session?.status === 'active',
+    // isOnboarded: a user is considered onboarded when they have chosen a role
+    // AND completed their profile. Previously this used `status === 'active'`
+    // which is true for ALL users (even brand-new stubs), causing existing
+    // users to be routed to /onboarding and getting "Role already chosen" errors.
+    isOnboarded: !!(session?.role && session?.profileComplete),
     loginWithGoogle,
     logout,
     refreshSession,

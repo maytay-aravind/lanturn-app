@@ -27,12 +27,24 @@ export default function LoginPage() {
     setSigningIn(true);
     try {
       await loginWithGoogle();
+      // loginWithGoogle now fetches the backend session internally.
+      // The useEffect below will handle the redirect once role/isOnboarded
+      // state is populated. No need to navigate here.
       toast.success('Signed in successfully!');
     } catch (err) {
-      if (err.code !== 'auth/popup-closed-by-user') {
-        toast.error('Login failed. Please try again.');
-        console.error('Login error:', err);
+      // User closed the popup — silent fail, no toast.
+      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') {
+        return;
       }
+      // Firebase auth errors (network, config, etc.)
+      if (err.code?.startsWith('auth/')) {
+        toast.error('Google sign-in failed. Please try again.');
+        console.error('Firebase auth error:', err.code, err.message);
+        return;
+      }
+      // Unexpected errors
+      toast.error('Something went wrong. Please try again.');
+      console.error('Login error:', err);
     } finally {
       setSigningIn(false);
     }
