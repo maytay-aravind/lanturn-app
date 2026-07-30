@@ -2,93 +2,115 @@ import { env } from '#config';
 import { logger_for } from '#utils/logger.js';
 
 const log = logger_for('magical.client');
-const BASE = 'https://api.magicalapi.com';
 
-/** JSON-body call (for review + score endpoints that accept a URL) */
-async function callMagical(path, body) {
+// MagicalAPI gateway — note this is `gw.` not `api.`.
+const BASE = 'https://gw.magicalapi.com';
+const API_VERSION = '1';
+const MAX_POLLS = 15; // ~30s of polling before giving up on a 201-pending job
+const POLL_DELAY_MS = 2000;
+
+/**
+ * Low-level POST to MagicalAPI.
+ *
+ * MagicalAPI uses an async 201/200 pattern: the first request (and any
+ * follow-up while the job is still processing) returns HTTP 201 with a
+ * `data.request_id`. We re-send the SAME payload with `request_id` appended
+ * until the server returns HTTP 200 with the final result.
+ *
+ * Auth is via the `api-key` header (not `x-api-key`), and a `version` header
+ * is required. All requests are JSON — file uploads are not supported.
+ */
+async function post(path, payload) {
   if (!env.MAGICAL_API_KEY) {
-    throw new Error('MagicalAPI key not configured');
+    throw new Error('MagicalAPI key not configured (MAGICAL_API_KEY)');
   }
 
-  const res = await fetch(`${BASE}${path}`, {
+  const headers = {
+    'api-key': env.MAGICAL_API_KEY,
+    'version': API_VERSION,
+    'Content-Type': 'application/json',
+  };
+
+  const body = { ...payload };
+  let response = await fetch(`${BASE}${path}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': env.MAGICAL_API_KEY,
-    },
+    headers,
     body: JSON.stringify(body),
     signal: AbortSignal.timeout(30000),
   });
 
-  if (!res.ok) {
-    const text = await res.text();
-    log.error({ status: res.status, body: text }, 'MagicalAPI error');
-    throw new Error(`MagicalAPI error ${res.status}: ${text}`);
+  let json = await safeJson(response);
+
+  // Poll while the job is pending (HTTP 201 carries a request_id).
+  let polls = 0;
+  while (response.status === 201 && polls < MAX_POLLS) {
+    const requestId = json?.data?.request_id;
+    if (!requestId) break; // malformed — bail and let the error path handle it
+    log.debug({ path, requestId, poll: polls + 1 }, 'MagicalAPI job pending, re-polling');
+    await sleep(POLL_DELAY_MS);
+
+    body.request_id = requestId;
+    response = await fetch(`${BASE}${path}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+      signal: AbortSignal.timeout(30000),
+    });
+    json = await safeJson(response);
+    polls++;
   }
 
-  return res.json();
+  if (!response.ok) {
+    const text = JSON.stringify(json);
+    log.error({ status: response.status, body: text, path }, 'MagicalAPI error');
+    // Surface the API's own message when present
+    const message = json?.message || json?.error || text || `HTTP ${response.status}`;
+    throw new Error(`MagicalAPI error ${response.status}: ${message}`);
+  }
+
+  if (response.status === 202 || response.status === 201) {
+    throw new Error('MagicalAPI job did not complete in time — please try again');
+  }
+
+  return json;
 }
 
-/**
- * Parse a resume by sending PDF bytes as multipart/form-data.
- * This avoids passing a signed URL to an external server — instead our backend
- * downloads the bytes from Supabase storage and forwards them directly.
- *
- * @param {Buffer|Uint8Array} pdfBytes - Raw PDF file bytes
- * @param {string} filename - Filename hint (e.g. "resume.pdf")
- */
-export async function parseResumeBytes(pdfBytes, filename = 'resume.pdf') {
-  if (!env.MAGICAL_API_KEY) {
-    throw new Error('MagicalAPI key not configured');
+async function safeJson(response) {
+  try {
+    return await response.json();
+  } catch {
+    return null;
   }
-
-  const form = new FormData();
-  form.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), filename);
-
-  const res = await fetch(`${BASE}/resume/parser`, {
-    method: 'POST',
-    headers: {
-      'x-api-key': env.MAGICAL_API_KEY,
-      // Do NOT set Content-Type manually — fetch sets it with the correct boundary for FormData
-    },
-    body: form,
-    signal: AbortSignal.timeout(45000),
-  });
-
-  if (!res.ok) {
-    const text = await res.text();
-    log.error({ status: res.status, body: text }, 'MagicalAPI parseResumeBytes error');
-    throw new Error(`MagicalAPI error ${res.status}: ${text}`);
-  }
-
-  return res.json();
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// ─── Public API ──────────────────────────────────────────────────────────────
+
 /**
- * Parse a resume from a publicly accessible URL.
- * Only use when the URL is truly public. Prefer parseResumeBytes for private buckets.
- * @param {string} resumeUrl - Publicly accessible URL of the resume PDF
+ * Parse a resume from a publicly-accessible (or signed) URL.
+ * @param {string} resumeUrl - Accessible HTTPS URL of the resume PDF
+ * @returns {Promise<object>} MagicalAPI response (contains `data` + `usage`)
  */
 export async function parseResume(resumeUrl) {
-  return callMagical('/resume/parser', { url: resumeUrl });
+  return post('/resume-parser', { url: resumeUrl });
 }
 
 /**
- * Review a resume for quality, ATS score, and feedback.
- * @param {string} resumeUrl - URL of the resume
+ * Review a resume for quality / ATS score / feedback.
+ * @param {string} resumeUrl - Accessible HTTPS URL of the resume
  */
 export async function reviewResume(resumeUrl) {
-  return callMagical('/resume/checker', { url: resumeUrl });
+  return post('/resume-review', { url: resumeUrl });
 }
 
 /**
- * Match a resume against a job description.
- * @param {string} resumeUrl - URL of the resume
- * @param {string} jobDescription - Text of the job description
+ * Score how well a resume matches a job description.
+ * @param {string} resumeUrl - Accessible HTTPS URL of the resume
+ * @param {string} jobDescription - Full text of the job description (100–5000 chars)
  */
 export async function matchResume(resumeUrl, jobDescription) {
-  return callMagical('/resume/score', {
-    url: resumeUrl,
-    job_description: jobDescription,
-  });
+  return post('/resume-score', { url: resumeUrl, job_description: jobDescription });
 }

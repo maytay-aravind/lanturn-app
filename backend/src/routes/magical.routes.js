@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import { authenticate, requireRole, requireProfileComplete } from '#middlewares';
 import { asyncHandler } from '#utils/asyncHandler.js';
-import { parseResumeBytes, parseResume, reviewResume, matchResume } from '#clients/magical.client.js';
+import { parseResume, reviewResume, matchResume } from '#clients/magical.client.js';
 import { studentsRepo } from '#repositories/students.repository.js';
 import { jobsRepo } from '#repositories/jobs.repository.js';
-import { supabase } from '#supabase';
 import { getSignedDownloadUrl } from '#clients/storage.client.js';
 import { AppError } from '#utils/httpErrors.js';
 import { logger_for } from '#utils/logger.js';
@@ -16,36 +15,40 @@ const guard = [authenticate, requireRole('student'), requireProfileComplete];
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /**
- * Download raw PDF bytes from Supabase storage using the admin client.
- * This is the recommended approach for private buckets — avoids passing
- * a signed URL to an external service (which may be unreachable or time out).
+ * Normalise a legacy full Supabase URL to an object path.
+ * e.g. "https://project.supabase.co/storage/v1/object/public/resumes/resumes/uid/file.pdf"
+ *   →   "resumes/uid/file.pdf"
  */
-async function downloadResumeBytes(objectPath) {
-  const { data, error } = await supabase.storage
-    .from('resumes')
-    .download(objectPath);
-
-  if (error) {
-    log.error({ error, objectPath }, 'Failed to download resume from storage');
-    throw new Error(`Storage download failed: ${error.message}`);
-  }
-
-  const arrayBuffer = await data.arrayBuffer();
-  const filename = objectPath.split('/').pop() || 'resume.pdf';
-  return { bytes: new Uint8Array(arrayBuffer), filename };
+function toObjectPath(rawUrl) {
+  if (!rawUrl || !rawUrl.startsWith('http')) return rawUrl;
+  try {
+    const url = new URL(rawUrl);
+    const match = url.pathname.match(/^\/storage\/v1\/object\/(?:public|signed)\/[^/]+\/(.+)$/);
+    if (match) return match[1];
+  } catch { /* not a valid URL */ }
+  return rawUrl;
 }
 
 /**
- * Resolve the student's stored resumeUrl to an accessible HTTPS URL.
- * Used for review/match endpoints that pass a URL to external services.
+ * Resolve the student's stored resumeUrl to an object path.
+ * Handles both new format (object path) and legacy format (full Supabase URL).
+ */
+function resolveObjectPath(student) {
+  const raw = student?.resumeUrl;
+  if (!raw) return null;
+  if (!raw.startsWith('http')) return raw; // already an object path
+  return toObjectPath(raw);
+}
+
+/**
+ * Resolve the student's stored resumeUrl to a short-lived signed HTTPS URL.
+ * MagicalAPI downloads the PDF from this URL, so it must be accessible for the
+ * duration of the parse call (~10 minutes is plenty).
  */
 async function getAccessibleResumeUrl(student) {
-  const raw = student?.resumeUrl;
-  if (!raw) throw AppError.unprocessable('Upload a resume first');
-  if (!raw.startsWith('http')) {
-    return getSignedDownloadUrl(raw, 600); // 10-min URL is enough for one API call
-  }
-  return raw; // legacy public URL
+  const objectPath = resolveObjectPath(student);
+  if (!objectPath) throw AppError.unprocessable('Upload a resume first');
+  return getSignedDownloadUrl(objectPath, 600); // 10-min URL
 }
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
@@ -99,6 +102,9 @@ router.post(
       description = `${job.title}\n${job.description}\nRequirements: ${job.requirements?.join(', ')}\nSkills: ${job.requiredSkills?.join(', ')}`;
     }
     if (!description) throw AppError.validation('Provide jobId or jobDescription');
+    if (description.length < 100 || description.length > 5000) {
+      throw AppError.validation('Job description must be between 100 and 5000 characters');
+    }
 
     const data = await matchResume(resumeUrl, description);
     res.json({ data, meta: { requestId: req.id } });
@@ -108,20 +114,21 @@ router.post(
 /**
  * POST /api/magical/resume-extract
  *
- * Downloads the PDF directly from Supabase storage (bypassing signed URL issues),
- * sends it to MagicalAPI as a multipart upload, then maps the response to our
- * profile schema for the frontend auto-fill form.
+ * Parses the student's resume via MagicalAPI and maps the response to our
+ * profile schema so the frontend auto-fill form can populate fields.
  *
- * Actual MagicalAPI /resume/parser response shape:
+ * Real MagicalAPI /resume-parser response shape:
  * {
  *   data: {
- *     contact:    { name, email, phone, linkedin, github, location: { city, state, country } },
- *     educations: [{ institution, degree, field_of_study, start_date, end_date, gpa }],
- *     experiences:[{ company, title, start_date, end_date, description }],
- *     skills:     [{ name }],
- *     summary:    string,
- *     usage:      { credits: number }
- *   }
+ *     basic: { first_name, last_name, email, phone_number, location,
+ *              linkedin_url, github_url, portfolio_website_url, job_title,
+ *              majors, university, graduation_year },
+ *     educations:    [{ school, degree, field, start:{year,month}, end:{year,month} }],
+ *     work_experiences: [{ ... }],
+ *     skills:        [{ name }],
+ *     summary:       string,
+ *   },
+ *   usage: { credits }
  * }
  */
 router.post(
@@ -129,87 +136,76 @@ router.post(
   ...guard,
   asyncHandler(async (req, res) => {
     const student = await studentsRepo.getById(req.user.uid);
-    const rawPath = student?.resumeUrl;
-    if (!rawPath) throw AppError.unprocessable('Upload a resume first');
+    const resumeUrl = await getAccessibleResumeUrl(student);
 
-    let parsed;
-
-    if (!rawPath.startsWith('http')) {
-      // Private bucket objectPath (new format) — download bytes, send as multipart
-      const { bytes, filename } = await downloadResumeBytes(rawPath);
-      parsed = await parseResumeBytes(bytes, filename);
-    } else {
-      // Legacy full HTTP URL — pass directly (pre-fix rows only)
-      parsed = await parseResume(rawPath);
-    }
-
+    const parsed = await parseResume(resumeUrl);
     log.info({ uid: req.user.uid, topKeys: Object.keys(parsed ?? {}) }, 'MagicalAPI raw response received');
 
-    // MagicalAPI wraps everything in a `data` key
     const r = parsed?.data ?? parsed ?? {};
+    const basic = r.basic ?? {};
 
-    // ── Contact / personal ──────────────────────────────────────────────────
-    const contact  = r.contact  ?? {};
-    const location = contact.location ?? r.location ?? {};
+    // ── Name ──────────────────────────────────────────────────────────────
+    const fullName = [basic.first_name, basic.last_name].filter(Boolean).join(' ').trim();
 
-    // ── Education ───────────────────────────────────────────────────────────
-    // Plural "educations" is the documented key; fall back to singular for safety
-    const educations = Array.isArray(r.educations) ? r.educations
-      : Array.isArray(r.education) ? r.education
-      : [];
+    // ── Education ─────────────────────────────────────────────────────────
+    const educations = Array.isArray(r.educations) ? r.educations : [];
     const edu = educations[0] ?? null;
-
-    // end_date may be "2025", "May 2025", or "2025-05" — extract a 4-digit year
-    const rawGradYear = edu?.end_date ?? edu?.graduation_year ?? edu?.end_year ?? null;
-    const graduationYear = rawGradYear
-      ? parseInt(String(rawGradYear).match(/\b(20\d{2}|19\d{2})\b/)?.[1] ?? '', 10) || null
+    const gradYearRaw = basic.graduation_year ?? edu?.end?.year ?? edu?.end_year ?? null;
+    const graduationYear = gradYearRaw
+      ? parseInt(String(gradYearRaw).match(/\b(20\d{2}|19\d{2})\b/)?.[1] ?? '', 10) || null
       : null;
 
-    const cgpaRaw = edu?.gpa ?? edu?.cgpa ?? null;
-    const cgpa = cgpaRaw
-      ? parseFloat(String(cgpaRaw).replace(/[^0-9.]/g, '')) || null
-      : null;
-
-    // ── Skills ──────────────────────────────────────────────────────────────
-    // MagicalAPI returns skills as [{ name: "Python" }] — not plain strings
+    // ── Skills ────────────────────────────────────────────────────────────
+    // MagicalAPI returns skills as [{ name: "Python" }]
     const rawSkills = Array.isArray(r.skills) ? r.skills : [];
     const skills = rawSkills
       .map((s) => (typeof s === 'string' ? s : s?.name ?? ''))
       .filter(Boolean)
       .slice(0, 50);
 
-    // ── Social links ────────────────────────────────────────────────────────
-    const linkedin  = contact.linkedin  ?? r.linkedin_url  ?? r.linkedin  ?? '';
-    const github    = contact.github    ?? r.github_url    ?? r.github    ?? '';
-    const portfolio = r.portfolio_url   ?? contact.portfolio ?? '';
+    // ── Social links ──────────────────────────────────────────────────────
+    const linkedin = normalizeUrl(basic.linkedin_url);
+    const github = normalizeUrl(basic.github_url);
+    const portfolio = normalizeUrl(basic.portfolio_website_url);
 
     const extracted = {
       personal: {
-        ...(contact.name     && { name:  contact.name }),
-        ...(contact.phone    && { phone: contact.phone }),
-        ...(location.city    && { city:  location.city }),
-        ...(location.state   && { state: location.state }),
+        ...(fullName && { name: fullName }),
+        ...(basic.phone_number && { phone: basic.phone_number }),
+        ...(basic.location && { city: basic.location }),
       },
       academic: {
-        ...(edu?.institution    && { college:        edu.institution }),
-        ...(edu?.degree         && { degree:         edu.degree }),
-        ...(edu?.field_of_study && { branch:         edu.field_of_study }),
-        ...(graduationYear      && { graduationYear }),
-        ...(cgpa !== null       && { cgpa }),
+        ...(basic.university || edu?.school ? { college: basic.university || edu.school } : {}),
+        ...(basic.majors || edu?.field ? { branch: basic.majors || edu.field } : {}),
+        ...(edu?.degree && { degree: edu.degree }),
+        ...(graduationYear && { graduationYear }),
       },
       professional: {
         ...(skills.length && { skills }),
       },
       social: {
-        ...(linkedin  && { linkedin }),
-        ...(github    && { github }),
+        ...(linkedin && { linkedin }),
+        ...(github && { github }),
         ...(portfolio && { portfolio }),
       },
     };
 
-    log.info({ uid: req.user.uid, hasName: !!contact.name, skillCount: skills.length }, 'Resume extracted OK');
+    log.info({ uid: req.user.uid, hasName: !!fullName, skillCount: skills.length }, 'Resume extracted OK');
     res.json({ data: extracted, meta: { requestId: req.id } });
   })
 );
+
+/**
+ * MagicalAPI sometimes returns raw handles (e.g. "maytay-aravind") instead of
+ * full URLs for social links. Only keep values that look like real URLs so we
+ * don't pollute the profile with garbage.
+ */
+function normalizeUrl(value) {
+  if (!value || typeof value !== 'string') return '';
+  const v = value.trim();
+  if (!v) return '';
+  if (/^https?:\/\//i.test(v)) return v;
+  return ''; // not a usable URL
+}
 
 export default router;

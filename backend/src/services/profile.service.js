@@ -19,22 +19,50 @@ function isObjectPath(value) {
 }
 
 /**
+ * Normalise a legacy full Supabase public/signed URL back to its object path.
+ * e.g. "https://project.supabase.co/storage/v1/object/public/resumes/resumes/uid/file.pdf"
+ *   →   "resumes/uid/file.pdf"
+ *
+ * This is needed because the resumes bucket is PRIVATE — public URLs are
+ * inaccessible and the service role key must generate signed URLs instead.
+ */
+function toObjectPath(rawResumeUrl) {
+  if (!rawResumeUrl || !rawResumeUrl.startsWith('http')) return rawResumeUrl;
+
+  try {
+    const url = new URL(rawResumeUrl);
+    // Supabase public URLs: /storage/v1/object/public/<bucket>/<objectPath...>
+    const match = url.pathname.match(/^\/storage\/v1\/object\/(?:public|signed)\/[^/]+\/(.+)$/);
+    if (match) {
+      log.info({ rawResumeUrl, objectPath: match[1] }, 'Normalised legacy resume URL to object path');
+      return match[1];
+    }
+  } catch {
+    // Not a valid URL — return as-is
+  }
+
+  return rawResumeUrl;
+}
+
+/**
  * Given a raw student row, resolve the resumeUrl:
  * - If it's an objectPath → generate a 1-hour signed URL
- * - If it's already an http URL (legacy) → return as-is
+ * - If it's a legacy http URL → normalise to object path, then sign it
  * - If empty → return ''
  */
 async function resolveResumeUrl(rawResumeUrl) {
   if (!rawResumeUrl) return '';
-  if (isObjectPath(rawResumeUrl)) {
-    try {
-      return await getSignedDownloadUrl(rawResumeUrl, 3600);
-    } catch (err) {
-      log.warn({ err, path: rawResumeUrl }, 'Failed to sign resume URL — returning empty');
-      return '';
-    }
+  const objectPath = isObjectPath(rawResumeUrl) ? rawResumeUrl : toObjectPath(rawResumeUrl);
+  if (!objectPath || objectPath.startsWith('http')) {
+    // Could not extract object path — return as last resort
+    return rawResumeUrl;
   }
-  return rawResumeUrl; // legacy http URL — pass through
+  try {
+    return await getSignedDownloadUrl(objectPath, 3600);
+  } catch (err) {
+    log.warn({ err, path: objectPath }, 'Failed to sign resume URL — returning empty');
+    return '';
+  }
 }
 
 /** Get or update the student's own profile */
@@ -76,13 +104,14 @@ export async function getStudentResumeSignedUrl(uid) {
   if (!profile) throw AppError.notFound('Student profile not found');
   if (!profile.resumeUrl) throw AppError.notFound('No resume uploaded yet');
 
-  if (isObjectPath(profile.resumeUrl)) {
-    const signedUrl = await getSignedDownloadUrl(profile.resumeUrl, 3600);
-    return { signedUrl, expiresIn: 3600 };
+  const objectPath = isObjectPath(profile.resumeUrl) ? profile.resumeUrl : toObjectPath(profile.resumeUrl);
+  if (!objectPath || objectPath.startsWith('http')) {
+    // Could not extract object path — return raw URL as last resort
+    return { signedUrl: profile.resumeUrl, expiresIn: null };
   }
 
-  // Legacy HTTP URL — return as-is (publicly accessible)
-  return { signedUrl: profile.resumeUrl, expiresIn: null };
+  const signedUrl = await getSignedDownloadUrl(objectPath, 3600);
+  return { signedUrl, expiresIn: 3600 };
 }
 
 export async function getStudentPublic(uid) {
