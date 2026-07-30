@@ -39,16 +39,18 @@ export function AuthProvider({ children }) {
     const result = await signInWithPopup(auth, googleProvider);
     // Immediately fetch the backend session after a successful Google sign-in
     // so that state is populated before the onAuthStateChanged listener fires.
-    // This prevents a brief window where role/profileComplete are null for
-    // existing users, which was causing them to be incorrectly sent to /onboarding.
+    // Return { user, session } so the caller (LoginPage) can make explicit
+    // routing decisions based on the session (sign-in vs sign-up mode).
+    let resolvedSession = null;
     try {
       const s = await authService.session();
       setSession(s);
+      resolvedSession = s;
     } catch (err) {
       // Non-fatal: onAuthStateChanged will retry. Log for debugging.
       console.warn('Immediate post-login session fetch failed (will retry):', err);
     }
-    return result.user;
+    return { user: result.user, session: resolvedSession };
   }, []);
 
   const logout = useCallback(async () => {
