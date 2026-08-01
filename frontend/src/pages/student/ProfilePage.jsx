@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import {
   User, GraduationCap, Briefcase, Link2, Upload,
   Save, Camera, FileText, CheckCircle2, ExternalLink, Loader2, Sparkles,
+  Pencil, X, MapPin, Phone, Star,
 } from 'lucide-react';
 
 // ── Inline SVG brand icons ────────────────────────────────────
@@ -59,6 +60,18 @@ function Grid2({ children }) {
   return <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div>;
 }
 
+// ── Detail row for the read-only view ─────────────────────────
+function DetailRow({ icon: Icon, label, value }) {
+  if (!value) return null;
+  return (
+    <div className="flex items-center gap-2.5 text-sm py-1">
+      <Icon className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
+      <span className="text-slate-500 min-w-[80px]">{label}</span>
+      <span className="font-medium text-slate-800 truncate">{value}</span>
+    </div>
+  );
+}
+
 export default function ProfilePage() {
   const qc = useQueryClient();
   const fileRef = useRef(null);
@@ -67,6 +80,7 @@ export default function ProfilePage() {
   const [resumePct, setResumePct] = useState(null);
   const [viewingResume, setViewingResume] = useState(false);
   const [extracting, setExtracting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['student', 'me'],
@@ -91,6 +105,7 @@ export default function ProfilePage() {
     onSuccess: () => {
       toast.success('Profile saved!');
       qc.invalidateQueries({ queryKey: ['student', 'me'] });
+      setIsEditing(false);
     },
     onError: (err) => {
       const details = err.details;
@@ -208,6 +223,7 @@ export default function ProfilePage() {
   // Social link helpers
   const githubUrl   = soc.github   || '';
   const linkedinUrl = soc.linkedin || '';
+  const portfolioUrl = soc.portfolio || '';
 
   return (
     <div className="space-y-5">
@@ -219,34 +235,85 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* ── Avatar + social links card ───────────────────── */}
-      <div className="card p-5 flex items-center gap-5">
-        <div className="relative flex-shrink-0">
-          {p.profilePhotoURL ? (
-            <img src={p.profilePhotoURL} alt="avatar" className="avatar h-20 w-20" />
-          ) : (
-            <div className="h-20 w-20 rounded-full flex items-center justify-center text-2xl font-bold text-brand-700 bg-brand-50 ring-2 ring-brand-100">
-              {per.name?.charAt(0)?.toUpperCase() ?? '?'}
-            </div>
-          )}
+      {/* ── Profile Display Card (always visible) ─────────── */}
+      <div className="card overflow-hidden animate-slide-up">
+        {/* Gradient banner with Edit button */}
+        <div className="h-28 relative" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%)' }}>
           <button
-            onClick={() => fileRef.current?.click()}
-            className="absolute bottom-0 right-0 h-7 w-7 rounded-full bg-white ring-2 ring-brand-500 flex items-center justify-center text-brand-600 hover:bg-brand-50 transition-colors"
+            id="profile-edit-toggle-btn"
+            onClick={() => setIsEditing(!isEditing)}
+            className="absolute top-3 right-3 flex items-center gap-1.5 rounded-xl bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3.5 py-2 hover:bg-white/30 transition-all duration-200 active:scale-95"
           >
-            <Camera className="h-3.5 w-3.5" />
+            {isEditing ? (
+              <>
+                <X className="h-3.5 w-3.5" />
+                Cancel
+              </>
+            ) : (
+              <>
+                <Pencil className="h-3.5 w-3.5" />
+                Edit Profile
+              </>
+            )}
           </button>
+
+          {/* Photo upload overlay (only in edit mode) */}
+          {isEditing && (
+            <button
+              onClick={() => fileRef.current?.click()}
+              className="absolute bottom-3 left-5 flex items-center gap-1.5 rounded-lg bg-black/30 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1.5 hover:bg-black/40 transition-colors"
+            >
+              <Camera className="h-3 w-3" />
+              Change Photo
+            </button>
+          )}
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
         </div>
 
-        <div className="flex-1 min-w-0">
-          <p className="font-semibold text-slate-900 text-lg">{per.name || 'Your Name'}</p>
-          <p className="text-sm text-slate-500">{p.uid ? `Student · ${aca.college || 'College'}` : ''}</p>
-          <div className="flex flex-wrap items-center gap-2 mt-2">
+        <div className="px-5 pb-5">
+          {/* Avatar overlapping the banner */}
+          <div className="flex items-end gap-4 -mt-12">
+            <div className="relative flex-shrink-0">
+              {p.profilePhotoURL ? (
+                <img src={p.profilePhotoURL} alt="avatar" className="avatar h-24 w-24 ring-4 ring-white shadow-lg" />
+              ) : (
+                <div className="h-24 w-24 rounded-full flex items-center justify-center text-3xl font-bold text-brand-700 bg-brand-50 ring-4 ring-white shadow-lg">
+                  {per.name?.charAt(0)?.toUpperCase() ?? '?'}
+                </div>
+              )}
+              {isEditing && (
+                <button
+                  onClick={() => fileRef.current?.click()}
+                  className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white ring-2 ring-brand-500 flex items-center justify-center text-brand-600 hover:bg-brand-50 transition-colors shadow-md"
+                >
+                  <Camera className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+            <div className="flex-1 min-w-0 pb-1">
+              <p className="font-bold text-slate-900 text-xl leading-tight">{per.name || 'Your Name'}</p>
+              <p className="text-sm text-slate-500 mt-0.5">
+                {[aca.degree, aca.branch].filter(Boolean).join(' in ') || 'Student'}
+                {aca.college ? ` · ${aca.college}` : ''}
+              </p>
+            </div>
+
+            {uploadPct !== null && (
+              <div className="w-24 flex-shrink-0">
+                <p className="text-xs text-slate-400 mb-1 text-center">{uploadPct}%</p>
+                <div className="progress-track"><div className="progress-fill" style={{ width: `${uploadPct}%` }} /></div>
+              </div>
+            )}
+          </div>
+
+          {/* Badges row */}
+          <div className="flex flex-wrap items-center gap-1.5 mt-3">
             {p.role          && <span className="badge-brand">{p.role}</span>}
             {aca.graduationYear && <span className="badge-default">Class of {aca.graduationYear}</span>}
+            {aca.cgpa        && <span className="badge-blue">CGPA: {aca.cgpa}</span>}
             {p.resumeUrl     && <span className="badge-green"><CheckCircle2 className="h-3 w-3" /> Resume</span>}
 
-            {/* GitHub link — grey if no URL */}
+            {/* GitHub link */}
             <a
               href={githubUrl || '#'}
               target={githubUrl ? '_blank' : '_self'}
@@ -263,7 +330,7 @@ export default function ProfilePage() {
               GitHub
             </a>
 
-            {/* LinkedIn link — grey if no URL */}
+            {/* LinkedIn link */}
             <a
               href={linkedinUrl || '#'}
               target={linkedinUrl ? '_blank' : '_self'}
@@ -280,258 +347,349 @@ export default function ProfilePage() {
               LinkedIn
             </a>
           </div>
-        </div>
 
-        {uploadPct !== null && (
-          <div className="w-24 flex-shrink-0">
-            <p className="text-xs text-slate-400 mb-1 text-center">{uploadPct}%</p>
-            <div className="progress-track"><div className="progress-fill" style={{ width: `${uploadPct}%` }} /></div>
+          {/* ── Read-only details ─────────────────────────── */}
+          <div className="divider my-4" />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-1">
+            {/* Personal */}
+            <DetailRow icon={User} label="Full Name" value={per.name} />
+            <DetailRow icon={Phone} label="Phone" value={per.phone} />
+            <DetailRow icon={MapPin} label="City" value={per.city} />
+            <DetailRow icon={MapPin} label="State" value={per.state} />
+
+            {/* Academic */}
+            <DetailRow icon={GraduationCap} label="College" value={aca.college} />
+            <DetailRow icon={GraduationCap} label="Degree" value={aca.degree} />
+            <DetailRow icon={GraduationCap} label="Branch" value={aca.branch} />
+            <DetailRow icon={GraduationCap} label="Graduation" value={aca.graduationYear ? `${aca.graduationYear}` : null} />
+            <DetailRow icon={Star} label="CGPA" value={aca.cgpa ? `${aca.cgpa} / 10` : null} />
           </div>
-        )}
-      </div>
 
-      {/* ── Resume section — FIRST ───────────────────────── */}
-      <Section icon={FileText} title="Resume">
-        {/* Uploaded state */}
-        {p.resumeUrl && resumePct === null && (
-          <div className="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 ring-1 ring-emerald-200">
-            <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-              <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-emerald-800">Resume uploaded</p>
-              <p className="text-xs text-emerald-600 mt-0.5">PDF · Click View to open</p>
-            </div>
-            <button
-              onClick={handleViewResume}
-              disabled={viewingResume}
-              className="btn-secondary btn-sm flex items-center gap-1.5 flex-shrink-0"
-            >
-              {viewingResume ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
-              {viewingResume ? 'Opening...' : 'View'}
-            </button>
-          </div>
-        )}
-
-        {/* No resume yet + not uploading */}
-        {!p.resumeUrl && resumePct === null && (
-          <div className="dropzone" onClick={() => resumeRef.current?.click()}>
-            <Upload className="h-8 w-8 text-slate-400 mb-2" />
-            <p className="text-sm font-medium text-slate-700">Drop your resume here or click to browse</p>
-            <p className="text-xs text-slate-400 mt-1">PDF only · Max 5 MB</p>
-          </div>
-        )}
-
-        {/* Upload progress */}
-        {resumePct !== null && (
-          <div className="p-4 rounded-xl bg-slate-50 ring-1 ring-slate-200">
-            <div className="flex justify-between text-xs text-slate-500 mb-2">
-              <span className="font-medium">Uploading resume...</span>
-              <span>{resumePct}%</span>
-            </div>
-            <div className="progress-track">
-              <div className="progress-fill" style={{ width: `${resumePct}%` }} />
-            </div>
-          </div>
-        )}
-
-        <input ref={resumeRef} type="file" accept="application/pdf" className="hidden" onChange={handleResumeChange} />
-
-        <div className="flex flex-wrap items-center gap-3">
-          <button
-            onClick={() => resumeRef.current?.click()}
-            disabled={resumePct !== null}
-            className="btn-secondary btn-sm flex items-center gap-1.5"
-          >
-            <Upload className="h-3.5 w-3.5" />
-            {p.resumeUrl ? 'Replace Resume' : 'Upload Resume'}
-          </button>
-
-          {/* Auto-fill button — only shown when a resume exists */}
-          {p.resumeUrl && (
-            <button
-              onClick={handleExtract}
-              disabled={extracting}
-              className="btn-primary btn-sm flex items-center gap-1.5"
-            >
-              {extracting
-                ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                : <Sparkles className="h-3.5 w-3.5" />}
-              {extracting ? 'Extracting...' : 'Auto-fill from Resume'}
-            </button>
+          {/* Skills inline */}
+          {(pro.skills?.length ?? 0) > 0 && (
+            <>
+              <div className="divider my-4" />
+              <div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {pro.skills.map((s) => (
+                    <span key={s} className="pill">{s}</span>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
 
+          {/* Social links inline */}
+          {(githubUrl || linkedinUrl || portfolioUrl) && (
+            <>
+              <div className="divider my-4" />
+              <div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Links</p>
+                <div className="flex flex-wrap gap-2">
+                  {githubUrl && (
+                    <a href={githubUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-slate-900 text-white hover:bg-slate-700 transition-colors">
+                      <GitHubIcon className="h-3.5 w-3.5" /> GitHub <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                    </a>
+                  )}
+                  {linkedinUrl && (
+                    <a href={linkedinUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-[#0A66C2] text-white hover:bg-[#004182] transition-colors">
+                      <LinkedInIcon className="h-3.5 w-3.5" /> LinkedIn <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                    </a>
+                  )}
+                  {portfolioUrl && (
+                    <a href={portfolioUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors">
+                      <ExternalLink className="h-3 w-3" /> Portfolio
+                    </a>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Resume status inline */}
           {p.resumeUrl && (
-            <span className="text-xs text-slate-400">
-              {p.resumeUrl ? 'Uploading a new PDF replaces the current one' : ''}
-            </span>
+            <>
+              <div className="divider my-4" />
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                  <FileText className="h-4 w-4 text-emerald-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-emerald-800">Resume uploaded</p>
+                </div>
+                <button
+                  onClick={handleViewResume}
+                  disabled={viewingResume}
+                  className="btn-secondary btn-sm flex items-center gap-1.5 flex-shrink-0"
+                >
+                  {viewingResume ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
+                  {viewingResume ? 'Opening...' : 'View Resume'}
+                </button>
+              </div>
+            </>
           )}
         </div>
-      </Section>
-
-      {/* ── Personal Info ─────────────────────────────────── */}
-      <Section icon={User} title="Personal Information">
-        <Grid2>
-          <Field label="Full Name">
-            <input
-              key={`name-${per.name}`}
-              className="input"
-              defaultValue={per.name}
-              onChange={(e) => setPersonal({ ...getPersonal(), name: e.target.value })}
-              placeholder="Asha Kumar"
-            />
-          </Field>
-          <Field label="Phone">
-            <input
-              key={`phone-${per.phone}`}
-              className="input"
-              defaultValue={per.phone}
-              onChange={(e) => setPersonal({ ...getPersonal(), phone: e.target.value })}
-              placeholder="+91 98765 43210"
-            />
-          </Field>
-          <Field label="City">
-            <input
-              key={`city-${per.city}`}
-              className="input"
-              defaultValue={per.city}
-              onChange={(e) => setPersonal({ ...getPersonal(), city: e.target.value })}
-              placeholder="Bangalore"
-            />
-          </Field>
-          <Field label="State">
-            <input
-              key={`state-${per.state}`}
-              className="input"
-              defaultValue={per.state}
-              onChange={(e) => setPersonal({ ...getPersonal(), state: e.target.value })}
-              placeholder="Karnataka"
-            />
-          </Field>
-        </Grid2>
-      </Section>
-
-      {/* ── Academic ──────────────────────────────────────── */}
-      <Section icon={GraduationCap} title="Academic Details">
-        <Grid2>
-          <Field label="College / University">
-            <input
-              key={`college-${aca.college}`}
-              className="input"
-              defaultValue={aca.college}
-              onChange={(e) => setAcademic({ ...getAcademic(), college: e.target.value })}
-              placeholder="IIT Madras"
-            />
-          </Field>
-          <Field label="Degree">
-            <input
-              key={`degree-${aca.degree}`}
-              className="input"
-              defaultValue={aca.degree}
-              onChange={(e) => setAcademic({ ...getAcademic(), degree: e.target.value })}
-              placeholder="B.Tech"
-            />
-          </Field>
-          <Field label="Branch / Major">
-            <input
-              key={`branch-${aca.branch}`}
-              className="input"
-              defaultValue={aca.branch}
-              onChange={(e) => setAcademic({ ...getAcademic(), branch: e.target.value })}
-              placeholder="Computer Science"
-            />
-          </Field>
-          <Field label="Graduation Year">
-            <input
-              key={`gradYear-${aca.graduationYear}`}
-              type="number"
-              className="input"
-              defaultValue={aca.graduationYear}
-              min={2000}
-              max={2035}
-              onChange={(e) => setAcademic({ ...getAcademic(), graduationYear: Number(e.target.value) })}
-              placeholder="2025"
-            />
-          </Field>
-          <Field label="CGPA / GPA" hint="Out of 10">
-            <input
-              key={`cgpa-${aca.cgpa}`}
-              type="number"
-              step="0.01"
-              min={0}
-              max={10}
-              className="input"
-              defaultValue={aca.cgpa}
-              onChange={(e) => setAcademic({ ...getAcademic(), cgpa: parseFloat(e.target.value) })}
-              placeholder="8.5"
-            />
-          </Field>
-        </Grid2>
-      </Section>
-
-      {/* ── Professional ──────────────────────────────────── */}
-      <Section icon={Briefcase} title="Professional Details">
-        <Field label="Skills" hint="Type and press Enter or comma to add">
-          <SkillsInput
-            value={pro.skills ?? []}
-            onChange={(skills) => setProfessional({ ...getProfessional(), skills })}
-          />
-        </Field>
-      </Section>
-
-      {/* ── Social Links ──────────────────────────────────── */}
-      <Section icon={Link2} title="Social & Portfolio">
-        <Grid2>
-          <Field label="GitHub">
-            <div className="relative">
-              <GitHubIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <input
-                key={`github-${soc.github}`}
-                className="input pl-9"
-                defaultValue={soc.github}
-                onChange={(e) => setSocial({ ...getSocial(), github: e.target.value })}
-                placeholder="https://github.com/username"
-              />
-            </div>
-          </Field>
-          <Field label="LinkedIn">
-            <div className="relative">
-              <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-              <input
-                key={`linkedin-${soc.linkedin}`}
-                className="input pl-9"
-                defaultValue={soc.linkedin}
-                onChange={(e) => setSocial({ ...getSocial(), linkedin: e.target.value })}
-                placeholder="https://linkedin.com/in/username"
-              />
-            </div>
-          </Field>
-          <Field label="Portfolio / Website">
-            <input
-              key={`portfolio-${soc.portfolio}`}
-              className="input"
-              defaultValue={soc.portfolio}
-              onChange={(e) => setSocial({ ...getSocial(), portfolio: e.target.value })}
-              placeholder="https://myportfolio.dev"
-            />
-          </Field>
-        </Grid2>
-      </Section>
-
-      {/* ── Single Save button at the bottom ─────────────── */}
-      <div className="card p-4 flex items-center justify-between gap-4 sticky bottom-4 z-10 bg-white/90 backdrop-blur-sm">
-        <p className="text-xs text-slate-500">All changes are saved at once</p>
-        <button
-          onClick={handleSaveAll}
-          disabled={saveMutation.isPending}
-          className="btn-primary flex items-center gap-2"
-        >
-          {saveMutation.isPending
-            ? <Loader2 className="h-4 w-4 animate-spin" />
-            : <Save className="h-4 w-4" />}
-          {saveMutation.isPending ? 'Saving...' : 'Save Profile'}
-        </button>
       </div>
+
+      {/* ── Editable sections (toggle visibility) ─────────── */}
+      {isEditing && (
+        <div className="space-y-5 animate-slide-up">
+
+          {/* ── Resume section ──────────────────────────────── */}
+          <Section icon={FileText} title="Resume">
+            {/* Uploaded state */}
+            {p.resumeUrl && resumePct === null && (
+              <div className="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 ring-1 ring-emerald-200">
+                <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-emerald-800">Resume uploaded</p>
+                  <p className="text-xs text-emerald-600 mt-0.5">PDF · Click View to open</p>
+                </div>
+                <button
+                  onClick={handleViewResume}
+                  disabled={viewingResume}
+                  className="btn-secondary btn-sm flex items-center gap-1.5 flex-shrink-0"
+                >
+                  {viewingResume ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
+                  {viewingResume ? 'Opening...' : 'View'}
+                </button>
+              </div>
+            )}
+
+            {/* No resume yet + not uploading */}
+            {!p.resumeUrl && resumePct === null && (
+              <div className="dropzone" onClick={() => resumeRef.current?.click()}>
+                <Upload className="h-8 w-8 text-slate-400 mb-2" />
+                <p className="text-sm font-medium text-slate-700">Drop your resume here or click to browse</p>
+                <p className="text-xs text-slate-400 mt-1">PDF only · Max 5 MB</p>
+              </div>
+            )}
+
+            {/* Upload progress */}
+            {resumePct !== null && (
+              <div className="p-4 rounded-xl bg-slate-50 ring-1 ring-slate-200">
+                <div className="flex justify-between text-xs text-slate-500 mb-2">
+                  <span className="font-medium">Uploading resume...</span>
+                  <span>{resumePct}%</span>
+                </div>
+                <div className="progress-track">
+                  <div className="progress-fill" style={{ width: `${resumePct}%` }} />
+                </div>
+              </div>
+            )}
+
+            <input ref={resumeRef} type="file" accept="application/pdf" className="hidden" onChange={handleResumeChange} />
+
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={() => resumeRef.current?.click()}
+                disabled={resumePct !== null}
+                className="btn-secondary btn-sm flex items-center gap-1.5"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                {p.resumeUrl ? 'Replace Resume' : 'Upload Resume'}
+              </button>
+
+              {/* Auto-fill button — only shown when a resume exists */}
+              {p.resumeUrl && (
+                <button
+                  onClick={handleExtract}
+                  disabled={extracting}
+                  className="btn-primary btn-sm flex items-center gap-1.5"
+                >
+                  {extracting
+                    ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    : <Sparkles className="h-3.5 w-3.5" />}
+                  {extracting ? 'Extracting...' : 'Auto-fill from Resume'}
+                </button>
+              )}
+
+              {p.resumeUrl && (
+                <span className="text-xs text-slate-400">
+                  {p.resumeUrl ? 'Uploading a new PDF replaces the current one' : ''}
+                </span>
+              )}
+            </div>
+          </Section>
+
+          {/* ── Personal Info ─────────────────────────────────── */}
+          <Section icon={User} title="Personal Information">
+            <Grid2>
+              <Field label="Full Name">
+                <input
+                  key={`name-${per.name}`}
+                  className="input"
+                  defaultValue={per.name}
+                  onChange={(e) => setPersonal({ ...getPersonal(), name: e.target.value })}
+                  placeholder="Asha Kumar"
+                />
+              </Field>
+              <Field label="Phone">
+                <input
+                  key={`phone-${per.phone}`}
+                  className="input"
+                  defaultValue={per.phone}
+                  onChange={(e) => setPersonal({ ...getPersonal(), phone: e.target.value })}
+                  placeholder="+91 98765 43210"
+                />
+              </Field>
+              <Field label="City">
+                <input
+                  key={`city-${per.city}`}
+                  className="input"
+                  defaultValue={per.city}
+                  onChange={(e) => setPersonal({ ...getPersonal(), city: e.target.value })}
+                  placeholder="Bangalore"
+                />
+              </Field>
+              <Field label="State">
+                <input
+                  key={`state-${per.state}`}
+                  className="input"
+                  defaultValue={per.state}
+                  onChange={(e) => setPersonal({ ...getPersonal(), state: e.target.value })}
+                  placeholder="Karnataka"
+                />
+              </Field>
+            </Grid2>
+          </Section>
+
+          {/* ── Academic ──────────────────────────────────────── */}
+          <Section icon={GraduationCap} title="Academic Details">
+            <Grid2>
+              <Field label="College / University">
+                <input
+                  key={`college-${aca.college}`}
+                  className="input"
+                  defaultValue={aca.college}
+                  onChange={(e) => setAcademic({ ...getAcademic(), college: e.target.value })}
+                  placeholder="IIT Madras"
+                />
+              </Field>
+              <Field label="Degree">
+                <input
+                  key={`degree-${aca.degree}`}
+                  className="input"
+                  defaultValue={aca.degree}
+                  onChange={(e) => setAcademic({ ...getAcademic(), degree: e.target.value })}
+                  placeholder="B.Tech"
+                />
+              </Field>
+              <Field label="Branch / Major">
+                <input
+                  key={`branch-${aca.branch}`}
+                  className="input"
+                  defaultValue={aca.branch}
+                  onChange={(e) => setAcademic({ ...getAcademic(), branch: e.target.value })}
+                  placeholder="Computer Science"
+                />
+              </Field>
+              <Field label="Graduation Year">
+                <input
+                  key={`gradYear-${aca.graduationYear}`}
+                  type="number"
+                  className="input"
+                  defaultValue={aca.graduationYear}
+                  min={2000}
+                  max={2035}
+                  onChange={(e) => setAcademic({ ...getAcademic(), graduationYear: Number(e.target.value) })}
+                  placeholder="2025"
+                />
+              </Field>
+              <Field label="CGPA / GPA" hint="Out of 10">
+                <input
+                  key={`cgpa-${aca.cgpa}`}
+                  type="number"
+                  step="0.01"
+                  min={0}
+                  max={10}
+                  className="input"
+                  defaultValue={aca.cgpa}
+                  onChange={(e) => setAcademic({ ...getAcademic(), cgpa: parseFloat(e.target.value) })}
+                  placeholder="8.5"
+                />
+              </Field>
+            </Grid2>
+          </Section>
+
+          {/* ── Professional ──────────────────────────────────── */}
+          <Section icon={Briefcase} title="Professional Details">
+            <Field label="Skills" hint="Type and press Enter or comma to add">
+              <SkillsInput
+                value={pro.skills ?? []}
+                onChange={(skills) => setProfessional({ ...getProfessional(), skills })}
+              />
+            </Field>
+          </Section>
+
+          {/* ── Social Links ──────────────────────────────────── */}
+          <Section icon={Link2} title="Social & Portfolio">
+            <Grid2>
+              <Field label="GitHub">
+                <div className="relative">
+                  <GitHubIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <input
+                    key={`github-${soc.github}`}
+                    className="input pl-9"
+                    defaultValue={soc.github}
+                    onChange={(e) => setSocial({ ...getSocial(), github: e.target.value })}
+                    placeholder="https://github.com/username"
+                  />
+                </div>
+              </Field>
+              <Field label="LinkedIn">
+                <div className="relative">
+                  <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <input
+                    key={`linkedin-${soc.linkedin}`}
+                    className="input pl-9"
+                    defaultValue={soc.linkedin}
+                    onChange={(e) => setSocial({ ...getSocial(), linkedin: e.target.value })}
+                    placeholder="https://linkedin.com/in/username"
+                  />
+                </div>
+              </Field>
+              <Field label="Portfolio / Website">
+                <input
+                  key={`portfolio-${soc.portfolio}`}
+                  className="input"
+                  defaultValue={soc.portfolio}
+                  onChange={(e) => setSocial({ ...getSocial(), portfolio: e.target.value })}
+                  placeholder="https://myportfolio.dev"
+                />
+              </Field>
+            </Grid2>
+          </Section>
+
+          {/* ── Single Save button at the bottom ─────────────── */}
+          <div className="card p-4 flex items-center justify-between gap-4 sticky bottom-4 z-10 bg-white/90 backdrop-blur-sm">
+            <p className="text-xs text-slate-500">All changes are saved at once</p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsEditing(false)}
+                className="btn-secondary flex items-center gap-2"
+              >
+                <X className="h-4 w-4" />
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveAll}
+                disabled={saveMutation.isPending}
+                className="btn-primary flex items-center gap-2"
+              >
+                {saveMutation.isPending
+                  ? <Loader2 className="h-4 w-4 animate-spin" />
+                  : <Save className="h-4 w-4" />}
+                {saveMutation.isPending ? 'Saving...' : 'Save Profile'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
