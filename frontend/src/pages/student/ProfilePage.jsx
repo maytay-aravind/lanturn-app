@@ -261,8 +261,8 @@ export default function ProfilePage() {
 
         <div className="px-5 pb-5">
           {/* Avatar overlapping the banner */}
-          <div className="flex items-end gap-4 -mt-12">
-            <div className="relative flex-shrink-0">
+          <div className="-mt-14 mb-3">
+            <div className="relative inline-block">
               {p.profilePhotoURL ? (
                 <img src={p.profilePhotoURL} alt="avatar" className="avatar h-24 w-24 ring-4 ring-white shadow-lg" />
               ) : (
@@ -277,20 +277,22 @@ export default function ProfilePage() {
                 <Camera className="h-3.5 w-3.5" />
               </button>
             </div>
-            <div className="flex-1 min-w-0 pb-1">
-              <p className="font-bold text-slate-900 text-xl leading-tight">{per.name || p.personal?.name || 'Your Name'}</p>
-              <p className="text-sm text-slate-500 mt-0.5">
-                {[aca.degree, aca.branch].filter(Boolean).join(' in ') || 'Student'}
-                {aca.college ? ` · ${aca.college}` : ''}
-              </p>
-            </div>
 
             {uploadPct !== null && (
-              <div className="w-24 flex-shrink-0">
+              <div className="inline-block w-24 ml-4 align-bottom">
                 <p className="text-xs text-slate-400 mb-1 text-center">{uploadPct}%</p>
                 <div className="progress-track"><div className="progress-fill" style={{ width: `${uploadPct}%` }} /></div>
               </div>
             )}
+          </div>
+
+          {/* Name and subtitle */}
+          <div className="mb-3">
+            <h2 className="font-bold text-slate-900 text-xl leading-tight">{per.name || p.personal?.name || 'Your Name'}</h2>
+            <p className="text-sm text-slate-500 mt-1">
+              {[aca.degree, aca.branch].filter(Boolean).join(' in ') || 'Student'}
+              {aca.college ? ` · ${aca.college}` : ''}
+            </p>
           </div>
 
           {/* Badges row */}
@@ -396,27 +398,51 @@ export default function ProfilePage() {
           )}
 
           {/* Resume status inline */}
-          {p.resumeUrl && (
-            <>
-              <div className="divider my-4" />
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                  <FileText className="h-4 w-4 text-emerald-600" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-emerald-800">Resume uploaded</p>
-                </div>
+          <>
+            <div className="divider my-4" />
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                <FileText className="h-4 w-4 text-emerald-600" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-emerald-800">
+                  {p.resumeUrl ? 'Resume uploaded' : 'No resume uploaded'}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                {p.resumeUrl && (
+                  <button
+                    onClick={handleViewResume}
+                    disabled={viewingResume}
+                    className="btn-secondary btn-sm flex items-center gap-1.5"
+                  >
+                    {viewingResume ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
+                    {viewingResume ? 'Opening...' : 'View Resume'}
+                  </button>
+                )}
                 <button
-                  onClick={handleViewResume}
-                  disabled={viewingResume}
-                  className="btn-secondary btn-sm flex items-center gap-1.5 flex-shrink-0"
+                  onClick={() => resumeRef.current?.click()}
+                  disabled={resumePct !== null}
+                  className="btn-primary btn-sm flex items-center gap-1.5"
                 >
-                  {viewingResume ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
-                  {viewingResume ? 'Opening...' : 'View Resume'}
+                  <Upload className="h-3 w-3" />
+                  {p.resumeUrl ? 'Replace' : 'Upload Resume'}
                 </button>
               </div>
-            </>
-          )}
+            </div>
+            {resumePct !== null && (
+              <div className="mt-2 p-3 rounded-xl bg-slate-50 ring-1 ring-slate-200">
+                <div className="flex justify-between text-xs text-slate-500 mb-1">
+                  <span className="font-medium">Uploading...</span>
+                  <span>{resumePct}%</span>
+                </div>
+                <div className="progress-track">
+                  <div className="progress-fill" style={{ width: `${resumePct}%` }} />
+                </div>
+              </div>
+            )}
+            <input ref={resumeRef} type="file" accept="application/pdf" className="hidden" onChange={handleResumeChange} />
+          </>
         </div>
       </div>
 
