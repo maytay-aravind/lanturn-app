@@ -17,6 +17,7 @@ function rowToStudent(row) {
     profilePhotoURL:  row.profile_photo_url || '',
     resumeUrl:        row.resume_url        || '',
     resumeText:       row.resume_text       || '',
+    resumeKeywords:   row.resume_keywords   || [],
     createdAt:        row.created_at,
     updatedAt:        row.updated_at,
   };
@@ -34,6 +35,7 @@ function toDbPayload(data) {
   if (data.profilePhotoURL  !== undefined) p.profile_photo_url  = data.profilePhotoURL;
   if (data.resumeUrl        !== undefined) p.resume_url         = data.resumeUrl;
   if (data.resumeText       !== undefined) p.resume_text        = data.resumeText;
+  if (data.resumeKeywords   !== undefined) p.resume_keywords    = data.resumeKeywords;
   return p;
 }
 
@@ -50,6 +52,7 @@ function defaultStudentRow(uid) {
     profile_photo_url:  '',
     resume_url:         '',
     resume_text:        '',
+    resume_keywords:    [],
   };
 }
 

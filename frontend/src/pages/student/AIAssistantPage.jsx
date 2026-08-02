@@ -221,6 +221,17 @@ function ResumeReviewTab() {
             </div>
           )}
 
+          {/* Resume Keywords (extracted from resume) */}
+          {result.resumeKeywords?.length > 0 && (
+            <div className="card p-5">
+              <p className="section-title mb-3 text-brand-700">🔑 Your Resume Keywords</p>
+              <div className="flex flex-wrap gap-2">
+                {result.resumeKeywords.map((k) => <span key={k} className="badge-brand">{k}</span>)}
+              </div>
+              <p className="text-xs text-slate-400 mt-2">These keywords were extracted from your resume and sent to AI for scoring</p>
+            </div>
+          )}
+
           {/* Strengths */}
           {result.strengths?.length > 0 && (
             <div className="card p-5">
@@ -246,6 +257,7 @@ function ResumeReviewTab() {
           {result.keywordsMissing?.length > 0 && (
             <div className="card p-5">
               <p className="section-title mb-3 text-red-700">🔍 Missing Keywords</p>
+              <p className="text-xs text-slate-500 mb-2">Add these keywords to your resume to improve your score</p>
               <div className="flex flex-wrap gap-2">
                 {result.keywordsMissing.map((k) => <span key={k} className="badge-red">{k}</span>)}
               </div>
@@ -256,6 +268,7 @@ function ResumeReviewTab() {
     </div>
   );
 }
+
 
 // ─── Interview Prep tab ───────────────────────────────────────
 function InterviewPrepTab() {

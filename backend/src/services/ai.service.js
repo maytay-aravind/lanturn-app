@@ -36,18 +36,45 @@ Output STRICT JSON only:
 const CHAT_PROMPT = `You are LanTURN's AI Career Assistant. Help the student with career guidance, interview preparation, or general questions.
 Be encouraging, specific, and practical. Keep responses under 300 words.`;
 
-async function loadResumeText(uid, resumeUrl) {
-  if (resumeUrl) {
-    // In a real app, we'd download and parse the PDF.
-    // For now, use cached text from the student profile.
-  }
+async function loadResumeText(uid) {
   const student = await studentsRepo.getById(uid);
-  if (!student?.resumeText) throw AppError.unprocessable('Upload a resume first');
-  return student.resumeText;
+  if (!student) throw AppError.unprocessable('Student profile not found');
+
+  // If we have cached resumeText (populated on upload), use it
+  if (student.resumeText) return { text: student.resumeText, keywords: student.resumeKeywords || [] };
+
+  // Fall back: build context from profile data + keywords
+  if (!student.resumeUrl && !(student.resumeKeywords?.length > 0)) {
+    throw AppError.unprocessable('Upload a resume first');
+  }
+
+  const parts = [];
+  const per = student.personal || {};
+  const aca = student.academic || {};
+  const pro = student.professional || {};
+  const soc = student.social || {};
+
+  if (per.name)   parts.push(`Name: ${per.name}`);
+  if (per.phone)  parts.push(`Phone: ${per.phone}`);
+  if (per.city)   parts.push(`Location: ${[per.city, per.state].filter(Boolean).join(', ')}`);
+  if (aca.college) parts.push(`University: ${aca.college}`);
+  if (aca.degree)  parts.push(`Degree: ${aca.degree}`);
+  if (aca.branch)  parts.push(`Major: ${aca.branch}`);
+  if (aca.graduationYear) parts.push(`Graduation Year: ${aca.graduationYear}`);
+  if (aca.cgpa)    parts.push(`CGPA: ${aca.cgpa}`);
+  if (pro.skills?.length)  parts.push(`Skills: ${pro.skills.join(', ')}`);
+  if (student.resumeKeywords?.length) parts.push(`Resume Keywords: ${student.resumeKeywords.join(', ')}`);
+  if (soc.github)    parts.push(`GitHub: ${soc.github}`);
+  if (soc.linkedin)  parts.push(`LinkedIn: ${soc.linkedin}`);
+  if (soc.portfolio) parts.push(`Portfolio: ${soc.portfolio}`);
+
+  if (parts.length === 0) throw AppError.unprocessable('Upload a resume first or complete your profile');
+
+  return { text: parts.join('\n'), keywords: student.resumeKeywords || [] };
 }
 
 export async function reviewResume(uid, { targetRole }) {
-  const resumeText = await loadResumeText(uid);
+  const { text: resumeText, keywords } = await loadResumeText(uid);
   const userContent = `RESUME:\n${resumeText}\n\nTARGET ROLE: ${targetRole || 'general'}`;
   const result = await callGemini({
     systemPrompt: RESUME_REVIEW_PROMPT,
@@ -55,11 +82,21 @@ export async function reviewResume(uid, { targetRole }) {
     responseFormat: true,
     temperature: 0.2,
   });
-  return result;
+
+  // If Gemini returned keywords, merge with existing and save
+  const geminiKeywords = result.keywordsMissing || [];
+  const allKeywords = [...new Set([...keywords, ...geminiKeywords])];
+
+  // Save the keywords back (merge existing + any new ones Gemini found)
+  if (keywords.length === 0 && allKeywords.length > 0) {
+    await studentsRepo.ensureAndUpdate(uid, { resumeKeywords: allKeywords });
+  }
+
+  return { ...result, resumeKeywords: keywords };
 }
 
-export async function matchResumeToJob(uid, { jobId, resumeUrl }) {
-  const resumeText = await loadResumeText(uid, resumeUrl);
+export async function matchResumeToJob(uid, { jobId }) {
+  const { text: resumeText } = await loadResumeText(uid);
   const job = await jobsRepo.getById(jobId);
   if (!job) throw AppError.notFound('Job not found');
 
@@ -74,7 +111,7 @@ export async function matchResumeToJob(uid, { jobId, resumeUrl }) {
 }
 
 export async function skillGapAnalysis(uid, { jobId }) {
-  const resumeText = await loadResumeText(uid);
+  const { text: resumeText } = await loadResumeText(uid);
   const job = await jobsRepo.getById(jobId);
   if (!job) throw AppError.notFound('Job not found');
 
@@ -102,8 +139,8 @@ export async function generateInterviewQuestions(uid, { jobId, skills, difficult
   return result;
 }
 
-export async function generateCoverLetter(uid, { jobId, resumeUrl, tone }) {
-  const resumeText = await loadResumeText(uid, resumeUrl);
+export async function generateCoverLetter(uid, { jobId, tone }) {
+  const { text: resumeText } = await loadResumeText(uid);
   const job = await jobsRepo.getById(jobId);
   if (!job) throw AppError.notFound('Job not found');
 
