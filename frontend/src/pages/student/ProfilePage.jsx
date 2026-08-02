@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { studentService } from '../../services/student.service.js';
 import { uploadService } from '../../services/upload.service.js';
 import { magicalService } from '../../services/magical.service.js';
@@ -9,7 +10,7 @@ import toast from 'react-hot-toast';
 import {
   User, GraduationCap, Briefcase, Link2, Upload,
   Save, Camera, FileText, CheckCircle2, ExternalLink, Loader2, Sparkles,
-  Pencil, X, MapPin, Phone, Star,
+  Pencil, X, MapPin, Phone, Star, BarChart3,
 } from 'lucide-react';
 
 // ── Inline SVG brand icons ────────────────────────────────────
@@ -81,6 +82,7 @@ export default function ProfilePage() {
   const [viewingResume, setViewingResume] = useState(false);
   const [extracting, setExtracting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
 
   const { data: profile, isLoading } = useQuery({
     queryKey: ['student', 'me'],
@@ -420,13 +422,22 @@ export default function ProfilePage() {
                     {viewingResume ? 'Opening...' : 'View Resume'}
                   </button>
                 )}
+                {p.resumeUrl && (
+                  <button
+                    onClick={() => navigate('/ai?tab=review')}
+                    className="btn-secondary btn-sm flex items-center gap-1.5 text-brand-600 ring-brand-200 hover:ring-brand-300 hover:bg-brand-50"
+                  >
+                    <BarChart3 className="h-3 w-3" />
+                    AI Score
+                  </button>
+                )}
                 <button
                   onClick={() => resumeRef.current?.click()}
                   disabled={resumePct !== null}
                   className="btn-primary btn-sm flex items-center gap-1.5"
                 >
                   <Upload className="h-3 w-3" />
-                  {p.resumeUrl ? 'Replace' : 'Upload Resume'}
+                  {p.resumeUrl ? 'Update' : 'Upload Resume'}
                 </button>
               </div>
             </div>

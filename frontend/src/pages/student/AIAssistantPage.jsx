@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { aiService } from '../../services/ai.service.js';
 import { magicalService } from '../../services/magical.service.js';
 import { jobService } from '../../services/job.service.js';
@@ -433,7 +434,14 @@ function JobMatchTab() {
 
 // ─── Main component ───────────────────────────────────────────
 export default function AIAssistantPage() {
-  const [tab, setTab] = useState('chat');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = TABS.some(t => t.id === searchParams.get('tab')) ? searchParams.get('tab') : 'chat';
+  const [tab, setTab] = useState(initialTab);
+
+  const changeTab = (newTab) => {
+    setTab(newTab);
+    setSearchParams({ tab: newTab }, { replace: true });
+  };
 
   return (
     <div className="space-y-5">
@@ -453,7 +461,7 @@ export default function AIAssistantPage() {
         {TABS.map(({ id, icon: Icon, label }) => (
           <button
             key={id}
-            onClick={() => setTab(id)}
+            onClick={() => changeTab(id)}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
               tab === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
             }`}
