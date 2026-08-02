@@ -62,7 +62,7 @@ function ChatTab() {
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
     },
     onError: (err) => {
-      toast.error(err.response?.data?.error?.message || 'AI unavailable right now');
+      toast.error(err.message || 'AI unavailable right now');
       setMessages((prev) => [...prev, { role: 'assistant', content: '⚠️ I ran into an error. Please try again.' }]);
     },
   });
@@ -165,7 +165,7 @@ function ResumeReviewTab() {
   const magicalMutation = useMutation({
     mutationFn: () => magicalService.reviewResume(),
     onSuccess: (data) => setResult({ ...data, _source: 'magical' }),
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'MagicalAPI review failed'),
+    onError: (err) => toast.error(err.message || 'MagicalAPI review failed'),
   });
 
   const geminiMutation = useMutation({
@@ -177,7 +177,7 @@ function ResumeReviewTab() {
         setTargetRole(data.predictedRole);
       }
     },
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'AI review failed — check your Gemini API key'),
+    onError: (err) => toast.error(err.message || 'AI review failed — check your Gemini API key'),
   });
 
   const isPending = magicalMutation.isPending || geminiMutation.isPending;
@@ -292,7 +292,7 @@ function InterviewPrepTab() {
       difficulty,
     }),
     onSuccess: (data) => setResult(data),
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'Failed to generate questions'),
+    onError: (err) => toast.error(err.message || 'Failed to generate questions'),
   });
 
   const CATEGORIES = ['technical', 'behavioral', 'situational'];
@@ -383,7 +383,7 @@ function JobMatchTab() {
   const geminiMutation = useMutation({
     mutationFn: () => aiService.matchJob({ jobId }),
     onSuccess: (data) => setResult({ ...data, _source: 'gemini' }),
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'Match failed'),
+    onError: (err) => toast.error(err.message || 'Match failed'),
   });
 
   const isPending = magicalMutation.isPending || geminiMutation.isPending;
