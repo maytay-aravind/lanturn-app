@@ -256,17 +256,6 @@ export default function ProfilePage() {
               </>
             )}
           </button>
-
-          {/* Photo upload overlay (only in edit mode) */}
-          {isEditing && (
-            <button
-              onClick={() => fileRef.current?.click()}
-              className="absolute bottom-3 left-5 flex items-center gap-1.5 rounded-lg bg-black/30 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1.5 hover:bg-black/40 transition-colors"
-            >
-              <Camera className="h-3 w-3" />
-              Change Photo
-            </button>
-          )}
           <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
         </div>
 
@@ -281,17 +270,15 @@ export default function ProfilePage() {
                   {per.name?.charAt(0)?.toUpperCase() ?? '?'}
                 </div>
               )}
-              {isEditing && (
-                <button
-                  onClick={() => fileRef.current?.click()}
-                  className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white ring-2 ring-brand-500 flex items-center justify-center text-brand-600 hover:bg-brand-50 transition-colors shadow-md"
-                >
-                  <Camera className="h-3.5 w-3.5" />
-                </button>
-              )}
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-white ring-2 ring-brand-500 flex items-center justify-center text-brand-600 hover:bg-brand-50 transition-colors shadow-md"
+              >
+                <Camera className="h-3.5 w-3.5" />
+              </button>
             </div>
             <div className="flex-1 min-w-0 pb-1">
-              <p className="font-bold text-slate-900 text-xl leading-tight">{per.name || 'Your Name'}</p>
+              <p className="font-bold text-slate-900 text-xl leading-tight">{per.name || p.personal?.name || 'Your Name'}</p>
               <p className="text-sm text-slate-500 mt-0.5">
                 {[aca.degree, aca.branch].filter(Boolean).join(' in ') || 'Student'}
                 {aca.college ? ` · ${aca.college}` : ''}
