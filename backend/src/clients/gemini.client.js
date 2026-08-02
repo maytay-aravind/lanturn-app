@@ -5,7 +5,7 @@ import { AppError } from '#utils/httpErrors.js';
 const log = logger_for('gemini.client');
 
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const MODEL = 'gemini-1.5-flash';
+const MODEL = 'gemini-3.5-flash-lite';
 
 /**
  * Call the Gemini API with a structured prompt.
