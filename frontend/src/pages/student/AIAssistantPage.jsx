@@ -170,8 +170,14 @@ function ResumeReviewTab() {
 
   const geminiMutation = useMutation({
     mutationFn: () => aiService.reviewResume({ targetRole }),
-    onSuccess: (data) => setResult({ ...data, _source: 'gemini' }),
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'AI review failed'),
+    onSuccess: (data) => {
+      setResult({ ...data, _source: 'gemini' });
+      // Auto-fill the role field with the AI-predicted role if user left it empty
+      if (!targetRole && data.predictedRole) {
+        setTargetRole(data.predictedRole);
+      }
+    },
+    onError: (err) => toast.error(err.response?.data?.error?.message || 'AI review failed — check your Gemini API key'),
   });
 
   const isPending = magicalMutation.isPending || geminiMutation.isPending;
@@ -194,8 +200,8 @@ function ResumeReviewTab() {
         </div>
         {source === 'gemini' && (
           <div>
-            <label className="label">Target Role (optional)</label>
-            <input className="input" placeholder="e.g. Software Engineer" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
+            <label className="label">Target Role <span className="text-slate-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
+            <input className="input" placeholder="Will be predicted from your resume…" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
           </div>
         )}
         <button
@@ -217,6 +223,9 @@ function ResumeReviewTab() {
               <div>
                 <p className="font-semibold text-slate-900">Resume Score</p>
                 <p className="text-sm text-slate-500">Powered by {result._source === 'magical' ? 'MagicalAPI' : 'Gemini AI'}</p>
+                {result.predictedRole && (
+                  <p className="text-xs text-brand-600 mt-1">🎯 Analyzed for: <span className="font-medium">{result.predictedRole}</span></p>
+                )}
               </div>
             </div>
           )}

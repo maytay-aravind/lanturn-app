@@ -75,24 +75,53 @@ async function loadResumeText(uid) {
 
 export async function reviewResume(uid, { targetRole }) {
   const { text: resumeText, keywords } = await loadResumeText(uid);
-  const userContent = `RESUME:\n${resumeText}\n\nTARGET ROLE: ${targetRole || 'general'}`;
-  const result = await callGemini({
-    systemPrompt: RESUME_REVIEW_PROMPT,
-    userContent,
-    responseFormat: true,
-    temperature: 0.2,
-  });
 
-  // If Gemini returned keywords, merge with existing and save
-  const geminiKeywords = result.keywordsMissing || [];
-  const allKeywords = [...new Set([...keywords, ...geminiKeywords])];
-
-  // Save the keywords back (merge existing + any new ones Gemini found)
-  if (keywords.length === 0 && allKeywords.length > 0) {
-    await studentsRepo.ensureAndUpdate(uid, { resumeKeywords: allKeywords });
+  // Auto-predict a target role from profile data if user didn't provide one
+  let predictedRole = targetRole || '';
+  if (!predictedRole) {
+    const student = await studentsRepo.getById(uid);
+    const pro = student?.professional || {};
+    const aca = student?.academic || {};
+    // Use job_title from resume if available, else infer from degree/skills
+    if (pro.jobTitle) {
+      predictedRole = pro.jobTitle;
+    } else if (keywords.length > 0) {
+      // Build a simple prediction from degree + top skills
+      const degree = aca.degree || '';
+      const branch = aca.branch || '';
+      const topSkills = keywords.slice(0, 5).join(', ');
+      if (branch && topSkills) {
+        predictedRole = `${branch} ${degree ? `(${degree})` : ''} — ${topSkills}`.trim();
+      } else if (topSkills) {
+        predictedRole = topSkills;
+      }
+    }
   }
 
-  return { ...result, resumeKeywords: keywords };
+  const userContent = `RESUME:\n${resumeText}\n\nTARGET ROLE: ${predictedRole || 'general'}`;
+
+  try {
+    const result = await callGemini({
+      systemPrompt: RESUME_REVIEW_PROMPT,
+      userContent,
+      responseFormat: true,
+      temperature: 0.2,
+    });
+
+    // If Gemini returned keywords, merge with existing and save
+    const geminiKeywords = result.keywordsMissing || [];
+    const allKeywords = [...new Set([...keywords, ...geminiKeywords])];
+
+    // Save the keywords back (merge existing + any new ones Gemini found)
+    if (keywords.length === 0 && allKeywords.length > 0) {
+      await studentsRepo.ensureAndUpdate(uid, { resumeKeywords: allKeywords });
+    }
+
+    return { ...result, resumeKeywords: keywords, predictedRole };
+  } catch (err) {
+    log.error({ err, uid }, 'Gemini resume review failed');
+    throw err;
+  }
 }
 
 export async function matchResumeToJob(uid, { jobId }) {
