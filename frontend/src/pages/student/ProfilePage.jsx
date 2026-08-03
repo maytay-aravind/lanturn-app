@@ -207,6 +207,7 @@ export default function ProfilePage() {
       if (extracted.social    && Object.keys(extracted.social).length)
         setSocial((prev) => ({ ...(prev ?? p.social ?? {}), ...extracted.social }));
 
+      setIsEditing(true);
       toast.success('Profile fields filled from resume! Review and save.', { id: toastId });
     } catch (err) {
       toast.error(err.message || 'Could not extract resume data', { id: toastId });
@@ -429,6 +430,18 @@ export default function ProfilePage() {
                   >
                     <BarChart3 className="h-3 w-3" />
                     AI Score
+                  </button>
+                )}
+                {p.resumeUrl && (
+                  <button
+                    onClick={handleExtract}
+                    disabled={extracting}
+                    className="btn-primary btn-sm flex items-center gap-1.5"
+                  >
+                    {extracting
+                      ? <Loader2 className="h-3 w-3 animate-spin" />
+                      : <Sparkles className="h-3 w-3" />}
+                    {extracting ? 'Extracting...' : 'Auto-fill'}
                   </button>
                 )}
                 <button

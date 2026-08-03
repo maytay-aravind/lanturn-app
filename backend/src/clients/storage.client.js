@@ -1,5 +1,6 @@
 import { supabase } from '#supabase';
 import { env, UPLOAD_POLICY } from '#config';
+import { AppError } from '#utils/httpErrors.js';
 import { logger_for } from '#utils/logger.js';
 import { randomUUID } from 'node:crypto';
 
@@ -88,7 +89,7 @@ export async function getSignedDownloadUrl(objectPath, expiresInSeconds = 3600) 
     .from('resumes')
     .createSignedUrl(objectPath, expiresInSeconds);
 
-  if (error) throw new Error(`Failed to sign download URL: ${error.message}`);
+  if (error) throw AppError.upstream(`Failed to sign download URL: ${error.message}`);
   return data.signedUrl;
 }
 

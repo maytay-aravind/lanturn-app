@@ -1,4 +1,5 @@
 import { env } from '#config';
+import { AppError } from '#utils/httpErrors.js';
 import { logger_for } from '#utils/logger.js';
 
 const log = logger_for('magical.client');
@@ -65,11 +66,11 @@ async function post(path, payload) {
     log.error({ status: response.status, body: text, path }, 'MagicalAPI error');
     // Surface the API's own message when present
     const message = json?.message || json?.error || text || `HTTP ${response.status}`;
-    throw new Error(`MagicalAPI error ${response.status}: ${message}`);
+    throw AppError.upstream(`MagicalAPI error ${response.status}: ${message}`);
   }
 
   if (response.status === 202 || response.status === 201) {
-    throw new Error('MagicalAPI job did not complete in time — please try again');
+    throw AppError.upstream('MagicalAPI job did not complete in time — please try again');
   }
 
   return json;
