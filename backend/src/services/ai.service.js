@@ -135,7 +135,45 @@ export async function reviewResume(uid, { targetRole }) {
 }
 
 export async function extractResumeData(uid) {
-  const { text: resumeText } = await loadResumeText(uid);
+  const student = await studentsRepo.getById(uid);
+  if (!student) throw AppError.unprocessable('Student profile not found');
+
+  let resumeText;
+
+  // Prefer downloading and parsing the actual PDF for maximum accuracy
+  if (student.resumeUrl) {
+    try {
+      const { getSignedDownloadUrl } = await import('#clients/storage.client.js');
+      const { createRequire } = await import('module');
+      const require = createRequire(import.meta.url);
+      const pdfParse = require('pdf-parse');
+
+      // Extract the storage path from the public URL
+      const urlObj = new URL(student.resumeUrl);
+      const objectPath = decodeURIComponent(urlObj.pathname.split('/object/public/')[1] || '');
+      if (!objectPath) throw new Error('Cannot extract storage path from resumeUrl');
+
+      const signedUrl = await getSignedDownloadUrl(objectPath, 300);
+      const response = await fetch(signedUrl);
+      if (!response.ok) throw new Error(`PDF download failed: ${response.status}`);
+      const buffer = await response.arrayBuffer();
+      const parsed = await pdfParse(Buffer.from(buffer));
+      resumeText = parsed.text;
+      log.info({ uid, chars: resumeText.length }, 'Parsed PDF for extraction');
+    } catch (pdfErr) {
+      log.warn({ err: pdfErr, uid }, 'PDF parse failed, falling back to cached text');
+      resumeText = null;
+    }
+  }
+
+  // Fallback to cached resumeText
+  if (!resumeText) {
+    if (student.resumeText) {
+      resumeText = student.resumeText;
+    } else {
+      throw AppError.unprocessable('Upload a resume first');
+    }
+  }
 
   try {
     const result = await callGemini({
@@ -145,7 +183,7 @@ export async function extractResumeData(uid) {
       temperature: 0.1,
     });
 
-    log.info({ uid }, 'Gemini extracted resume data');
+    log.info({ uid, keys: Object.keys(result || {}) }, 'Gemini extracted resume data');
     
     const normalizeUrl = (v) => (v && /^https?:\/\//i.test(v) ? v : '');
     
@@ -154,6 +192,9 @@ export async function extractResumeData(uid) {
       if (result.social.github) result.social.github = normalizeUrl(result.social.github);
       if (result.social.portfolio) result.social.portfolio = normalizeUrl(result.social.portfolio);
     }
+
+    // Also update the cached resumeText so future calls are faster
+    await studentsRepo.ensureAndUpdate(uid, { resumeText });
     
     return result;
   } catch (err) {
