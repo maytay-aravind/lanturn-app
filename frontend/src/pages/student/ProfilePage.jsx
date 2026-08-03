@@ -545,36 +545,32 @@ export default function ProfilePage() {
             <Grid2>
               <Field label="Full Name">
                 <input
-                  key={`name-${per.name}`}
                   className="input"
-                  defaultValue={per.name}
+                  value={per.name || ''}
                   onChange={(e) => setPersonal({ ...getPersonal(), name: e.target.value })}
                   placeholder="Asha Kumar"
                 />
               </Field>
               <Field label="Phone">
                 <input
-                  key={`phone-${per.phone}`}
                   className="input"
-                  defaultValue={per.phone}
+                  value={per.phone || ''}
                   onChange={(e) => setPersonal({ ...getPersonal(), phone: e.target.value })}
                   placeholder="+91 98765 43210"
                 />
               </Field>
               <Field label="City">
                 <input
-                  key={`city-${per.city}`}
                   className="input"
-                  defaultValue={per.city}
+                  value={per.city || ''}
                   onChange={(e) => setPersonal({ ...getPersonal(), city: e.target.value })}
                   placeholder="Bangalore"
                 />
               </Field>
               <Field label="State">
                 <input
-                  key={`state-${per.state}`}
                   className="input"
-                  defaultValue={per.state}
+                  value={per.state || ''}
                   onChange={(e) => setPersonal({ ...getPersonal(), state: e.target.value })}
                   placeholder="Karnataka"
                 />
@@ -587,37 +583,33 @@ export default function ProfilePage() {
             <Grid2>
               <Field label="College / University">
                 <input
-                  key={`college-${aca.college}`}
                   className="input"
-                  defaultValue={aca.college}
+                  value={aca.college || ''}
                   onChange={(e) => setAcademic({ ...getAcademic(), college: e.target.value })}
                   placeholder="IIT Madras"
                 />
               </Field>
               <Field label="Degree">
                 <input
-                  key={`degree-${aca.degree}`}
                   className="input"
-                  defaultValue={aca.degree}
+                  value={aca.degree || ''}
                   onChange={(e) => setAcademic({ ...getAcademic(), degree: e.target.value })}
                   placeholder="B.Tech"
                 />
               </Field>
               <Field label="Branch / Major">
                 <input
-                  key={`branch-${aca.branch}`}
                   className="input"
-                  defaultValue={aca.branch}
+                  value={aca.branch || ''}
                   onChange={(e) => setAcademic({ ...getAcademic(), branch: e.target.value })}
                   placeholder="Computer Science"
                 />
               </Field>
               <Field label="Graduation Year">
                 <input
-                  key={`gradYear-${aca.graduationYear}`}
                   type="number"
                   className="input"
-                  defaultValue={aca.graduationYear}
+                  value={aca.graduationYear || ''}
                   min={2000}
                   max={2035}
                   onChange={(e) => setAcademic({ ...getAcademic(), graduationYear: Number(e.target.value) })}
@@ -626,13 +618,12 @@ export default function ProfilePage() {
               </Field>
               <Field label="CGPA / GPA" hint="Out of 10">
                 <input
-                  key={`cgpa-${aca.cgpa}`}
                   type="number"
                   step="0.01"
                   min={0}
                   max={10}
                   className="input"
-                  defaultValue={aca.cgpa}
+                  value={aca.cgpa || ''}
                   onChange={(e) => setAcademic({ ...getAcademic(), cgpa: parseFloat(e.target.value) })}
                   placeholder="8.5"
                 />
@@ -657,9 +648,8 @@ export default function ProfilePage() {
                 <div className="relative">
                   <GitHubIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <input
-                    key={`github-${soc.github}`}
                     className="input pl-9"
-                    defaultValue={soc.github}
+                    value={soc.github || ''}
                     onChange={(e) => setSocial({ ...getSocial(), github: e.target.value })}
                     placeholder="https://github.com/username"
                   />
@@ -669,9 +659,8 @@ export default function ProfilePage() {
                 <div className="relative">
                   <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                   <input
-                    key={`linkedin-${soc.linkedin}`}
                     className="input pl-9"
-                    defaultValue={soc.linkedin}
+                    value={soc.linkedin || ''}
                     onChange={(e) => setSocial({ ...getSocial(), linkedin: e.target.value })}
                     placeholder="https://linkedin.com/in/username"
                   />
@@ -679,9 +668,8 @@ export default function ProfilePage() {
               </Field>
               <Field label="Portfolio / Website">
                 <input
-                  key={`portfolio-${soc.portfolio}`}
                   className="input"
-                  defaultValue={soc.portfolio}
+                  value={soc.portfolio || ''}
                   onChange={(e) => setSocial({ ...getSocial(), portfolio: e.target.value })}
                   placeholder="https://myportfolio.dev"
                 />
