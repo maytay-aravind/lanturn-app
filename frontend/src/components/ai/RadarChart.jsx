@@ -1,0 +1,174 @@
+import { useEffect, useMemo, useState } from 'react';
+
+/**
+ * Reusable animated radar chart.
+ * @param {Object} props
+ * @param {{ label: string, score: number }[]} props.dimensions - Any number of axes (typically 6)
+ * @param {number} [props.size=320]
+ * @param {boolean} [props.animated=true]
+ * @param {number|null} [props.activeIndex] - Highlighted point index
+ * @param {(index: number, dimension: object) => void} [props.onPointClick]
+ */
+export function RadarChart({
+  dimensions = [],
+  size = 320,
+  animated = true,
+  activeIndex = null,
+  onPointClick,
+}) {
+  const count = dimensions.length;
+  const [progress, setProgress] = useState(animated ? 0 : 1);
+
+  useEffect(() => {
+    if (!animated) {
+      setProgress(1);
+      return;
+    }
+    setProgress(0);
+    const start = performance.now();
+    const duration = 900;
+    let frame;
+
+    const tick = (now) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - (1 - t) ** 3;
+      setProgress(eased);
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [dimensions, animated]);
+
+  const layout = useMemo(() => {
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = size * 0.32;
+    const labelRadius = size * 0.44;
+
+    const angles = Array.from({ length: count }, (_, i) => {
+      const step = (Math.PI * 2) / count;
+      return -Math.PI / 2 + i * step;
+    });
+
+    const axisPoints = angles.map((angle) => ({
+      x: cx + radius * Math.cos(angle),
+      y: cy + radius * Math.sin(angle),
+      lx: cx + labelRadius * Math.cos(angle),
+      ly: cy + labelRadius * Math.sin(angle),
+      angle,
+    }));
+
+    const dataPoints = dimensions.map((dim, i) => {
+      const r = (dim.score / 100) * radius * progress;
+      const { angle } = axisPoints[i];
+      return {
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle),
+        score: dim.score,
+        label: dim.label,
+      };
+    });
+
+    const polygon = dataPoints.map((p) => `${p.x},${p.y}`).join(' ');
+
+    return { cx, cy, radius, axisPoints, dataPoints, polygon };
+  }, [count, dimensions, progress, size]);
+
+  if (count === 0) return null;
+
+  const { cx, cy, radius, axisPoints, dataPoints, polygon } = layout;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className="mx-auto select-none"
+      role="img"
+      aria-label="Career DNA radar chart"
+    >
+      {/* Grid rings */}
+      {[0.25, 0.5, 0.75, 1].map((level) => (
+        <polygon
+          key={level}
+          points={axisPoints
+            .map(({ angle }) => {
+              const r = radius * level;
+              return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
+            })
+            .join(' ')}
+          fill="none"
+          stroke="#e2e8f0"
+          strokeWidth={level === 1 ? 1.5 : 1}
+        />
+      ))}
+
+      {/* Axis lines */}
+      {axisPoints.map(({ x, y }, i) => (
+        <line
+          key={`axis-${i}`}
+          x1={cx}
+          y1={cy}
+          x2={x}
+          y2={y}
+          stroke="#e2e8f0"
+          strokeWidth={1}
+        />
+      ))}
+
+      {/* Data fill */}
+      <polygon
+        points={polygon}
+        fill="rgba(99,102,241,0.18)"
+        stroke="#6366f1"
+        strokeWidth={2}
+        strokeLinejoin="round"
+        style={{ transition: animated ? 'none' : 'all 0.3s ease' }}
+      />
+
+      {/* Clickable vertices + labels */}
+      {dataPoints.map((point, i) => {
+        const isActive = activeIndex === i;
+        const dim = dimensions[i];
+        const { lx, ly, angle } = axisPoints[i];
+        const anchor = Math.cos(angle) > 0.2 ? 'start' : Math.cos(angle) < -0.2 ? 'end' : 'middle';
+        const dy = Math.sin(angle) > 0.35 ? 12 : Math.sin(angle) < -0.35 ? 4 : 8;
+
+        return (
+          <g key={`point-${i}-${dim.label}`}>
+            <text
+              x={lx}
+              y={ly + dy}
+              textAnchor={anchor}
+              className={`text-[10px] font-medium fill-slate-600 ${isActive ? 'fill-brand-700 font-semibold' : ''}`}
+            >
+              {dim.label.length > 18 ? `${dim.label.slice(0, 16)}…` : dim.label}
+            </text>
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r={isActive ? 8 : 6}
+              fill={isActive ? '#4f46e5' : '#6366f1'}
+              stroke="#fff"
+              strokeWidth={2}
+              className={onPointClick ? 'cursor-pointer' : ''}
+              style={{ transition: 'r 0.15s ease, fill 0.15s ease' }}
+              onClick={() => onPointClick?.(i, dimensions[i])}
+            />
+            <circle
+              cx={point.x}
+              cy={point.y}
+              r={14}
+              fill="transparent"
+              className={onPointClick ? 'cursor-pointer' : ''}
+              onClick={() => onPointClick?.(i, dimensions[i])}
+            />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+export default RadarChart;

@@ -8,12 +8,14 @@ import { Skeleton } from '../../components/ui/Skeleton.jsx';
 import {
   Sparkles, Send, MessageSquare, FileSearch, Target, Star,
   ChevronRight, Bot, User, Loader2, RefreshCw, CheckCircle2,
-  AlertCircle,
+  AlertCircle, Dna,
 } from 'lucide-react';
+import { CareerDNAPanel } from '../../components/ai/CareerDNAPanel.jsx';
 
 // ─── Tab bar ─────────────────────────────────────────────────
 const TABS = [
   { id: 'chat',     icon: MessageSquare, label: 'Career Chat' },
+  { id: 'dna',      icon: Dna,           label: 'Career DNA' },
   { id: 'review',  icon: FileSearch,    label: 'Resume Review' },
   { id: 'match',   icon: Target,        label: 'Job Match' },
   { id: 'interview', icon: Star,        label: 'Interview Prep' },
@@ -496,6 +498,7 @@ export default function AIAssistantPage() {
       {/* Tab content */}
       <div className="card p-5">
         {tab === 'chat'      && <ChatTab />}
+        {tab === 'dna'       && <CareerDNAPanel />}
         {tab === 'review'    && <ResumeReviewTab />}
         {tab === 'match'     && <JobMatchTab />}
         {tab === 'interview' && <InterviewPrepTab />}

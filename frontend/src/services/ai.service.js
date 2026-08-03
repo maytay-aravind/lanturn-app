@@ -13,4 +13,7 @@ export const aiService = {
   careerChat: (body) => apiClient.post('/ai/career-chat', body).then(unwrap),
   listThreads: () => apiClient.get('/ai/threads').then(unwrap),
   getThreadMessages: (threadId) => apiClient.get(`/ai/threads/${threadId}/messages`).then(unwrap),
+
+  // Career DNA
+  careerDna: () => apiClient.post('/ai/career-dna').then(unwrap),
 };

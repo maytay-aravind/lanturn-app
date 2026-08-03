@@ -21,6 +21,7 @@ router.post('/skill-gap', ...guard, validate({ body: jobTargetSchema }), ...aiCt
 router.post('/interview-questions', ...guard, validate({ body: interviewQuestionsSchema }), ...aiCtrl.interviewQuestions);
 router.post('/cover-letter', ...guard, validate({ body: coverLetterSchema }), ...aiCtrl.coverLetter);
 router.post('/career-chat', ...guard, validate({ body: careerChatSchema }), ...aiCtrl.careerChat);
+router.post('/career-dna', ...guard, ...aiCtrl.careerDna);
 
 router.get('/threads', authenticate, requireRole('student'), requireProfileComplete, ...aiCtrl.listThreads);
 router.get('/threads/:threadId/messages', authenticate, requireRole('student'), requireProfileComplete, ...aiCtrl.getThreadMessages);

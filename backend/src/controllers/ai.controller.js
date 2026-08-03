@@ -81,3 +81,11 @@ export const getThreadMessages = [
     res.json({ data: { items }, meta: { requestId: req.id } });
   }),
 ];
+
+export const careerDna = [
+  ensureGeminiConfigured,
+  asyncHandler(async (req, res) => {
+    const data = await aiService.analyzeCareerDna(req.user.uid);
+    res.json({ data, meta: { requestId: req.id } });
+  }),
+];
