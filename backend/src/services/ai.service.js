@@ -413,22 +413,14 @@ export async function careerChat(uid, { threadId, message, mode = 'general', job
 
   let reply;
   try {
-    reply = await callGemini({
+    reply = await callDeepseek({
       systemPrompt: CHAT_PROMPT + contextStr,
       userContent,
       temperature: 0.7,
     });
   } catch (err) {
-    if (err.status === 429 || err.message?.includes('429') || err.message?.toLowerCase().includes('quota') || err.message?.toLowerCase().includes('limit')) {
-      log.warn({ threadId, err: err.message }, 'Gemini rate limited in career chat, falling back to Deepseek');
-      reply = await callDeepseek({
-        systemPrompt: CHAT_PROMPT + contextStr,
-        userContent,
-        temperature: 0.7,
-      });
-    } else {
-      throw err;
-    }
+    log.error({ threadId, err: err.message }, 'Deepseek career chat failed');
+    throw err;
   }
 
   // Save assistant message
