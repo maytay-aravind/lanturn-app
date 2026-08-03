@@ -36,6 +36,16 @@ Output STRICT JSON only:
 const CHAT_PROMPT = `You are LanTURN's AI Career Assistant. Help the student with career guidance, interview preparation, or general questions.
 Be encouraging, specific, and practical. Keep responses under 300 words.`;
 
+const EXTRACT_PROMPT = `You are an AI extracting student profile data from a resume for a job-matching platform.
+Extract the data and map it to the following JSON schema. Do NOT invent information. If a field is missing, omit it or use null.
+Output STRICT JSON only:
+{
+  "personal": { "name": "string", "phone": "string", "city": "string" },
+  "academic": { "college": "string", "degree": "string", "branch": "string", "graduationYear": 2024 },
+  "professional": { "skills": ["string"] },
+  "social": { "linkedin": "string URL", "github": "string URL", "portfolio": "string URL" }
+}`;
+
 async function loadResumeText(uid) {
   const student = await studentsRepo.getById(uid);
   if (!student) throw AppError.unprocessable('Student profile not found');
@@ -120,6 +130,34 @@ export async function reviewResume(uid, { targetRole }) {
     return { ...result, resumeKeywords: keywords, predictedRole };
   } catch (err) {
     log.error({ err, uid }, 'Gemini resume review failed');
+    throw err;
+  }
+}
+
+export async function extractResumeData(uid) {
+  const { text: resumeText } = await loadResumeText(uid);
+
+  try {
+    const result = await callGemini({
+      systemPrompt: EXTRACT_PROMPT,
+      userContent: resumeText,
+      responseFormat: true,
+      temperature: 0.1,
+    });
+
+    log.info({ uid }, 'Gemini extracted resume data');
+    
+    const normalizeUrl = (v) => (v && /^https?:\/\//i.test(v) ? v : '');
+    
+    if (result.social) {
+      if (result.social.linkedin) result.social.linkedin = normalizeUrl(result.social.linkedin);
+      if (result.social.github) result.social.github = normalizeUrl(result.social.github);
+      if (result.social.portfolio) result.social.portfolio = normalizeUrl(result.social.portfolio);
+    }
+    
+    return result;
+  } catch (err) {
+    log.error({ err, uid }, 'Gemini resume extraction failed');
     throw err;
   }
 }

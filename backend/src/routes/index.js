@@ -10,7 +10,6 @@ import notificationRoutes from './notification.routes.js';
 import aiRoutes from './ai.routes.js';
 import adminRoutes from './admin.routes.js';
 import joobleRoutes from './jooble.routes.js';
-import magicalRoutes from './magical.routes.js';
 
 const router = Router();
 
@@ -27,7 +26,6 @@ router.use('/', adminRoutes); // mounts /admin/* and /platform/*
 // /applications, etc.) so they are mounted at root.
 router.use('/jobs', jobRoutes);
 router.use('/jobs', joobleRoutes);
-router.use('/magical', magicalRoutes);
 router.use('/', applicationRoutes);
 
 export default router;

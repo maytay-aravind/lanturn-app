@@ -12,7 +12,9 @@ import {
 const router = Router();
 
 const guard = [authenticate, requireRole('student'), requireProfileComplete, aiLimiter];
+const extractGuard = [authenticate, requireRole('student'), aiLimiter];
 
+router.post('/resume-extract', ...extractGuard, ...aiCtrl.extractResume);
 router.post('/resume-review', ...guard, validate({ body: resumeReviewSchema }), ...aiCtrl.reviewResume);
 router.post('/resume-match', ...guard, validate({ body: jobTargetSchema }), ...aiCtrl.matchResume);
 router.post('/skill-gap', ...guard, validate({ body: jobTargetSchema }), ...aiCtrl.skillGap);

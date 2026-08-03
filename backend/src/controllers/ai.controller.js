@@ -10,6 +10,14 @@ function ensureGeminiConfigured(req, res, next) {
   next();
 }
 
+export const extractResume = [
+  ensureGeminiConfigured,
+  asyncHandler(async (req, res) => {
+    const data = await aiService.extractResumeData(req.user.uid);
+    res.json({ data, meta: { requestId: req.id } });
+  }),
+];
+
 export const reviewResume = [
   ensureGeminiConfigured,
   asyncHandler(async (req, res) => {

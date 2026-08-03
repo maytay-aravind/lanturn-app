@@ -57,9 +57,6 @@ const envSchema = z.object({
   // Gemini
   GEMINI_API_KEY: z.string().optional().default(''),
 
-  // MagicalAPI (resume parsing/review/matching)
-  MAGICAL_API_KEY: z.string().optional().default(''),
-
   // Jooble (external job search)
   JOOBLE_API_KEY: z.string().optional().default(''),
 

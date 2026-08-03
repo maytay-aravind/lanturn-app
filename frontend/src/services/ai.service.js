@@ -2,6 +2,7 @@ import { apiClient, unwrap } from '../lib/apiClient.js';
 
 export const aiService = {
   // Resume analysis
+  extractResume: () => apiClient.post('/ai/resume-extract').then(unwrap),
   reviewResume: (body) => apiClient.post('/ai/resume-review', body).then(unwrap),
   matchJob: (body) => apiClient.post('/ai/resume-match', body).then(unwrap),
   skillGap: (body) => apiClient.post('/ai/skill-gap', body).then(unwrap),

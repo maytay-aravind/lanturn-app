@@ -8,3 +8,7 @@ export const jobService = {
   remove: (jobId) => apiClient.delete(`/jobs/${jobId}`).then(unwrap),
   listMine: (params) => apiClient.get('/jobs/me/all', { params }).then(unwrap),
 };
+
+export const joobleService = {
+  search: (body) => apiClient.post('/jobs/external-search', body).then(unwrap),
+};

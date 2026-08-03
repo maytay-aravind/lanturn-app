@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { aiService } from '../../services/ai.service.js';
-import { magicalService } from '../../services/magical.service.js';
 import { jobService } from '../../services/job.service.js';
 import toast from 'react-hot-toast';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';

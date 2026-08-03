@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { joobleService } from '../../services/magical.service.js';
+import { joobleService } from '../../services/job.service.js';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { SkeletonList } from '../../components/ui/Skeleton.jsx';
 import toast from 'react-hot-toast';

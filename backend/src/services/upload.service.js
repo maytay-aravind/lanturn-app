@@ -2,7 +2,8 @@ import { signUploadUrl, getPublicUrl } from '#clients/storage.client.js';
 import { getSignedDownloadUrl } from '#clients/storage.client.js';
 import { studentsRepo } from '#repositories/students.repository.js';
 import { employersRepo } from '#repositories/employers.repository.js';
-import { parseResume } from '#clients/magical.client.js';
+import pdfParse from 'pdf-parse';
+import { callGemini } from '#clients/gemini.client.js';
 import { AppError } from '#utils/httpErrors.js';
 import { ROLES, UPLOAD_POLICY, UPLOAD_KINDS } from '#config';
 import { logger_for } from '#utils/logger.js';
@@ -64,60 +65,45 @@ export async function commitUpload(uid, role, { kind, objectPath }) {
   throw AppError.validation('Unknown upload kind');
 }
 
+const KEYWORD_EXTRACT_PROMPT = `You are an AI extracting keywords from a resume.
+Read the resume text and return a JSON list of the top technical and professional skills.
+Output STRICT JSON only matching this schema:
+{ "skills": [string] }`;
+
 /**
- * Extract keywords/skills from a newly uploaded resume via MagicalAPI,
+ * Extract keywords/skills from a newly uploaded resume,
  * then persist them into the `resume_keywords` column for AI scoring.
  * Also saves the resume text summary for Gemini-based analysis.
  */
 async function extractAndSaveKeywords(uid, objectPath) {
   try {
     const signedUrl = await getSignedDownloadUrl(objectPath, 600);
-    const parsed = await parseResume(signedUrl);
+    
+    // Download PDF from Supabase
+    const response = await fetch(signedUrl);
+    if (!response.ok) throw new Error(`Failed to download PDF: ${response.status}`);
+    const buffer = await response.arrayBuffer();
+    
+    // Parse PDF text
+    const parsedPdf = await pdfParse(Buffer.from(buffer));
+    const resumeText = parsedPdf.text;
 
-    const r = parsed?.data ?? parsed ?? {};
-    const basic = r.basic ?? {};
+    // Use Gemini to extract skills/keywords
+    const result = await callGemini({
+      systemPrompt: KEYWORD_EXTRACT_PROMPT,
+      userContent: resumeText,
+      responseFormat: true,
+      temperature: 0.2,
+    });
 
-    // Extract skills
-    const rawSkills = Array.isArray(r.skills) ? r.skills : [];
-    const skills = rawSkills
-      .map((s) => (typeof s === 'string' ? s : s?.name ?? ''))
-      .filter(Boolean)
-      .slice(0, 100);
-
-    // Build a text summary for Gemini (from available fields)
-    const fullName = [basic.first_name, basic.last_name].filter(Boolean).join(' ');
-    const educations = Array.isArray(r.educations) ? r.educations : [];
-    const experiences = Array.isArray(r.work_experiences) ? r.work_experiences : [];
-
-    const textParts = [];
-    if (fullName) textParts.push(`Name: ${fullName}`);
-    if (basic.job_title) textParts.push(`Current Role: ${basic.job_title}`);
-    if (basic.university) textParts.push(`University: ${basic.university}`);
-    if (basic.majors) textParts.push(`Major: ${basic.majors}`);
-    if (educations.length) {
-      textParts.push('Education: ' + educations.map(e =>
-        [e.degree, e.field, e.school].filter(Boolean).join(' - ')
-      ).join('; '));
-    }
-    if (experiences.length) {
-      textParts.push('Experience: ' + experiences.map(e =>
-        [e.job_title, e.company].filter(Boolean).join(' at ')
-      ).join('; '));
-    }
-    if (skills.length) textParts.push(`Skills: ${skills.join(', ')}`);
-    if (r.summary) textParts.push(`Summary: ${r.summary}`);
-
-    const resumeText = textParts.join('\n');
+    const skills = Array.isArray(result?.skills) ? result.skills : [];
 
     await studentsRepo.ensureAndUpdate(uid, {
       resumeKeywords: skills,
-      resumeText: resumeText,
+      resumeText,
     });
-
-    log.info({ uid, keywordCount: skills.length }, 'Resume keywords extracted and saved');
+    log.info({ uid, skillCount: skills.length }, 'Resume keywords and summary saved via Gemini');
   } catch (err) {
-    log.error({ err, uid }, 'Failed to extract resume keywords');
-    throw err;
+    log.warn({ err, uid }, 'Failed to extract resume keywords (non-fatal)');
   }
 }
-

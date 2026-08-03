@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { studentService } from '../../services/student.service.js';
 import { uploadService } from '../../services/upload.service.js';
-import { magicalService } from '../../services/magical.service.js';
+import { aiService } from '../../services/ai.service.js';
 import { SkillsInput } from '../../components/ui/SkillsInput.jsx';
 import { SkeletonProfile } from '../../components/ui/Skeleton.jsx';
 import toast from 'react-hot-toast';
@@ -195,7 +195,7 @@ export default function ProfilePage() {
     setExtracting(true);
     const toastId = toast.loading('Reading your resume...');
     try {
-      const extracted = await magicalService.extractResume();
+      const extracted = await aiService.extractResume();
       // Merge extracted data into local form state (don't overwrite fields
       // the user has already manually edited in this session)
       if (extracted.personal  && Object.keys(extracted.personal).length)
