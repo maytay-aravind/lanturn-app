@@ -57,7 +57,7 @@ function ChatTab() {
   const bottomRef = useRef(null);
 
   const chatMutation = useMutation({
-    mutationFn: (msg) => aiService.careerChat({ message: msg, threadId, mode: 'career_guidance' }),
+    mutationFn: (msg) => aiService.careerChat({ message: msg, threadId: threadId || undefined, mode: 'career_guidance' }),
     onSuccess: (data) => {
       setThreadId(data.threadId);
       setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
