@@ -140,35 +140,28 @@ export async function extractResumeData(uid) {
 
   let resumeText;
 
+  log.info({ uid, resumeUrl: student.resumeUrl, hasResumeText: !!student.resumeText }, 'extractResumeData called');
+
   // Prefer downloading and parsing the actual PDF for maximum accuracy
   if (student.resumeUrl) {
-    try {
-      const { getSignedDownloadUrl } = await import('#clients/storage.client.js');
-      const { createRequire } = await import('module');
-      const require = createRequire(import.meta.url);
-      const pdfParse = require('pdf-parse');
+    const { getSignedDownloadUrl } = await import('#clients/storage.client.js');
+    const { createRequire } = await import('module');
+    const require = createRequire(import.meta.url);
+    const pdfParse = require('pdf-parse');
 
-      // resumeUrl is already the storage object path (e.g. "resumes/uid/file.pdf")
-      const signedUrl = await getSignedDownloadUrl(student.resumeUrl, 300);
-      const response = await fetch(signedUrl);
-      if (!response.ok) throw new Error(`PDF download failed: ${response.status}`);
-      const buffer = await response.arrayBuffer();
-      const parsed = await pdfParse(Buffer.from(buffer));
-      resumeText = parsed.text;
-      log.info({ uid, chars: resumeText.length }, 'Parsed PDF for extraction');
-    } catch (pdfErr) {
-      log.warn({ err: pdfErr, uid }, 'PDF parse failed, falling back to cached text');
-      resumeText = null;
-    }
-  }
-
-  // Fallback to cached resumeText
-  if (!resumeText) {
-    if (student.resumeText) {
-      resumeText = student.resumeText;
-    } else {
-      throw AppError.unprocessable('Upload a resume first');
-    }
+    // resumeUrl is already the storage object path (e.g. "resumes/uid/file.pdf")
+    const signedUrl = await getSignedDownloadUrl(student.resumeUrl, 300);
+    const response = await fetch(signedUrl);
+    if (!response.ok) throw AppError.upstream(`PDF download failed with status ${response.status}`);
+    const buffer = await response.arrayBuffer();
+    const parsed = await pdfParse(Buffer.from(buffer));
+    resumeText = parsed.text;
+    log.info({ uid, chars: resumeText.length }, 'Parsed PDF for extraction');
+  } else if (student.resumeText) {
+    // Fallback to cached resumeText
+    resumeText = student.resumeText;
+  } else {
+    throw AppError.unprocessable('Upload a resume first');
   }
 
   try {
