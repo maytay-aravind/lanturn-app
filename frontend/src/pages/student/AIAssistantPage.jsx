@@ -160,14 +160,7 @@ function ChatTab() {
 // ─── Resume Review tab ────────────────────────────────────────
 function ResumeReviewTab() {
   const [result, setResult] = useState(null);
-  const [source, setSource] = useState('magical'); // 'magical' | 'gemini'
   const [targetRole, setTargetRole] = useState('');
-
-  const magicalMutation = useMutation({
-    mutationFn: () => magicalService.reviewResume(),
-    onSuccess: (data) => setResult({ ...data, _source: 'magical' }),
-    onError: (err) => toast.error(err.message || 'MagicalAPI review failed'),
-  });
 
   const geminiMutation = useMutation({
     mutationFn: () => aiService.reviewResume({ targetRole }),
@@ -181,32 +174,17 @@ function ResumeReviewTab() {
     onError: (err) => toast.error(err.message || 'AI review failed — check your Gemini API key'),
   });
 
-  const isPending = magicalMutation.isPending || geminiMutation.isPending;
+  const isPending = geminiMutation.isPending;
 
   return (
     <div className="space-y-5">
       <div className="p-4 rounded-2xl bg-slate-50 space-y-3">
-        <p className="text-sm font-medium text-slate-700">Choose review engine</p>
-        <div className="flex gap-3">
-          <label className={`flex-1 p-3 rounded-xl border-2 cursor-pointer transition-colors ${source === 'magical' ? 'border-brand-500 bg-brand-50' : 'border-slate-200 bg-white'}`}>
-            <input type="radio" name="source" value="magical" className="sr-only" onChange={() => setSource('magical')} />
-            <p className="font-semibold text-sm text-slate-900">MagicalAPI</p>
-            <p className="text-xs text-slate-500">ATS score + detailed feedback</p>
-          </label>
-          <label className={`flex-1 p-3 rounded-xl border-2 cursor-pointer transition-colors ${source === 'gemini' ? 'border-brand-500 bg-brand-50' : 'border-slate-200 bg-white'}`}>
-            <input type="radio" name="source" value="gemini" className="sr-only" onChange={() => setSource('gemini')} />
-            <p className="font-semibold text-sm text-slate-900">Gemini AI</p>
-            <p className="text-xs text-slate-500">Score + strengths/weaknesses</p>
-          </label>
+        <div>
+          <label className="label">Target Role <span className="text-slate-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
+          <input className="input" placeholder="Will be predicted from your resume…" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
         </div>
-        {source === 'gemini' && (
-          <div>
-            <label className="label">Target Role <span className="text-slate-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
-            <input className="input" placeholder="Will be predicted from your resume…" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
-          </div>
-        )}
         <button
-          onClick={() => source === 'magical' ? magicalMutation.mutate() : geminiMutation.mutate()}
+          onClick={() => geminiMutation.mutate()}
           disabled={isPending}
           className="btn-primary flex items-center gap-2"
         >
@@ -223,7 +201,7 @@ function ResumeReviewTab() {
               <ScoreRing score={result.score ?? result.ats_score ?? 0} label="Score" />
               <div>
                 <p className="font-semibold text-slate-900">Resume Score</p>
-                <p className="text-sm text-slate-500">Powered by {result._source === 'magical' ? 'MagicalAPI' : 'Gemini AI'}</p>
+                <p className="text-sm text-slate-500">Powered by Gemini AI</p>
                 {result.predictedRole && (
                   <p className="text-xs text-brand-600 mt-1">🎯 Analyzed for: <span className="font-medium">{result.predictedRole}</span></p>
                 )}
@@ -375,19 +353,13 @@ function JobMatchTab() {
     queryFn: () => jobService.list({ limit: 50 }),
   });
 
-  const magicalMutation = useMutation({
-    mutationFn: () => magicalService.matchJob({ jobId }),
-    onSuccess: (data) => setResult({ ...data, _source: 'magical' }),
-    onError: () => geminiMutation.mutate(),
-  });
-
   const geminiMutation = useMutation({
     mutationFn: () => aiService.matchJob({ jobId }),
     onSuccess: (data) => setResult({ ...data, _source: 'gemini' }),
     onError: (err) => toast.error(err.message || 'Match failed'),
   });
 
-  const isPending = magicalMutation.isPending || geminiMutation.isPending;
+  const isPending = geminiMutation.isPending;
 
   return (
     <div className="space-y-5">
@@ -402,7 +374,7 @@ function JobMatchTab() {
           </select>
         </div>
         <button
-          onClick={() => magicalMutation.mutate()}
+          onClick={() => geminiMutation.mutate()}
           disabled={isPending || !jobId}
           className="btn-primary flex items-center gap-2"
         >
@@ -475,7 +447,7 @@ export default function AIAssistantPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-slate-900">AI Career Assistant</h1>
-          <p className="text-sm text-slate-500">Powered by Gemini AI + MagicalAPI</p>
+          <p className="text-sm text-slate-500">Powered by Gemini AI</p>
         </div>
       </div>
 
