@@ -176,16 +176,19 @@ export async function extractResumeData(uid) {
     
     const normalizeUrl = (v) => (v && /^https?:\/\//i.test(v) ? v : '');
     
-    if (result.social) {
-      if (result.social.linkedin) result.social.linkedin = normalizeUrl(result.social.linkedin);
-      if (result.social.github) result.social.github = normalizeUrl(result.social.github);
-      if (result.social.portfolio) result.social.portfolio = normalizeUrl(result.social.portfolio);
+    // Remove null values so they don't override existing frontend state with invalid data
+    const cleanResult = JSON.parse(JSON.stringify(result, (key, value) => (value === null ? undefined : value)));
+
+    if (cleanResult.social) {
+      if (cleanResult.social.linkedin) cleanResult.social.linkedin = normalizeUrl(cleanResult.social.linkedin);
+      if (cleanResult.social.github) cleanResult.social.github = normalizeUrl(cleanResult.social.github);
+      if (cleanResult.social.portfolio) cleanResult.social.portfolio = normalizeUrl(cleanResult.social.portfolio);
     }
 
     // Also update the cached resumeText so future calls are faster
     await studentsRepo.ensureAndUpdate(uid, { resumeText });
     
-    return result;
+    return cleanResult;
   } catch (err) {
     log.error({ err, uid }, 'Gemini resume extraction failed');
     throw err;

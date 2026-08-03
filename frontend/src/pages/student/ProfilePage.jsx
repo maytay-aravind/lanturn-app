@@ -556,14 +556,6 @@ export default function ProfilePage() {
           {/* ── Personal Info ─────────────────────────────────── */}
           <Section icon={User} title="Personal Information">
             <Grid2>
-              <Field label="Full Name">
-                <input
-                  className="input"
-                  value={per.name || ''}
-                  onChange={(e) => setPersonal({ ...getPersonal(), name: e.target.value })}
-                  placeholder="Asha Kumar"
-                />
-              </Field>
               <Field label="Phone">
                 <input
                   className="input"
