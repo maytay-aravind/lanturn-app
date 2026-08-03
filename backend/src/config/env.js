@@ -54,8 +54,9 @@ const envSchema = z.object({
   SUPABASE_URL: z.string().url().optional().default('https://placeholder.supabase.co'),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional().default(''),
 
-  // Gemini
+  // Gemini & Deepseek
   GEMINI_API_KEY: z.string().optional().default(''),
+  DEEPSEEK_API_KEY: z.string().optional().default(''),
 
   // Jooble (external job search)
   JOOBLE_API_KEY: z.string().optional().default(''),

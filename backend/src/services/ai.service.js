@@ -1,4 +1,5 @@
 import { callGemini } from '#clients/gemini.client.js';
+import { callDeepseek } from '#clients/deepseek.client.js';
 import { studentsRepo } from '#repositories/students.repository.js';
 import { jobsRepo } from '#repositories/jobs.repository.js';
 import { AppError } from '#utils/httpErrors.js';
@@ -304,11 +305,25 @@ export async function careerChat(uid, { threadId, message, mode = 'general', job
   const contextStr = thread.context?.jobTitle ? `\nJob context: ${thread.context.jobTitle}` : '';
   const userContent = `Conversation:\n${messages}\n\nUser: ${message}`;
 
-  const reply = await callGemini({
-    systemPrompt: CHAT_PROMPT + contextStr,
-    userContent,
-    temperature: 0.7,
-  });
+  let reply;
+  try {
+    reply = await callGemini({
+      systemPrompt: CHAT_PROMPT + contextStr,
+      userContent,
+      temperature: 0.7,
+    });
+  } catch (err) {
+    if (err.status === 429 || err.message?.includes('429') || err.message?.toLowerCase().includes('quota') || err.message?.toLowerCase().includes('limit')) {
+      log.warn({ threadId, err: err.message }, 'Gemini rate limited in career chat, falling back to Deepseek');
+      reply = await callDeepseek({
+        systemPrompt: CHAT_PROMPT + contextStr,
+        userContent,
+        temperature: 0.7,
+      });
+    } else {
+      throw err;
+    }
+  }
 
   // Save assistant message
   await supabase.from('chat_messages').insert({
