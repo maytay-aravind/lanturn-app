@@ -16,4 +16,5 @@ export const aiService = {
 
   // Career DNA
   careerDna: () => apiClient.post('/ai/career-dna').then(unwrap),
+  getCareerDna: () => apiClient.get('/ai/career-dna').then(unwrap),
 };

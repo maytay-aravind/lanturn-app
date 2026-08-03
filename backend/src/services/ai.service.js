@@ -231,11 +231,31 @@ export async function analyzeCareerDna(uid) {
       throw AppError.upstream('Invalid Career DNA response — please try again');
     }
 
-    return parsed.data;
+    const data = parsed.data;
+
+    // Persist the result in the student's professional profile
+    const student = await studentsRepo.getById(uid);
+    const professional = student?.professional || {};
+    await studentsRepo.ensureAndUpdate(uid, {
+      professional: {
+        ...professional,
+        careerDna: data,
+      }
+    });
+
+    return data;
   } catch (err) {
     log.error({ err, uid }, 'Gemini Career DNA analysis failed');
     throw err;
   }
+}
+
+export async function getCareerDna(uid) {
+  const student = await studentsRepo.getById(uid);
+  if (!student?.professional?.careerDna) {
+    throw AppError.notFound('Career DNA not found. Please analyze your resume first.');
+  }
+  return student.professional.careerDna;
 }
 
 export async function extractResumeData(uid) {

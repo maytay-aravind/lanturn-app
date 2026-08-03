@@ -89,3 +89,10 @@ export const careerDna = [
     res.json({ data, meta: { requestId: req.id } });
   }),
 ];
+
+export const getCareerDna = [
+  asyncHandler(async (req, res) => {
+    const data = await aiService.getCareerDna(req.user.uid);
+    res.json({ data, meta: { requestId: req.id } });
+  }),
+];

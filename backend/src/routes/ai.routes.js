@@ -22,6 +22,7 @@ router.post('/interview-questions', ...guard, validate({ body: interviewQuestion
 router.post('/cover-letter', ...guard, validate({ body: coverLetterSchema }), ...aiCtrl.coverLetter);
 router.post('/career-chat', ...guard, validate({ body: careerChatSchema }), ...aiCtrl.careerChat);
 router.post('/career-dna', ...guard, ...aiCtrl.careerDna);
+router.get('/career-dna', authenticate, requireRole('student'), ...aiCtrl.getCareerDna);
 
 router.get('/threads', authenticate, requireRole('student'), requireProfileComplete, ...aiCtrl.listThreads);
 router.get('/threads/:threadId/messages', authenticate, requireRole('student'), requireProfileComplete, ...aiCtrl.getThreadMessages);

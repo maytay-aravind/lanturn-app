@@ -142,9 +142,23 @@ export function RadarChart({
               x={lx}
               y={ly + dy}
               textAnchor={anchor}
-              className={`text-[12px] font-medium fill-slate-700 ${isActive ? 'fill-brand-700 font-bold' : ''}`}
+              className={`text-[11px] font-medium fill-slate-700 ${isActive ? 'fill-brand-700 font-bold' : ''}`}
             >
-              {dim.label.length > 22 ? `${dim.label.slice(0, 20)}…` : dim.label}
+              {(() => {
+                const words = dim.label.split(' ');
+                if (words.length <= 1) {
+                  return dim.label.length > 22 ? `${dim.label.slice(0, 20)}…` : dim.label;
+                }
+                const mid = Math.ceil(words.length / 2);
+                const line1 = words.slice(0, mid).join(' ');
+                const line2 = words.slice(mid).join(' ');
+                return (
+                  <>
+                    <tspan x={lx} dy="-0.4em">{line1}</tspan>
+                    <tspan x={lx} dy="1.2em">{line2.length > 22 ? `${line2.slice(0, 20)}…` : line2}</tspan>
+                  </>
+                );
+              })()}
             </text>
             <circle
               cx={point.x}

@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { aiService } from '../../services/ai.service.js';
 import { RadarChart } from './RadarChart.jsx';
 import { Modal } from '../ui/Modal.jsx';
 import toast from 'react-hot-toast';
 import {
   Dna, Loader2, Sparkles, CheckCircle2, AlertCircle, Lightbulb,
-  TrendingUp, ChevronRight,
+  TrendingUp, ChevronRight, RefreshCw
 } from 'lucide-react';
 
 function OverallScoreRing({ score, size = 96 }) {
@@ -78,6 +78,18 @@ export function CareerDNAPanel() {
     onError: (err) => toast.error(err.message || 'Career DNA analysis failed — upload a resume first'),
   });
 
+  const { data: savedDna, isLoading: isFetchingSaved } = useQuery({
+    queryKey: ['careerDna'],
+    queryFn: () => aiService.getCareerDna(),
+    retry: false,
+  });
+
+  useEffect(() => {
+    if (savedDna && !result && !dnaMutation.isPending) {
+      setResult(savedDna);
+    }
+  }, [savedDna, result, dnaMutation.isPending]);
+
   const selected = selectedIndex !== null ? result?.radarChart?.[selectedIndex] : null;
 
   return (
@@ -119,7 +131,7 @@ export function CareerDNAPanel() {
       </div>
 
       {/* Loading skeleton */}
-      {dnaMutation.isPending && (
+      {(dnaMutation.isPending || isFetchingSaved) && (
         <div className="card p-8 flex flex-col items-center gap-4 animate-pulse">
           <div className="h-64 w-64 rounded-full bg-slate-100" />
           <p className="text-sm text-slate-500">Mapping your unique career dimensions…</p>
@@ -193,6 +205,17 @@ export function CareerDNAPanel() {
               icon={TrendingUp}
               tone="info"
             />
+          </div>
+
+          <div className="flex justify-center mt-8">
+            <button
+              onClick={() => dnaMutation.mutate()}
+              disabled={dnaMutation.isPending}
+              className="px-4 py-2 bg-slate-100 text-slate-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Re-analyze Resume
+            </button>
           </div>
         </div>
       )}
