@@ -80,12 +80,6 @@ export function RadarChart({
 
   const { cx, cy, radius, axisPoints, dataPoints, polygon } = layout;
 
-  const getTraitColor = (score, alpha = 1) => {
-    if (score >= 70) return `rgba(16, 185, 129, ${alpha})`; // Emerald for high
-    if (score >= 45) return `rgba(245, 158, 11, ${alpha})`; // Amber for medium
-    return `rgba(239, 68, 68, ${alpha})`; // Red for low
-  };
-
   return (
     <svg
       width="100%"
@@ -95,15 +89,6 @@ export function RadarChart({
       role="img"
       aria-label="Career DNA radar chart"
     >
-      <defs>
-        {dataPoints.map((dp, i) => (
-          <radialGradient key={`grad-${i}`} id={`glow-${i}`}>
-            <stop offset="0%" stopColor={getTraitColor(dp.score, 0.4)} />
-            <stop offset="100%" stopColor={getTraitColor(dp.score, 0)} />
-          </radialGradient>
-        ))}
-      </defs>
-
       {/* Grid rings */}
       {[0.25, 0.5, 0.75, 1].map((level) => (
         <polygon
@@ -136,24 +121,12 @@ export function RadarChart({
       {/* Data fill */}
       <polygon
         points={polygon}
-        fill="rgba(99,102,241,0.06)"
+        fill="rgba(99,102,241,0.18)"
         stroke="#6366f1"
-        strokeWidth={1.5}
+        strokeWidth={2}
         strokeLinejoin="round"
         style={{ transition: animated ? 'none' : 'all 0.3s ease' }}
       />
-
-      {/* Glowing auras behind points */}
-      {dataPoints.map((dp, i) => (
-        <circle
-          key={`glow-c-${i}`}
-          cx={dp.x}
-          cy={dp.y}
-          r={radius * 0.45}
-          fill={`url(#glow-${i})`}
-          pointerEvents="none"
-        />
-      ))}
 
       {/* Clickable vertices + labels */}
       {dataPoints.map((point, i) => {
@@ -169,7 +142,7 @@ export function RadarChart({
               x={lx}
               y={ly + dy}
               textAnchor={anchor}
-              className={`text-[12px] font-medium fill-slate-700 ${isActive ? 'font-bold' : ''}`}
+              className={`text-[12px] font-medium fill-slate-700 ${isActive ? 'fill-brand-700 font-bold' : ''}`}
             >
               {dim.label.length > 22 ? `${dim.label.slice(0, 20)}…` : dim.label}
             </text>
@@ -177,7 +150,7 @@ export function RadarChart({
               cx={point.x}
               cy={point.y}
               r={isActive ? 8 : 6}
-              fill={getTraitColor(point.score, 1)}
+              fill={isActive ? '#4f46e5' : '#6366f1'}
               stroke="#fff"
               strokeWidth={2}
               className={onPointClick ? 'cursor-pointer' : ''}
