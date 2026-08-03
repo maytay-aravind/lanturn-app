@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from 'react';
  */
 export function RadarChart({
   dimensions = [],
-  size = 320,
+  size = 500,
   animated = true,
   activeIndex = null,
   onPointClick,
@@ -43,8 +43,9 @@ export function RadarChart({
   const layout = useMemo(() => {
     const cx = size / 2;
     const cy = size / 2;
-    const radius = size * 0.32;
-    const labelRadius = size * 0.44;
+    // Reduce radius to leave more room for text labels around the edges
+    const radius = size * 0.26;
+    const labelRadius = size * 0.35;
 
     const angles = Array.from({ length: count }, (_, i) => {
       const step = (Math.PI * 2) / count;
@@ -79,15 +80,30 @@ export function RadarChart({
 
   const { cx, cy, radius, axisPoints, dataPoints, polygon } = layout;
 
+  const getTraitColor = (score, alpha = 1) => {
+    if (score >= 70) return `rgba(16, 185, 129, ${alpha})`; // Emerald for high
+    if (score >= 45) return `rgba(245, 158, 11, ${alpha})`; // Amber for medium
+    return `rgba(239, 68, 68, ${alpha})`; // Red for low
+  };
+
   return (
     <svg
-      width={size}
-      height={size}
+      width="100%"
+      height="auto"
       viewBox={`0 0 ${size} ${size}`}
-      className="mx-auto select-none"
+      className="max-w-[500px] mx-auto select-none"
       role="img"
       aria-label="Career DNA radar chart"
     >
+      <defs>
+        {dataPoints.map((dp, i) => (
+          <radialGradient key={`grad-${i}`} id={`glow-${i}`}>
+            <stop offset="0%" stopColor={getTraitColor(dp.score, 0.4)} />
+            <stop offset="100%" stopColor={getTraitColor(dp.score, 0)} />
+          </radialGradient>
+        ))}
+      </defs>
+
       {/* Grid rings */}
       {[0.25, 0.5, 0.75, 1].map((level) => (
         <polygon
@@ -120,12 +136,24 @@ export function RadarChart({
       {/* Data fill */}
       <polygon
         points={polygon}
-        fill="rgba(99,102,241,0.18)"
+        fill="rgba(99,102,241,0.06)"
         stroke="#6366f1"
-        strokeWidth={2}
+        strokeWidth={1.5}
         strokeLinejoin="round"
         style={{ transition: animated ? 'none' : 'all 0.3s ease' }}
       />
+
+      {/* Glowing auras behind points */}
+      {dataPoints.map((dp, i) => (
+        <circle
+          key={`glow-c-${i}`}
+          cx={dp.x}
+          cy={dp.y}
+          r={radius * 0.45}
+          fill={`url(#glow-${i})`}
+          pointerEvents="none"
+        />
+      ))}
 
       {/* Clickable vertices + labels */}
       {dataPoints.map((point, i) => {
@@ -141,15 +169,15 @@ export function RadarChart({
               x={lx}
               y={ly + dy}
               textAnchor={anchor}
-              className={`text-[10px] font-medium fill-slate-600 ${isActive ? 'fill-brand-700 font-semibold' : ''}`}
+              className={`text-[12px] font-medium fill-slate-700 ${isActive ? 'font-bold' : ''}`}
             >
-              {dim.label.length > 18 ? `${dim.label.slice(0, 16)}…` : dim.label}
+              {dim.label.length > 22 ? `${dim.label.slice(0, 20)}…` : dim.label}
             </text>
             <circle
               cx={point.x}
               cy={point.y}
               r={isActive ? 8 : 6}
-              fill={isActive ? '#4f46e5' : '#6366f1'}
+              fill={getTraitColor(point.score, 1)}
               stroke="#fff"
               strokeWidth={2}
               className={onPointClick ? 'cursor-pointer' : ''}
