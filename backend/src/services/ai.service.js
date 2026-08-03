@@ -148,12 +148,8 @@ export async function extractResumeData(uid) {
       const require = createRequire(import.meta.url);
       const pdfParse = require('pdf-parse');
 
-      // Extract the storage path from the public URL
-      const urlObj = new URL(student.resumeUrl);
-      const objectPath = decodeURIComponent(urlObj.pathname.split('/object/public/')[1] || '');
-      if (!objectPath) throw new Error('Cannot extract storage path from resumeUrl');
-
-      const signedUrl = await getSignedDownloadUrl(objectPath, 300);
+      // resumeUrl is already the storage object path (e.g. "resumes/uid/file.pdf")
+      const signedUrl = await getSignedDownloadUrl(student.resumeUrl, 300);
       const response = await fetch(signedUrl);
       if (!response.ok) throw new Error(`PDF download failed: ${response.status}`);
       const buffer = await response.arrayBuffer();
