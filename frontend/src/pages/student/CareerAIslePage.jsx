@@ -389,7 +389,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
           animate={{ scaleY: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
           style={{ transformOrigin: 'top' }}
-          className="absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 z-0"
+          className="absolute left-1/2 top-0 bottom-0 w-1.5 -translate-x-1/2 z-0"
         >
           <div className="h-full w-full" style={{
             background: 'linear-gradient(180deg, #818cf8 0%, #c4b5fd 50%, #e0e7ff 100%)'
@@ -476,10 +476,13 @@ function RoadmapTimeline({ roadmap, onRemove }) {
         </div>
 
         {/* End marker */}
-        <div className="flex justify-center relative z-10">
-          <div className="flex items-center gap-2 rounded-2xl bg-emerald-500 text-white px-5 py-2.5 text-sm font-semibold shadow-lg">
-            <CheckCircle2 className="h-4 w-4" /> Journey Complete!
-          </div>
+        <div className="flex justify-center relative z-10 pb-4">
+          <motion.div
+            whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
+            className="flex items-center gap-2.5 rounded-2xl bg-[#10b981] text-white px-7 py-3.5 font-black uppercase tracking-wider border-[3px] border-slate-900 shadow-[6px_6px_0px_#0f172a] cursor-default"
+          >
+            <CheckCircle2 className="h-5 w-5" /> Journey Complete!
+          </motion.div>
         </div>
       </div>
     </div>
