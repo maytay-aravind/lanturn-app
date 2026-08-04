@@ -389,11 +389,9 @@ function RoadmapTimeline({ roadmap, onRemove }) {
           animate={{ scaleY: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
           style={{ transformOrigin: 'top' }}
-          className="absolute left-1/2 top-0 bottom-0 w-1.5 -translate-x-1/2 z-0"
+          className="absolute left-1/2 top-0 bottom-0 w-2 -translate-x-1/2 z-0"
         >
-          <div className="h-full w-full" style={{
-            background: 'linear-gradient(180deg, #818cf8 0%, #c4b5fd 50%, #e0e7ff 100%)'
-          }} />
+          <div className="h-full w-full bg-indigo-500 rounded-full shadow-[inset_0_0_4px_rgba(0,0,0,0.2)]" />
         </motion.div>
 
         <div className="space-y-0">
@@ -410,27 +408,11 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: si * 0.08, duration: 0.4 }}
-                className="relative flex items-center justify-center"
+                className="relative flex items-center w-full"
                 style={{ minHeight: 300, paddingBottom: 48 }}
               >
-                {/* Left slot */}
-                <div className="flex-1 flex justify-end pr-10">
-                  {side === 'left' && (
-                    <StagePanel
-                      stage={stage}
-                      stageIndex={si}
-                      side="left"
-                      completedSet={completedSet}
-                      onToggleTopic={(sI, tI, c) => toggleMutation.mutate({ stageIndex: sI, topicIndex: tI, completed: c })}
-                      pendingKey={pendingKey}
-                      color={color}
-                      stageCompleted={stageCompleted}
-                    />
-                  )}
-                </div>
-
-                {/* Center node */}
-                <div className="flex-shrink-0 flex flex-col items-center z-10">
+                {/* Center node (absolutely centered to prevent flex offsets) */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
                   {/* Stage pill node */}
                   <motion.div
                     layout
@@ -440,7 +422,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                     }}
                     transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
                     whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
-                    className="rounded-2xl px-6 py-5 text-center cursor-default border-[3px] border-slate-900 z-10"
+                    className="rounded-2xl px-6 py-5 text-center border-[3px] border-slate-900 z-10 pointer-events-auto"
                     style={{ minWidth: 170 }}
                   >
                     <motion.p
@@ -455,8 +437,24 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   </motion.div>
                 </div>
 
+                {/* Left slot */}
+                <div className="w-1/2 flex justify-end pr-[110px]">
+                  {side === 'left' && (
+                    <StagePanel
+                      stage={stage}
+                      stageIndex={si}
+                      side="left"
+                      completedSet={completedSet}
+                      onToggleTopic={(sI, tI, c) => toggleMutation.mutate({ stageIndex: sI, topicIndex: tI, completed: c })}
+                      pendingKey={pendingKey}
+                      color={color}
+                      stageCompleted={stageCompleted}
+                    />
+                  )}
+                </div>
+
                 {/* Right slot */}
-                <div className="flex-1 flex justify-start pl-10">
+                <div className="w-1/2 flex justify-start pl-[110px]">
                   {side === 'right' && (
                     <StagePanel
                       stage={stage}
