@@ -32,7 +32,11 @@ const DOMAIN_ICONS = {
 
 // ── Stage node colors (cycles) ───────────────────────────────
 const STAGE_COLORS = [
-  { bg: 'bg-amber-400', border: 'border-amber-400', text: 'text-amber-500', light: 'bg-amber-50', hex: '#f59e0b' },
+  { bg: 'bg-indigo-600',  border: 'border-indigo-600',  text: 'text-indigo-600',  light: 'bg-indigo-50',  hex: '#4f46e5' },
+  { bg: 'bg-amber-400',   border: 'border-amber-400',   text: 'text-amber-500',   light: 'bg-amber-50',   hex: '#f59e0b' },
+  { bg: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-600', light: 'bg-emerald-50', hex: '#10b981' },
+  { bg: 'bg-rose-500',    border: 'border-rose-500',    text: 'text-rose-600',    light: 'bg-rose-50',    hex: '#f43f5e' },
+  { bg: 'bg-violet-500',  border: 'border-violet-500',  text: 'text-violet-600',  light: 'bg-violet-50',  hex: '#8b5cf6' },
 ];
 
 // ── Domain picker modal ──────────────────────────────────────
@@ -405,7 +409,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   <motion.div
                     layout
                     animate={{
-                      backgroundColor: stageCompleted ? '#10b981' : color.hex,
+                      backgroundColor: stageCompleted ? '#10b981' : '#f59e0b',
                       boxShadow: '6px 6px 0px #0f172a',
                     }}
                     transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
@@ -415,11 +419,11 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   >
                     <motion.p
                       animate={{ opacity: 1 }}
-                      className={`${(color.hex === '#f59e0b' && !stageCompleted) ? 'text-slate-900/80' : 'text-white/90'} text-[11px] font-black uppercase tracking-widest`}
+                      className="text-slate-900/80 text-[11px] font-black uppercase tracking-widest"
                     >
                       {stageCompleted ? '✓ Complete' : `Stage ${si + 1}`}
                     </motion.p>
-                    <p className={`${(color.hex === '#f59e0b' && !stageCompleted) ? 'text-slate-900' : 'text-white'} text-base font-black leading-tight mt-1.5`}>
+                    <p className="text-slate-900 text-base font-black leading-tight mt-1.5">
                       {stage.title}
                     </p>
                   </motion.div>
