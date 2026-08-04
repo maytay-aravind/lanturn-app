@@ -41,6 +41,10 @@ export const usersRepo = {
     if (data.displayName     !== undefined) payload.display_name     = data.displayName;
     if (data.photoURL        !== undefined) payload.photo_url        = data.photoURL;
 
+    if (Object.keys(payload).length === 0) {
+      return this.getById(uid);
+    }
+
     const { data: updated, error } = await supabase
       .from('users')
       .update(payload)

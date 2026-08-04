@@ -85,6 +85,9 @@ export const studentsRepo = {
    */
   async update(uid, data) {
     const payload = toDbPayload(data);
+    if (Object.keys(payload).length === 0) {
+      return this.getById(uid);
+    }
     const { data: updated, error } = await supabase
       .from('students')
       .update(payload)
