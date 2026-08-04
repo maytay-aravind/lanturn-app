@@ -409,7 +409,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   <motion.div
                     layout
                     animate={{
-                      backgroundColor: stageCompleted ? '#10b981' : '#f59e0b',
+                      backgroundColor: stageCompleted ? '#10b981' : '#ffc107',
                       boxShadow: '6px 6px 0px #0f172a',
                     }}
                     transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
