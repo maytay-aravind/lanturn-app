@@ -84,15 +84,17 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   onClick={() => !isEnrolled && onEnroll(domain.id)}
                   className={`text-left p-4 rounded-2xl ring-1 transition-all duration-200 ${
                     isEnrolled
-                      ? 'bg-slate-50 ring-slate-200 opacity-60 cursor-not-allowed'
+                      ? 'bg-emerald-50 ring-emerald-200 cursor-default'
                       : 'bg-white ring-slate-200 hover:ring-indigo-300 hover:shadow-md cursor-pointer'
                   }`}
                 >
                   <div className="flex items-start gap-3">
-                    <div className="h-9 w-9 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                    <div className={`h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                      isEnrolled ? 'bg-emerald-100' : 'bg-indigo-50'
+                    }`}>
                       {enrolling === domain.id
-                        ? <Loader2 className="h-4 w-4 text-indigo-500 animate-spin" />
-                        : <DIcon className="h-4 w-4 text-indigo-600" />}
+                        ? <Loader2 className={`h-4 w-4 animate-spin ${isEnrolled ? 'text-emerald-600' : 'text-indigo-500'}`} />
+                        : <DIcon className={`h-4 w-4 ${isEnrolled ? 'text-emerald-600' : 'text-indigo-600'}`} />}
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -334,51 +336,26 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 
   return (
     <div className="space-y-6">
-      {/* Roadmap header */}
+      {/* Compact Roadmap Stats */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="card overflow-hidden"
+        className="flex items-center justify-between px-2 bg-slate-50/50 py-3 rounded-2xl ring-1 ring-slate-200/60"
       >
-        <div className={`h-20 bg-gradient-to-r ${roadmap.domain.gradient} relative flex items-center px-6 gap-4`}>
-          <div className="h-10 w-10 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center flex-shrink-0">
-            <DIcon className="h-5 w-5 text-white" />
-          </div>
-          <div>
-            <h2 className="text-white font-bold text-lg leading-tight">{roadmap.domain.title}</h2>
-            <p className="text-white/75 text-xs">{roadmap.domain.description}</p>
-          </div>
+        <div className="flex gap-6 text-sm text-slate-600 font-medium px-4 flex-wrap">
+          <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-indigo-400" /> {roadmap.percentComplete}% Complete</span>
+          <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400" /> {roadmap.completedTopics}/{roadmap.totalTopics} topics</span>
+          <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-slate-400" /> {roadmap.domain.stages.length} stages</span>
+          <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-slate-400" /> ~{roadmap.domain.estimatedMonths} months</span>
         </div>
-        <div className="px-5 py-4 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-6">
-            <div>
-              <p className="text-2xl font-bold text-slate-900">{roadmap.percentComplete}%</p>
-              <p className="text-xs text-slate-500">{roadmap.completedTopics}/{roadmap.totalTopics} topics</p>
-            </div>
-            <div className="flex-1 min-w-[160px]">
-              <div className="progress-track">
-                <motion.div
-                  className="progress-fill"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${roadmap.percentComplete}%` }}
-                  transition={{ duration: 0.8, ease: 'easeOut' }}
-                />
-              </div>
-            </div>
-            <div className="flex gap-4 text-xs text-slate-400">
-              <span className="flex items-center gap-1"><BookOpen className="h-3.5 w-3.5" />{roadmap.domain.stages.length} stages</span>
-              <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" />~{roadmap.domain.estimatedMonths} months</span>
-            </div>
-          </div>
-          <button
-            onClick={handleRemove}
-            disabled={removing}
-            className="btn-secondary btn-sm text-red-500 hover:bg-red-50 hover:ring-red-200 flex items-center gap-1.5"
-          >
-            {removing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
-            Remove
-          </button>
-        </div>
+        <button
+          onClick={handleRemove}
+          disabled={removing}
+          className="text-red-500 hover:bg-red-50 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition-colors mr-1 flex-shrink-0"
+        >
+          {removing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+          Remove Path
+        </button>
       </motion.div>
 
       {/* Center alternating timeline */}
@@ -558,7 +535,7 @@ export default function CareerAIslePage() {
       </div>
 
       {/* Roadmap tabs */}
-      {myRoadmaps.length > 1 && (
+      {myRoadmaps.length > 0 && (
         <div className="flex gap-2 flex-wrap">
           {myRoadmaps.map((rm) => {
             const DIcon = DOMAIN_ICONS[rm.domainId] ?? Globe;
