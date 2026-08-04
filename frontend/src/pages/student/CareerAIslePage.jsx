@@ -449,32 +449,23 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   <motion.div
                     layout
                     animate={{
-                      background: stageCompleted
-                        ? 'linear-gradient(135deg, #10b981, #059669)'
-                        : `linear-gradient(135deg, ${color.hex}, ${color.hex}dd)`,
-                      boxShadow: stageCompleted
-                        ? '0 8px 32px rgba(16,185,129,0.45), 0 0 0 4px rgba(16,185,129,0.15)'
-                        : `0 8px 24px ${color.hex}55, 0 0 0 4px ${color.hex}20`,
+                      backgroundColor: stageCompleted ? '#10b981' : color.hex,
+                      boxShadow: '6px 6px 0px #0f172a',
                     }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    whileHover={{ scale: 1.07, y: -2 }}
-                    className="rounded-[20px] px-5 py-4 text-center cursor-default"
-                    style={{ minWidth: 130 }}
+                    transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
+                    whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
+                    className="rounded-2xl px-6 py-5 text-center cursor-default border-[3px] border-slate-900 z-10"
+                    style={{ minWidth: 170 }}
                   >
                     <motion.p
-                      animate={{ opacity: stageCompleted ? 0.8 : 0.7 }}
-                      className="text-white text-[10px] font-bold uppercase tracking-widest"
+                      animate={{ opacity: 1 }}
+                      className={`${(color.hex === '#f59e0b' && !stageCompleted) ? 'text-slate-900/80' : 'text-white/90'} text-[11px] font-black uppercase tracking-widest`}
                     >
                       {stageCompleted ? '✓ Complete' : `Stage ${si + 1}`}
                     </motion.p>
-                    <p className="text-white text-sm font-bold leading-tight mt-1">
+                    <p className={`${(color.hex === '#f59e0b' && !stageCompleted) ? 'text-slate-900' : 'text-white'} text-base font-black leading-tight mt-1.5`}>
                       {stage.title}
                     </p>
-                    {!stageCompleted && (
-                      <p className="text-white/60 text-[10px] mt-1">
-                        {completedCount}/{stage.topics.length} done
-                      </p>
-                    )}
                   </motion.div>
 
                   {/* Right connector line */}
