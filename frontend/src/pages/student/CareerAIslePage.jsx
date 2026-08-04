@@ -165,19 +165,17 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
   const startWeek = stageIndex * stage.durationWeeks + 1;
   const endWeek   = startWeek + stage.durationWeeks - 1;
 
-  const panelBg    = stageCompleted ? 'bg-gradient-to-br from-emerald-50 to-teal-50' : 'bg-white';
-  const panelRing  = stageCompleted ? 'ring-2 ring-emerald-300' : 'ring-1 ring-slate-200';
-  const shadow     = stageCompleted ? 'shadow-lg shadow-emerald-100' : 'shadow-md';
+  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-white';
   const accentHex  = stageCompleted ? '#10b981' : color.hex;
 
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, x: side === 'right' ? 48 : -48, y: 12 }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
+      initial={{ opacity: 0, x: side === 'right' ? 48 : -48, y: 12, boxShadow: '6px 6px 0px #0f172a' }}
+      animate={{ opacity: 1, x: 0, y: 0, boxShadow: '6px 6px 0px #0f172a' }}
       transition={{ delay: stageIndex * 0.08, duration: 0.45, type: 'spring', stiffness: 200, damping: 24 }}
-      whileHover={{ y: -3, shadow: '0 20px 40px rgba(0,0,0,0.1)' }}
-      className={`${panelBg} ${panelRing} ${shadow} rounded-3xl overflow-hidden transition-all duration-500`}
+      whileHover={{ scale: 1.02, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
+      className={`${panelBg} border-[3px] border-slate-900 rounded-2xl overflow-hidden z-10`}
       style={{ width: 380 }}
     >
       {/* Coloured top accent bar */}
@@ -433,18 +431,6 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 
                 {/* Center node */}
                 <div className="flex-shrink-0 flex flex-col items-center z-10">
-                  {/* Left connector line */}
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: si * 0.08 + 0.3, duration: 0.3 }}
-                    className="w-10 h-0.5"
-                    style={{
-                      transformOrigin: 'right',
-                      background: `repeating-linear-gradient(90deg, ${nodeColor} 0, ${nodeColor} 5px, transparent 5px, transparent 10px)`,
-                    }}
-                  />
-
                   {/* Stage pill node */}
                   <motion.div
                     layout
@@ -467,18 +453,6 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                       {stage.title}
                     </p>
                   </motion.div>
-
-                  {/* Right connector line */}
-                  <motion.div
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ delay: si * 0.08 + 0.3, duration: 0.3 }}
-                    className="w-10 h-0.5"
-                    style={{
-                      transformOrigin: 'left',
-                      background: `repeating-linear-gradient(90deg, ${nodeColor} 0, ${nodeColor} 5px, transparent 5px, transparent 10px)`,
-                    }}
-                  />
                 </div>
 
                 {/* Right slot */}
