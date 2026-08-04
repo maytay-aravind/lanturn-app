@@ -117,112 +117,183 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 }
 
 // ── Topic row ────────────────────────────────────────────────
-function TopicRow({ topic, checked, onToggle, isLoading }) {
+function TopicRow({ topic, checked, onToggle, isLoading, accentColor, stageCompleted }) {
   return (
-    <button
+    <motion.button
+      layout
       onClick={onToggle}
       disabled={isLoading}
-      className="flex items-center justify-between w-full text-left py-2.5 px-0 border-b border-slate-100 last:border-0 group"
+      whileHover={{ x: 4 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      className={`flex items-center justify-between w-full text-left py-3 px-4 rounded-xl mb-1.5 group transition-colors ${
+        checked
+          ? 'bg-emerald-50 ring-1 ring-emerald-200'
+          : stageCompleted
+          ? 'bg-slate-50 ring-1 ring-slate-200'
+          : 'bg-slate-50/50 hover:bg-slate-100 ring-1 ring-transparent hover:ring-slate-200'
+      }`}
     >
-      <span className={`text-sm pr-3 transition-colors ${checked ? 'line-through text-slate-400' : 'text-slate-700 group-hover:text-slate-900'}`}>
+      <span className={`text-sm pr-3 font-medium transition-all duration-300 ${
+        checked ? 'line-through text-emerald-600/60' : 'text-slate-700 group-hover:text-slate-900'
+      }`}>
         {topic}
       </span>
       <div className="flex-shrink-0">
         {isLoading ? (
-          <Loader2 className="h-5 w-5 text-indigo-400 animate-spin" />
+          <Loader2 className="h-5 w-5 animate-spin" style={{ color: accentColor }} />
         ) : checked ? (
-          <CheckCircle2 className="h-5 w-5 text-indigo-500" />
+          <motion.div
+            initial={{ scale: 0, rotate: -90 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+          >
+            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+          </motion.div>
         ) : (
-          <div className="h-5 w-5 rounded-full border-2 border-slate-300 group-hover:border-indigo-400 transition-colors" />
+          <div className="h-5 w-5 rounded-full border-2 border-slate-300 group-hover:border-slate-400 transition-colors" />
         )}
       </div>
-    </button>
+    </motion.button>
   );
 }
 
 // ── Stage content panel (left or right) ─────────────────────
-function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pendingKey, color }) {
+function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pendingKey, color, stageCompleted }) {
   const completedCount = stage.topics.filter((_, ti) => completedSet.has(`${stageIndex}-${ti}`)).length;
+  const pct = stage.topics.length ? Math.round((completedCount / stage.topics.length) * 100) : 0;
   const startWeek = stageIndex * stage.durationWeeks + 1;
   const endWeek   = startWeek + stage.durationWeeks - 1;
 
+  const panelBg    = stageCompleted ? 'bg-gradient-to-br from-emerald-50 to-teal-50' : 'bg-white';
+  const panelRing  = stageCompleted ? 'ring-2 ring-emerald-300' : 'ring-1 ring-slate-200';
+  const shadow     = stageCompleted ? 'shadow-lg shadow-emerald-100' : 'shadow-md';
+  const accentHex  = stageCompleted ? '#10b981' : color.hex;
+
   return (
     <motion.div
-      initial={{ opacity: 0, x: side === 'right' ? 32 : -32 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: stageIndex * 0.07, duration: 0.35, ease: 'easeOut' }}
-      className="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden"
-      style={{ maxWidth: 340 }}
+      layout
+      initial={{ opacity: 0, x: side === 'right' ? 48 : -48, y: 12 }}
+      animate={{ opacity: 1, x: 0, y: 0 }}
+      transition={{ delay: stageIndex * 0.08, duration: 0.45, type: 'spring', stiffness: 200, damping: 24 }}
+      whileHover={{ y: -3, shadow: '0 20px 40px rgba(0,0,0,0.1)' }}
+      className={`${panelBg} ${panelRing} ${shadow} rounded-3xl overflow-hidden transition-all duration-500`}
+      style={{ width: 380 }}
     >
-      {/* Timeframe header */}
-      <div className="px-4 pt-4 pb-2">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          Timeframe: Weeks {startWeek}–{endWeek}
-        </p>
-      </div>
+      {/* Coloured top accent bar */}
+      <motion.div
+        className="h-1.5 w-full"
+        animate={{ background: stageCompleted
+          ? 'linear-gradient(90deg, #10b981, #059669)'
+          : `linear-gradient(90deg, ${color.hex}, ${color.hex}cc)`
+        }}
+        transition={{ duration: 0.6 }}
+      />
 
-      {/* Topics */}
-      <div className="px-4">
-        {stage.topics.map((topic, ti) => {
-          const key = `${stageIndex}-${ti}`;
-          return (
-            <TopicRow
-              key={ti}
-              topic={topic}
-              checked={completedSet.has(key)}
-              isLoading={pendingKey === key}
-              onToggle={() => onToggleTopic(stageIndex, ti, !completedSet.has(key))}
-            />
-          );
-        })}
-      </div>
+      <div className="p-5">
+        {/* Header row */}
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+              Timeframe: Weeks {startWeek}–{endWeek}
+            </p>
+            <p className="text-base font-bold text-slate-900 mt-0.5">{stage.title}</p>
+          </div>
+          {stageCompleted && (
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+              className="h-9 w-9 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-md shadow-emerald-200 flex-shrink-0"
+            >
+              <CheckCircle2 className="h-5 w-5 text-white" />
+            </motion.div>
+          )}
+        </div>
 
-      {/* Progress bar */}
-      <div className="px-4 py-2">
-        <div className="flex items-center gap-2">
-          <div className="flex-1 h-1 rounded-full bg-slate-100 overflow-hidden">
+        {/* Progress bar */}
+        <div className="flex items-center gap-3 mb-5">
+          <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
             <motion.div
               className="h-full rounded-full"
-              style={{ background: color.hex }}
-              initial={{ width: 0 }}
-              animate={{ width: `${stage.topics.length ? Math.round((completedCount / stage.topics.length) * 100) : 0}%` }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
+              animate={{
+                width: `${pct}%`,
+                background: stageCompleted
+                  ? 'linear-gradient(90deg, #10b981, #059669)'
+                  : `linear-gradient(90deg, ${color.hex}, ${color.hex}bb)`,
+              }}
+              transition={{ duration: 0.7, ease: 'easeOut' }}
             />
           </div>
-          <span className="text-xs text-slate-400">{completedCount}/{stage.topics.length}</span>
+          <motion.span
+            animate={{ color: stageCompleted ? '#059669' : '#94a3b8' }}
+            className="text-xs font-semibold flex-shrink-0 w-10 text-right"
+          >
+            {pct}%
+          </motion.span>
         </div>
-      </div>
 
-      {/* Project */}
-      <div className="mx-4 mb-3 p-3 rounded-xl bg-slate-50 ring-1 ring-slate-200">
-        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 flex items-center gap-1">
-          <Code2 className="h-3 w-3" /> Project
-        </p>
-        <p className="text-xs font-semibold text-slate-900">{stage.project.title}</p>
-        <p className="text-xs text-slate-500 mt-0.5">{stage.project.description}</p>
-      </div>
+        {/* Topics */}
+        <div className="mb-4">
+          {stage.topics.map((topic, ti) => {
+            const key = `${stageIndex}-${ti}`;
+            return (
+              <TopicRow
+                key={ti}
+                topic={topic}
+                checked={completedSet.has(key)}
+                isLoading={pendingKey === key}
+                onToggle={() => onToggleTopic(stageIndex, ti, !completedSet.has(key))}
+                accentColor={accentHex}
+                stageCompleted={stageCompleted}
+              />
+            );
+          })}
+        </div>
 
-      {/* Resources */}
-      {stage.resources.length > 0 && (
-        <div className="border-t border-slate-100 px-4 py-3">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
-            Recommended Study Resources
+        {/* Project card */}
+        <motion.div
+          animate={{
+            background: stageCompleted
+              ? 'linear-gradient(135deg, #ecfdf5, #d1fae5)'
+              : 'linear-gradient(135deg, #f8fafc, #f1f5f9)',
+          }}
+          transition={{ duration: 0.5 }}
+          className="rounded-2xl p-4 mb-4 ring-1 ring-slate-200"
+        >
+          <p className="text-[10px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"
+             style={{ color: accentHex }}>
+            <Code2 className="h-3.5 w-3.5" /> Stage Project
           </p>
-          <div className="space-y-1.5">
-            {stage.resources.map((res, ri) => (
-              <a
-                key={ri}
-                href={res.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-indigo-500 hover:text-indigo-700 hover:underline transition-colors"
-              >
-                {res.title} <ArrowRight className="h-3 w-3 opacity-70" />
-              </a>
-            ))}
+          <p className="text-sm font-semibold text-slate-900">{stage.project.title}</p>
+          <p className="text-xs text-slate-500 mt-1 leading-relaxed">{stage.project.description}</p>
+        </motion.div>
+
+        {/* Resources */}
+        {stage.resources.length > 0 && (
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">
+              Recommended Study Resources
+            </p>
+            <div className="space-y-2">
+              {stage.resources.map((res, ri) => (
+                <motion.a
+                  key={ri}
+                  href={res.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ x: 4 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                  className="flex items-center gap-2 text-sm font-medium text-indigo-500 hover:text-indigo-700 transition-colors"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 flex-shrink-0" />
+                  {res.title}
+                </motion.a>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </motion.div>
   );
 }
@@ -314,8 +385,18 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 
       {/* Center alternating timeline */}
       <div className="relative py-8">
-        {/* Vertical center line */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-indigo-200 -translate-x-1/2 z-0" />
+        {/* Animated vertical center line */}
+        <motion.div
+          initial={{ scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
+          style={{ transformOrigin: 'top' }}
+          className="absolute left-1/2 top-0 bottom-0 w-0.5 -translate-x-1/2 z-0"
+        >
+          <div className="h-full w-full" style={{
+            background: 'linear-gradient(180deg, #818cf8 0%, #c4b5fd 50%, #e0e7ff 100%)'
+          }} />
+        </motion.div>
 
         <div className="space-y-0">
           {roadmap.domain.stages.map((stage, si) => {
@@ -323,18 +404,19 @@ function RoadmapTimeline({ roadmap, onRemove }) {
             const color = STAGE_COLORS[si % STAGE_COLORS.length];
             const completedCount = stage.topics.filter((_, ti) => completedSet.has(`${si}-${ti}`)).length;
             const stageCompleted = completedCount === stage.topics.length && stage.topics.length > 0;
+            const nodeColor = stageCompleted ? '#10b981' : color.hex;
 
             return (
               <motion.div
                 key={si}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: si * 0.06 }}
-                className="relative flex items-start justify-center"
-                style={{ minHeight: 260, paddingBottom: 32 }}
+                transition={{ delay: si * 0.08, duration: 0.4 }}
+                className="relative flex items-center justify-center"
+                style={{ minHeight: 300, paddingBottom: 48 }}
               >
                 {/* Left slot */}
-                <div className="flex-1 flex justify-end pr-8 pt-4">
+                <div className="flex-1 flex justify-end pr-10">
                   {side === 'left' && (
                     <StagePanel
                       stage={stage}
@@ -344,49 +426,72 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                       onToggleTopic={(sI, tI, c) => toggleMutation.mutate({ stageIndex: sI, topicIndex: tI, completed: c })}
                       pendingKey={pendingKey}
                       color={color}
+                      stageCompleted={stageCompleted}
                     />
                   )}
                 </div>
 
                 {/* Center node */}
                 <div className="flex-shrink-0 flex flex-col items-center z-10">
-                  {/* Dashed connector to panel */}
+                  {/* Left connector line */}
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: si * 0.06 + 0.2 }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: si * 0.08 + 0.3, duration: 0.3 }}
                     className="w-10 h-0.5"
                     style={{
-                      background: `repeating-linear-gradient(90deg, ${color.hex} 0, ${color.hex} 4px, transparent 4px, transparent 8px)`,
-                      transformOrigin: side === 'right' ? 'left' : 'right',
+                      transformOrigin: 'right',
+                      background: `repeating-linear-gradient(90deg, ${nodeColor} 0, ${nodeColor} 5px, transparent 5px, transparent 10px)`,
                     }}
                   />
 
-                  {/* Stage pill */}
+                  {/* Stage pill node */}
                   <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    className={`${stageCompleted ? 'bg-emerald-500' : color.bg} rounded-2xl px-4 py-3 text-center shadow-lg cursor-default`}
-                    style={{ minWidth: 110 }}
+                    layout
+                    animate={{
+                      background: stageCompleted
+                        ? 'linear-gradient(135deg, #10b981, #059669)'
+                        : `linear-gradient(135deg, ${color.hex}, ${color.hex}dd)`,
+                      boxShadow: stageCompleted
+                        ? '0 8px 32px rgba(16,185,129,0.45), 0 0 0 4px rgba(16,185,129,0.15)'
+                        : `0 8px 24px ${color.hex}55, 0 0 0 4px ${color.hex}20`,
+                    }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    whileHover={{ scale: 1.07, y: -2 }}
+                    className="rounded-[20px] px-5 py-4 text-center cursor-default"
+                    style={{ minWidth: 130 }}
                   >
-                    <p className="text-white/70 text-[10px] font-bold uppercase tracking-widest">
-                      Stage {si + 1}
-                    </p>
-                    <p className="text-white text-xs font-bold leading-tight mt-0.5">
+                    <motion.p
+                      animate={{ opacity: stageCompleted ? 0.8 : 0.7 }}
+                      className="text-white text-[10px] font-bold uppercase tracking-widest"
+                    >
+                      {stageCompleted ? '✓ Complete' : `Stage ${si + 1}`}
+                    </motion.p>
+                    <p className="text-white text-sm font-bold leading-tight mt-1">
                       {stage.title}
                     </p>
+                    {!stageCompleted && (
+                      <p className="text-white/60 text-[10px] mt-1">
+                        {completedCount}/{stage.topics.length} done
+                      </p>
+                    )}
                   </motion.div>
 
-                  {/* Dashed connector to panel (right side) */}
-                  <div
+                  {/* Right connector line */}
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: si * 0.08 + 0.3, duration: 0.3 }}
                     className="w-10 h-0.5"
                     style={{
-                      background: `repeating-linear-gradient(90deg, ${color.hex} 0, ${color.hex} 4px, transparent 4px, transparent 8px)`,
+                      transformOrigin: 'left',
+                      background: `repeating-linear-gradient(90deg, ${nodeColor} 0, ${nodeColor} 5px, transparent 5px, transparent 10px)`,
                     }}
                   />
                 </div>
 
                 {/* Right slot */}
-                <div className="flex-1 flex justify-start pl-8 pt-4">
+                <div className="flex-1 flex justify-start pl-10">
                   {side === 'right' && (
                     <StagePanel
                       stage={stage}
@@ -396,6 +501,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                       onToggleTopic={(sI, tI, c) => toggleMutation.mutate({ stageIndex: sI, topicIndex: tI, completed: c })}
                       pendingKey={pendingKey}
                       color={color}
+                      stageCompleted={stageCompleted}
                     />
                   )}
                 </div>
