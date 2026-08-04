@@ -167,7 +167,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
   const startWeek = stageIndex * stage.durationWeeks + 1;
   const endWeek   = startWeek + stage.durationWeeks - 1;
 
-  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-white';
+  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-[#fef9c3]';
   const accentHex  = stageCompleted ? '#10b981' : color.hex;
 
   return (
