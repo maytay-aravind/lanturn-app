@@ -165,7 +165,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
   const startWeek = stageIndex * stage.durationWeeks + 1;
   const endWeek   = startWeek + stage.durationWeeks - 1;
 
-  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-white';
+  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-[#fef9c3]';
   const accentHex  = stageCompleted ? '#10b981' : color.hex;
 
   return (
@@ -176,7 +176,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
       transition={{ delay: stageIndex * 0.08, duration: 0.45, type: 'spring', stiffness: 200, damping: 24 }}
       whileHover={{ scale: 1.02, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
       className={`${panelBg} border-[3px] border-slate-900 rounded-2xl overflow-hidden z-10`}
-      style={{ width: 380 }}
+      style={{ width: '100%', maxWidth: 380 }}
     >
       {/* Coloured top accent bar */}
       <motion.div
@@ -389,7 +389,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
           animate={{ scaleY: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
           style={{ transformOrigin: 'top' }}
-          className="absolute left-1/2 top-0 bottom-0 w-2 -translate-x-1/2 z-0 bg-slate-200 rounded-full"
+          className="absolute lg:left-1/2 left-4 top-0 bottom-0 w-2 lg:-translate-x-1/2 -translate-x-1/2 z-0 bg-slate-200 rounded-full"
         >
           <motion.div
             initial={{ height: 0 }}
@@ -402,8 +402,8 @@ function RoadmapTimeline({ roadmap, onRemove }) {
         <div className="space-y-0">
           {roadmap.domain.stages.map((stage, si) => {
             const side = si % 2 === 0 ? 'right' : 'left';
-            // Uncompleted stages are always yellow (STAGE_COLORS[1] is amber-400)
-            const color = STAGE_COLORS[1];
+            // Uncompleted stages are light yellow (yellow-300)
+            const color = { hex: '#fde047' };
             const completedCount = stage.topics.filter((_, ti) => completedSet.has(`${si}-${ti}`)).length;
             const stageCompleted = completedCount === stage.topics.length && stage.topics.length > 0;
             const nodeColor = stageCompleted ? '#10b981' : color.hex;
@@ -414,11 +414,11 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: si * 0.08, duration: 0.4 }}
-                className="relative flex items-center w-full"
+                className="relative flex items-center w-full justify-start lg:justify-center"
                 style={{ minHeight: 300, paddingBottom: 48 }}
               >
                 {/* Center node (absolutely centered to prevent flex offsets) */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
+                <div className="absolute lg:left-1/2 left-4 top-1/2 lg:-translate-x-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
                   {/* Stage pill node */}
                   <motion.div
                     layout
@@ -433,18 +433,18 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   >
                     <motion.p
                       animate={{ opacity: 1 }}
-                      className={`${(color.hex === '#f59e0b' && !stageCompleted) ? 'text-slate-900/80' : 'text-white/90'} text-[11px] font-black uppercase tracking-widest`}
+                      className={`${stageCompleted ? 'text-white/90' : 'text-slate-900/80'} text-[11px] font-black uppercase tracking-widest`}
                     >
                       {stageCompleted ? '✓ Complete' : `Stage ${si + 1}`}
                     </motion.p>
-                    <p className={`${(color.hex === '#f59e0b' && !stageCompleted) ? 'text-slate-900' : 'text-white'} text-base font-black leading-tight mt-1.5`}>
+                    <p className={`${stageCompleted ? 'text-white' : 'text-slate-900'} text-base font-black leading-tight mt-1.5`}>
                       {stage.title}
                     </p>
                   </motion.div>
                 </div>
 
                 {/* Left slot */}
-                <div className="w-1/2 flex justify-end pr-[150px]">
+                <div className={`w-full lg:w-1/2 flex lg:justify-end lg:pr-[150px] pl-[110px] lg:pl-0 pr-4 ${side === 'left' ? 'block' : 'hidden lg:block'}`}>
                   {side === 'left' && (
                     <StagePanel
                       stage={stage}
@@ -460,7 +460,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 </div>
 
                 {/* Right slot */}
-                <div className="w-1/2 flex justify-start pl-[150px]">
+                <div className={`w-full lg:w-1/2 flex lg:justify-start lg:pl-[150px] pl-[110px] lg:pl-0 pr-4 ${side === 'right' ? 'block' : 'hidden lg:block'}`}>
                   {side === 'right' && (
                     <StagePanel
                       stage={stage}
