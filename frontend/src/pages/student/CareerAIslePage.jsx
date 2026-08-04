@@ -397,7 +397,8 @@ function RoadmapTimeline({ roadmap, onRemove }) {
         <div className="space-y-0">
           {roadmap.domain.stages.map((stage, si) => {
             const side = si % 2 === 0 ? 'right' : 'left';
-            const color = STAGE_COLORS[si % STAGE_COLORS.length];
+            // Uncompleted stages are always yellow (STAGE_COLORS[1] is amber-400)
+            const color = STAGE_COLORS[1];
             const completedCount = stage.topics.filter((_, ti) => completedSet.has(`${si}-${ti}`)).length;
             const stageCompleted = completedCount === stage.topics.length && stage.topics.length > 0;
             const nodeColor = stageCompleted ? '#10b981' : color.hex;
