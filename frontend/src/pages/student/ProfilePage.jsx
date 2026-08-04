@@ -30,6 +30,14 @@ function LinkedInIcon({ className }) {
   );
 }
 
+function HackerRankIcon({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.87 16.5H12.59v-3.79h-4.18v3.79H5.14V7.5h3.27v4.14h4.18V7.5h3.28v9z" />
+    </svg>
+  );
+}
+
 // ── Section wrapper ───────────────────────────────────────────
 function Section({ icon: Icon, title, children }) {
   return (
@@ -243,6 +251,19 @@ export default function ProfilePage() {
     }
   }, [p.certificates, qc]);
 
+  const handleRenameCert = useCallback(async (certId, oldName) => {
+    const newName = window.prompt('Enter new certificate name:', oldName);
+    if (!newName || newName === oldName) return;
+    const newCerts = (p.certificates || []).map(c => c.id === certId ? { ...c, name: newName } : c);
+    try {
+      await studentService.updateMe({ certificates: newCerts });
+      toast.success('Certificate renamed');
+      qc.invalidateQueries({ queryKey: ['student', 'me'] });
+    } catch (err) {
+      toast.error(err.message || 'Failed to rename certificate');
+    }
+  }, [p.certificates, qc]);
+
   // ── Resume auto-fill ──────────────────────────────────────
   const handleExtract = useCallback(async () => {
     setExtracting(true);
@@ -280,6 +301,7 @@ export default function ProfilePage() {
   const githubUrl   = soc.github   || '';
   const linkedinUrl = soc.linkedin || '';
   const portfolioUrl = soc.portfolio || '';
+  const hackerrankUrl = soc.hackerrank || '';
 
   return (
     <div className="space-y-5">
@@ -427,7 +449,7 @@ export default function ProfilePage() {
           )}
 
           {/* Social links inline */}
-          {(githubUrl || linkedinUrl || portfolioUrl) && (
+          {(githubUrl || linkedinUrl || portfolioUrl || hackerrankUrl) && (
             <>
               <div className="divider my-4" />
               <div>
@@ -446,6 +468,11 @@ export default function ProfilePage() {
                   {portfolioUrl && (
                     <a href={portfolioUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors">
                       <ExternalLink className="h-3 w-3" /> Portfolio
+                    </a>
+                  )}
+                  {hackerrankUrl && (
+                    <a href={hackerrankUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-[#00EA64] text-slate-900 hover:bg-[#00c955] transition-colors">
+                      <HackerRankIcon className="h-3.5 w-3.5" /> HackerRank <ExternalLink className="h-2.5 w-2.5 opacity-60" />
                     </a>
                   )}
                 </div>
@@ -569,6 +596,13 @@ export default function ProfilePage() {
                       >
                         {viewingCert === cert.url ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
                         View
+                      </button>
+                      <button
+                        onClick={() => handleRenameCert(cert.id, cert.name)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        title="Rename Certificate"
+                      >
+                        <Pencil className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleRemoveCert(cert.id)}
@@ -797,6 +831,17 @@ export default function ProfilePage() {
                   onChange={(e) => setSocial({ ...getSocial(), portfolio: e.target.value })}
                   placeholder="https://myportfolio.dev"
                 />
+              </Field>
+              <Field label="HackerRank">
+                <div className="relative">
+                  <HackerRankIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <input
+                    className="input pl-9"
+                    value={soc.hackerrank || ''}
+                    onChange={(e) => setSocial({ ...getSocial(), hackerrank: e.target.value })}
+                    placeholder="https://hackerrank.com/username"
+                  />
+                </div>
               </Field>
             </Grid2>
           </Section>

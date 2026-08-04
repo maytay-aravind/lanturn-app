@@ -70,6 +70,7 @@ export const studentProfileSchema = z
         github: z.string().max(120).optional(),
         linkedin: z.string().max(120).optional(),
         portfolio: z.string().max(200).optional(),
+        hackerrank: z.string().max(120).optional(),
       })
       .partial(),
     certificates: z
