@@ -165,7 +165,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
   const startWeek = stageIndex * stage.durationWeeks + 1;
   const endWeek   = startWeek + stage.durationWeeks - 1;
 
-  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-[#fef9c3]';
+  const panelBg    = stageCompleted ? 'bg-[#10b981]' : 'bg-[#fde047]';
   const accentHex  = stageCompleted ? '#10b981' : color.hex;
 
   return (
@@ -178,21 +178,11 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
       className={`${panelBg} border-[3px] border-slate-900 rounded-2xl overflow-hidden z-10`}
       style={{ width: '100%', maxWidth: 380 }}
     >
-      {/* Coloured top accent bar */}
-      <motion.div
-        className="h-1.5 w-full"
-        animate={{ background: stageCompleted
-          ? 'linear-gradient(90deg, #10b981, #059669)'
-          : `linear-gradient(90deg, ${color.hex}, ${color.hex}cc)`
-        }}
-        transition={{ duration: 0.6 }}
-      />
-
       <div className="p-5">
         {/* Header row */}
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-900/60">
               Timeframe: Weeks {startWeek}–{endWeek}
             </p>
             <p className="text-base font-bold text-slate-900 mt-0.5">{stage.title}</p>
@@ -224,7 +214,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
             />
           </div>
           <motion.span
-            animate={{ color: stageCompleted ? '#059669' : '#94a3b8' }}
+            animate={{ color: stageCompleted ? '#022c22' : '#334155' }}
             className="text-xs font-semibold flex-shrink-0 w-10 text-right"
           >
             {pct}%
@@ -429,7 +419,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                     transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
                     whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
                     className="rounded-2xl px-6 py-5 text-center border-[3px] border-slate-900 z-10 pointer-events-auto"
-                    style={{ minWidth: 170 }}
+                    style={{ minWidth: 170, maxWidth: 240 }}
                   >
                     <motion.p
                       animate={{ opacity: 1 }}
