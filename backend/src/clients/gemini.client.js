@@ -22,7 +22,7 @@ export async function callGemini({ systemPrompt, userContent, responseFormat, te
     throw AppError.unprocessable('Gemini API key not configured.');
   }
 
-  const MODELS = [MODEL, 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  const MODELS = [MODEL, 'gemini-3.5-flash', 'gemini-2.5-flash'];
 
   const body = {
     contents: [
