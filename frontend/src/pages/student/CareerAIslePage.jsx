@@ -32,11 +32,7 @@ const DOMAIN_ICONS = {
 
 // ── Stage node colors (cycles) ───────────────────────────────
 const STAGE_COLORS = [
-  { bg: 'bg-indigo-600',  border: 'border-indigo-600',  text: 'text-indigo-600',  light: 'bg-indigo-50',  hex: '#4f46e5' },
-  { bg: 'bg-amber-400',   border: 'border-amber-400',   text: 'text-amber-500',   light: 'bg-amber-50',   hex: '#f59e0b' },
-  { bg: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-600', light: 'bg-emerald-50', hex: '#10b981' },
-  { bg: 'bg-rose-500',    border: 'border-rose-500',    text: 'text-rose-600',    light: 'bg-rose-50',    hex: '#f43f5e' },
-  { bg: 'bg-violet-500',  border: 'border-violet-500',  text: 'text-violet-600',  light: 'bg-violet-50',  hex: '#8b5cf6' },
+  { bg: 'bg-amber-400', border: 'border-amber-400', text: 'text-amber-500', light: 'bg-amber-50', hex: '#f59e0b' },
 ];
 
 // ── Domain picker modal ──────────────────────────────────────
@@ -167,7 +163,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
   const startWeek = stageIndex * stage.durationWeeks + 1;
   const endWeek   = startWeek + stage.durationWeeks - 1;
 
-  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-[#fef9c3]';
+  const panelBg    = stageCompleted ? 'bg-[#ecfdf5]' : 'bg-white';
   const accentHex  = stageCompleted ? '#10b981' : color.hex;
 
   return (
