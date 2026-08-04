@@ -11,6 +11,7 @@ const BUCKET = {
   resume:       'resumes',
   profilePhoto: 'profile-pictures',
   companyLogo:  'company-logos',
+  certificate:  'resumes', // Store certificates in the private resumes bucket
 };
 
 /**
@@ -32,6 +33,8 @@ export async function signUploadUrl({ uid, kind, mimeType, sizeBytes }) {
   }
 
   const bucket = BUCKET[kind];
+  if (!bucket) throw new Error(`Bucket mapping not found for kind: ${kind}`);
+
   const ext = mimeTypeToExt(mimeType);
   const fileId = randomUUID().slice(0, 8);
   const objectPath = `${policy.prefix}/${uid}/${kind}-${fileId}.${ext}`;
@@ -108,6 +111,7 @@ function mimeTypeToExt(mime) {
 /** Infer bucket from object path prefix when kind is not available */
 function kindFromPath(objectPath) {
   if (objectPath.startsWith('resumes/'))  return 'resumes';
+  if (objectPath.startsWith('certificates/')) return 'resumes';
   if (objectPath.startsWith('photos/'))   return 'profile-pictures';
   if (objectPath.startsWith('logos/'))    return 'company-logos';
   return 'resumes'; // safe default
