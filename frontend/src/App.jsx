@@ -13,6 +13,7 @@ import ApplicationsPage from './pages/student/ApplicationsPage.jsx';
 import StudentProfilePage from './pages/student/ProfilePage.jsx';
 import AIAssistantPage from './pages/student/AIAssistantPage.jsx';
 import NotificationsPage from './pages/student/NotificationsPage.jsx';
+import CareerAIslePage from './pages/student/CareerAIslePage.jsx';
 
 // Employer pages
 import EmployerDashboard from './pages/employer/DashboardPage.jsx';
@@ -46,6 +47,7 @@ export default function App() {
               <Route path="/applications" element={<ApplicationsPage />} />
               <Route path="/profile" element={<StudentProfilePage />} />
               <Route path="/ai" element={<AIAssistantPage />} />
+              <Route path="/career-aisle" element={<CareerAIslePage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
             </Route>
 

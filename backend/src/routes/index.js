@@ -10,6 +10,7 @@ import notificationRoutes from './notification.routes.js';
 import aiRoutes from './ai.routes.js';
 import adminRoutes from './admin.routes.js';
 import joobleRoutes from './jooble.routes.js';
+import roadmapRoutes from './roadmap.routes.js';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ router.use('/uploads', uploadRoutes);
 router.use('/ai', aiRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/', adminRoutes); // mounts /admin/* and /platform/*
+router.use('/roadmaps', roadmapRoutes);
 
 // Jobs mounted at /jobs; application routes use absolute paths (/jobs/:jobId/applications,
 // /applications, etc.) so they are mounted at root.
@@ -29,3 +31,4 @@ router.use('/jobs', joobleRoutes);
 router.use('/', applicationRoutes);
 
 export default router;
+

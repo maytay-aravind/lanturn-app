@@ -30,7 +30,8 @@
     "#firebase": "./src/firebase/index.js",
     "#firebase/*": "./src/firebase/*",
     "#supabase": "./src/supabase/index.js",
-    "#supabase/*": "./src/supabase/*"
+    "#supabase/*": "./src/supabase/*",
+    "#data/*": "./src/data/*"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.111.0",
