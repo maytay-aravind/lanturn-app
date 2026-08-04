@@ -383,15 +383,20 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 
       {/* Center alternating timeline */}
       <div className="relative py-8">
-        {/* Animated vertical center line */}
+        {/* Animated vertical center line (Track & Progress) */}
         <motion.div
           initial={{ scaleY: 0 }}
           animate={{ scaleY: 1 }}
           transition={{ duration: 1.2, ease: 'easeOut' }}
           style={{ transformOrigin: 'top' }}
-          className="absolute left-1/2 top-0 bottom-0 w-2 -translate-x-1/2 z-0"
+          className="absolute left-1/2 top-0 bottom-0 w-2 -translate-x-1/2 z-0 bg-slate-200 rounded-full"
         >
-          <div className="h-full w-full bg-indigo-500 rounded-full shadow-[inset_0_0_4px_rgba(0,0,0,0.2)]" />
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: `${roadmap.percentComplete}%` }}
+            transition={{ duration: 1.5, ease: 'easeOut', delay: 0.5 }}
+            className="w-full bg-indigo-500 rounded-full shadow-[inset_0_0_4px_rgba(0,0,0,0.2)]"
+          />
         </motion.div>
 
         <div className="space-y-0">
@@ -439,7 +444,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 </div>
 
                 {/* Left slot */}
-                <div className="w-1/2 flex justify-end pr-[110px]">
+                <div className="w-1/2 flex justify-end pr-[150px]">
                   {side === 'left' && (
                     <StagePanel
                       stage={stage}
@@ -455,7 +460,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 </div>
 
                 {/* Right slot */}
-                <div className="w-1/2 flex justify-start pl-[110px]">
+                <div className="w-1/2 flex justify-start pl-[150px]">
                   {side === 'right' && (
                     <StagePanel
                       stage={stage}
