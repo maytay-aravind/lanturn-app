@@ -31,7 +31,7 @@ export async function signUpload(uid, { kind, mimeType, sizeBytes }) {
 }
 
 /** Step 2: commit the upload — persist the URL onto the profile */
-export async function commitUpload(uid, role, { kind, objectPath }) {
+export async function commitUpload(uid, role, { kind, objectPath, fileName }) {
   // Always pass `kind` so the correct bucket is resolved — never rely on
   // path-prefix inference which breaks if prefixes drift.
   const publicUrl = getPublicUrl(objectPath, kind);
@@ -48,6 +48,23 @@ export async function commitUpload(uid, role, { kind, objectPath }) {
     });
 
     return { objectPath, attachedTo: 'students.me.resumeUrl' };
+  }
+
+  if (kind === UPLOAD_KINDS.CERTIFICATE) {
+    // Fetch current student, append to certificates array
+    const student = await studentsRepo.getById(uid) || { certificates: [] };
+    const newCert = {
+      id: crypto.randomUUID(),
+      name: fileName || objectPath.split('/').pop(),
+      url: objectPath,
+      uploadedAt: new Date().toISOString(),
+    };
+    
+    await studentsRepo.ensureAndUpdate(uid, {
+      certificates: [...(student.certificates || []), newCert],
+    });
+
+    return { objectPath, attachedTo: 'students.me.certificates' };
   }
 
   if (kind === UPLOAD_KINDS.PROFILE_PHOTO) {

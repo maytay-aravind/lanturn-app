@@ -72,6 +72,16 @@ export const studentProfileSchema = z
         portfolio: z.string().max(200).optional(),
       })
       .partial(),
+    certificates: z
+      .array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+          url: z.string(),
+          uploadedAt: z.string(),
+        })
+      )
+      .optional(),
   })
   .strict();
 

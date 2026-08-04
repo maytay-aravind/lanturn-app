@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import {
   User, GraduationCap, Briefcase, Link2, Upload,
   Save, Camera, FileText, CheckCircle2, ExternalLink, Loader2, Sparkles,
-  Pencil, X, MapPin, Phone, Star, BarChart3,
+  Pencil, X, MapPin, Phone, Star, BarChart3, Trash2,
 } from 'lucide-react';
 
 // ── Inline SVG brand icons ────────────────────────────────────
@@ -79,7 +79,10 @@ export default function ProfilePage() {
   const resumeRef = useRef(null);
   const [uploadPct, setUploadPct] = useState(null);
   const [resumePct, setResumePct] = useState(null);
+  const [certPct, setCertPct] = useState(null);
+  const certRef = useRef(null);
   const [viewingResume, setViewingResume] = useState(false);
+  const [viewingCert, setViewingCert] = useState(null);
   const [extracting, setExtracting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
@@ -189,6 +192,56 @@ export default function ProfilePage() {
       setViewingResume(false);
     }
   }, []);
+
+  // ── Certificate upload ──────────────────────────────────────
+  const handleCertChange = useCallback(async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    if (!['application/pdf', 'image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+      toast.error('Certificate must be a PDF or Image (JPG, PNG, WebP)');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Certificate must be under 5 MB');
+      return;
+    }
+    try {
+      setCertPct(0);
+      await uploadService.uploadFile(file, 'certificate', setCertPct);
+      toast.success('Certificate uploaded!');
+      qc.invalidateQueries({ queryKey: ['student', 'me'] });
+    } catch (err) {
+      toast.error(err.message || 'Certificate upload failed');
+    } finally {
+      setCertPct(null);
+    }
+  }, [qc]);
+
+  // ── Certificate view ────────────────────────────────────────
+  const handleViewCert = useCallback(async (certUrl) => {
+    setViewingCert(certUrl);
+    try {
+      const { signedUrl } = await studentService.getCertificateUrl(certUrl);
+      window.open(signedUrl, '_blank', 'noopener,noreferrer');
+    } catch (err) {
+      toast.error(err.message || 'Could not open certificate');
+    } finally {
+      setViewingCert(null);
+    }
+  }, []);
+
+  const handleRemoveCert = useCallback(async (certId) => {
+    if (!confirm('Are you sure you want to remove this certificate?')) return;
+    const newCerts = (p.certificates || []).filter(c => c.id !== certId);
+    try {
+      await studentService.updateMe({ certificates: newCerts });
+      toast.success('Certificate removed');
+      qc.invalidateQueries({ queryKey: ['student', 'me'] });
+    } catch (err) {
+      toast.error(err.message || 'Failed to remove certificate');
+    }
+  }, [p.certificates, qc]);
 
   // ── Resume auto-fill ──────────────────────────────────────
   const handleExtract = useCallback(async () => {
@@ -466,6 +519,72 @@ export default function ProfilePage() {
               </div>
             )}
             <input ref={resumeRef} type="file" accept="application/pdf" className="hidden" onChange={handleResumeChange} />
+          </>
+
+          {/* Certificates inline */}
+          <>
+            <div className="divider my-4" />
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h3 className="text-sm font-semibold text-slate-800">Certificates</h3>
+              <button
+                onClick={() => certRef.current?.click()}
+                disabled={certPct !== null}
+                className="btn-secondary btn-sm flex items-center gap-1.5"
+              >
+                <Upload className="h-3 w-3" />
+                Upload
+              </button>
+            </div>
+            
+            {certPct !== null && (
+              <div className="mb-3 p-3 rounded-xl bg-slate-50 ring-1 ring-slate-200">
+                <div className="flex justify-between text-xs text-slate-500 mb-1">
+                  <span className="font-medium">Uploading...</span>
+                  <span>{certPct}%</span>
+                </div>
+                <div className="progress-track">
+                  <div className="progress-fill" style={{ width: `${certPct}%` }} />
+                </div>
+              </div>
+            )}
+            
+            {p.certificates?.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {p.certificates.map(cert => (
+                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                    <div className="flex items-start gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        <FileText className="h-4 w-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-slate-800 truncate" title={cert.name}>{cert.name}</p>
+                        <p className="text-xs text-slate-500 mt-0.5">Uploaded {new Date(cert.uploadedAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <button
+                        onClick={() => handleViewCert(cert.url)}
+                        disabled={viewingCert === cert.url}
+                        className="btn-secondary btn-sm flex-1 flex items-center justify-center gap-1.5"
+                      >
+                        {viewingCert === cert.url ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
+                        View
+                      </button>
+                      <button
+                        onClick={() => handleRemoveCert(cert.id)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        title="Remove Certificate"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-500 italic">No certificates uploaded yet.</p>
+            )}
+            <input ref={certRef} type="file" accept="application/pdf,image/jpeg,image/png,image/webp" className="hidden" onChange={handleCertChange} />
           </>
         </div>
       </div>

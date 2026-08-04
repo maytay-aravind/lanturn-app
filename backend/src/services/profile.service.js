@@ -114,6 +114,27 @@ export async function getStudentResumeSignedUrl(uid) {
   return { signedUrl, expiresIn: 3600 };
 }
 
+/**
+ * Generate a fresh short-lived signed URL for a specific certificate.
+ * Called by GET /students/me/certificate-url?path=...
+ */
+export async function getStudentCertificateSignedUrl(uid, path) {
+  const profile = await studentsRepo.getById(uid);
+  if (!profile) throw AppError.notFound('Student profile not found');
+  
+  // Verify that this path actually belongs to one of their certificates
+  const cert = profile.certificates?.find(c => c.url === path);
+  if (!cert) throw AppError.notFound('Certificate not found on profile');
+
+  const objectPath = isObjectPath(path) ? path : toObjectPath(path);
+  if (!objectPath || objectPath.startsWith('http')) {
+    return { signedUrl: path, expiresIn: null };
+  }
+
+  const signedUrl = await getSignedDownloadUrl(objectPath, 3600);
+  return { signedUrl, expiresIn: 3600 };
+}
+
 export async function getStudentPublic(uid) {
   const profile = await studentsRepo.getById(uid);
   if (!profile) throw AppError.notFound('Student not found');

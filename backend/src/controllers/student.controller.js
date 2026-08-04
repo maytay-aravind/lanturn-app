@@ -25,3 +25,10 @@ export const getResumeUrl = asyncHandler(async (req, res) => {
   const data = await profileService.getStudentResumeSignedUrl(req.user.uid);
   res.json({ data, meta: { requestId: req.id } });
 });
+
+export const getCertificateUrl = asyncHandler(async (req, res) => {
+  const path = req.query.path;
+  if (!path) throw new Error('path query parameter is required');
+  const data = await profileService.getStudentCertificateSignedUrl(req.user.uid, path);
+  res.json({ data, meta: { requestId: req.id } });
+});

@@ -54,6 +54,7 @@ export const UPLOAD_KINDS = Object.freeze({
   RESUME: 'resume',
   PROFILE_PHOTO: 'profilePhoto',
   COMPANY_LOGO: 'companyLogo',
+  CERTIFICATE: 'certificate',
 });
 
 export const UPLOAD_POLICY = Object.freeze({
@@ -71,6 +72,11 @@ export const UPLOAD_POLICY = Object.freeze({
     mimeTypes: ['image/png', 'image/jpeg', 'image/webp'],
     maxSizeBytes: 2 * 1024 * 1024,
     prefix: 'logos',
+  },
+  [UPLOAD_KINDS.CERTIFICATE]: {
+    mimeTypes: ['application/pdf', 'image/png', 'image/jpeg', 'image/webp'],
+    maxSizeBytes: 5 * 1024 * 1024,
+    prefix: 'certificates',
   },
 });
 

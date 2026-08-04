@@ -55,6 +55,6 @@ export const uploadService = {
     });
 
     // Step 3: Commit — persist the URL on the profile
-    return uploadService.commitUpload({ kind, objectPath });
+    return uploadService.commitUpload({ kind, objectPath, fileName: file.name });
   },
 };
