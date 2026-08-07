@@ -5,4 +5,6 @@ export const employerService = {
   updateMe: (body) => apiClient.patch('/employers/me', body).then(unwrap),
   getAnalytics: () => apiClient.get('/employers/me/analytics').then(unwrap),
   getPublic: (uid) => apiClient.get(`/employers/${uid}`).then(unwrap),
+  getJobMatches: (jobId) => apiClient.get(`/employers/jobs/${jobId}/matches`).then(unwrap),
+  getTopRecommendations: () => apiClient.get('/employers/me/recommendations').then(unwrap),
 };

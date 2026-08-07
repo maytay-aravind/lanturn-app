@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate, requireRole, requireProfileComplete, validate } from '#middlewares';
 import * as employerCtrl from '#controllers/employer.controller.js';
+import * as employerMatchesCtrl from '#controllers/employerMatches.controller.js';
 import { employerProfileUpdateSchema } from '#schemas/employer.schema.js';
 
 const router = Router();
@@ -10,6 +11,10 @@ router.get('/me/analytics', authenticate, requireRole('employer'), requireProfil
 router.get('/me', authenticate, requireRole('employer'), requireProfileComplete, employerCtrl.getMe);
 router.patch('/me', authenticate, requireRole('employer'), requireProfileComplete, validate({ body: employerProfileUpdateSchema }), employerCtrl.updateMe);
 router.put('/me', authenticate, requireRole('employer'), requireProfileComplete, validate({ body: employerProfileUpdateSchema }), employerCtrl.updateMe);
+
+// Candidate Matches
+router.get('/jobs/:jobId/matches', authenticate, requireRole('employer'), requireProfileComplete, employerMatchesCtrl.getJobCandidateMatches);
+
 router.get('/:uid', employerCtrl.getPublic);
 
 export default router;

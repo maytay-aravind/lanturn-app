@@ -5,7 +5,9 @@ import { timeAgo } from '../../lib/utils.js';
 import {
   Briefcase, Users, TrendingUp, UserCheck, UserX, Award,
   BarChart3, Activity, ArrowUpRight, PauseCircle, Eye,
+  Sparkles, Star
 } from 'lucide-react';
+import CandidateMatchCard from '../../components/employer/CandidateMatchCard.jsx';
 
 /* ── Tiny SVG donut chart ─────────────────────────────────── */
 function DonutChart({ segments, size = 160 }) {
@@ -122,10 +124,17 @@ export default function EmployerDashboard() {
     queryFn: employerService.getMe,
   });
 
-  const { data: analytics, isLoading } = useQuery({
+  const { data: analytics, isLoading: analyticsLoading } = useQuery({
     queryKey: ['employer', 'analytics'],
     queryFn: employerService.getAnalytics,
   });
+
+  const { data: aiRecommendations, isLoading: recommendationsLoading } = useQuery({
+    queryKey: ['employer', 'recommendations'],
+    queryFn: employerService.getTopRecommendations,
+  });
+
+  const isLoading = analyticsLoading || recommendationsLoading;
 
   const a = analytics || {};
   const sb = a.statusBreakdown || {};
@@ -282,6 +291,53 @@ export default function EmployerDashboard() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ── AI Recommended Candidates ───────────────────── */}
+      <div className="card p-6 border-brand-200 shadow-md animate-slide-up relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-10 bg-brand-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-brand-100 flex items-center justify-center">
+              <Sparkles className="h-4 w-4 text-brand-600" />
+            </div>
+            <h2 className="section-title text-brand-900 font-extrabold text-xl">AI Recommended Candidates</h2>
+          </div>
+        </div>
+
+        {aiRecommendations && aiRecommendations.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {aiRecommendations.slice(0, 4).map((match, i) => (
+              <div key={match.id} className="relative group">
+                {/* Ranking Medals */}
+                <div className="absolute -top-3 -left-3 z-10 h-8 w-8 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-lg font-bold">
+                  {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : <span className="text-sm text-slate-400">#{i + 1}</span>}
+                </div>
+                <div className="h-full transform transition-all duration-300 hover:-translate-y-1">
+                  <CandidateMatchCard
+                    candidate={{
+                      studentName: match.studentName,
+                      studentPhotoURL: match.studentPhotoURL,
+                      applicationId: match.studentId, // or link to application directly if needed
+                    }}
+                    matchData={match}
+                  />
+                  <div className="mt-2 text-center text-xs font-medium text-slate-500 bg-slate-50 py-1.5 rounded-lg border border-slate-100">
+                    Applying for: <span className="text-brand-700 font-bold">{match.jobTitle}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <div className="inline-flex h-12 w-12 rounded-full bg-slate-50 items-center justify-center mb-3">
+              <Star className="h-5 w-5 text-slate-300" />
+            </div>
+            <p className="text-slate-500 font-medium">No top candidates found yet</p>
+            <p className="text-xs text-slate-400 mt-1">Our AI will highlight the best fits once candidates start applying to your jobs.</p>
+          </div>
+        )}
       </div>
 
       {/* ── Recent Applications ─────────────────────────── */}

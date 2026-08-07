@@ -4,6 +4,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { applicationService } from '../../services/application.service.js';
 import { studentService } from '../../services/student.service.js';
 import { jobService } from '../../services/job.service.js';
+import { employerService } from '../../services/employer.service.js';
+import CandidateMatchCard from '../../components/employer/CandidateMatchCard.jsx';
 import toast from 'react-hot-toast';
 import { timeAgo, formatDate } from '../../lib/utils.js';
 import {
@@ -207,10 +209,25 @@ export default function JobApplicantsPage() {
     queryFn: () => jobService.get(jobId),
   });
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading: isAppsLoading } = useQuery({
     queryKey: ['applications', 'job', jobId],
     queryFn: () => applicationService.listForJob(jobId, { limit: 100 }),
   });
+
+  const { data: matchesData, isLoading: isMatchesLoading } = useQuery({
+    queryKey: ['matches', 'job', jobId],
+    queryFn: () => employerService.getJobMatches(jobId),
+  });
+
+  const matchesMap = {};
+  if (matchesData) {
+    matchesData.forEach(m => {
+      matchesMap[m.studentId] = m;
+    });
+  }
+
+  const isLoading = isAppsLoading || isMatchesLoading;
+
 
   const allApplicants = data?.items ?? [];
   const applicants = statusFilter
@@ -302,6 +319,13 @@ export default function JobApplicantsPage() {
                         <h3 className="font-semibold text-slate-900">{app.studentName || 'Student'}</h3>
                         <span className={cfg.cls}>{cfg.label}</span>
                       </div>
+                      
+                      {matchesMap[app.studentId] && (
+                        <div className="mt-4 mb-2">
+                          <CandidateMatchCard candidate={app} matchData={matchesMap[app.studentId]} />
+                        </div>
+                      )}
+
                       {app.coverLetter && (
                         <p className="text-sm text-slate-500 mt-1 line-clamp-2">{app.coverLetter}</p>
                       )}

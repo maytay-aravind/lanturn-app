@@ -5,6 +5,7 @@ import { AppError } from '#utils/httpErrors.js';
 import { APPLICATION_STATUS, JOB_STATUS } from '#config';
 import { applicationIdFor } from '#utils/ids.js';
 import { logger_for } from '#utils/logger.js';
+import { candidateMatchingService } from '#services/candidateMatching.service.js';
 
 const log = logger_for('application.service');
 
@@ -48,6 +49,10 @@ export async function applyToJob(studentId, jobId, { coverLetter, resumeUrl }) {
   jobsRepo.update(jobId, {
     applicationCount: (job.applicationCount || 0) + 1,
   }).catch((err) => log.error({ err }, 'Failed to increment counter'));
+
+  // Trigger AI matching asynchronously (fire-and-forget)
+  candidateMatchingService.generateAndStoreMatchScore(studentId, jobId)
+    .catch(err => log.error({ err, studentId, jobId }, 'Failed to generate candidate match score async'));
 
   return app;
 }
