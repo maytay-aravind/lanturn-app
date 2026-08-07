@@ -45,30 +45,81 @@ function DonutChart({ segments, size = 160 }) {
   );
 }
 
-/* ── Bar chart (applications per day) ─────────────────────── */
-function MiniBarChart({ data }) {
+/* ── Area chart (applications per day) ─────────────────────── */
+function MiniAreaChart({ data }) {
   const entries = Object.entries(data || {});
   if (entries.length === 0) return <p className="text-sm text-slate-400">No data yet</p>;
-  const max = Math.max(...entries.map(([, v]) => v), 1);
+  
+  const values = entries.map(([, v]) => v);
+  const max = Math.max(...values, 1);
+  const width = 1000;
+  const height = 200;
+  
+  // Calculate points
+  const points = entries.map(([, count], i) => {
+    const x = (i / (entries.length - 1)) * width;
+    const y = height - (count / max) * height;
+    return `${x},${y}`;
+  }).join(' ');
+
+  // Create curved path (using basic curve approx)
+  let path = `M 0,${height - (values[0] / max) * height}`;
+  for (let i = 1; i < entries.length; i++) {
+    const prevX = ((i - 1) / (entries.length - 1)) * width;
+    const prevY = height - (values[i - 1] / max) * height;
+    const currX = (i / (entries.length - 1)) * width;
+    const currY = height - (values[i] / max) * height;
+    
+    // Control points for a smooth cubic bezier curve
+    const cp1x = prevX + (currX - prevX) / 2;
+    const cp1y = prevY;
+    const cp2x = prevX + (currX - prevX) / 2;
+    const cp2y = currY;
+    
+    path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${currX},${currY}`;
+  }
+
+  const areaPath = `${path} L ${width},${height} L 0,${height} Z`;
 
   return (
-    <div className="flex items-end gap-[3px] h-28 w-full">
-      {entries.map(([date, count]) => (
-        <div key={date} className="flex-1 flex flex-col items-center group relative">
-          <div
-            className="w-full rounded-t-sm transition-all duration-300 hover:opacity-80"
-            style={{
-              height: `${Math.max((count / max) * 100, 4)}%`,
-              background: count > 0 ? 'linear-gradient(180deg, #6366f1 0%, #818cf8 100%)' : '#e2e8f0',
-              minHeight: '2px',
-            }}
-          />
-          {/* Tooltip */}
-          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-            {date.slice(5)}: {count}
+    <div className="relative h-28 w-full group overflow-hidden rounded-lg">
+      <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full preserve-3d" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#818cf8" stopOpacity="0.0" />
+          </linearGradient>
+        </defs>
+        
+        {/* Fill Area */}
+        <path d={areaPath} fill="url(#areaGradient)" className="transition-all duration-500" />
+        
+        {/* Line */}
+        <path d={path} fill="none" stroke="#6366f1" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="transition-all duration-500" />
+        
+        {/* Data points on hover */}
+        {entries.map(([, count], i) => {
+          if (count === 0) return null; // Don't show dots for zero
+          const x = (i / (entries.length - 1)) * width;
+          const y = height - (count / max) * height;
+          return (
+            <circle key={i} cx={x} cy={y} r="8" fill="#fff" stroke="#6366f1" strokeWidth="4" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          );
+        })}
+      </svg>
+      
+      {/* Tooltip Overlay (approximate) */}
+      <div className="absolute inset-0 flex items-end justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        {entries.map(([date, count], i) => (
+          <div key={date} className="flex-1 h-full flex flex-col justify-end" title={`${date}: ${count} applications`}>
+            {count > 0 && (
+              <div className="w-full h-full flex items-center justify-center relative">
+                <span className="absolute bottom-2 text-[10px] font-bold text-brand-700 bg-white/90 px-1 rounded shadow-sm">{count}</span>
+              </div>
+            )}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -237,7 +288,7 @@ export default function EmployerDashboard() {
             <Activity className="h-4 w-4 text-brand-600" />
             <h2 className="section-title">Applications (Last 30 Days)</h2>
           </div>
-          <MiniBarChart data={a.applicationsPerDay} />
+          <MiniAreaChart data={a.applicationsPerDay} />
           <div className="flex justify-between mt-3 text-[10px] text-slate-400">
             <span>{Object.keys(a.applicationsPerDay || {}).at(0)?.slice(5) || ''}</span>
             <span>Today</span>
