@@ -54,10 +54,9 @@ export const getAnalytics = asyncHandler(async (req, res) => {
 
   // Applications per day (last 30 days)
   const now = new Date();
-  const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const applicationsPerDay = {};
-  for (let i = 0; i < 30; i++) {
-    const d = new Date(thirtyDaysAgo.getTime() + i * 24 * 60 * 60 * 1000);
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
     applicationsPerDay[d.toISOString().slice(0, 10)] = 0;
   }
   allApplications.forEach(a => {
