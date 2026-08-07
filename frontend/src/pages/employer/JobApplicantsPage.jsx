@@ -319,12 +319,6 @@ export default function JobApplicantsPage() {
                         <h3 className="font-semibold text-slate-900">{app.studentName || 'Student'}</h3>
                         <span className={cfg.cls}>{cfg.label}</span>
                       </div>
-                      
-                      {matchesMap[app.studentId] && (
-                        <div className="mt-4 mb-2">
-                          <CandidateMatchCard candidate={app} matchData={matchesMap[app.studentId]} />
-                        </div>
-                      )}
 
                       {app.coverLetter && (
                         <p className="text-sm text-slate-500 mt-1 line-clamp-2">{app.coverLetter}</p>
@@ -342,7 +336,7 @@ export default function JobApplicantsPage() {
                   </div>
 
                   {/* Right: Actions */}
-                  <div className="flex flex-wrap items-center gap-2 sm:flex-col sm:items-end">
+                  <div className="flex flex-wrap items-center justify-start sm:justify-end gap-2">
                     {/* View Profile */}
                     <button
                       onClick={() => setProfileId(app.studentId)}
@@ -383,6 +377,13 @@ export default function JobApplicantsPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* AI Match Score Card (Full Width) */}
+                {matchesMap[app.studentId] && (
+                  <div className="mt-5 border-t border-slate-100 pt-5">
+                    <CandidateMatchCard candidate={app} matchData={matchesMap[app.studentId]} />
+                  </div>
+                )}
               </div>
             );
           })}

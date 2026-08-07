@@ -97,8 +97,8 @@ export default function CandidateMatchCard({ candidate, matchData }) {
                 </div>
               )}
             </div>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors">
+            <div className="min-w-0 flex-1">
+              <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors truncate">
                 {candidate?.studentName || 'Unknown Candidate'}
               </h3>
               <p className="text-sm text-slate-500 flex items-center gap-1 mt-0.5">
@@ -108,7 +108,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 py-3 border-y border-slate-100">
+          <div className="flex flex-wrap items-center justify-between gap-4 py-3 border-y border-slate-100">
             <CircularProgress value={matchData.skillMatchScore || 0} label="Skills" colorClass="text-blue-500" />
             <CircularProgress value={matchData.projectScore || 0} label="Projects" colorClass="text-purple-500" />
             <CircularProgress value={matchData.experienceScore || 0} label="Experience" colorClass="text-amber-500" />
