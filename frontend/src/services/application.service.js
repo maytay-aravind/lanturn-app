@@ -7,4 +7,5 @@ export const applicationService = {
   withdraw: (applicationId) => apiClient.delete(`/applications/${applicationId}`).then(unwrap),
   listForJob: (jobId, params) => apiClient.get(`/jobs/${jobId}/applications`, { params }).then(unwrap),
   updateStatus: (applicationId, body) => apiClient.patch(`/applications/${applicationId}/status`, body).then(unwrap),
+  getResumeUrl: (applicationId) => apiClient.get(`/applications/${applicationId}/resume-url`).then(unwrap),
 };

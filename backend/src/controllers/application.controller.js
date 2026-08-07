@@ -92,3 +92,8 @@ export const withdraw = asyncHandler(async (req, res) => {
   const app = await appService.withdrawApplication(req.params.applicationId, req.user.uid);
   res.json({ data: app, meta: { requestId: req.id } });
 });
+
+export const getResumeUrl = asyncHandler(async (req, res) => {
+  const data = await appService.getApplicationResumeSignedUrl(req.params.applicationId, req.user.uid);
+  res.json({ data, meta: { requestId: req.id } });
+});

@@ -248,6 +248,22 @@ export default function JobApplicantsPage() {
   const counts = {};
   allApplicants.forEach(a => { counts[a.status] = (counts[a.status] || 0) + 1; });
 
+  const handleViewResume = async (appId) => {
+    try {
+      const toastId = toast.loading('Loading resume...');
+      const { signedUrl } = await applicationService.getResumeUrl(appId);
+      toast.dismiss(toastId);
+      if (signedUrl) {
+        window.open(signedUrl, '_blank', 'noopener,noreferrer');
+      } else {
+        toast.error('Resume URL not available');
+      }
+    } catch (err) {
+      toast.dismiss();
+      toast.error(err.message || 'Failed to load resume');
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Profile Modal */}
@@ -347,14 +363,12 @@ export default function JobApplicantsPage() {
 
                     {/* Resume */}
                     {app.resumeUrl && (
-                      <a
-                        href={app.resumeUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        onClick={() => handleViewResume(app.applicationId)}
                         className="btn-secondary btn-sm flex items-center gap-1"
                       >
                         <FileText className="h-3.5 w-3.5" /> Resume
-                      </a>
+                      </button>
                     )}
 
                     {/* Status actions */}

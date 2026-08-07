@@ -6,6 +6,7 @@ import { APPLICATION_STATUS, JOB_STATUS } from '#config';
 import { applicationIdFor } from '#utils/ids.js';
 import { logger_for } from '#utils/logger.js';
 import { candidateMatchingService } from '#services/candidateMatching.service.js';
+import { getSignedDownloadUrl } from '#clients/storage.client.js';
 
 const log = logger_for('application.service');
 
@@ -98,4 +99,24 @@ export async function getApplication(applicationId) {
   const app = await applicationsRepo.getById(applicationId);
   if (!app) throw AppError.notFound('Application not found');
   return app;
+}
+
+/** Get signed URL for applicant's resume (employer only) */
+export async function getApplicationResumeSignedUrl(applicationId, employerId) {
+  const app = await applicationsRepo.getById(applicationId);
+  if (!app) throw AppError.notFound('Application not found');
+
+  const job = await jobsRepo.getById(app.jobId);
+  if (!job || job.employerId !== employerId) {
+    throw AppError.forbidden('Not your job applicant');
+  }
+
+  if (!app.resumeUrl) throw AppError.notFound('No resume attached');
+
+  if (app.resumeUrl.startsWith('http')) {
+    return { signedUrl: app.resumeUrl, expiresIn: null };
+  }
+
+  const signedUrl = await getSignedDownloadUrl(app.resumeUrl, 3600);
+  return { signedUrl, expiresIn: 3600 };
 }
