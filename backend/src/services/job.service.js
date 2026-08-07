@@ -1,5 +1,7 @@
 import { jobsRepo } from '#repositories/jobs.repository.js';
 import { employersRepo } from '#repositories/employers.repository.js';
+import { studentsRepo } from '#repositories/students.repository.js';
+import { notifyNewJob } from '#services/notification.service.js';
 import { AppError } from '#utils/httpErrors.js';
 import { JOB_STATUS } from '#config';
 import { generateId } from '#utils/ids.js';
@@ -21,7 +23,16 @@ export async function createJob(employerId, data) {
     requiredSkills: (data.requiredSkills || []).map((s) => s.toLowerCase()),
   };
 
-  return jobsRepo.create(jobId, doc);
+  const createdJob = await jobsRepo.create(jobId, doc);
+
+  // Background task: notify all students
+  if (doc.status === JOB_STATUS.ACTIVE) {
+    studentsRepo.getAllUids()
+      .then(uids => notifyNewJob(uids, doc.title, doc.companyName, jobId))
+      .catch(err => log.error({ err }, 'Failed to notify students of new job'));
+  }
+
+  return createdJob;
 }
 
 /** Get a single job */

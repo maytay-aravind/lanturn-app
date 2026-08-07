@@ -128,4 +128,10 @@ export const studentsRepo = {
     if (error) throw error;
     return (data || []).map(rowToStudent);
   },
+
+  async getAllUids() {
+    const { data, error } = await supabase.from('students').select('uid');
+    if (error) throw error;
+    return (data || []).map((row) => row.uid);
+  },
 };

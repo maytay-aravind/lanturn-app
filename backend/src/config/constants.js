@@ -38,6 +38,7 @@ export const NOTIFICATION_TYPE = Object.freeze({
   APPLICATION_RECEIVED: 'application_received',
   APPLICATION_STATUS: 'application_status',
   JOB_REMOVED: 'job_removed',
+  NEW_JOB: 'new_job',
   SYSTEM: 'system',
   AI_READY: 'ai_ready',
 });

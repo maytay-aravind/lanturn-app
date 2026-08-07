@@ -84,6 +84,24 @@ export async function notifyJobRemoved(userIds, userEmails, jobTitle, jobId) {
   return Promise.allSettled(promises);
 }
 
+/** Convenience: new job posted → all students */
+export async function notifyNewJob(studentIds, jobTitle, companyName, jobId) {
+  // Batch insert via repository is better, but since notify() uses repo.create per id,
+  // Promise.allSettled is fine for MVP.
+  const promises = studentIds.map((uid) =>
+    notify({
+      userId: uid,
+      type: NOTIFICATION_TYPE.NEW_JOB,
+      title: 'New Job Posted',
+      body: `${companyName} just posted a new opening for "${jobTitle}"`,
+      link: '/student/jobs',
+      data: { jobId },
+      channel: 'inapp',
+    })
+  );
+  return Promise.allSettled(promises);
+}
+
 export async function listNotifications(userId, query) {
   return notificationsRepo.listByUser(userId, query);
 }

@@ -107,7 +107,7 @@ export default function JobsPage() {
 
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['jobs', search, typeFilter, page],
-    queryFn: () => jobService.list({ search, type: typeFilter || undefined, ...page }),
+    queryFn: () => jobService.list({ q: search || undefined, jobType: typeFilter || undefined, ...page }),
   });
 
   const jobs = data?.items ?? [];
