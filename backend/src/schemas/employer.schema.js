@@ -23,6 +23,19 @@ export const employerProfileSchema = z
       })
       .partial()
       .optional(),
+    // New fields
+    ceo: z.string().max(160).optional(),
+    foundedYear: z.coerce.number().int().min(1800).max(2100).optional().nullable(),
+    headquarters: z.string().max(300).optional(),
+    branches: z.array(z.string().max(200)).max(50).optional(),
+    email: z.string().email().or(z.literal('')).optional(),
+    phone: z.string().max(30).optional(),
+    benefits: z.array(z.string().max(200)).max(50).optional(),
+    technologies: z.array(z.string().max(100)).max(100).optional(),
+    companyCulture: z.string().max(5000).optional(),
+    officeImages: z.array(z.string().url().or(z.literal(''))).max(10).optional(),
+    logoURL: z.string().url().or(z.literal('')).optional(),
+    employeeCount: z.coerce.number().int().min(0).optional().nullable(),
   })
   .strict();
 

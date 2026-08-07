@@ -17,6 +17,8 @@ export function validate({ body, query, params }) {
           field: i.path.join('.'),
           message: i.message,
         }));
+        console.error('Validation Error Details:', details);
+        import('fs').then(fs => fs.writeFileSync('zod-error.json', JSON.stringify({ body: req.body, details }, null, 2)));
         return next(AppError.validation('Invalid input', details));
       }
       next(err);

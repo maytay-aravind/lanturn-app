@@ -5,6 +5,8 @@ import { employerProfileUpdateSchema } from '#schemas/employer.schema.js';
 
 const router = Router();
 
+// Analytics — must be before /:uid so "me" is not caught as a uid
+router.get('/me/analytics', authenticate, requireRole('employer'), requireProfileComplete, employerCtrl.getAnalytics);
 router.get('/me', authenticate, requireRole('employer'), requireProfileComplete, employerCtrl.getMe);
 router.patch('/me', authenticate, requireRole('employer'), requireProfileComplete, validate({ body: employerProfileUpdateSchema }), employerCtrl.updateMe);
 router.put('/me', authenticate, requireRole('employer'), requireProfileComplete, validate({ body: employerProfileUpdateSchema }), employerCtrl.updateMe);

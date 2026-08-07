@@ -14,8 +14,15 @@ export const USER_STATUS = Object.freeze({
 export const JOB_STATUS = Object.freeze({
   DRAFT: 'draft',
   ACTIVE: 'active',
+  PAUSED: 'paused',
   CLOSED: 'closed',
   REMOVED: 'removed',
+});
+
+export const WORK_MODE = Object.freeze({
+  ONSITE: 'onsite',
+  REMOTE: 'remote',
+  HYBRID: 'hybrid',
 });
 
 export const APPLICATION_STATUS = Object.freeze({
@@ -87,3 +94,12 @@ export const PAGINATION = Object.freeze({
 
 // Fields a student may not write directly (server-controlled)
 export const USER_LOCKED_FIELDS = ['role', 'status', 'email', 'uid'];
+
+// Employer profile additional enums
+export const COMPANY_SIZE = Object.freeze({
+  STARTUP: '1-10',
+  SMALL: '11-50',
+  MEDIUM: '51-200',
+  LARGE: '201-500',
+  ENTERPRISE: '500+',
+});

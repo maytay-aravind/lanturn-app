@@ -23,6 +23,7 @@ const EMPLOYER_LINKS = [
   { to: '/employer/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/employer/jobs', icon: Briefcase, label: 'My Jobs' },
   { to: '/employer/profile', icon: Building2, label: 'Company Profile' },
+  { to: '/employer/notifications', icon: Bell, label: 'Notifications' },
 ];
 
 export default function Navbar() {
@@ -85,7 +86,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           {/* Notifications */}
           <NavLink
-            to="/notifications"
+            to={role === 'employer' ? '/employer/notifications' : '/notifications'}
             className="relative h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
           >
             <Bell className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />

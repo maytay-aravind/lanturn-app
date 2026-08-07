@@ -11,6 +11,8 @@ router.put('/me', authenticate, requireRole('student'), requireProfileComplete, 
 // Must be before /:uid so Express doesn't treat "resume-url" as a uid
 router.get('/me/resume-url', authenticate, requireRole('student'), requireProfileComplete, studentCtrl.getResumeUrl);
 router.get('/me/certificate-url', authenticate, requireRole('student'), requireProfileComplete, studentCtrl.getCertificateUrl);
+// Public profile — accessible by any authenticated user (employers viewing applicants)
 router.get('/:uid', authenticate, studentCtrl.getPublic);
 
 export default router;
+
