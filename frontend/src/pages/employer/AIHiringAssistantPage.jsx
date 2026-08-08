@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employerService } from '../../services/employer.service.js';
+import {
   Bot, Send, Plus, MessageSquare, Sparkles, Search,
   Loader2, ArrowLeft, Clock, ChevronRight, Zap, Users,
   BriefcaseBusiness, GraduationCap, X, Trash2, PanelLeftClose, PanelLeftOpen, Edit, Menu

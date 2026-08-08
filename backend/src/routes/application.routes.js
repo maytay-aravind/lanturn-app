@@ -18,12 +18,12 @@ router.get('/applications',
 router.get('/jobs/:jobId/applications',
   authenticate, requireRole('employer'), requireProfileComplete, appCtrl.listForJob);
 
-// Single application (student owner / employer owner / admin)
-router.get('/applications/:applicationId', authenticate, appCtrl.getOne);
-
 // Get signed URL for applicant's resume
 router.get('/applications/:applicationId/resume-url',
   authenticate, requireRole('employer'), appCtrl.getResumeUrl);
+
+// Single application (student owner / employer owner / admin)
+router.get('/applications/:applicationId', authenticate, appCtrl.getOne);
 
 // Employer/admin updates status
 router.patch('/applications/:applicationId/status',
