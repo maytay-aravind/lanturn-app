@@ -36,6 +36,8 @@ export const employerProfileSchema = z
     officeImages: z.array(z.string().url().or(z.literal(''))).max(10).optional(),
     logoURL: z.string().url().or(z.literal('')).optional(),
     employeeCount: z.coerce.number().int().min(0).optional().nullable(),
+    linkedin: z.string().url().or(z.literal('')).optional(),
+    achievements: z.array(z.string().max(200)).max(50).optional(),
   })
   .strict();
 

@@ -28,6 +28,8 @@ function rowToEmployer(row) {
     companyCulture: row.company_culture || '',
     officeImages:   row.office_images  || [],
     employeeCount:  row.employee_count ?? null,
+    linkedin:       row.linkedin       || '',
+    achievements:   row.achievements   || [],
     createdAt:      row.created_at,
     updatedAt:      row.updated_at,
   };
@@ -56,6 +58,8 @@ function toDbPayload(data) {
   if (data.companyCulture !== undefined) p.company_culture = data.companyCulture;
   if (data.officeImages   !== undefined) p.office_images   = data.officeImages;
   if (data.employeeCount  !== undefined) p.employee_count  = data.employeeCount;
+  if (data.linkedin       !== undefined) p.linkedin        = data.linkedin;
+  if (data.achievements   !== undefined) p.achievements    = data.achievements;
   return p;
 }
 
