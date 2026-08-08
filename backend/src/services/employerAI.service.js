@@ -1,7 +1,7 @@
 import { jobsRepo } from '#repositories/jobs.repository.js';
 import { studentsRepo } from '#repositories/students.repository.js';
 import { candidateMatchesRepo } from '#repositories/candidateMatches.repository.js';
-import { callDeepseek } from '#clients/deepseek.client.js';
+import { callGemini } from '#clients/gemini.client.js';
 import { supabase } from '#supabase';
 import { generateId } from '#utils/ids.js';
 import { AppError } from '#utils/httpErrors.js';
@@ -214,13 +214,13 @@ Employer: ${message}`;
   // 6. Call AI
   let reply;
   try {
-    reply = await callDeepseek({
+    reply = await callGemini({
       systemPrompt: SYSTEM_PROMPT,
       userContent,
       temperature: 0.5,
     });
   } catch (err) {
-    log.error({ threadId, err: err.message }, 'Deepseek employer AI chat failed');
+    log.error({ threadId, err: err.message }, 'Gemini employer AI chat failed');
     throw err;
   }
 
