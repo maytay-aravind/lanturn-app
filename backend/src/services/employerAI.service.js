@@ -293,3 +293,34 @@ export async function getEmployerChatMessages(threadId, uid) {
     createdAt: m.created_at,
   }));
 }
+
+/**
+ * Delete a specific employer chat thread and all its messages.
+ */
+export async function deleteEmployerThread(threadId, uid) {
+  // Verify ownership
+  const { data: thread, error: threadErr } = await supabase
+    .from('chat_threads')
+    .select('user_id')
+    .eq('thread_id', threadId)
+    .maybeSingle();
+  if (threadErr) throw threadErr;
+  if (!thread || thread.user_id !== uid) throw AppError.forbidden('Not your thread');
+
+  // Delete messages first (child rows)
+  const { error: msgErr } = await supabase
+    .from('chat_messages')
+    .delete()
+    .eq('thread_id', threadId);
+  if (msgErr) throw msgErr;
+
+  // Delete thread
+  const { error: delErr } = await supabase
+    .from('chat_threads')
+    .delete()
+    .eq('thread_id', threadId);
+  if (delErr) throw delErr;
+
+  log.info({ uid, threadId }, 'Employer AI thread deleted');
+  return { deleted: true };
+}

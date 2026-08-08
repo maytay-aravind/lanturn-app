@@ -20,6 +20,7 @@ router.get('/jobs/:jobId/matches', authenticate, requireRole('employer'), requir
 router.post('/ai/chat', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.chat);
 router.get('/ai/threads', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.listThreads);
 router.get('/ai/threads/:threadId/messages', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.getMessages);
+router.delete('/ai/threads/:threadId', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.deleteThread);
 
 router.get('/:uid', employerCtrl.getPublic);
 

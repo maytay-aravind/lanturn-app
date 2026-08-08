@@ -12,5 +12,6 @@ export const employerService = {
   aiChat: (body) => apiClient.post('/employers/ai/chat', body).then(unwrap),
   aiListThreads: () => apiClient.get('/employers/ai/threads').then(unwrap),
   aiGetMessages: (threadId) => apiClient.get(`/employers/ai/threads/${threadId}/messages`).then(unwrap),
+  aiDeleteThread: (threadId) => apiClient.delete(`/employers/ai/threads/${threadId}`).then(unwrap),
 };
 

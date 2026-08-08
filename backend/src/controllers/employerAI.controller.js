@@ -1,4 +1,4 @@
-import { employerAIChat, listEmployerThreads, getEmployerChatMessages } from '#services/employerAI.service.js';
+import { employerAIChat, listEmployerThreads, getEmployerChatMessages, deleteEmployerThread } from '#services/employerAI.service.js';
 import { asyncHandler } from '#utils/asyncHandler.js';
 
 /**
@@ -43,5 +43,20 @@ export const getMessages = asyncHandler(async (req, res) => {
   res.json({
     data: messages,
     meta: { requestId: req.id, count: messages.length },
+  });
+});
+
+/**
+ * DELETE /employers/ai/threads/:threadId
+ * Delete a specific AI hiring assistant thread.
+ */
+export const deleteThread = asyncHandler(async (req, res) => {
+  const uid = req.user.uid;
+  const { threadId } = req.params;
+  const result = await deleteEmployerThread(threadId, uid);
+
+  res.json({
+    data: result,
+    meta: { requestId: req.id },
   });
 });

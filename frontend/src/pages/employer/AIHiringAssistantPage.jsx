@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employerService } from '../../services/employer.service.js';
-import {
   Bot, Send, Plus, MessageSquare, Sparkles, Search,
   Loader2, ArrowLeft, Clock, ChevronRight, Zap, Users,
-  BriefcaseBusiness, GraduationCap, X,
+  BriefcaseBusiness, GraduationCap, X, Trash2, PanelLeftClose, PanelLeftOpen, Edit, Menu
 } from 'lucide-react';
 
 /* ── Suggested prompts shown for new conversations ────────── */
@@ -111,7 +110,7 @@ function TypingIndicator() {
 }
 
 /* ── Thread sidebar ──────────────────────────────────────── */
-function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, isLoading }) {
+function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, onDeleteThread, isLoading }) {
   const [search, setSearch] = useState('');
 
   const filtered = (threads || []).filter(t =>
@@ -162,48 +161,60 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, i
           </div>
         ) : (
           filtered.map(thread => (
-            <button
-              key={thread.threadId}
-              onClick={() => onSelectThread(thread.threadId)}
-              className={`w-full text-left p-3 rounded-xl transition-all duration-150 group ${
-                activeThreadId === thread.threadId
-                  ? 'bg-brand-50 ring-1 ring-brand-200'
-                  : 'hover:bg-slate-50'
-              }`}
-            >
-              <div className="flex items-start gap-2.5">
-                <div className={`h-7 w-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+            <div key={thread.threadId} className="relative group/item">
+              <button
+                onClick={() => onSelectThread(thread.threadId)}
+                className={`w-full text-left p-3 rounded-xl transition-all duration-150 group ${
                   activeThreadId === thread.threadId
-                    ? 'bg-brand-100 text-brand-700'
-                    : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'
-                }`}>
-                  <MessageSquare className="h-3.5 w-3.5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm font-medium truncate ${
-                    activeThreadId === thread.threadId ? 'text-brand-800' : 'text-slate-700'
+                    ? 'bg-brand-50 ring-1 ring-brand-200'
+                    : 'hover:bg-slate-50'
+                }`}
+              >
+                <div className="flex items-start gap-2.5">
+                  <div className={`h-7 w-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    activeThreadId === thread.threadId
+                      ? 'bg-brand-100 text-brand-700'
+                      : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'
                   }`}>
-                    {thread.title || 'Untitled'}
-                  </p>
-                  <p className="text-xs text-slate-400 truncate mt-0.5">
-                    {thread.lastMessagePreview || ''}
-                  </p>
+                    <MessageSquare className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0 pr-6">
+                    <p className={`text-sm font-medium truncate ${
+                      activeThreadId === thread.threadId ? 'text-brand-800' : 'text-slate-700'
+                    }`}>
+                      {thread.title || 'Untitled'}
+                    </p>
+                    <p className="text-xs text-slate-400 truncate mt-0.5">
+                      {thread.lastMessagePreview || ''}
+                    </p>
+                  </div>
                 </div>
-                <ChevronRight className={`h-3.5 w-3.5 flex-shrink-0 mt-0.5 transition-colors ${
-                  activeThreadId === thread.threadId ? 'text-brand-500' : 'text-slate-300'
-                }`} />
-              </div>
-              {thread.lastMessageAt && (
-                <div className="flex items-center gap-1 mt-1.5 pl-9">
-                  <Clock className="h-3 w-3 text-slate-300" />
-                  <span className="text-[10px] text-slate-400">
-                    {new Date(thread.lastMessageAt).toLocaleDateString(undefined, {
-                      month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-                    })}
-                  </span>
-                </div>
-              )}
-            </button>
+                {thread.lastMessageAt && (
+                  <div className="flex items-center gap-1 mt-1.5 pl-9">
+                    <Clock className="h-3 w-3 text-slate-300" />
+                    <span className="text-[10px] text-slate-400">
+                      {new Date(thread.lastMessageAt).toLocaleDateString(undefined, {
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+                      })}
+                    </span>
+                  </div>
+                )}
+              </button>
+              
+              {/* Delete button (visible on hover) */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (window.confirm('Are you sure you want to delete this conversation?')) {
+                    onDeleteThread(thread.threadId);
+                  }
+                }}
+                className="absolute right-2 top-3 h-7 w-7 rounded-lg flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-600 opacity-0 group-hover/item:opacity-100 transition-all duration-150"
+                title="Delete thread"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
           ))
         )}
       </div>
@@ -218,6 +229,7 @@ export default function AIHiringAssistantPage() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -260,6 +272,17 @@ export default function AIHiringAssistantPage() {
 
       // Refetch thread list to update previews
       queryClient.invalidateQueries({ queryKey: ['employer', 'ai-threads'] });
+    },
+  });
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: (id) => employerService.aiDeleteThread(id),
+    onSuccess: (_, deletedId) => {
+      queryClient.invalidateQueries({ queryKey: ['employer', 'ai-threads'] });
+      if (activeThreadId === deletedId) {
+        handleNewThread();
+      }
     },
   });
 
@@ -320,6 +343,7 @@ export default function AIHiringAssistantPage() {
     setActiveThreadId(null);
     setMessages([]);
     setSidebarOpen(false);
+    if (!desktopSidebarOpen) setDesktopSidebarOpen(true);
     inputRef.current?.focus();
   };
 
@@ -356,15 +380,18 @@ export default function AIHiringAssistantPage() {
       )}
 
       {/* ── Desktop sidebar ──────────────────────────────── */}
-      <div className="hidden lg:flex lg:w-72 xl:w-80 border-r border-slate-100 bg-white flex-shrink-0">
-        <ThreadSidebar
-          threads={threads}
-          activeThreadId={activeThreadId}
-          onSelectThread={handleSelectThread}
-          onNewThread={handleNewThread}
-          isLoading={threadsLoading}
-        />
-      </div>
+      {desktopSidebarOpen && (
+        <div className="hidden lg:flex lg:w-72 xl:w-80 border-r border-slate-100 bg-white flex-shrink-0 transition-all duration-300">
+          <ThreadSidebar
+            threads={threads}
+            activeThreadId={activeThreadId}
+            onSelectThread={handleSelectThread}
+            onNewThread={handleNewThread}
+            onDeleteThread={(id) => deleteMutation.mutate(id)}
+            isLoading={threadsLoading}
+          />
+        </div>
+      )}
 
       {/* ── Main chat area ───────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
@@ -375,8 +402,21 @@ export default function AIHiringAssistantPage() {
             className="lg:hidden btn-ghost p-1.5 rounded-lg"
             id="mobile-sidebar-toggle"
           >
-            <MessageSquare className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
+            <Menu className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
           </button>
+          
+          <button
+            onClick={() => setDesktopSidebarOpen(!desktopSidebarOpen)}
+            className="hidden lg:flex btn-ghost p-1.5 rounded-lg"
+            title={desktopSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+          >
+            {desktopSidebarOpen ? (
+              <PanelLeftClose className="h-5 w-5 text-slate-500" />
+            ) : (
+              <PanelLeftOpen className="h-5 w-5 text-slate-500" />
+            )}
+          </button>
+
           <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-md shadow-brand-500/20">
             <Bot className="h-5 w-5 text-white" />
           </div>
@@ -384,9 +424,19 @@ export default function AIHiringAssistantPage() {
             <h1 className="text-sm font-bold text-slate-900">AI Hiring Assistant</h1>
             <p className="text-xs text-slate-400">Powered by AI · Ask about candidates, skills, and matches</p>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-medium text-emerald-600">Online</span>
+          
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleNewThread}
+              className="hidden sm:flex btn-ghost p-1.5 rounded-lg text-slate-500 hover:text-brand-600"
+              title="New Conversation"
+            >
+              <Edit className="h-5 w-5" />
+            </button>
+            <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded-full border border-emerald-100">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-medium text-emerald-700 uppercase tracking-wider">Online</span>
+            </div>
           </div>
         </div>
 
