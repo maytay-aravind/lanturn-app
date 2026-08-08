@@ -58,10 +58,8 @@ function toDbPayload(data) {
   if (data.companyCulture !== undefined) p.company_culture = data.companyCulture;
   if (data.officeImages   !== undefined) p.office_images   = data.officeImages;
   if (data.employeeCount  !== undefined) p.employee_count  = data.employeeCount;
-  // Temporarily comment out these fields because the Supabase DB migration 
-  // hasn't been run, and trying to save them causes an Internal Server Error (PGRST204)
-  // if (data.linkedin       !== undefined) p.linkedin        = data.linkedin;
-  // if (data.achievements   !== undefined) p.achievements    = data.achievements;
+  if (data.linkedin       !== undefined) p.linkedin        = data.linkedin;
+  if (data.achievements   !== undefined) p.achievements    = data.achievements;
   return p;
 }
 

@@ -304,7 +304,15 @@ export default function EmployerProfilePage() {
                 <DetailRow icon={Briefcase} label="Industry" value={p.industry} />
                 <DetailRow icon={Users} label="Size" value={p.companySize} />
                 <DetailRow icon={Users} label="Employees" value={p.employeeCount} />
-                <DetailRow icon={Globe} label="Website" value={p.website} />
+                {p.website && (
+                  <div className="flex items-center gap-2.5 text-sm py-1">
+                    <Globe className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
+                    <span className="text-slate-500 min-w-[80px]">Website</span>
+                    <a href={p.website} target="_blank" rel="noreferrer" className="font-medium text-brand-600 hover:underline truncate">
+                      {p.website.replace(/^https?:\/\//, '')}
+                    </a>
+                  </div>
+                )}
               </div>
             </Section>
 
