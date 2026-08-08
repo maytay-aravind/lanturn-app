@@ -185,7 +185,7 @@ export default function EmployerProfilePage() {
       // In a real app, you would use uploadService to get a URL, then update the backend.
       // For this implementation, we will assume uploadService.uploadFile returns the URL 
       // or that we can patch the logoURL right after.
-      const result = await uploadService.uploadFile(file, 'logoURL', setUploadPct);
+      const result = await uploadService.uploadFile(file, 'companyLogo', setUploadPct);
       // Wait, let's just trigger a re-fetch since the user's logo URL should be updated by the upload service
       toast.success('Company Logo updated!');
       qc.invalidateQueries({ queryKey: ['employer', 'me'] });
