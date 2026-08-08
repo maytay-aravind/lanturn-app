@@ -1,5 +1,5 @@
 import { callGemini } from '#clients/gemini.client.js';
-import { callDeepseek } from '#clients/deepseek.client.js';
+
 import { studentsRepo } from '#repositories/students.repository.js';
 import { jobsRepo } from '#repositories/jobs.repository.js';
 import { AppError } from '#utils/httpErrors.js';
@@ -413,13 +413,13 @@ export async function careerChat(uid, { threadId, message, mode = 'general', job
 
   let reply;
   try {
-    reply = await callDeepseek({
+    reply = await callGemini({
       systemPrompt: CHAT_PROMPT + contextStr,
       userContent,
       temperature: 0.7,
     });
   } catch (err) {
-    log.error({ threadId, err: err.message }, 'Deepseek career chat failed');
+    log.error({ threadId, err: err.message }, 'Gemini career chat failed');
     throw err;
   }
 
