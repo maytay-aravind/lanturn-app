@@ -11,7 +11,7 @@ import {
   Search, MapPin, Briefcase, Clock, DollarSign,
   Building2, ChevronRight, CheckCircle2, ChevronDown,
   X, Users, GraduationCap, Globe, Star, Loader2,
-  ExternalLink, Heart, Cpu, Calendar, Crown, Phone, Mail,
+  ExternalLink, Heart, Cpu, Calendar, Crown, Phone, Mail, Linkedin
 } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -157,6 +157,14 @@ function JobDetailDialog({ job, onClose, onApply, isApplying }) {
                         <Globe className="h-4 w-4 text-slate-400" />
                         <a href={company.website} target="_blank" rel="noreferrer" className="text-brand-600 hover:underline truncate">
                           {company.website.replace(/^https?:\/\//, '')}
+                        </a>
+                      </div>
+                    )}
+                    {company.linkedin && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Linkedin className="h-4 w-4 text-slate-400" />
+                        <a href={company.linkedin} target="_blank" rel="noreferrer" className="text-brand-600 hover:underline truncate">
+                          LinkedIn Profile
                         </a>
                       </div>
                     )}
