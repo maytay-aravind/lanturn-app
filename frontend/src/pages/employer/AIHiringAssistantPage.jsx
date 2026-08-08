@@ -331,7 +331,8 @@ export default function AIHiringAssistantPage() {
   const isNewConversation = messages.length === 0 && !activeThreadId;
 
   return (
-    <div className="flex h-[calc(100dvh-3.5rem)] overflow-hidden animate-fade-in" id="ai-hiring-assistant-page">
+    <div className="-mx-4 sm:-mx-6 -my-6" id="ai-hiring-assistant-page">
+      <div className="flex h-[calc(100dvh-3.5rem)] overflow-hidden animate-fade-in">
       {/* ── Mobile sidebar overlay ───────────────────────── */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
@@ -532,6 +533,7 @@ export default function AIHiringAssistantPage() {
           animation: slideRight 0.2s ease-out;
         }
       `}</style>
+      </div>
     </div>
   );
 }
