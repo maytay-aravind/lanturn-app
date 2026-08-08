@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { jobService } from '../../services/job.service.js';
 import { applicationService } from '../../services/application.service.js';
+import { employerService } from '../../services/employer.service.js';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { SkeletonList } from '../../components/ui/Skeleton.jsx';
 import { formatSalary, timeAgo } from '../../lib/utils.js';
 import toast from 'react-hot-toast';
 import {
   Search, MapPin, Briefcase, Clock, DollarSign,
-  Building2, ChevronRight, CheckCircle2, ChevronDown
+  Building2, ChevronRight, CheckCircle2, ChevronDown,
+  X, Users, GraduationCap, Globe, Star, Loader2,
+  ExternalLink, Heart, Cpu, Calendar, Crown, Phone, Mail,
 } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -17,8 +20,357 @@ const STATUS_COLORS = {
   paused: 'badge-yellow',
 };
 
-function InternalJobCard({ job, onApply }) {
-  const [expanded, setExpanded] = useState(false);
+/* ── Job Detail Dialog ─────────────────────────────────────────── */
+function JobDetailDialog({ job, onClose, onApply, isApplying }) {
+  const [showCompanyProfile, setShowCompanyProfile] = useState(false);
+
+  // Fetch full job details
+  const { data: fullJob, isLoading: jobLoading } = useQuery({
+    queryKey: ['job', job.jobId || job.id],
+    queryFn: () => jobService.get(job.jobId || job.id),
+    initialData: job,
+  });
+
+  // Fetch company profile when requested
+  const { data: company, isLoading: companyLoading } = useQuery({
+    queryKey: ['employer', 'public', job.employerId],
+    queryFn: () => employerService.getPublic(job.employerId),
+    enabled: showCompanyProfile && !!job.employerId,
+  });
+
+  const j = fullJob || job;
+  const loc = typeof j.location === 'object'
+    ? [j.location?.city, j.location?.state, j.location?.country].filter(Boolean).join(', ')
+    : (j.location || 'Remote');
+  const salaryText = j.salary?.min
+    ? formatSalary(j.salary.min, j.salary.max, j.salary.currency)
+    : null;
+  const isApplied = j.hasApplied || false;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" />
+
+      {/* Dialog */}
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-start justify-between gap-4">
+          <div className="flex items-start gap-4 min-w-0">
+            <div className="h-14 w-14 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
+              {j.companyLogoURL ? (
+                <img src={j.companyLogoURL} alt="" className="h-full w-full object-cover rounded-xl" />
+              ) : (
+                <Building2 className="h-7 w-7 text-brand-600" />
+              )}
+            </div>
+            <div className="min-w-0">
+              <h2 className="text-xl font-bold text-slate-900 truncate">{j.title}</h2>
+              <p className="text-sm font-medium text-brand-600">{j.companyName}</p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {j.jobType && <span className="badge badge-blue">{j.jobType}</span>}
+                {j.workMode && <span className="badge badge-default">{j.workMode}</span>}
+                {j.experienceLevel && <span className="badge badge-default">{j.experienceLevel}</span>}
+                {j.status && <span className={`badge ${STATUS_COLORS[j.status] || 'badge-default'}`}>{j.status}</span>}
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="h-8 w-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center flex-shrink-0 transition-colors"
+          >
+            <X className="h-4 w-4 text-slate-500" />
+          </button>
+        </div>
+
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto px-6 py-5 space-y-6" style={{ maxHeight: 'calc(90vh - 160px)' }}>
+          {jobLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 text-brand-500 animate-spin" /></div>
+          ) : showCompanyProfile ? (
+            /* ── Company Profile View ────────────────────────────── */
+            <div className="space-y-5 animate-fade-in">
+              <button
+                onClick={() => setShowCompanyProfile(false)}
+                className="text-sm font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
+              >
+                ← Back to Job Details
+              </button>
+
+              {companyLoading ? (
+                <div className="flex justify-center py-12"><Loader2 className="h-6 w-6 text-brand-500 animate-spin" /></div>
+              ) : company ? (
+                <div className="space-y-5">
+                  {/* Company header */}
+                  <div className="flex items-center gap-4">
+                    <div className="h-16 w-16 rounded-xl bg-brand-50 flex items-center justify-center border border-brand-100 overflow-hidden">
+                      {company.logoURL ? (
+                        <img src={company.logoURL} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <Building2 className="h-8 w-8 text-brand-600" />
+                      )}
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900">{company.companyName || j.companyName}</h3>
+                      <p className="text-sm text-slate-500">{company.industry || 'Industry not specified'}</p>
+                    </div>
+                  </div>
+
+                  {/* Company details */}
+                  {company.description && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-700 mb-2">About</h4>
+                      <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{company.description}</p>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {company.headquarters && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="h-4 w-4 text-slate-400" />
+                        <span className="text-slate-600">{company.headquarters}</span>
+                      </div>
+                    )}
+                    {company.companySize && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Users className="h-4 w-4 text-slate-400" />
+                        <span className="text-slate-600">{company.companySize} employees</span>
+                      </div>
+                    )}
+                    {company.ceo && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Crown className="h-4 w-4 text-slate-400" />
+                        <span className="text-slate-600">CEO: {company.ceo}</span>
+                      </div>
+                    )}
+                    {company.foundedYear && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4 text-slate-400" />
+                        <span className="text-slate-600">Founded {company.foundedYear}</span>
+                      </div>
+                    )}
+                    {company.website && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Globe className="h-4 w-4 text-slate-400" />
+                        <a href={company.website} target="_blank" rel="noreferrer" className="text-brand-600 hover:underline truncate">
+                          {company.website.replace(/^https?:\/\//, '')}
+                        </a>
+                      </div>
+                    )}
+                    {company.email && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Mail className="h-4 w-4 text-slate-400" />
+                        <span className="text-slate-600">{company.email}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {company.technologies?.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><Cpu className="h-4 w-4" /> Tech Stack</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {company.technologies.map((t, i) => (
+                          <span key={i} className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200">{t}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {company.benefits?.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><Heart className="h-4 w-4" /> Benefits</h4>
+                      <div className="flex flex-wrap gap-1.5">
+                        {company.benefits.map((b, i) => (
+                          <span key={i} className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">{b}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {company.companyCulture && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-slate-700 mb-2">Company Culture</h4>
+                      <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{company.companyCulture}</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500 text-center py-8">Company profile not available.</p>
+              )}
+            </div>
+          ) : (
+            /* ── Job Details View ────────────────────────────────── */
+            <div className="space-y-5 animate-fade-in">
+              {/* Quick stats */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {loc && (
+                  <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                    <MapPin className="h-4 w-4 text-slate-400 mx-auto mb-1" />
+                    <p className="text-xs text-slate-500">Location</p>
+                    <p className="text-sm font-semibold text-slate-800 truncate">{loc}</p>
+                  </div>
+                )}
+                {salaryText && (
+                  <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                    <DollarSign className="h-4 w-4 text-slate-400 mx-auto mb-1" />
+                    <p className="text-xs text-slate-500">Salary</p>
+                    <p className="text-sm font-semibold text-slate-800 truncate">{salaryText}</p>
+                  </div>
+                )}
+                {j.openings && (
+                  <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                    <Users className="h-4 w-4 text-slate-400 mx-auto mb-1" />
+                    <p className="text-xs text-slate-500">Openings</p>
+                    <p className="text-sm font-semibold text-slate-800">{j.openings}</p>
+                  </div>
+                )}
+                {j.deadline && (
+                  <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
+                    <Calendar className="h-4 w-4 text-slate-400 mx-auto mb-1" />
+                    <p className="text-xs text-slate-500">Deadline</p>
+                    <p className="text-sm font-semibold text-slate-800">{new Date(j.deadline).toLocaleDateString()}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              {j.description && (
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900 mb-2">About This Role</h4>
+                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{j.description}</p>
+                </div>
+              )}
+
+              {/* Responsibilities */}
+              {j.responsibilities && (
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Responsibilities</h4>
+                  <div className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{j.responsibilities}</div>
+                </div>
+              )}
+
+              {/* Requirements */}
+              {j.requirements?.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Requirements</h4>
+                  <ul className="space-y-1.5">
+                    {j.requirements.map((req, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+                        <span>{req}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Required Skills */}
+              {j.requiredSkills?.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Required Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {j.requiredSkills.map((skill, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 text-xs font-semibold border border-brand-100">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Education */}
+              {j.educationRequirement && (
+                <div className="flex items-start gap-2">
+                  <GraduationCap className="h-4 w-4 text-slate-400 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-sm font-semibold text-slate-900">Education</h4>
+                    <p className="text-sm text-slate-600">{j.educationRequirement}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Benefits */}
+              {j.benefits?.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Benefits</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {j.benefits.map((b, i) => (
+                      <span key={i} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100">
+                        {b}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stipend for internships */}
+              {j.stipend?.amount && (
+                <div className="flex items-center gap-2 text-sm p-3 bg-amber-50 rounded-xl border border-amber-100">
+                  <DollarSign className="h-4 w-4 text-amber-600" />
+                  <span className="font-semibold text-amber-800">Monthly Stipend: ₹{j.stipend.amount.toLocaleString()}</span>
+                </div>
+              )}
+
+              {/* View Company Profile link */}
+              {j.employerId && (
+                <button
+                  onClick={() => setShowCompanyProfile(true)}
+                  className="w-full flex items-center justify-between p-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center border border-brand-100">
+                      {j.companyLogoURL ? (
+                        <img src={j.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
+                      ) : (
+                        <Building2 className="h-5 w-5 text-brand-600" />
+                      )}
+                    </div>
+                    <div className="text-left">
+                      <p className="text-sm font-semibold text-slate-900">{j.companyName}</p>
+                      <p className="text-xs text-slate-500">View full company profile</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-brand-600 transition-colors" />
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        {!showCompanyProfile && (
+          <div className="sticky bottom-0 bg-white/90 backdrop-blur-md border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-3">
+            <div className="text-xs text-slate-400">
+              {j.createdAt && <>Posted {timeAgo(j.createdAt)}</>}
+              {j.applicationCount != null && <> • {j.applicationCount} applicant{j.applicationCount !== 1 ? 's' : ''}</>}
+            </div>
+            {j.status === 'active' && (
+              isApplied ? (
+                <span className="badge-green px-4 py-2 flex items-center gap-1.5 text-sm">
+                  <CheckCircle2 className="h-4 w-4" /> Applied
+                </span>
+              ) : (
+                <button
+                  onClick={() => onApply(j.jobId || j.id)}
+                  disabled={isApplying}
+                  className="btn-primary px-6"
+                >
+                  {isApplying ? 'Applying...' : 'Apply Now'}
+                </button>
+              )
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Job Card (click to open dialog) ───────────────────────────── */
+function InternalJobCard({ job, onClick }) {
   const loc = typeof job.location === 'object'
     ? [job.location?.city, job.location?.country].filter(Boolean).join(', ')
     : (job.location || 'Remote');
@@ -30,15 +382,22 @@ function InternalJobCard({ job, onApply }) {
   const isApplied = job.hasApplied || false;
 
   return (
-    <div className="card p-5 animate-slide-up">
+    <div
+      className="card p-5 animate-slide-up cursor-pointer hover:shadow-lg hover:border-brand-200 transition-all duration-200 group"
+      onClick={onClick}
+    >
       <div className="flex flex-col sm:flex-row gap-4 sm:items-start justify-between">
         <div className="flex items-start gap-4 flex-1 min-w-0">
-          <div className="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
-            <Building2 className="h-6 w-6 text-brand-600" />
+          <div className="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 group-hover:scale-105 transition-transform">
+            {job.companyLogoURL ? (
+              <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-xl" />
+            ) : (
+              <Building2 className="h-6 w-6 text-brand-600" />
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h3 className="font-bold text-slate-900 text-lg truncate">{job.title}</h3>
+              <h3 className="font-bold text-slate-900 text-lg truncate group-hover:text-brand-700 transition-colors">{job.title}</h3>
               {job.status && <span className={`badge ${STATUS_COLORS[job.status] || 'badge-default'}`}>{job.status}</span>}
             </div>
             <p className="text-sm font-medium text-slate-600">{job.companyName}</p>
@@ -49,9 +408,9 @@ function InternalJobCard({ job, onApply }) {
                   <MapPin className="h-3.5 w-3.5" />{loc}
                 </span>
               )}
-              {job.type && (
+              {job.jobType && (
                 <span className="flex items-center gap-1 text-xs text-slate-500">
-                  <Briefcase className="h-3.5 w-3.5" />{job.type}
+                  <Briefcase className="h-3.5 w-3.5" />{job.jobType}
                 </span>
               )}
               {salaryText && (
@@ -66,33 +425,32 @@ function InternalJobCard({ job, onApply }) {
               )}
             </div>
 
-            <div className={`mt-3 text-sm text-slate-600 relative transition-all duration-300 ${expanded ? '' : 'line-clamp-2'}`}>
-              {job.description}
-            </div>
-            
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="text-xs font-semibold text-brand-600 hover:text-brand-700 mt-2 flex items-center gap-1"
-            >
-              {expanded ? 'Show less' : 'Read more'} <ChevronDown className={`h-3 w-3 transition-transform ${expanded ? 'rotate-180' : ''}`} />
-            </button>
+            {job.description && (
+              <p className="mt-3 text-sm text-slate-600 line-clamp-2">{job.description}</p>
+            )}
+
+            {job.requiredSkills?.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {job.requiredSkills.slice(0, 5).map((s, i) => (
+                  <span key={i} className="px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 text-[11px] font-medium border border-brand-100">{s}</span>
+                ))}
+                {job.requiredSkills.length > 5 && (
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[11px] font-medium">+{job.requiredSkills.length - 5} more</span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 flex-shrink-0 w-full sm:w-auto mt-4 sm:mt-0">
-          {job.status === 'active' && (
-            isApplied ? (
-              <span className="badge-green px-3 py-1.5 flex items-center gap-1">
-                <CheckCircle2 className="h-4 w-4" /> Applied
-              </span>
-            ) : (
-              <button
-                onClick={() => onApply(job.jobId || job.id)}
-                className="btn-primary w-full sm:w-auto"
-              >
-                Apply Now
-              </button>
-            )
+        <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-3 flex-shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
+          {isApplied ? (
+            <span className="badge-green px-3 py-1.5 flex items-center gap-1">
+              <CheckCircle2 className="h-4 w-4" /> Applied
+            </span>
+          ) : (
+            <span className="text-xs font-semibold text-brand-600 flex items-center gap-1 group-hover:underline">
+              View Details <ChevronRight className="h-3.5 w-3.5" />
+            </span>
           )}
         </div>
       </div>
@@ -104,6 +462,7 @@ export default function JobsPage() {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [page, setPage] = useState({ limit: 10, cursor: null });
+  const [selectedJob, setSelectedJob] = useState(null);
 
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['jobs', search, typeFilter, page],
@@ -117,6 +476,7 @@ export default function JobsPage() {
     mutationFn: (jobId) => applicationService.apply(jobId),
     onSuccess: () => {
       toast.success('Application submitted successfully!');
+      setSelectedJob(null);
       refetch();
     },
     onError: (err) => toast.error(err.response?.data?.error?.message || 'Failed to apply'),
@@ -172,7 +532,7 @@ export default function JobsPage() {
             <InternalJobCard
               key={job.jobId || job.id}
               job={job}
-              onApply={(id) => applyMutation.mutate(id)}
+              onClick={() => setSelectedJob(job)}
             />
           ))}
         </div>
@@ -188,6 +548,16 @@ export default function JobsPage() {
             {isFetching ? 'Loading...' : 'Load More Jobs'}
           </button>
         </div>
+      )}
+
+      {/* Job Detail Dialog */}
+      {selectedJob && (
+        <JobDetailDialog
+          job={selectedJob}
+          onClose={() => setSelectedJob(null)}
+          onApply={(id) => applyMutation.mutate(id)}
+          isApplying={applyMutation.isPending}
+        />
       )}
     </div>
   );
