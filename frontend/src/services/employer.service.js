@@ -13,5 +13,8 @@ export const employerService = {
   aiListThreads: () => apiClient.get('/employers/ai/threads').then(unwrap),
   aiGetMessages: (threadId) => apiClient.get(`/employers/ai/threads/${threadId}/messages`).then(unwrap),
   aiDeleteThread: (threadId) => apiClient.delete(`/employers/ai/threads/${threadId}`).then(unwrap),
+
+  // AI Job Description Generator
+  aiGenerateJobDesc: (body) => apiClient.post('/employers/ai/generate-job-description', body).then(unwrap),
 };
 

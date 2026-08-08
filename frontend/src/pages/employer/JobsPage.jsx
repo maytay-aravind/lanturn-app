@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { jobService } from '../../services/job.service.js';
+import { employerService } from '../../services/employer.service.js';
 import toast from 'react-hot-toast';
 import { formatSalary, timeAgo } from '../../lib/utils.js';
 import { Link } from 'react-router-dom';
 import {
   Plus, X, Pencil, Trash2, Users, Play, Pause, Eye,
-  MapPin, Clock, Briefcase, GraduationCap, DollarSign,
+  MapPin, Clock, Briefcase, GraduationCap, DollarSign, Sparkles, Loader2,
 } from 'lucide-react';
 
 const JOB_TYPES = ['full-time', 'part-time', 'internship', 'contract'];
@@ -129,6 +130,47 @@ export default function EmployerJobsPage() {
   });
 
   const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+
+  // ── AI Job Description Generator ──────────────────────────
+  const aiDescMutation = useMutation({
+    mutationFn: (body) => employerService.aiGenerateJobDesc(body),
+    onSuccess: (data) => {
+      setForm(prev => ({
+        ...prev,
+        description: data.description || prev.description,
+        responsibilities: data.responsibilities || prev.responsibilities,
+        requirements: data.requirements?.length
+          ? data.requirements.join('\n')
+          : prev.requirements,
+        requiredSkills: data.requiredSkills?.length
+          ? data.requiredSkills
+          : prev.requiredSkills || [],
+      }));
+      // Append nice-to-have into description if present
+      if (data.niceToHave?.length) {
+        setForm(prev => ({
+          ...prev,
+          description: prev.description + '\n\nNice to have: ' + data.niceToHave.join(', '),
+        }));
+      }
+      toast.success('AI generated description! Review and edit before posting.', { icon: '✨' });
+    },
+    onError: (err) => toast.error(err.message || 'AI generation failed'),
+  });
+
+  const handleAIGenerate = () => {
+    if (!form.title) {
+      toast.error('Please enter a Job Title first');
+      return;
+    }
+    aiDescMutation.mutate({
+      title: form.title,
+      jobType: form.jobType || 'full-time',
+      experienceLevel: form.experienceLevel || 'entry',
+      workMode: form.workMode || '',
+      department: form.department || '',
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -272,7 +314,21 @@ export default function EmployerJobsPage() {
 
             {/* Description */}
             <div>
-              <label className="label label-required">Job Description</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="label label-required mb-0">Job Description</label>
+                <button
+                  type="button"
+                  onClick={handleAIGenerate}
+                  disabled={aiDescMutation.isPending}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-brand-500 to-violet-600 text-white hover:from-brand-600 hover:to-violet-700 shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-60 disabled:cursor-wait"
+                >
+                  {aiDescMutation.isPending ? (
+                    <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Generating...</>
+                  ) : (
+                    <><Sparkles className="h-3.5 w-3.5" /> Generate with AI</>
+                  )}
+                </button>
+              </div>
               <textarea name="description" rows={4} value={form.description || ''} onChange={handleChange} className="textarea" required placeholder="Describe the role and what the ideal candidate looks like..." />
             </div>
 
