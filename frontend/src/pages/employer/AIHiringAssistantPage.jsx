@@ -380,8 +380,12 @@ export default function AIHiringAssistantPage() {
       )}
 
       {/* ── Desktop sidebar ──────────────────────────────── */}
-      {desktopSidebarOpen && (
-        <div className="hidden lg:flex lg:w-72 xl:w-80 border-r border-slate-100 bg-white flex-shrink-0 transition-all duration-300">
+      <div 
+        className={`hidden lg:flex flex-shrink-0 bg-white border-slate-100 transition-all duration-300 ease-in-out overflow-hidden ${
+          desktopSidebarOpen ? 'w-72 xl:w-80 border-r opacity-100' : 'w-0 border-r-0 opacity-0'
+        }`}
+      >
+        <div className="w-72 xl:w-80 h-full flex-shrink-0">
           <ThreadSidebar
             threads={threads}
             activeThreadId={activeThreadId}
@@ -391,7 +395,7 @@ export default function AIHiringAssistantPage() {
             isLoading={threadsLoading}
           />
         </div>
-      )}
+      </div>
 
       {/* ── Main chat area ───────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
