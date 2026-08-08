@@ -28,8 +28,8 @@ function rowToEmployer(row) {
     companyCulture: row.company_culture || '',
     officeImages:   row.office_images  || [],
     employeeCount:  row.employee_count ?? null,
-    linkedin:       row.linkedin       || '',
-    achievements:   row.achievements   || [],
+    linkedin:       row.hr_contact?.linkedin || '',
+    achievements:   row.hr_contact?.achievements || [],
     createdAt:      row.created_at,
     updatedAt:      row.updated_at,
   };
@@ -58,8 +58,15 @@ function toDbPayload(data) {
   if (data.companyCulture !== undefined) p.company_culture = data.companyCulture;
   if (data.officeImages   !== undefined) p.office_images   = data.officeImages;
   if (data.employeeCount  !== undefined) p.employee_count  = data.employeeCount;
-  if (data.linkedin       !== undefined) p.linkedin        = data.linkedin;
-  if (data.achievements   !== undefined) p.achievements    = data.achievements;
+
+  // Workaround: Store linkedin and achievements in the hr_contact JSONB column
+  // because the actual columns do not exist in the remote Supabase database yet.
+  if (data.linkedin !== undefined || data.achievements !== undefined) {
+    p.hr_contact = p.hr_contact || (data.hrContact || {});
+    if (data.linkedin !== undefined) p.hr_contact.linkedin = data.linkedin;
+    if (data.achievements !== undefined) p.hr_contact.achievements = data.achievements;
+  }
+  
   return p;
 }
 
