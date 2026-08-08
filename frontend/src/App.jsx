@@ -21,6 +21,7 @@ import EmployerJobsPage from './pages/employer/JobsPage.jsx';
 import JobApplicantsPage from './pages/employer/JobApplicantsPage.jsx';
 import EmployerProfilePage from './pages/employer/ProfilePage.jsx';
 import EmployerNotificationsPage from './pages/employer/NotificationsPage.jsx';
+import AIHiringAssistantPage from './pages/employer/AIHiringAssistantPage.jsx';
 
 // Admin
 import AdminPage from './pages/admin/AdminPage.jsx';
@@ -59,6 +60,7 @@ export default function App() {
               <Route path="/employer/dashboard" element={<EmployerDashboard />} />
               <Route path="/employer/jobs" element={<EmployerJobsPage />} />
               <Route path="/employer/jobs/:jobId/applicants" element={<JobApplicantsPage />} />
+              <Route path="/employer/ai-assistant" element={<AIHiringAssistantPage />} />
               <Route path="/employer/profile" element={<EmployerProfilePage />} />
               <Route path="/employer/notifications" element={<EmployerNotificationsPage />} />
             </Route>

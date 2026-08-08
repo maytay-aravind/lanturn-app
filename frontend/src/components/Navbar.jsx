@@ -5,7 +5,7 @@ import { notificationService } from '../services/notification.service.js';
 import {
   LayoutDashboard, Briefcase, FileText, User, Sparkles,
   Search, Bell, LogOut, ChevronDown, Menu, X, Settings,
-  Building2, Map,
+  Building2, Map, Bot,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,6 +22,7 @@ const STUDENT_LINKS = [
 const EMPLOYER_LINKS = [
   { to: '/employer/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/employer/jobs', icon: Briefcase, label: 'My Jobs' },
+  { to: '/employer/ai-assistant', icon: Bot, label: 'AI Assistant' },
   { to: '/employer/profile', icon: Building2, label: 'Company Profile' },
   { to: '/employer/notifications', icon: Bell, label: 'Notifications' },
 ];

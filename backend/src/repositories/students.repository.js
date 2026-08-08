@@ -134,4 +134,25 @@ export const studentsRepo = {
     if (error) throw error;
     return (data || []).map((row) => row.uid);
   },
+
+  /** Search students whose searchable_skills overlap with the given skills array */
+  async searchBySkills(skills, { limit = 50 } = {}) {
+    const { data, error } = await supabase
+      .from('students')
+      .select('uid, personal, academic, professional, searchable_skills, profile_photo_url')
+      .overlaps('searchable_skills', skills.map(s => s.toLowerCase()))
+      .limit(limit);
+    if (error) throw error;
+    return (data || []).map(rowToStudent);
+  },
+
+  /** List all students (lightweight columns) for AI context building */
+  async listAll({ limit = 200 } = {}) {
+    const { data, error } = await supabase
+      .from('students')
+      .select('uid, personal, academic, professional, searchable_skills, profile_photo_url')
+      .limit(limit);
+    if (error) throw error;
+    return (data || []).map(rowToStudent);
+  },
 };

@@ -7,4 +7,10 @@ export const employerService = {
   getPublic: (uid) => apiClient.get(`/employers/${uid}`).then(unwrap),
   getJobMatches: (jobId) => apiClient.get(`/employers/jobs/${jobId}/matches`).then(unwrap),
   getTopRecommendations: () => apiClient.get('/employers/me/recommendations').then(unwrap),
+
+  // AI Hiring Assistant
+  aiChat: (body) => apiClient.post('/employers/ai/chat', body).then(unwrap),
+  aiListThreads: () => apiClient.get('/employers/ai/threads').then(unwrap),
+  aiGetMessages: (threadId) => apiClient.get(`/employers/ai/threads/${threadId}/messages`).then(unwrap),
 };
+

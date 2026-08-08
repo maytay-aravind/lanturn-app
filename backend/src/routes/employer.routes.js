@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { authenticate, requireRole, requireProfileComplete, validate } from '#middlewares';
 import * as employerCtrl from '#controllers/employer.controller.js';
 import * as employerMatchesCtrl from '#controllers/employerMatches.controller.js';
+import * as employerAICtrl from '#controllers/employerAI.controller.js';
 import { employerProfileUpdateSchema } from '#schemas/employer.schema.js';
 
 const router = Router();
@@ -15,6 +16,12 @@ router.put('/me', authenticate, requireRole('employer'), requireProfileComplete,
 // Candidate Matches
 router.get('/jobs/:jobId/matches', authenticate, requireRole('employer'), requireProfileComplete, employerMatchesCtrl.getJobCandidateMatches);
 
+// AI Hiring Assistant
+router.post('/ai/chat', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.chat);
+router.get('/ai/threads', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.listThreads);
+router.get('/ai/threads/:threadId/messages', authenticate, requireRole('employer'), requireProfileComplete, employerAICtrl.getMessages);
+
 router.get('/:uid', employerCtrl.getPublic);
 
 export default router;
+
