@@ -3,6 +3,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { jobService } from '../../services/job.service.js';
 import { applicationService } from '../../services/application.service.js';
 import { employerService } from '../../services/employer.service.js';
+import { studentService } from '../../services/student.service.js';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { SkeletonList } from '../../components/ui/Skeleton.jsx';
 import { CompanyDNAPanel } from '../../components/ai/CompanyDNAPanel.jsx';
@@ -12,7 +13,8 @@ import {
   Search, MapPin, Briefcase, Clock, DollarSign,
   Building2, ChevronRight, CheckCircle2, ChevronDown,
   X, Users, GraduationCap, Globe, Star, Loader2,
-  ExternalLink, Heart, Cpu, Calendar, Crown, Phone, Mail, Linkedin
+  ExternalLink, Heart, Cpu, Calendar, Crown, Phone, Mail, Linkedin,
+  Sparkles, AlertCircle
 } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -21,8 +23,95 @@ const STATUS_COLORS = {
   paused: 'badge-yellow',
 };
 
+/**
+ * Compute student qualification match score for a job posting.
+ * Returns { score, matchedSkills, missingSkills, matchLabel, matchColor }
+ */
+export function computeJobMatch(job, studentProfile) {
+  if (!studentProfile) {
+    return { score: 0, matchedSkills: [], missingSkills: [], matchLabel: 'Unevaluated', matchColor: 'slate' };
+  }
+
+  // Collect all student skills (lowercase)
+  const studentSkillSet = new Set();
+
+  if (Array.isArray(studentProfile.searchableSkills)) {
+    studentProfile.searchableSkills.forEach(s => {
+      if (s) studentSkillSet.add(s.toLowerCase().trim());
+    });
+  }
+
+  const profSkills = studentProfile.professional?.skills || [];
+  profSkills.forEach(s => {
+    const name = typeof s === 'string' ? s : s?.name;
+    if (name) studentSkillSet.add(name.toLowerCase().trim());
+  });
+
+  if (Array.isArray(studentProfile.resumeKeywords)) {
+    studentProfile.resumeKeywords.forEach(k => {
+      if (k) studentSkillSet.add(k.toLowerCase().trim());
+    });
+  }
+
+  const reqSkills = (job?.requiredSkills || []).map(s => s.toLowerCase().trim());
+  const matchedSkills = [];
+  const missingSkills = [];
+
+  if (reqSkills.length > 0) {
+    reqSkills.forEach(skill => {
+      const isMatched = Array.from(studentSkillSet).some(stSkill =>
+        stSkill === skill || stSkill.includes(skill) || skill.includes(stSkill)
+      );
+      if (isMatched) {
+        matchedSkills.push(skill);
+      } else {
+        missingSkills.push(skill);
+      }
+    });
+
+    const skillMatchRatio = matchedSkills.length / reqSkills.length;
+    let score = Math.round(skillMatchRatio * 75);
+
+    let bonus = 0;
+    if (studentProfile.resumeUrl) bonus += 5;
+    if ((studentProfile.professional?.projects || []).length > 0) bonus += 5;
+    if ((studentProfile.professional?.experience || []).length > 0) bonus += 5;
+    if (studentSkillSet.size > 5) bonus += 5;
+    if (matchedSkills.length > 0) bonus += 5;
+
+    score = Math.min(100, Math.max(15, score + bonus));
+
+    let matchLabel = 'Low Match';
+    let matchColor = 'slate';
+    if (score >= 80) {
+      matchLabel = 'Highly Qualified';
+      matchColor = 'emerald';
+    } else if (score >= 60) {
+      matchLabel = 'Good Fit';
+      matchColor = 'indigo';
+    } else if (score >= 40) {
+      matchLabel = 'Partial Match';
+      matchColor = 'amber';
+    }
+
+    return { score, matchedSkills, missingSkills, matchLabel, matchColor };
+  } else {
+    const jobText = `${job?.title || ''} ${job?.description || ''}`.toLowerCase();
+    let matchesCount = 0;
+    studentSkillSet.forEach(sk => {
+      if (sk && jobText.includes(sk)) matchesCount++;
+    });
+
+    const score = Math.min(95, Math.max(50, 50 + matchesCount * 8));
+    const matchLabel = score >= 80 ? 'Highly Qualified' : score >= 60 ? 'Good Fit' : 'Qualified';
+    const matchColor = score >= 80 ? 'emerald' : score >= 60 ? 'indigo' : 'amber';
+
+    return { score, matchedSkills: [], missingSkills: [], matchLabel, matchColor };
+  }
+}
+
 /* ── Job Detail Dialog ─────────────────────────────────────────── */
-function JobDetailDialog({ job, onClose, onApply, isApplying }) {
+function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) {
   const [showCompanyProfile, setShowCompanyProfile] = useState(false);
 
   // Fetch full job details
@@ -228,6 +317,65 @@ function JobDetailDialog({ job, onClose, onApply, isApplying }) {
           ) : (
             /* ── Job Details View ────────────────────────────────── */
             <div className="space-y-5 animate-fade-in">
+              {/* Qualification & Match Score Card */}
+              {(() => {
+                const matchInfo = computeJobMatch(j, studentProfile);
+                if (!matchInfo || matchInfo.score === 0) return null;
+                return (
+                  <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+                    matchInfo.matchColor === 'emerald' ? 'bg-emerald-50/70 border-emerald-200' :
+                    matchInfo.matchColor === 'indigo' ? 'bg-indigo-50/70 border-indigo-200' :
+                    matchInfo.matchColor === 'amber' ? 'bg-amber-50/70 border-amber-200' : 'bg-slate-50 border-slate-200'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <div className={`h-12 w-12 rounded-xl flex items-center justify-center font-extrabold text-base border shadow-sm ${
+                        matchInfo.matchColor === 'emerald' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
+                        matchInfo.matchColor === 'indigo' ? 'bg-indigo-100 text-indigo-800 border-indigo-300' :
+                        matchInfo.matchColor === 'amber' ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-200 text-slate-700 border-slate-300'
+                      }`}>
+                        {matchInfo.score}%
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1">
+                            <Sparkles className="h-4 w-4 text-indigo-600" />
+                            Qualification Match
+                          </h4>
+                          <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-md ${
+                            matchInfo.matchColor === 'emerald' ? 'bg-emerald-200/80 text-emerald-900' :
+                            matchInfo.matchColor === 'indigo' ? 'bg-indigo-200/80 text-indigo-900' :
+                            matchInfo.matchColor === 'amber' ? 'bg-amber-200/80 text-amber-900' : 'bg-slate-200 text-slate-700'
+                          }`}>
+                            {matchInfo.matchLabel}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-0.5">
+                          {matchInfo.matchedSkills.length > 0
+                            ? `You meet ${matchInfo.matchedSkills.length} out of ${j.requiredSkills?.length || 0} required skills.`
+                            : 'Based on your profile skills & resume qualifications.'}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Skills match chips */}
+                    {(matchInfo.matchedSkills.length > 0 || matchInfo.missingSkills.length > 0) && (
+                      <div className="flex flex-wrap items-center gap-1.5 max-w-xs">
+                        {matchInfo.matchedSkills.map((s, idx) => (
+                          <span key={idx} className="px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-800 text-[11px] font-semibold flex items-center gap-1 border border-emerald-200">
+                            <CheckCircle2 className="h-3 w-3 text-emerald-600" /> {s}
+                          </span>
+                        ))}
+                        {matchInfo.missingSkills.map((s, idx) => (
+                          <span key={idx} className="px-2 py-0.5 rounded-md bg-amber-100/80 text-amber-800 text-[11px] font-semibold flex items-center gap-1 border border-amber-200">
+                            <AlertCircle className="h-3 w-3 text-amber-600" /> {s}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+
               {/* Quick stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {loc && (
@@ -394,7 +542,7 @@ function JobDetailDialog({ job, onClose, onApply, isApplying }) {
 }
 
 /* ── Job Card (click to open dialog) ───────────────────────────── */
-function InternalJobCard({ job, onClick }) {
+function InternalJobCard({ job, studentProfile, onClick }) {
   const loc = typeof job.location === 'object'
     ? [job.location?.city, job.location?.country].filter(Boolean).join(', ')
     : (job.location || 'Remote');
@@ -404,6 +552,7 @@ function InternalJobCard({ job, onClick }) {
     : (job.salaryMin ? formatSalary(job.salaryMin, job.salaryMax, job.salaryCurrency) : null);
 
   const isApplied = job.hasApplied || false;
+  const matchInfo = computeJobMatch(job, studentProfile);
 
   return (
     <div
@@ -423,6 +572,22 @@ function InternalJobCard({ job, onClick }) {
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <h3 className="font-bold text-slate-900 text-lg truncate group-hover:text-brand-700 transition-colors">{job.title}</h3>
               {job.status && <span className={`badge ${STATUS_COLORS[job.status] || 'badge-default'}`}>{job.status}</span>}
+              
+              {/* Match Score Badge */}
+              {matchInfo.score > 0 && (
+                <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 border transition-all ${
+                  matchInfo.matchColor === 'emerald'
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                    : matchInfo.matchColor === 'indigo'
+                    ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                    : matchInfo.matchColor === 'amber'
+                    ? 'bg-amber-50 text-amber-700 border-amber-200'
+                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                }`}>
+                  <Sparkles className="h-3 w-3 text-indigo-600" />
+                  {matchInfo.score}% Match
+                </span>
+              )}
             </div>
             <p className="text-sm font-medium text-slate-600">{job.companyName}</p>
 
@@ -487,6 +652,12 @@ export default function JobsPage() {
   const [typeFilter, setTypeFilter] = useState('');
   const [page, setPage] = useState({ limit: 10, cursor: null });
   const [selectedJob, setSelectedJob] = useState(null);
+
+  const { data: studentProfile } = useQuery({
+    queryKey: ['studentProfile', 'me'],
+    queryFn: () => studentService.getMe(),
+    retry: false,
+  });
 
   const { data, isLoading, isFetching, refetch } = useQuery({
     queryKey: ['jobs', search, typeFilter, page],
@@ -556,6 +727,7 @@ export default function JobsPage() {
             <InternalJobCard
               key={job.jobId || job.id}
               job={job}
+              studentProfile={studentProfile}
               onClick={() => setSelectedJob(job)}
             />
           ))}
@@ -578,6 +750,7 @@ export default function JobsPage() {
       {selectedJob && (
         <JobDetailDialog
           job={selectedJob}
+          studentProfile={studentProfile}
           onClose={() => setSelectedJob(null)}
           onApply={(id) => applyMutation.mutate(id)}
           isApplying={applyMutation.isPending}
