@@ -28,6 +28,7 @@ export {
   // Email/Password auth
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   // Phone auth
   signInWithPhoneNumber,
   RecaptchaVerifier,

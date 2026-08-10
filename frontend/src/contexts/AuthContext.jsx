@@ -7,6 +7,7 @@ import {
   googleProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithPhoneNumber,
   RecaptchaVerifier,
 } from '../firebase/client.js';
@@ -86,6 +87,10 @@ export function AuthProvider({ children }) {
     return { user: result.user, session: resolvedSession };
   }, []);
 
+  const resetPassword = useCallback(async (email) => {
+    await sendPasswordResetEmail(auth, email);
+  }, []);
+
   // ── Phone Auth ──────────────────────────────────────────────────────────
 
   /**
@@ -162,6 +167,7 @@ export function AuthProvider({ children }) {
     loginWithGoogle,
     loginWithEmail,
     registerWithEmail,
+    resetPassword,
     setupRecaptcha,
     requestPhoneOtp,
     verifyPhoneOtp,

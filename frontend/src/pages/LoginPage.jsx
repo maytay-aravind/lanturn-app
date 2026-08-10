@@ -6,7 +6,7 @@ import { Sparkles, Loader2, Mail, Phone, Eye, EyeOff, ArrowRight } from 'lucide-
 
 export default function LoginPage() {
   const {
-    loginWithGoogle, loginWithEmail, registerWithEmail,
+    loginWithGoogle, loginWithEmail, registerWithEmail, resetPassword,
     setupRecaptcha, requestPhoneOtp, verifyPhoneOtp,
     logout, firebaseUser, role, isOnboarded, loading,
   } = useAuth();
@@ -103,6 +103,26 @@ export default function LoginPage() {
       if (msg === null) return;
       toast.error(msg || 'Something went wrong. Please try again.');
       console.error('Sign-up error:', err);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  // ── Forgot Password handler ───────────────────────────────────────────
+  const handleForgotPassword = async () => {
+    if (!email) {
+      toast.error('Please enter your email address to reset password.');
+      return;
+    }
+    setSigningIn(true);
+    try {
+      await resetPassword(email);
+      toast.success('Password reset link sent to your email!');
+    } catch (err) {
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'Failed to send password reset email. Please try again.');
+      console.error('Password reset error:', err);
     } finally {
       setSigningIn(false);
     }
@@ -349,9 +369,20 @@ export default function LoginPage() {
                 />
               </div>
               <div>
-                <label htmlFor="password-input" className="block text-sm font-medium text-slate-700 mb-1">
-                  Password
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label htmlFor="password-input" className="block text-sm font-medium text-slate-700">
+                    Password
+                  </label>
+                  {mode === 'signin' && (
+                    <button
+                      type="button"
+                      onClick={handleForgotPassword}
+                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+                    >
+                      Forgot password?
+                    </button>
+                  )}
+                </div>
                 <div className="relative">
                   <input
                     id="password-input"
