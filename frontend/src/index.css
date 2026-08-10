@@ -246,3 +246,9 @@ html.dark-theme .keep-color {
 html.dark-theme .logo-light { display: none !important; }
 html.dark-theme .logo-dark { display: block !important; }
 
+
+.logo-light { display: inline-block; }
+.logo-dark { display: none; }
+html.dark-theme .logo-light { display: none !important; }
+html.dark-theme .logo-dark { display: inline-block !important; }
+

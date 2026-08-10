@@ -72,7 +72,7 @@ export default function Navbar() {
         {/* Logo */}
         <NavLink to="/dashboard" className="flex items-center gap-2 mr-4 flex-shrink-0">
           <img src="/logo.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
-          <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-dark h-10 w-auto object-contain mix-blend-screen keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
+          <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-dark h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast' }} />
           <span className="text-lg font-extrabold gradient-text hidden sm:block tracking-tight">LanTURN</span>
         </NavLink>
 
