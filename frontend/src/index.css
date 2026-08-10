@@ -239,3 +239,10 @@ html.dark-theme .keep-color {
   filter: invert(1) hue-rotate(180deg) !important;
 }
 
+
+/* Theme-specific logo visibility */
+.logo-light { display: block; }
+.logo-dark { display: none; }
+html.dark-theme .logo-light { display: none !important; }
+html.dark-theme .logo-dark { display: block !important; }
+
