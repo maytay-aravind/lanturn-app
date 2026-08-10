@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { applicationService } from '../../services/application.service.js';
@@ -12,7 +12,9 @@ import {
   ArrowLeft, UserCheck, UserX, Award, Eye, Download,
   FileText, Github, Linkedin, Globe, GraduationCap,
   Briefcase, Code, Star, X, ExternalLink, ChevronDown,
+  LayoutGrid, List,
 } from 'lucide-react';
+import KanbanBoard from '../../components/ui/KanbanBoard.jsx';
 
 const STATUS_CONFIG = {
   submitted:   { label: 'Applied',     cls: 'badge-blue',    color: 'blue' },
@@ -203,6 +205,7 @@ export default function JobApplicantsPage() {
   const qc = useQueryClient();
   const [profileId, setProfileId] = useState(null);
   const [statusFilter, setStatusFilter] = useState('');
+  const [viewMode, setViewMode] = useState('kanban');
 
   const { data: jobData } = useQuery({
     queryKey: ['job', jobId],
@@ -280,6 +283,22 @@ export default function JobApplicantsPage() {
             {jobData?.title ? `"${jobData.title}"` : 'Job'} — {allApplicants.length} applicant{allApplicants.length !== 1 ? 's' : ''}
           </p>
         </div>
+
+        {/* View toggle */}
+        <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+          <button
+            onClick={() => setViewMode('kanban')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'kanban' ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'}`}
+          >
+            <LayoutGrid className="h-3.5 w-3.5" /> Board
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'list' ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'}`}
+          >
+            <List className="h-3.5 w-3.5" /> List
+          </button>
+        </div>
       </div>
 
       {/* Status filter tabs */}
@@ -310,6 +329,67 @@ export default function JobApplicantsPage() {
         <div className="space-y-3">
           {[1,2,3].map(i => <div key={i} className="h-24 skeleton rounded-2xl" />)}
         </div>
+      ) : viewMode === 'kanban' ? (
+        /* ── KANBAN VIEW ──────────────────────────────── */
+        <KanbanBoard
+          columns={[
+            { id: 'submitted',   title: 'Applied',     color: '#3b82f6' },
+            { id: 'reviewed',    title: 'Reviewing',   color: '#f59e0b' },
+            { id: 'shortlisted', title: 'Shortlisted', color: '#10b981' },
+            { id: 'accepted',    title: 'Hired',       color: '#8b5cf6' },
+            { id: 'rejected',    title: 'Rejected',    color: '#ef4444' },
+          ]}
+          items={allApplicants.map((app) => ({ ...app, id: app.applicationId }))}
+          getItemColumn={(item) => item.status}
+          onDragEnd={({ item, toColumn }) => {
+            statusMutation.mutate({ id: item.applicationId, body: { status: toColumn } });
+          }}
+          renderCard={(app) => {
+            const match = matchesMap[app.studentId];
+            return (
+              <div className="bg-white rounded-xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2.5 mb-2">
+                  <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm flex-shrink-0">
+                    {(app.studentName || '?').charAt(0).toUpperCase()}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-slate-800 truncate">{app.studentName || 'Student'}</p>
+                    <p className="text-[10px] text-slate-400">{timeAgo(app.createdAt)}</p>
+                  </div>
+                  {match && (
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 rounded-full px-2 py-0.5">
+                      {Math.round(match.score ?? match.matchScore ?? 0)}%
+                    </span>
+                  )}
+                </div>
+                {app.skillsSnapshot?.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-2">
+                    {app.skillsSnapshot.slice(0, 4).map((s, i) => (
+                      <span key={i} className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">{s}</span>
+                    ))}
+                    {app.skillsSnapshot.length > 4 && <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">+{app.skillsSnapshot.length - 4}</span>}
+                  </div>
+                )}
+                <div className="flex gap-1.5">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setProfileId(app.studentId); }}
+                    className="text-[10px] font-medium text-indigo-600 hover:text-indigo-800 transition-colors"
+                  >
+                    View Profile
+                  </button>
+                  {app.resumeUrl && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleViewResume(app.applicationId); }}
+                      className="text-[10px] font-medium text-slate-500 hover:text-slate-700 transition-colors"
+                    >
+                      Resume
+                    </button>
+                  )}
+                </div>
+              </div>
+            );
+          }}
+        />
       ) : applicants.length === 0 ? (
         <div className="card p-12 text-center">
           <UserCheck className="h-10 w-10 text-brand-300 mx-auto mb-3" />
