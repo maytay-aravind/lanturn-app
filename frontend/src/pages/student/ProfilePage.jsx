@@ -75,9 +75,9 @@ function DetailRow({ icon: Icon, label, value }) {
   if (!value) return null;
   return (
     <div className="flex items-center gap-2.5 text-sm py-1">
-      <Icon className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-      <span className="text-slate-500 min-w-[80px]">{label}</span>
-      <span className="font-medium text-slate-800 truncate">{value}</span>
+      <Icon className="h-3.5 w-3.5 text-brand-400 flex-shrink-0" />
+      <span className="text-brand-500 min-w-[80px]">{label}</span>
+      <span className="font-medium text-brand-800 truncate">{value}</span>
     </div>
   );
 }
@@ -309,8 +309,8 @@ export default function ProfilePage() {
       {/* Page header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">My Profile</h1>
-          <p className="text-sm text-slate-500 mt-0.5">Keep your profile up-to-date to get better matches</p>
+          <h1 className="text-2xl font-bold text-brand-900">My Profile</h1>
+          <p className="text-sm text-brand-500 mt-0.5">Keep your profile up-to-date to get better matches</p>
         </div>
       </div>
 
@@ -359,7 +359,7 @@ export default function ProfilePage() {
 
             {uploadPct !== null && (
               <div className="inline-block w-24 ml-4 align-bottom">
-                <p className="text-xs text-slate-400 mb-1 text-center">{uploadPct}%</p>
+                <p className="text-xs text-brand-400 mb-1 text-center">{uploadPct}%</p>
                 <div className="progress-track"><div className="progress-fill" style={{ width: `${uploadPct}%` }} /></div>
               </div>
             )}
@@ -367,8 +367,8 @@ export default function ProfilePage() {
 
           {/* Name and subtitle */}
           <div className="mb-3">
-            <h2 className="font-bold text-slate-900 text-xl leading-tight">{per.name || p.personal?.name || 'Your Name'}</h2>
-            <p className="text-sm text-slate-500 mt-1">
+            <h2 className="font-bold text-brand-900 text-xl leading-tight">{per.name || p.personal?.name || 'Your Name'}</h2>
+            <p className="text-sm text-brand-500 mt-1">
               {[aca.degree, aca.branch].filter(Boolean).join(' in ') || 'Student'}
               {aca.college ? ` · ${aca.college}` : ''}
             </p>
@@ -391,7 +391,7 @@ export default function ProfilePage() {
               className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors ${
                 githubUrl
                   ? 'bg-slate-900 text-white hover:bg-slate-700'
-                  : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-brand-400 cursor-not-allowed'
               }`}
             >
               <GitHubIcon className="h-3 w-3" />
@@ -408,7 +408,7 @@ export default function ProfilePage() {
               className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors ${
                 linkedinUrl
                   ? 'bg-[#0A66C2] text-white hover:bg-[#004182]'
-                  : 'bg-slate-100 text-slate-400 cursor-not-allowed'
+                  : 'bg-slate-100 text-brand-400 cursor-not-allowed'
               }`}
             >
               <LinkedInIcon className="h-3 w-3" />
@@ -439,7 +439,7 @@ export default function ProfilePage() {
             <>
               <div className="divider my-4" />
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Skills</p>
+                <p className="text-xs font-semibold text-brand-500 uppercase tracking-wider mb-2">Skills</p>
                 <div className="flex flex-wrap gap-1.5">
                   {pro.skills.map((s) => (
                     <span key={s} className="pill">{s}</span>
@@ -454,7 +454,7 @@ export default function ProfilePage() {
             <>
               <div className="divider my-4" />
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-semibold text-brand-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                   <Star className="h-3 w-3" />
                   Skill Medals
                 </p>
@@ -472,7 +472,7 @@ export default function ProfilePage() {
             <>
               <div className="divider my-4" />
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Links</p>
+                <p className="text-xs font-semibold text-brand-500 uppercase tracking-wider mb-2">Links</p>
                 <div className="flex flex-wrap gap-2">
                   {githubUrl && (
                     <a href={githubUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-slate-900 text-white hover:bg-slate-700 transition-colors">
@@ -490,7 +490,7 @@ export default function ProfilePage() {
                     </a>
                   )}
                   {hackerrankUrl && (
-                    <a href={hackerrankUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-[#00EA64] text-slate-900 hover:bg-[#00c955] transition-colors">
+                    <a href={hackerrankUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-[#00EA64] text-brand-900 hover:bg-[#00c955] transition-colors">
                       <HackerRankIcon className="h-3.5 w-3.5" /> HackerRank <ExternalLink className="h-2.5 w-2.5 opacity-60" />
                     </a>
                   )}
@@ -554,8 +554,8 @@ export default function ProfilePage() {
               </div>
             </div>
             {resumePct !== null && (
-              <div className="mt-2 p-3 rounded-xl bg-slate-50 ring-1 ring-slate-200">
-                <div className="flex justify-between text-xs text-slate-500 mb-1">
+              <div className="mt-2 p-3 rounded-xl bg-slate-50 ring-1 ring-brand-200">
+                <div className="flex justify-between text-xs text-brand-500 mb-1">
                   <span className="font-medium">Uploading...</span>
                   <span>{resumePct}%</span>
                 </div>
@@ -571,7 +571,7 @@ export default function ProfilePage() {
           <>
             <div className="divider my-4" />
             <div className="flex items-center justify-between gap-3 mb-3">
-              <h3 className="text-sm font-semibold text-slate-800">Certificates</h3>
+              <h3 className="text-sm font-semibold text-brand-800">Certificates</h3>
               <button
                 onClick={() => certRef.current?.click()}
                 disabled={certPct !== null}
@@ -583,8 +583,8 @@ export default function ProfilePage() {
             </div>
             
             {certPct !== null && (
-              <div className="mb-3 p-3 rounded-xl bg-slate-50 ring-1 ring-slate-200">
-                <div className="flex justify-between text-xs text-slate-500 mb-1">
+              <div className="mb-3 p-3 rounded-xl bg-slate-50 ring-1 ring-brand-200">
+                <div className="flex justify-between text-xs text-brand-500 mb-1">
                   <span className="font-medium">Uploading...</span>
                   <span>{certPct}%</span>
                 </div>
@@ -597,14 +597,14 @@ export default function ProfilePage() {
             {p.certificates?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {p.certificates.map(cert => (
-                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-xl bg-slate-50 border border-brand-200">
                     <div className="flex items-start gap-3">
                       <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                         <FileText className="h-4 w-4 text-blue-600" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate" title={cert.name}>{cert.name}</p>
-                        <p className="text-xs text-slate-500 mt-0.5">Uploaded {new Date(cert.uploadedAt).toLocaleDateString()}</p>
+                        <p className="text-sm font-medium text-brand-800 truncate" title={cert.name}>{cert.name}</p>
+                        <p className="text-xs text-brand-500 mt-0.5">Uploaded {new Date(cert.uploadedAt).toLocaleDateString()}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mt-1">
@@ -618,14 +618,14 @@ export default function ProfilePage() {
                       </button>
                       <button
                         onClick={() => handleRenameCert(cert.id, cert.name)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-1.5 rounded-lg text-brand-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
                         title="Rename Certificate"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleRemoveCert(cert.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded-lg text-brand-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                         title="Remove Certificate"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -635,7 +635,7 @@ export default function ProfilePage() {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-slate-500 italic">No certificates uploaded yet.</p>
+              <p className="text-sm text-brand-500 italic">No certificates uploaded yet.</p>
             )}
             <input ref={certRef} type="file" accept="application/pdf,image/jpeg,image/png,image/webp" className="hidden" onChange={handleCertChange} />
           </>
@@ -672,16 +672,16 @@ export default function ProfilePage() {
             {/* No resume yet + not uploading */}
             {!p.resumeUrl && resumePct === null && (
               <div className="dropzone" onClick={() => resumeRef.current?.click()}>
-                <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                <p className="text-sm font-medium text-slate-700">Drop your resume here or click to browse</p>
-                <p className="text-xs text-slate-400 mt-1">PDF only · Max 5 MB</p>
+                <Upload className="h-8 w-8 text-brand-400 mb-2" />
+                <p className="text-sm font-medium text-brand-700">Drop your resume here or click to browse</p>
+                <p className="text-xs text-brand-400 mt-1">PDF only · Max 5 MB</p>
               </div>
             )}
 
             {/* Upload progress */}
             {resumePct !== null && (
-              <div className="p-4 rounded-xl bg-slate-50 ring-1 ring-slate-200">
-                <div className="flex justify-between text-xs text-slate-500 mb-2">
+              <div className="p-4 rounded-xl bg-slate-50 ring-1 ring-brand-200">
+                <div className="flex justify-between text-xs text-brand-500 mb-2">
                   <span className="font-medium">Uploading resume...</span>
                   <span>{resumePct}%</span>
                 </div>
@@ -718,7 +718,7 @@ export default function ProfilePage() {
               )}
 
               {p.resumeUrl && (
-                <span className="text-xs text-slate-400">
+                <span className="text-xs text-brand-400">
                   {p.resumeUrl ? 'Uploading a new PDF replaces the current one' : ''}
                 </span>
               )}
@@ -823,7 +823,7 @@ export default function ProfilePage() {
             <Grid2>
               <Field label="GitHub">
                 <div className="relative">
-                  <GitHubIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <GitHubIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
                   <input
                     className="input pl-9"
                     value={soc.github || ''}
@@ -834,7 +834,7 @@ export default function ProfilePage() {
               </Field>
               <Field label="LinkedIn">
                 <div className="relative">
-                  <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
                   <input
                     className="input pl-9"
                     value={soc.linkedin || ''}
@@ -853,7 +853,7 @@ export default function ProfilePage() {
               </Field>
               <Field label="HackerRank">
                 <div className="relative">
-                  <HackerRankIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <HackerRankIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
                   <input
                     className="input pl-9"
                     value={soc.hackerrank || ''}
@@ -867,7 +867,7 @@ export default function ProfilePage() {
 
           {/* ── Single Save button at the bottom ─────────────── */}
           <div className="card p-4 flex items-center justify-between gap-4 sticky bottom-4 z-10 bg-white/90 backdrop-blur-sm">
-            <p className="text-xs text-slate-500">All changes are saved at once</p>
+            <p className="text-xs text-brand-500">All changes are saved at once</p>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsEditing(false)}

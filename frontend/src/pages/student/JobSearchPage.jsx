@@ -21,38 +21,38 @@ function JobCard({ job }) {
             href={job.link}
             target="_blank"
             rel="noreferrer"
-            className="font-semibold text-slate-900 hover:text-brand-700 transition-colors text-sm leading-tight line-clamp-2 flex items-start gap-1 group"
+            className="font-semibold text-brand-900 hover:text-brand-700 transition-colors text-sm leading-tight line-clamp-2 flex items-start gap-1 group"
           >
             {job.title}
             <ExternalLink className="h-3 w-3 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity mt-0.5" />
           </a>
-          {job.company && <p className="text-xs text-slate-500 mt-0.5">{job.company}</p>}
+          {job.company && <p className="text-xs text-brand-500 mt-0.5">{job.company}</p>}
 
           <div className="flex flex-wrap items-center gap-3 mt-2">
             {job.location && (
-              <span className="flex items-center gap-1 text-xs text-slate-500">
+              <span className="flex items-center gap-1 text-xs text-brand-500">
                 <MapPin className="h-3 w-3" />{job.location}
               </span>
             )}
             {job.type && (
-              <span className="flex items-center gap-1 text-xs text-slate-500">
+              <span className="flex items-center gap-1 text-xs text-brand-500">
                 <Briefcase className="h-3 w-3" />{job.type}
               </span>
             )}
             {job.salary && (
-              <span className="flex items-center gap-1 text-xs text-slate-500">
+              <span className="flex items-center gap-1 text-xs text-brand-500">
                 <DollarSign className="h-3 w-3" />{job.salary}
               </span>
             )}
             {job.updated && (
-              <span className="flex items-center gap-1 text-xs text-slate-400">
+              <span className="flex items-center gap-1 text-xs text-brand-400">
                 <Clock className="h-3 w-3" />{new Date(job.updated).toLocaleDateString()}
               </span>
             )}
           </div>
 
           {job.snippet && (
-            <p className="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed"
+            <p className="text-xs text-brand-500 mt-2 line-clamp-2 leading-relaxed"
                dangerouslySetInnerHTML={{ __html: job.snippet }} />
           )}
         </div>
@@ -99,15 +99,15 @@ export default function JobSearchPage() {
     <div className="space-y-5">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">External Job Search</h1>
-        <p className="text-sm text-slate-500 mt-0.5">Search millions of jobs worldwide via Jooble</p>
+        <h1 className="text-2xl font-bold text-brand-900">External Job Search</h1>
+        <p className="text-sm text-brand-500 mt-0.5">Search millions of jobs worldwide via Jooble</p>
       </div>
 
       {/* Search bar */}
       <div className="card p-5 space-y-4">
         <div className="flex gap-3">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
             <input
               className="input pl-9"
               placeholder="Job title, keywords, or company..."
@@ -117,7 +117,7 @@ export default function JobSearchPage() {
             />
           </div>
           <div className="relative w-48">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
             <input
               className="input pl-9"
               placeholder="Location"
@@ -138,12 +138,12 @@ export default function JobSearchPage() {
 
         {/* Popular searches */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-slate-400">Popular:</span>
+          <span className="text-xs text-brand-400">Popular:</span>
           {POPULAR.map((p) => (
             <button
               key={p}
               onClick={() => { setKeywords(p); }}
-              className="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 hover:bg-brand-50 hover:text-brand-700 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-brand-600 hover:bg-brand-50 hover:text-brand-700 transition-colors"
             >
               {p}
             </button>
@@ -157,7 +157,7 @@ export default function JobSearchPage() {
       {!searchMutation.isPending && results && (
         <>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-brand-500">
               {results.totalCount > 0
                 ? `Found ~${results.totalCount.toLocaleString()} jobs for "${lastQuery?.keywords}"`
                 : 'No jobs found'}

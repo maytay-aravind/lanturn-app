@@ -15,7 +15,7 @@ const STATUS_COLORS = {
   interviewing: 'badge-purple',
   accepted: 'badge-green',
   rejected: 'badge-red',
-  withdrawn: 'badge-default bg-slate-100 text-slate-600',
+  withdrawn: 'badge-default bg-slate-100 text-brand-600',
 };
 
 export default function ApplicationsPage() {
@@ -40,8 +40,8 @@ export default function ApplicationsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">My Applications</h1>
-        <p className="text-slate-500 mt-1">Track the status of your internal job applications</p>
+        <h1 className="text-2xl font-bold text-brand-900">My Applications</h1>
+        <p className="text-brand-500 mt-1">Track the status of your internal job applications</p>
       </div>
 
       {isLoading ? (
@@ -62,18 +62,18 @@ export default function ApplicationsPage() {
                 {/* Left col */}
                 <div className="flex items-start gap-4">
                   <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 border border-slate-100">
-                    <Building2 className="h-5 w-5 text-slate-400" />
+                    <Building2 className="h-5 w-5 text-brand-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-900">{app.jobTitle || 'Job'}</h3>
-                    <p className="text-sm font-medium text-slate-600">{app.companyName || 'Company'}</p>
-                    <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
+                    <h3 className="font-semibold text-brand-900">{app.jobTitle || 'Job'}</h3>
+                    <p className="text-sm font-medium text-brand-600">{app.companyName || 'Company'}</p>
+                    <p className="text-xs text-brand-400 mt-1 flex items-center gap-1">
                       <FileText className="h-3 w-3" /> Applied {timeAgo(app.createdAt || app.appliedAt)}
                     </p>
                     
                     {app.coverLetter && (
-                      <div className="mt-3 p-3 rounded-lg bg-slate-50 text-sm text-slate-600 border border-slate-100">
-                        <p className="font-medium text-xs text-slate-400 mb-1 uppercase tracking-wider">Cover Letter</p>
+                      <div className="mt-3 p-3 rounded-lg bg-slate-50 text-sm text-brand-600 border border-slate-100">
+                        <p className="font-medium text-xs text-brand-400 mb-1 uppercase tracking-wider">Cover Letter</p>
                         <p className="line-clamp-2">{app.coverLetter}</p>
                       </div>
                     )}

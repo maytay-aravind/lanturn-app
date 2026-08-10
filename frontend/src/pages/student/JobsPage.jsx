@@ -19,7 +19,7 @@ import {
 
 const STATUS_COLORS = {
   active: 'badge-green',
-  closed: 'badge-default bg-slate-100 text-slate-600',
+  closed: 'badge-default bg-slate-100 text-brand-600',
   paused: 'badge-yellow',
 };
 
@@ -166,7 +166,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               )}
             </div>
             <div className="min-w-0">
-              <h2 className="text-xl font-bold text-slate-900 truncate">{j.title}</h2>
+              <h2 className="text-xl font-bold text-brand-900 truncate">{j.title}</h2>
               <p className="text-sm font-medium text-brand-600">{j.companyName}</p>
               <div className="flex flex-wrap gap-2 mt-2">
                 {j.jobType && <span className="badge badge-blue">{j.jobType}</span>}
@@ -180,7 +180,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
             onClick={onClose}
             className="h-8 w-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center flex-shrink-0 transition-colors"
           >
-            <X className="h-4 w-4 text-slate-500" />
+            <X className="h-4 w-4 text-brand-500" />
           </button>
         </div>
 
@@ -212,47 +212,47 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                       )}
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-slate-900">{company.companyName || j.companyName}</h3>
-                      <p className="text-sm text-slate-500">{company.industry || 'Industry not specified'}</p>
+                      <h3 className="text-lg font-bold text-brand-900">{company.companyName || j.companyName}</h3>
+                      <p className="text-sm text-brand-500">{company.industry || 'Industry not specified'}</p>
                     </div>
                   </div>
 
                   {/* Company details */}
                   {company.description && (
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-700 mb-2">About</h4>
-                      <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{company.description}</p>
+                      <h4 className="text-sm font-semibold text-brand-700 mb-2">About</h4>
+                      <p className="text-sm text-brand-600 leading-relaxed whitespace-pre-wrap">{company.description}</p>
                     </div>
                   )}
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {company.headquarters && (
                       <div className="flex items-center gap-2 text-sm">
-                        <MapPin className="h-4 w-4 text-slate-400" />
-                        <span className="text-slate-600">{company.headquarters}</span>
+                        <MapPin className="h-4 w-4 text-brand-400" />
+                        <span className="text-brand-600">{company.headquarters}</span>
                       </div>
                     )}
                     {company.companySize && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-slate-400" />
-                        <span className="text-slate-600">{company.companySize} employees</span>
+                        <Users className="h-4 w-4 text-brand-400" />
+                        <span className="text-brand-600">{company.companySize} employees</span>
                       </div>
                     )}
                     {company.ceo && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Crown className="h-4 w-4 text-slate-400" />
-                        <span className="text-slate-600">CEO: {company.ceo}</span>
+                        <Crown className="h-4 w-4 text-brand-400" />
+                        <span className="text-brand-600">CEO: {company.ceo}</span>
                       </div>
                     )}
                     {company.foundedYear && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-slate-400" />
-                        <span className="text-slate-600">Founded {company.foundedYear}</span>
+                        <Calendar className="h-4 w-4 text-brand-400" />
+                        <span className="text-brand-600">Founded {company.foundedYear}</span>
                       </div>
                     )}
                     {company.website && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Globe className="h-4 w-4 text-slate-400" />
+                        <Globe className="h-4 w-4 text-brand-400" />
                         <a href={company.website} target="_blank" rel="noreferrer" className="text-brand-600 hover:underline truncate">
                           {company.website.replace(/^https?:\/\//, '')}
                         </a>
@@ -260,7 +260,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                     )}
                     {company.linkedin && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Linkedin className="h-4 w-4 text-slate-400" />
+                        <Linkedin className="h-4 w-4 text-brand-400" />
                         <a href={company.linkedin} target="_blank" rel="noreferrer" className="text-brand-600 hover:underline truncate">
                           LinkedIn Profile
                         </a>
@@ -268,8 +268,8 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                     )}
                     {company.email && (
                       <div className="flex items-center gap-2 text-sm">
-                        <Mail className="h-4 w-4 text-slate-400" />
-                        <span className="text-slate-600">{company.email}</span>
+                        <Mail className="h-4 w-4 text-brand-400" />
+                        <span className="text-brand-600">{company.email}</span>
                       </div>
                     )}
                   </div>
@@ -283,10 +283,10 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
 
                   {company.technologies?.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><Cpu className="h-4 w-4" /> Tech Stack</h4>
+                      <h4 className="text-sm font-semibold text-brand-700 mb-2 flex items-center gap-1.5"><Cpu className="h-4 w-4" /> Tech Stack</h4>
                       <div className="flex flex-wrap gap-1.5">
                         {company.technologies.map((t, i) => (
-                          <span key={i} className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200">{t}</span>
+                          <span key={i} className="px-2.5 py-1 rounded-md bg-slate-100 text-brand-600 text-xs font-medium border border-brand-200">{t}</span>
                         ))}
                       </div>
                     </div>
@@ -294,7 +294,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
 
                   {company.benefits?.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-1.5"><Heart className="h-4 w-4" /> Benefits</h4>
+                      <h4 className="text-sm font-semibold text-brand-700 mb-2 flex items-center gap-1.5"><Heart className="h-4 w-4" /> Benefits</h4>
                       <div className="flex flex-wrap gap-1.5">
                         {company.benefits.map((b, i) => (
                           <span key={i} className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">{b}</span>
@@ -305,13 +305,13 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
 
                   {company.companyCulture && (
                     <div>
-                      <h4 className="text-sm font-semibold text-slate-700 mb-2">Company Culture</h4>
-                      <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{company.companyCulture}</p>
+                      <h4 className="text-sm font-semibold text-brand-700 mb-2">Company Culture</h4>
+                      <p className="text-sm text-brand-600 leading-relaxed whitespace-pre-wrap">{company.companyCulture}</p>
                     </div>
                   )}
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 text-center py-8">Company profile not available.</p>
+                <p className="text-sm text-brand-500 text-center py-8">Company profile not available.</p>
               )}
             </div>
           ) : (
@@ -325,31 +325,31 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                   <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
                     matchInfo.matchColor === 'emerald' ? 'bg-emerald-50/70 border-emerald-200' :
                     matchInfo.matchColor === 'indigo' ? 'bg-brand-50/70 border-brand-200' :
-                    matchInfo.matchColor === 'amber' ? 'bg-amber-50/70 border-amber-200' : 'bg-slate-50 border-slate-200'
+                    matchInfo.matchColor === 'amber' ? 'bg-amber-50/70 border-amber-200' : 'bg-slate-50 border-brand-200'
                   }`}>
                     <div className="flex items-center gap-3">
                       <div className={`h-12 w-12 rounded-xl flex items-center justify-center font-extrabold text-base border shadow-sm ${
                         matchInfo.matchColor === 'emerald' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
                         matchInfo.matchColor === 'indigo' ? 'bg-brand-100 text-brand-800 border-brand-300' :
-                        matchInfo.matchColor === 'amber' ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-200 text-slate-700 border-slate-300'
+                        matchInfo.matchColor === 'amber' ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-200 text-brand-700 border-brand-300'
                       }`}>
                         {matchInfo.score}%
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1">
+                          <h4 className="font-bold text-brand-900 text-sm flex items-center gap-1">
                             <Sparkles className="h-4 w-4 text-brand-600" />
                             Qualification Match
                           </h4>
                           <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-md ${
                             matchInfo.matchColor === 'emerald' ? 'bg-emerald-200/80 text-emerald-900' :
                             matchInfo.matchColor === 'indigo' ? 'bg-brand-200/80 text-brand-900' :
-                            matchInfo.matchColor === 'amber' ? 'bg-amber-200/80 text-amber-900' : 'bg-slate-200 text-slate-700'
+                            matchInfo.matchColor === 'amber' ? 'bg-amber-200/80 text-amber-900' : 'bg-slate-200 text-brand-700'
                           }`}>
                             {matchInfo.matchLabel}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 mt-0.5">
+                        <p className="text-xs text-brand-600 mt-0.5">
                           {matchInfo.matchedSkills.length > 0
                             ? `You meet ${matchInfo.matchedSkills.length} out of ${j.requiredSkills?.length || 0} required skills.`
                             : 'Based on your profile skills & resume qualifications.'}
@@ -380,30 +380,30 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {loc && (
                   <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-                    <MapPin className="h-4 w-4 text-slate-400 mx-auto mb-1" />
-                    <p className="text-xs text-slate-500">Location</p>
-                    <p className="text-sm font-semibold text-slate-800 truncate">{loc}</p>
+                    <MapPin className="h-4 w-4 text-brand-400 mx-auto mb-1" />
+                    <p className="text-xs text-brand-500">Location</p>
+                    <p className="text-sm font-semibold text-brand-800 truncate">{loc}</p>
                   </div>
                 )}
                 {salaryText && (
                   <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-                    <DollarSign className="h-4 w-4 text-slate-400 mx-auto mb-1" />
-                    <p className="text-xs text-slate-500">Salary</p>
-                    <p className="text-sm font-semibold text-slate-800 truncate">{salaryText}</p>
+                    <DollarSign className="h-4 w-4 text-brand-400 mx-auto mb-1" />
+                    <p className="text-xs text-brand-500">Salary</p>
+                    <p className="text-sm font-semibold text-brand-800 truncate">{salaryText}</p>
                   </div>
                 )}
                 {j.openings && (
                   <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-                    <Users className="h-4 w-4 text-slate-400 mx-auto mb-1" />
-                    <p className="text-xs text-slate-500">Openings</p>
-                    <p className="text-sm font-semibold text-slate-800">{j.openings}</p>
+                    <Users className="h-4 w-4 text-brand-400 mx-auto mb-1" />
+                    <p className="text-xs text-brand-500">Openings</p>
+                    <p className="text-sm font-semibold text-brand-800">{j.openings}</p>
                   </div>
                 )}
                 {j.deadline && (
                   <div className="bg-slate-50 rounded-xl p-3 text-center border border-slate-100">
-                    <Calendar className="h-4 w-4 text-slate-400 mx-auto mb-1" />
-                    <p className="text-xs text-slate-500">Deadline</p>
-                    <p className="text-sm font-semibold text-slate-800">{new Date(j.deadline).toLocaleDateString()}</p>
+                    <Calendar className="h-4 w-4 text-brand-400 mx-auto mb-1" />
+                    <p className="text-xs text-brand-500">Deadline</p>
+                    <p className="text-sm font-semibold text-brand-800">{new Date(j.deadline).toLocaleDateString()}</p>
                   </div>
                 )}
               </div>
@@ -411,26 +411,26 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {/* Description */}
               {j.description && (
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-900 mb-2">About This Role</h4>
-                  <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{j.description}</p>
+                  <h4 className="text-sm font-semibold text-brand-900 mb-2">About This Role</h4>
+                  <p className="text-sm text-brand-600 leading-relaxed whitespace-pre-wrap">{j.description}</p>
                 </div>
               )}
 
               {/* Responsibilities */}
               {j.responsibilities && (
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Responsibilities</h4>
-                  <div className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">{j.responsibilities}</div>
+                  <h4 className="text-sm font-semibold text-brand-900 mb-2">Responsibilities</h4>
+                  <div className="text-sm text-brand-600 leading-relaxed whitespace-pre-wrap">{j.responsibilities}</div>
                 </div>
               )}
 
               {/* Requirements */}
               {j.requirements?.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Requirements</h4>
+                  <h4 className="text-sm font-semibold text-brand-900 mb-2">Requirements</h4>
                   <ul className="space-y-1.5">
                     {j.requirements.map((req, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                      <li key={i} className="flex items-start gap-2 text-sm text-brand-600">
                         <CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />
                         <span>{req}</span>
                       </li>
@@ -442,7 +442,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {/* Required Skills */}
               {j.requiredSkills?.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Required Skills</h4>
+                  <h4 className="text-sm font-semibold text-brand-900 mb-2">Required Skills</h4>
                   <div className="flex flex-wrap gap-2">
                     {j.requiredSkills.map((skill, i) => (
                       <span key={i} className="px-3 py-1.5 rounded-lg bg-brand-50 text-brand-700 text-xs font-semibold border border-brand-100">
@@ -456,10 +456,10 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {/* Education */}
               {j.educationRequirement && (
                 <div className="flex items-start gap-2">
-                  <GraduationCap className="h-4 w-4 text-slate-400 flex-shrink-0 mt-0.5" />
+                  <GraduationCap className="h-4 w-4 text-brand-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-sm font-semibold text-slate-900">Education</h4>
-                    <p className="text-sm text-slate-600">{j.educationRequirement}</p>
+                    <h4 className="text-sm font-semibold text-brand-900">Education</h4>
+                    <p className="text-sm text-brand-600">{j.educationRequirement}</p>
                   </div>
                 </div>
               )}
@@ -467,7 +467,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {/* Benefits */}
               {j.benefits?.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-slate-900 mb-2">Benefits</h4>
+                  <h4 className="text-sm font-semibold text-brand-900 mb-2">Benefits</h4>
                   <div className="flex flex-wrap gap-2">
                     {j.benefits.map((b, i) => (
                       <span key={i} className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-100">
@@ -490,7 +490,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {j.employerId && (
                 <button
                   onClick={() => setShowCompanyProfile(true)}
-                  className="w-full flex items-center justify-between p-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 transition-colors group"
+                  className="w-full flex items-center justify-between p-4 rounded-xl bg-slate-50 hover:bg-slate-100 border border-brand-200 transition-colors group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center border border-brand-100">
@@ -501,11 +501,11 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                       )}
                     </div>
                     <div className="text-left">
-                      <p className="text-sm font-semibold text-slate-900">{j.companyName}</p>
-                      <p className="text-xs text-slate-500">View full company profile</p>
+                      <p className="text-sm font-semibold text-brand-900">{j.companyName}</p>
+                      <p className="text-xs text-brand-500">View full company profile</p>
                     </div>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-brand-600 transition-colors" />
+                  <ChevronRight className="h-4 w-4 text-brand-400 group-hover:text-brand-600 transition-colors" />
                 </button>
               )}
             </div>
@@ -515,7 +515,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
         {/* Footer */}
         {!showCompanyProfile && (
           <div className="sticky bottom-0 bg-white/90 backdrop-blur-md border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-3">
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-brand-400">
               {j.createdAt && <>Posted {timeAgo(j.createdAt)}</>}
               {j.applicationCount != null && <> • {j.applicationCount} applicant{j.applicationCount !== 1 ? 's' : ''}</>}
             </div>
@@ -570,7 +570,7 @@ function InternalJobCard({ job, studentProfile, onClick }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h3 className="font-bold text-slate-900 text-lg truncate group-hover:text-brand-700 transition-colors">{job.title}</h3>
+              <h3 className="font-bold text-brand-900 text-lg truncate group-hover:text-brand-700 transition-colors">{job.title}</h3>
               {job.status && <span className={`badge ${STATUS_COLORS[job.status] || 'badge-default'}`}>{job.status}</span>}
               
               {/* Match Score Badge */}
@@ -582,40 +582,40 @@ function InternalJobCard({ job, studentProfile, onClick }) {
                     ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : matchInfo.matchColor === 'amber'
                     ? 'bg-amber-50 text-amber-700 border-amber-200'
-                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                    : 'bg-slate-100 text-brand-600 border-brand-200'
                 }`}>
                   <Sparkles className="h-3 w-3 text-brand-600" />
                   {matchInfo.score}% Match
                 </span>
               )}
             </div>
-            <p className="text-sm font-medium text-slate-600">{job.companyName}</p>
+            <p className="text-sm font-medium text-brand-600">{job.companyName}</p>
 
             <div className="flex flex-wrap items-center gap-3 mt-3">
               {loc && (
-                <span className="flex items-center gap-1 text-xs text-slate-500">
+                <span className="flex items-center gap-1 text-xs text-brand-500">
                   <MapPin className="h-3.5 w-3.5" />{loc}
                 </span>
               )}
               {job.jobType && (
-                <span className="flex items-center gap-1 text-xs text-slate-500">
+                <span className="flex items-center gap-1 text-xs text-brand-500">
                   <Briefcase className="h-3.5 w-3.5" />{job.jobType}
                 </span>
               )}
               {salaryText && (
-                <span className="flex items-center gap-1 text-xs text-slate-500">
+                <span className="flex items-center gap-1 text-xs text-brand-500">
                   <DollarSign className="h-3.5 w-3.5" />{salaryText}
                 </span>
               )}
               {job.createdAt && (
-                <span className="flex items-center gap-1 text-xs text-slate-400">
+                <span className="flex items-center gap-1 text-xs text-brand-400">
                   <Clock className="h-3.5 w-3.5" />{timeAgo(job.createdAt)}
                 </span>
               )}
             </div>
 
             {job.description && (
-              <p className="mt-3 text-sm text-slate-600 line-clamp-2">{job.description}</p>
+              <p className="mt-3 text-sm text-brand-600 line-clamp-2">{job.description}</p>
             )}
 
             {job.requiredSkills?.length > 0 && (
@@ -624,7 +624,7 @@ function InternalJobCard({ job, studentProfile, onClick }) {
                   <span key={i} className="px-2 py-0.5 rounded-md bg-brand-50 text-brand-700 text-[11px] font-medium border border-brand-100">{s}</span>
                 ))}
                 {job.requiredSkills.length > 5 && (
-                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[11px] font-medium">+{job.requiredSkills.length - 5} more</span>
+                  <span className="px-2 py-0.5 rounded-md bg-slate-100 text-brand-500 text-[11px] font-medium">+{job.requiredSkills.length - 5} more</span>
                 )}
               </div>
             )}
@@ -693,13 +693,13 @@ export default function JobsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Internal Job Board</h1>
-        <p className="text-slate-500 mt-1">Exclusive opportunities for lanTURN students</p>
+        <h1 className="text-2xl font-bold text-brand-900">Internal Job Board</h1>
+        <p className="text-brand-500 mt-1">Exclusive opportunities for lanTURN students</p>
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
           <input
             type="text"
             placeholder="Search roles or companies..."

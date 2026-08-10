@@ -255,8 +255,8 @@ export default function EmployerJobsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">My Jobs</h1>
-          <p className="text-sm text-slate-500">Manage your job postings and track applicants</p>
+          <h1 className="text-2xl font-bold text-brand-900">My Jobs</h1>
+          <p className="text-sm text-brand-500">Manage your job postings and track applicants</p>
         </div>
         <button
           onClick={() => { setShowForm(!showForm); setEditingId(null); setForm({}); }}
@@ -273,7 +273,7 @@ export default function EmployerJobsPage() {
       {/* ── Job Form ──────────────────────────────────────── */}
       {showForm && (
         <div className="card p-6 animate-slide-up">
-          <h2 className="font-semibold text-slate-900 mb-4">{editingId ? 'Edit Job' : 'Post New Job'}</h2>
+          <h2 className="font-semibold text-brand-900 mb-4">{editingId ? 'Edit Job' : 'Post New Job'}</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Basic info */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -362,8 +362,8 @@ export default function EmployerJobsPage() {
 
             {/* Location */}
             <div>
-              <label className="label font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
-                <MapPin className="h-3.5 w-3.5 text-slate-400" /> Location
+              <label className="label font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
+                <MapPin className="h-3.5 w-3.5 text-brand-400" /> Location
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <input name="locationCity" value={form.locationCity || ''} onChange={handleChange} className="input" placeholder="City" />
@@ -374,8 +374,8 @@ export default function EmployerJobsPage() {
 
             {/* Compensation */}
             <div>
-              <label className="label font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
-                <DollarSign className="h-3.5 w-3.5 text-slate-400" /> Compensation
+              <label className="label font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
+                <DollarSign className="h-3.5 w-3.5 text-brand-400" /> Compensation
               </label>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <div>
@@ -456,9 +456,9 @@ export default function EmployerJobsPage() {
         </div>
       ) : jobs.length === 0 ? (
         <div className="card p-12 text-center">
-          <Briefcase className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 font-medium">No jobs posted yet</p>
-          <p className="text-sm text-slate-400 mt-1">Click "Post New Job" to create your first listing</p>
+          <Briefcase className="h-10 w-10 text-brand-300 mx-auto mb-3" />
+          <p className="text-brand-500 font-medium">No jobs posted yet</p>
+          <p className="text-sm text-brand-400 mt-1">Click "Post New Job" to create your first listing</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -467,12 +467,12 @@ export default function EmployerJobsPage() {
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <h3 className="font-semibold text-slate-900">{job.title}</h3>
+                    <h3 className="font-semibold text-brand-900">{job.title}</h3>
                     <StatusBadge status={job.status} />
                     {job.workMode && <span className="badge-default">{job.workMode}</span>}
                     {job.jobType && <span className="badge-brand">{job.jobType}</span>}
                   </div>
-                  <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                  <div className="flex flex-wrap items-center gap-3 text-sm text-brand-500">
                     {job.location?.city && (
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3.5 w-3.5" /> {job.location.city}{job.location.state ? `, ${job.location.state}` : ''}
@@ -490,7 +490,7 @@ export default function EmployerJobsPage() {
                     )}
                   </div>
                   {(job.salary?.min || job.salary?.max) && (
-                    <p className="text-sm text-slate-400 mt-1">
+                    <p className="text-sm text-brand-400 mt-1">
                       <DollarSign className="h-3 w-3 inline" /> {formatSalary(job.salary)}
                       {job.salary?.negotiable && <span className="text-brand-500 ml-1">(Negotiable)</span>}
                     </p>
@@ -503,7 +503,7 @@ export default function EmployerJobsPage() {
                       {job.requiredSkills.length > 5 && <span className="badge-default text-[10px]">+{job.requiredSkills.length - 5}</span>}
                     </div>
                   )}
-                  <div className="flex items-center gap-3 mt-2 text-xs text-slate-400">
+                  <div className="flex items-center gap-3 mt-2 text-xs text-brand-400">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" /> Posted {timeAgo(job.createdAt)}
                     </span>

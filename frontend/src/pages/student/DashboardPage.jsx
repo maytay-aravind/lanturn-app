@@ -43,10 +43,10 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-brand-900">
             Welcome back, {displayName} 👋
           </h1>
-          <p className="text-slate-500 mt-1">Here is your career placement overview</p>
+          <p className="text-brand-500 mt-1">Here is your career placement overview</p>
         </div>
         <Link to="/job-search" className="btn-primary flex items-center gap-2">
           <Target className="h-4 w-4" />
@@ -64,8 +64,8 @@ export default function StudentDashboard() {
                 <Briefcase className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-500">Applications</p>
-                <p className="text-2xl font-bold text-slate-900">{totalApps}</p>
+                <p className="text-sm font-medium text-brand-500">Applications</p>
+                <p className="text-2xl font-bold text-brand-900">{totalApps}</p>
               </div>
             </div>
             <Link to="/applications" className="text-sm font-medium text-brand-600 hover:text-brand-700 mt-4 flex items-center gap-1">
@@ -79,9 +79,9 @@ export default function StudentDashboard() {
                 <Trophy className="h-5 w-5 text-emerald-600" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-slate-500">Profile Strength</p>
+                <p className="text-sm font-medium text-brand-500">Profile Strength</p>
                 <div className="flex items-center justify-between mt-0.5">
-                  <p className="text-lg font-bold text-slate-900">{completion}%</p>
+                  <p className="text-lg font-bold text-brand-900">{completion}%</p>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${completion === 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                     {completion === 100 ? 'Complete' : 'Needs info'}
                   </span>
@@ -99,7 +99,7 @@ export default function StudentDashboard() {
                 <Star className="h-5 w-5 text-brand-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-500">Top Skills</p>
+                <p className="text-sm font-medium text-brand-500">Top Skills</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -108,7 +108,7 @@ export default function StudentDashboard() {
                   <span key={s} className="badge-default bg-slate-100">{s}</span>
                 )))
               ) : (
-                <span className="text-sm text-slate-400">No skills added yet</span>
+                <span className="text-sm text-brand-400">No skills added yet</span>
               )}
               {(profile?.professional?.skills?.length || 0) > 5 && (
                 <span className="badge-default bg-slate-100">+{profile.professional.skills.length - 5}</span>
@@ -120,8 +120,8 @@ export default function StudentDashboard() {
 
       <div className="card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-slate-900 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-slate-400" /> Recent Applications
+          <h2 className="font-semibold text-brand-900 flex items-center gap-2">
+            <Clock className="h-5 w-5 text-brand-400" /> Recent Applications
           </h2>
           <Link to="/applications" className="text-sm font-medium text-brand-600 hover:text-brand-700">View all</Link>
         </div>
@@ -140,8 +140,8 @@ export default function StudentDashboard() {
             {applications.map((app) => (
               <div key={app.id} className="card-hover p-4 border border-slate-100 rounded-xl flex items-center justify-between">
                 <div>
-                  <p className="font-semibold text-slate-900">{app.jobTitle || 'Job'}</p>
-                  <p className="text-sm text-slate-500">{app.companyName || 'Company'} · {timeAgo(app.createdAt)}</p>
+                  <p className="font-semibold text-brand-900">{app.jobTitle || 'Job'}</p>
+                  <p className="text-sm text-brand-500">{app.companyName || 'Company'} · {timeAgo(app.createdAt)}</p>
                 </div>
                 <span className={`badge ${
                   app.status === 'accepted' ? 'badge-green' :

@@ -14,7 +14,7 @@ function Field({ label, hint, children }) {
     <div>
       <label className="label">
         {label}
-        <span className="ml-1 text-slate-400 text-xs font-normal">(optional)</span>
+        <span className="ml-1 text-brand-400 text-xs font-normal">(optional)</span>
       </label>
       {children}
       {hint && <p className="form-hint">{hint}</p>}
@@ -35,23 +35,23 @@ function RoleCard({ role, selected, onClick, icon: Icon, title, description }) {
       className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
         selected
           ? 'border-brand-500 bg-brand-50 shadow-sm'
-          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+          : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-slate-50'
       }`}
     >
       <div className="flex items-start gap-4">
         <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
           selected ? 'bg-brand-100' : 'bg-slate-100 group-hover:bg-slate-200'
         }`}>
-          <Icon className={`h-5 w-5 ${selected ? 'text-brand-600' : 'text-slate-500'}`} />
+          <Icon className={`h-5 w-5 ${selected ? 'text-brand-600' : 'text-brand-500'}`} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`font-semibold text-sm ${selected ? 'text-brand-700' : 'text-slate-800'}`}>
+          <p className={`font-semibold text-sm ${selected ? 'text-brand-700' : 'text-brand-800'}`}>
             {title}
           </p>
-          <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{description}</p>
+          <p className="text-xs text-brand-500 mt-0.5 leading-relaxed">{description}</p>
         </div>
         <div className={`h-5 w-5 rounded-full border-2 flex-shrink-0 mt-0.5 transition-colors ${
-          selected ? 'border-brand-500 bg-brand-500' : 'border-slate-300'
+          selected ? 'border-brand-500 bg-brand-500' : 'border-brand-300'
         }`}>
           {selected && (
             <svg className="w-full h-full text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
@@ -190,8 +190,8 @@ export default function OnboardingPage() {
       <div className="flex items-center justify-center min-h-[80vh] px-4">
         <div className="card p-8 w-full max-w-md animate-fade-in">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-slate-900">Welcome! 👋</h1>
-            <p className="text-slate-500 mt-1 text-sm">
+            <h1 className="text-2xl font-bold text-brand-900">Welcome! 👋</h1>
+            <p className="text-brand-500 mt-1 text-sm">
               First, tell us who you are. This can't be changed later.
             </p>
           </div>
@@ -244,10 +244,10 @@ export default function OnboardingPage() {
             <ArrowLeft className="h-4 w-4" />
           </button>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-brand-900">
               {role === 'student' ? 'Your Profile' : 'Company Details'}
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-brand-500 mt-0.5">
               All fields are optional — you can fill these in later.
             </p>
           </div>
@@ -259,8 +259,8 @@ export default function OnboardingPage() {
           {role === 'student' && (
             <>
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
-                <User className="h-4 w-4 text-slate-400" />
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Personal</span>
+                <User className="h-4 w-4 text-brand-400" />
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Personal</span>
               </div>
               <Grid2>
                 <Field label="Full Name">
@@ -274,8 +274,8 @@ export default function OnboardingPage() {
               </Grid2>
 
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100 mt-2">
-                <GraduationCap className="h-4 w-4 text-slate-400" />
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Academic</span>
+                <GraduationCap className="h-4 w-4 text-brand-400" />
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Academic</span>
               </div>
               <Grid2>
                 <Field label="College / University">
@@ -307,8 +307,8 @@ export default function OnboardingPage() {
               </Grid2>
 
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100 mt-2">
-                <Code2 className="h-4 w-4 text-slate-400" />
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Skills &amp; Links</span>
+                <Code2 className="h-4 w-4 text-brand-400" />
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Skills &amp; Links</span>
               </div>
               <Field label="Skills" hint="Comma-separated, e.g. React, Node.js, Python">
                 <input name="skills" type="text" placeholder="React, Node.js, Python"
@@ -317,7 +317,7 @@ export default function OnboardingPage() {
               <Grid2>
                 <Field label="LinkedIn">
                   <div className="relative">
-                    <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                    <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="linkedin" type="url" placeholder="https://linkedin.com/in/..."
                       value={studentForm.linkedin} onChange={handleStudentChange}
                       className="input pl-9" />
@@ -325,7 +325,7 @@ export default function OnboardingPage() {
                 </Field>
                 <Field label="GitHub">
                   <div className="relative">
-                    <Github className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                    <Github className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="github" type="url" placeholder="https://github.com/..."
                       value={studentForm.github} onChange={handleStudentChange}
                       className="input pl-9" />
@@ -333,7 +333,7 @@ export default function OnboardingPage() {
                 </Field>
                 <Field label="Portfolio">
                   <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="portfolio" type="url" placeholder="https://mysite.dev"
                       value={studentForm.portfolio} onChange={handleStudentChange}
                       className="input pl-9" />
@@ -347,8 +347,8 @@ export default function OnboardingPage() {
           {role === 'employer' && (
             <>
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
-                <Building2 className="h-4 w-4 text-slate-400" />
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Company</span>
+                <Building2 className="h-4 w-4 text-brand-400" />
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Company</span>
               </div>
               <Grid2>
                 <Field label="Company Name">
@@ -365,7 +365,7 @@ export default function OnboardingPage() {
                 </Field>
                 <Field label="Website">
                   <div className="relative">
-                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="website" type="url" placeholder="https://acme.com"
                       value={employerForm.website} onChange={handleEmployerChange}
                       className="input pl-9" />
@@ -373,7 +373,7 @@ export default function OnboardingPage() {
                 </Field>
                 <Field label="City">
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="city" type="text" placeholder="Bangalore"
                       value={employerForm.city} onChange={handleEmployerChange}
                       className="input pl-9" />

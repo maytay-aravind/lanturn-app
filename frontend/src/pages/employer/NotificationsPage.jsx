@@ -54,8 +54,8 @@ export default function EmployerNotificationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Notifications</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-brand-900">Notifications</h1>
+          <p className="text-sm text-brand-500">
             {unreadCount > 0 ? `${unreadCount} unread notification${unreadCount !== 1 ? 's' : ''}` : 'All caught up!'}
           </p>
         </div>
@@ -78,9 +78,9 @@ export default function EmployerNotificationsPage() {
         </div>
       ) : notifications.length === 0 ? (
         <div className="card p-12 text-center">
-          <Bell className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 font-medium">No notifications yet</p>
-          <p className="text-sm text-slate-400 mt-1">You'll be notified when candidates apply to your jobs</p>
+          <Bell className="h-10 w-10 text-brand-300 mx-auto mb-3" />
+          <p className="text-brand-500 font-medium">No notifications yet</p>
+          <p className="text-sm text-brand-400 mt-1">You'll be notified when candidates apply to your jobs</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -104,18 +104,18 @@ export default function EmployerNotificationsPage() {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <p className={`text-sm font-medium ${!notif.read ? 'text-slate-900' : 'text-slate-600'}`}>
+                    <p className={`text-sm font-medium ${!notif.read ? 'text-brand-900' : 'text-brand-600'}`}>
                       {notif.title}
                     </p>
                     {!notif.read && <span className="h-2 w-2 rounded-full bg-brand-500 flex-shrink-0" />}
                   </div>
-                  <p className="text-sm text-slate-500 mt-0.5 line-clamp-2">{notif.body}</p>
-                  <p className="text-xs text-slate-400 mt-1">{timeAgo(notif.createdAt)}</p>
+                  <p className="text-sm text-brand-500 mt-0.5 line-clamp-2">{notif.body}</p>
+                  <p className="text-xs text-brand-400 mt-1">{timeAgo(notif.createdAt)}</p>
                 </div>
 
                 {/* Read indicator */}
                 {notif.link && (
-                  <Eye className="h-4 w-4 text-slate-300 flex-shrink-0 mt-1" />
+                  <Eye className="h-4 w-4 text-brand-300 flex-shrink-0 mt-1" />
                 )}
               </div>
             );

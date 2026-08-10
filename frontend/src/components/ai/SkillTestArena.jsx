@@ -39,8 +39,8 @@ function SkillSelectStep({ onSelect }) {
         >
           <Trophy className="h-7 w-7 text-white" />
         </div>
-        <h3 className="text-lg font-bold text-slate-900">Choose Your Skill</h3>
-        <p className="text-sm text-slate-500 mt-1">Select a skill to test your knowledge and earn a medal</p>
+        <h3 className="text-lg font-bold text-brand-900">Choose Your Skill</h3>
+        <p className="text-sm text-brand-500 mt-1">Select a skill to test your knowledge and earn a medal</p>
       </div>
 
       <div className="flex flex-wrap justify-center gap-2">
@@ -49,7 +49,7 @@ function SkillSelectStep({ onSelect }) {
             key={skill}
             type="button"
             onClick={() => onSelect(skill)}
-            className="px-3.5 py-2 rounded-xl text-sm font-medium bg-white ring-1 ring-slate-200 text-slate-700 hover:ring-brand-300 hover:text-brand-700 hover:bg-brand-50 transition-all active:scale-95"
+            className="px-3.5 py-2 rounded-xl text-sm font-medium bg-white ring-1 ring-brand-200 text-brand-700 hover:ring-brand-300 hover:text-brand-700 hover:bg-brand-50 transition-all active:scale-95"
           >
             {skill}
           </button>
@@ -58,7 +58,7 @@ function SkillSelectStep({ onSelect }) {
 
       <div className="flex items-center gap-2">
         <div className="h-px flex-1 bg-slate-200" />
-        <span className="text-xs text-slate-400 font-medium">or type your own</span>
+        <span className="text-xs text-brand-400 font-medium">or type your own</span>
         <div className="h-px flex-1 bg-slate-200" />
       </div>
 
@@ -91,7 +91,7 @@ function RatingStep({ skill, onBack, onStart }) {
     <div className="space-y-6 animate-fade-in">
       <button
         onClick={onBack}
-        className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+        className="flex items-center gap-1.5 text-sm text-brand-500 hover:text-brand-700 transition-colors"
       >
         <ChevronLeft className="h-4 w-4" /> Change skill
       </button>
@@ -101,8 +101,8 @@ function RatingStep({ skill, onBack, onStart }) {
           <Target className="h-4 w-4" />
           {skill}
         </span>
-        <h3 className="text-lg font-bold text-slate-900">Rate Your Proficiency</h3>
-        <p className="text-sm text-slate-500 mt-1">How well do you know {skill}? Be honest — questions are generated based on this.</p>
+        <h3 className="text-lg font-bold text-brand-900">Rate Your Proficiency</h3>
+        <p className="text-sm text-brand-500 mt-1">How well do you know {skill}? Be honest — questions are generated based on this.</p>
       </div>
 
       {/* Large score display */}
@@ -113,7 +113,7 @@ function RatingStep({ skill, onBack, onStart }) {
         >
           {rating}
         </div>
-        <span className="text-sm font-medium text-slate-500">out of 100</span>
+        <span className="text-sm font-medium text-brand-500">out of 100</span>
       </div>
 
       {/* Slider */}
@@ -130,8 +130,8 @@ function RatingStep({ skill, onBack, onStart }) {
           }}
         />
         <div className="flex justify-between mt-1.5">
-          <span className="text-[10px] text-slate-400">0</span>
-          <span className="text-[10px] text-slate-400">100</span>
+          <span className="text-[10px] text-brand-400">0</span>
+          <span className="text-[10px] text-brand-400">100</span>
         </div>
       </div>
 
@@ -146,7 +146,7 @@ function RatingStep({ skill, onBack, onStart }) {
         <p className="text-sm font-bold" style={{ color: tierInfo.color }}>
           {tierInfo.label} Tier
         </p>
-        <p className="text-xs text-slate-500 mt-0.5">
+        <p className="text-xs text-brand-500 mt-0.5">
           Pass all 3 questions to earn: {tierInfo.medal}
         </p>
       </div>
@@ -192,13 +192,13 @@ function TestStep({ skill, rating, questions, tier, onBack, onSubmit, isSubmitti
         <button
           onClick={onBack}
           disabled={isSubmitting}
-          className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+          className="flex items-center gap-1.5 text-sm text-brand-500 hover:text-brand-700 transition-colors"
         >
           <ChevronLeft className="h-4 w-4" /> Back
         </button>
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 rounded-full bg-brand-50 text-brand-700 font-semibold text-xs">{skill}</span>
-          <span className="text-xs font-mono text-slate-400 tabular-nums">
+          <span className="text-xs font-mono text-brand-400 tabular-nums">
             {mins}:{secs.toString().padStart(2, '0')}
           </span>
         </div>
@@ -214,7 +214,7 @@ function TestStep({ skill, rating, questions, tier, onBack, onSubmit, isSubmitti
             >
               {i + 1}
             </span>
-            <p className="text-sm font-medium text-slate-800 leading-relaxed pt-0.5">{q.question}</p>
+            <p className="text-sm font-medium text-brand-800 leading-relaxed pt-0.5">{q.question}</p>
           </div>
           <textarea
             className="input min-h-[100px] resize-y text-sm"
@@ -228,7 +228,7 @@ function TestStep({ skill, rating, questions, tier, onBack, onSubmit, isSubmitti
             disabled={isSubmitting}
           />
           <div className="flex justify-end">
-            <span className={`text-[10px] font-medium ${answers[i].trim().length >= 10 ? 'text-emerald-500' : 'text-slate-400'}`}>
+            <span className={`text-[10px] font-medium ${answers[i].trim().length >= 10 ? 'text-emerald-500' : 'text-brand-400'}`}>
               {answers[i].trim().length} chars
             </span>
           </div>
@@ -269,8 +269,8 @@ function ResultView({ skill, result, onRetry, onNewSkill }) {
             <div className="text-6xl mb-3" style={{ animation: 'pulse 1s ease-in-out' }}>
               {MEDAL_CONFIG[medal]?.emoji || '🏅'}
             </div>
-            <h3 className="text-xl font-bold text-slate-900">Congratulations!</h3>
-            <p className="text-sm text-slate-600 mt-1">
+            <h3 className="text-xl font-bold text-brand-900">Congratulations!</h3>
+            <p className="text-sm text-brand-600 mt-1">
               You earned a <strong>{MEDAL_CONFIG[medal]?.label || medal}</strong> Medal in <strong>{skill}</strong>!
             </p>
             <div className="mt-3">
@@ -280,8 +280,8 @@ function ResultView({ skill, result, onRetry, onNewSkill }) {
         ) : (
           <>
             <div className="text-5xl mb-3">📝</div>
-            <h3 className="text-xl font-bold text-slate-900">Not Quite!</h3>
-            <p className="text-sm text-slate-600 mt-1">
+            <h3 className="text-xl font-bold text-brand-900">Not Quite!</h3>
+            <p className="text-sm text-brand-600 mt-1">
               You scored <strong>{score}</strong>. Study the feedback below and try again!
             </p>
           </>
@@ -307,11 +307,11 @@ function ResultView({ skill, result, onRetry, onNewSkill }) {
               ) : (
                 <XCircle className="h-5 w-5 text-red-500" />
               )}
-              <span className="text-sm font-semibold text-slate-800">
+              <span className="text-sm font-semibold text-brand-800">
                 Question {r.questionId}: {r.correct ? 'Correct' : 'Incorrect'}
               </span>
             </div>
-            <p className="text-sm text-slate-600 leading-relaxed">{r.feedback}</p>
+            <p className="text-sm text-brand-600 leading-relaxed">{r.feedback}</p>
           </div>
         ))}
       </div>
@@ -349,7 +349,7 @@ function MedalsStrip() {
 
   return (
     <div className="rounded-2xl bg-slate-50 p-4 space-y-2.5">
-      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+      <p className="text-xs font-semibold text-brand-500 uppercase tracking-wider flex items-center gap-1.5">
         <Trophy className="h-3.5 w-3.5" />
         Your Medals
       </p>
@@ -434,8 +434,8 @@ export function SkillTestArena() {
             <Sparkles className="h-4 w-4 text-brand-400 absolute -top-1 -right-1" />
           </div>
           <div className="text-center">
-            <p className="font-semibold text-slate-900">Generating your {skill} test…</p>
-            <p className="text-sm text-slate-500 mt-1">AI is crafting questions for your {getTierInfo(rating).label} level</p>
+            <p className="font-semibold text-brand-900">Generating your {skill} test…</p>
+            <p className="text-sm text-brand-500 mt-1">AI is crafting questions for your {getTierInfo(rating).label} level</p>
           </div>
         </div>
       )}

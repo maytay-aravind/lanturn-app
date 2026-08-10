@@ -50,7 +50,7 @@ function DonutChart({ segments, size = 160 }) {
 /* ── Area chart (applications per day) ─────────────────────── */
 function MiniAreaChart({ data }) {
   const entries = Object.entries(data || {});
-  if (entries.length === 0) return <p className="text-sm text-slate-400">No data yet</p>;
+  if (entries.length === 0) return <p className="text-sm text-brand-400">No data yet</p>;
   
   const values = entries.map(([, v]) => v);
   const max = Math.max(...values, 1);
@@ -136,11 +136,11 @@ function StatCard({ icon: Icon, label, value, color, sub, link }) {
         <Icon className="h-5 w-5" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-slate-500">{label}</p>
-        <p className="text-2xl font-bold text-slate-900 mt-0.5">{value ?? '—'}</p>
-        {sub && <p className="text-xs text-slate-400 mt-0.5">{sub}</p>}
+        <p className="text-sm text-brand-500">{label}</p>
+        <p className="text-2xl font-bold text-brand-900 mt-0.5">{value ?? '—'}</p>
+        {sub && <p className="text-xs text-brand-400 mt-0.5">{sub}</p>}
       </div>
-      {link && <ArrowUpRight className="h-4 w-4 text-slate-300 group-hover:text-brand-500 transition-colors" />}
+      {link && <ArrowUpRight className="h-4 w-4 text-brand-300 group-hover:text-brand-500 transition-colors" />}
     </Wrapper>
   );
 }
@@ -151,8 +151,8 @@ function MetricBar({ label, value, max, color = '#6366f1' }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-1">
-        <span className="text-sm text-slate-600">{label}</span>
-        <span className="text-sm font-semibold text-slate-900">{value} <span className="text-slate-400 font-normal">({pct}%)</span></span>
+        <span className="text-sm text-brand-600">{label}</span>
+        <span className="text-sm font-semibold text-brand-900">{value} <span className="text-brand-400 font-normal">({pct}%)</span></span>
       </div>
       <div className="progress-track">
         <div className="progress-fill" style={{ width: `${pct}%`, background: color }} />
@@ -237,10 +237,10 @@ export default function EmployerDashboard() {
       {/* ── Header ──────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-brand-900">
             Welcome, {profile?.companyName || 'Employer'}
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-brand-500 mt-0.5">
             {profile?.industry && `${profile.industry} · `}
             Here's your recruitment overview
           </p>
@@ -293,8 +293,8 @@ export default function EmployerDashboard() {
               ].map(item => (
                 <div key={item.label} className="flex items-center gap-2.5">
                   <div className="h-3 w-3 rounded-full flex-shrink-0" style={{ background: item.color }} />
-                  <span className="text-sm text-slate-600 flex-1">{item.label}</span>
-                  <span className="text-sm font-semibold text-slate-900">{item.value || 0}</span>
+                  <span className="text-sm text-brand-600 flex-1">{item.label}</span>
+                  <span className="text-sm font-semibold text-brand-900">{item.value || 0}</span>
                 </div>
               ))}
             </div>
@@ -308,7 +308,7 @@ export default function EmployerDashboard() {
             <h2 className="section-title">Applications (Last 30 Days)</h2>
           </div>
           <MiniAreaChart data={a.applicationsPerDay} />
-          <div className="flex justify-between mt-3 text-[10px] text-slate-400">
+          <div className="flex justify-between mt-3 text-[10px] text-brand-400">
             <span>{Object.keys(a.applicationsPerDay || {}).at(0)?.slice(5) || ''}</span>
             <span>Today</span>
           </div>
@@ -351,9 +351,9 @@ export default function EmployerDashboard() {
               <p className="text-2xl font-bold text-amber-700">{a.pausedJobs ?? 0}</p>
               <p className="text-xs text-amber-600 mt-0.5">Paused</p>
             </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-              <p className="text-2xl font-bold text-slate-700">{a.closedJobs ?? 0}</p>
-              <p className="text-xs text-slate-500 mt-0.5">Closed</p>
+            <div className="p-3 rounded-xl bg-slate-50 border border-brand-200">
+              <p className="text-2xl font-bold text-brand-700">{a.closedJobs ?? 0}</p>
+              <p className="text-xs text-brand-500 mt-0.5">Closed</p>
             </div>
             <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
               <p className="text-2xl font-bold text-brand-700">{a.totalJobs ?? 0}</p>
@@ -381,7 +381,7 @@ export default function EmployerDashboard() {
               <div key={match.id} className="relative group">
                 {/* Ranking Medals */}
                 <div className="absolute -top-3 -left-3 z-10 h-8 w-8 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-lg font-bold">
-                  {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : <span className="text-sm text-slate-400">#{i + 1}</span>}
+                  {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : <span className="text-sm text-brand-400">#{i + 1}</span>}
                 </div>
                 <div className="h-full transform transition-all duration-300 hover:-translate-y-1">
                   <CandidateMatchCard
@@ -392,7 +392,7 @@ export default function EmployerDashboard() {
                     }}
                     matchData={match}
                   />
-                  <div className="mt-2 text-center text-xs font-medium text-slate-500 bg-slate-50 py-1.5 rounded-lg border border-slate-100">
+                  <div className="mt-2 text-center text-xs font-medium text-brand-500 bg-slate-50 py-1.5 rounded-lg border border-slate-100">
                     Applying for: <span className="text-brand-700 font-bold">{match.jobTitle}</span>
                   </div>
                 </div>
@@ -402,10 +402,10 @@ export default function EmployerDashboard() {
         ) : (
           <div className="text-center py-8">
             <div className="inline-flex h-12 w-12 rounded-full bg-slate-50 items-center justify-center mb-3">
-              <Star className="h-5 w-5 text-slate-300" />
+              <Star className="h-5 w-5 text-brand-300" />
             </div>
-            <p className="text-slate-500 font-medium">No top candidates found yet</p>
-            <p className="text-xs text-slate-400 mt-1">Our AI will highlight the best fits once candidates start applying to your jobs.</p>
+            <p className="text-brand-500 font-medium">No top candidates found yet</p>
+            <p className="text-xs text-brand-400 mt-1">Our AI will highlight the best fits once candidates start applying to your jobs.</p>
           </div>
         )}
       </div>
@@ -418,7 +418,7 @@ export default function EmployerDashboard() {
           </div>
           <h2 className="section-title text-lg font-bold">Company DNA Preview</h2>
         </div>
-        <p className="text-sm text-slate-500 mb-4">
+        <p className="text-sm text-brand-500 mb-4">
           This is how students see your company when browsing jobs. AI analyzes your profile to generate a workplace personality card.
         </p>
         <CompanyDNAPanel
@@ -440,7 +440,7 @@ export default function EmployerDashboard() {
           </div>
         </div>
         {(a.recentApplications || []).length === 0 ? (
-          <p className="text-sm text-slate-400 text-center py-6">No applications yet. Post a job to get started!</p>
+          <p className="text-sm text-brand-400 text-center py-6">No applications yet. Post a job to get started!</p>
         ) : (
           <div className="divide-y divide-slate-100">
             {(a.recentApplications || []).map(app => {
@@ -451,11 +451,11 @@ export default function EmployerDashboard() {
                     {(app.studentName || '?').charAt(0).toUpperCase()}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-slate-900 truncate">{app.studentName}</p>
-                    <p className="text-xs text-slate-400 truncate">Applied to {app.jobTitle}</p>
+                    <p className="text-sm font-medium text-brand-900 truncate">{app.studentName}</p>
+                    <p className="text-xs text-brand-400 truncate">Applied to {app.jobTitle}</p>
                   </div>
                   <span className={cfg.cls}>{cfg.label}</span>
-                  <span className="text-xs text-slate-400 hidden sm:block">{timeAgo(app.appliedAt)}</span>
+                  <span className="text-xs text-brand-400 hidden sm:block">{timeAgo(app.appliedAt)}</span>
                 </div>
               );
             })}

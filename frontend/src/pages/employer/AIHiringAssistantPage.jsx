@@ -28,7 +28,7 @@ function renderMarkdown(text) {
       elements.push(
         <ul key={`ul-${elements.length}`} className="space-y-1 pl-4 my-2">
           {listBuffer.map((item, i) => (
-            <li key={i} className="list-disc text-slate-700 text-sm leading-relaxed">
+            <li key={i} className="list-disc text-brand-700 text-sm leading-relaxed">
               {formatInline(item)}
             </li>
           ))}
@@ -43,7 +43,7 @@ function renderMarkdown(text) {
     const parts = str.split(/(\*\*[^*]+\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="font-semibold text-slate-900">{part.slice(2, -2)}</strong>;
+        return <strong key={i} className="font-semibold text-brand-900">{part.slice(2, -2)}</strong>;
       }
       return part;
     });
@@ -56,13 +56,13 @@ function renderMarkdown(text) {
     // Headers
     if (trimmed.startsWith('### ')) {
       flushList();
-      elements.push(<h4 key={i} className="text-sm font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(4))}</h4>);
+      elements.push(<h4 key={i} className="text-sm font-bold text-brand-900 mt-3 mb-1">{formatInline(trimmed.slice(4))}</h4>);
     } else if (trimmed.startsWith('## ')) {
       flushList();
-      elements.push(<h3 key={i} className="text-base font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(3))}</h3>);
+      elements.push(<h3 key={i} className="text-base font-bold text-brand-900 mt-3 mb-1">{formatInline(trimmed.slice(3))}</h3>);
     } else if (trimmed.startsWith('# ')) {
       flushList();
-      elements.push(<h2 key={i} className="text-lg font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(2))}</h2>);
+      elements.push(<h2 key={i} className="text-lg font-bold text-brand-900 mt-3 mb-1">{formatInline(trimmed.slice(2))}</h2>);
     }
     // Numbered lists
     else if (/^\d+\.\s/.test(trimmed)) {
@@ -71,7 +71,7 @@ function renderMarkdown(text) {
       elements.push(
         <div key={i} className="flex gap-2 my-1">
           <span className="text-brand-600 font-bold text-sm flex-shrink-0">{trimmed.match(/^\d+/)[0]}.</span>
-          <span className="text-sm text-slate-700 leading-relaxed">{formatInline(content)}</span>
+          <span className="text-sm text-brand-700 leading-relaxed">{formatInline(content)}</span>
         </div>
       );
     }
@@ -86,7 +86,7 @@ function renderMarkdown(text) {
     // Regular text
     else {
       flushList();
-      elements.push(<p key={i} className="text-sm text-slate-700 leading-relaxed my-1">{formatInline(trimmed)}</p>);
+      elements.push(<p key={i} className="text-sm text-brand-700 leading-relaxed my-1">{formatInline(trimmed)}</p>);
     }
   }
 
@@ -135,7 +135,7 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
       {/* Search */}
       <div className="px-3 pt-3 pb-2">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
           <input
             type="text"
             placeholder="Search threads..."
@@ -155,8 +155,8 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-8 px-4">
-            <MessageSquare className="h-8 w-8 text-slate-200 mx-auto mb-2" />
-            <p className="text-xs text-slate-400">
+            <MessageSquare className="h-8 w-8 text-brand-200 mx-auto mb-2" />
+            <p className="text-xs text-brand-400">
               {search ? 'No matching threads' : 'No conversations yet'}
             </p>
           </div>
@@ -175,25 +175,25 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
                   <div className={`h-7 w-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
                     activeThreadId === thread.threadId
                       ? 'bg-brand-100 text-brand-700'
-                      : 'bg-slate-100 text-slate-500 group-hover:bg-slate-200'
+                      : 'bg-slate-100 text-brand-500 group-hover:bg-slate-200'
                   }`}>
                     <MessageSquare className="h-3.5 w-3.5" />
                   </div>
                   <div className="flex-1 min-w-0 pr-6">
                     <p className={`text-sm font-medium truncate ${
-                      activeThreadId === thread.threadId ? 'text-brand-800' : 'text-slate-700'
+                      activeThreadId === thread.threadId ? 'text-brand-800' : 'text-brand-700'
                     }`}>
                       {thread.title || 'Untitled'}
                     </p>
-                    <p className="text-xs text-slate-400 truncate mt-0.5">
+                    <p className="text-xs text-brand-400 truncate mt-0.5">
                       {thread.lastMessagePreview || ''}
                     </p>
                   </div>
                 </div>
                 {thread.lastMessageAt && (
                   <div className="flex items-center gap-1 mt-1.5 pl-9">
-                    <Clock className="h-3 w-3 text-slate-300" />
-                    <span className="text-[10px] text-slate-400">
+                    <Clock className="h-3 w-3 text-brand-300" />
+                    <span className="text-[10px] text-brand-400">
                       {new Date(thread.lastMessageAt).toLocaleDateString(undefined, {
                         month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
                       })}
@@ -210,7 +210,7 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
                     onDeleteThread(thread.threadId);
                   }
                 }}
-                className="absolute right-2 top-3 h-7 w-7 rounded-lg flex items-center justify-center text-slate-400 hover:bg-red-50 hover:text-red-600 opacity-0 group-hover/item:opacity-100 transition-all duration-150"
+                className="absolute right-2 top-3 h-7 w-7 rounded-lg flex items-center justify-center text-brand-400 hover:bg-red-50 hover:text-red-600 opacity-0 group-hover/item:opacity-100 transition-all duration-150"
                 title="Delete thread"
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -364,7 +364,7 @@ export default function AIHiringAssistantPage() {
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <div className="absolute left-0 top-0 bottom-0 w-80 bg-white shadow-2xl animate-slide-right">
             <div className="flex items-center justify-between p-4 border-b border-slate-100">
-              <h3 className="font-semibold text-slate-900">Conversations</h3>
+              <h3 className="font-semibold text-brand-900">Conversations</h3>
               <button onClick={() => setSidebarOpen(false)} className="btn-ghost p-1.5 rounded-lg">
                 <X className="h-4 w-4" />
               </button>
@@ -416,9 +416,9 @@ export default function AIHiringAssistantPage() {
             title={desktopSidebarOpen ? 'Close sidebar' : 'Open sidebar'}
           >
             {desktopSidebarOpen ? (
-              <PanelLeftClose className="h-5 w-5 text-slate-500" />
+              <PanelLeftClose className="h-5 w-5 text-brand-500" />
             ) : (
-              <PanelLeftOpen className="h-5 w-5 text-slate-500" />
+              <PanelLeftOpen className="h-5 w-5 text-brand-500" />
             )}
           </button>
 
@@ -426,14 +426,14 @@ export default function AIHiringAssistantPage() {
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <h1 className="text-sm font-bold text-slate-900">AI Hiring Assistant</h1>
-            <p className="text-xs text-slate-400">Powered by AI · Ask about candidates, skills, and matches</p>
+            <h1 className="text-sm font-bold text-brand-900">AI Hiring Assistant</h1>
+            <p className="text-xs text-brand-400">Powered by AI · Ask about candidates, skills, and matches</p>
           </div>
           
           <div className="flex items-center gap-3">
             <button
               onClick={handleNewThread}
-              className="hidden sm:flex btn-ghost p-1.5 rounded-lg text-slate-500 hover:text-brand-600"
+              className="hidden sm:flex btn-ghost p-1.5 rounded-lg text-brand-500 hover:text-brand-600"
               title="New Conversation"
             >
               <Edit className="h-5 w-5" />
@@ -462,8 +462,8 @@ export default function AIHiringAssistantPage() {
                 </div>
               </div>
 
-              <h2 className="text-xl font-bold text-slate-900 mb-2">AI Hiring Assistant</h2>
-              <p className="text-sm text-slate-500 mb-8 leading-relaxed">
+              <h2 className="text-xl font-bold text-brand-900 mb-2">AI Hiring Assistant</h2>
+              <p className="text-sm text-brand-500 mb-8 leading-relaxed">
                 I can help you find the perfect candidates from our student pool. Ask me to search by skills,
                 compare candidates, or explain why someone is a good fit for your role.
               </p>
@@ -571,7 +571,7 @@ export default function AIHiringAssistantPage() {
               </button>
             </div>
 
-            <p className="text-[10px] text-slate-400 text-center mt-2">
+            <p className="text-[10px] text-brand-400 text-center mt-2">
               AI may make mistakes. Verify candidate information before making decisions.
             </p>
           </div>

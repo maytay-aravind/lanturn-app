@@ -54,8 +54,8 @@ function ProfileModal({ studentId, onClose }) {
       >
         {/* Header */}
         <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between z-10">
-          <h2 className="text-lg font-bold text-slate-900">Student Profile</h2>
-          <button onClick={onClose} className="h-8 w-8 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-900 transition-colors">
+          <h2 className="text-lg font-bold text-brand-900">Student Profile</h2>
+          <button onClick={onClose} className="h-8 w-8 rounded-xl flex items-center justify-center text-brand-400 hover:bg-slate-100 hover:text-brand-900 transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -72,9 +72,9 @@ function ProfileModal({ studentId, onClose }) {
                 {(personal.name || '?').charAt(0).toUpperCase()}
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">{personal.name || 'Student'}</h3>
-                <p className="text-sm text-slate-500">{personal.headline || ''}</p>
-                {personal.location && <p className="text-xs text-slate-400">{personal.location}</p>}
+                <h3 className="text-lg font-semibold text-brand-900">{personal.name || 'Student'}</h3>
+                <p className="text-sm text-brand-500">{personal.headline || ''}</p>
+                {personal.location && <p className="text-xs text-brand-400">{personal.location}</p>}
               </div>
             </div>
 
@@ -101,20 +101,20 @@ function ProfileModal({ studentId, onClose }) {
 
             {/* Education */}
             <div>
-              <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
+              <h4 className="text-sm font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
                 <GraduationCap className="h-4 w-4 text-brand-500" /> Education
               </h4>
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                <p className="font-medium text-slate-900">{academic.college || 'N/A'}</p>
-                <p className="text-sm text-slate-500">{academic.degree || ''}{academic.branch ? ` — ${academic.branch}` : ''}</p>
-                <p className="text-xs text-slate-400">{academic.graduationYear ? `Class of ${academic.graduationYear}` : ''}{academic.cgpa ? ` · CGPA: ${academic.cgpa}` : ''}</p>
+                <p className="font-medium text-brand-900">{academic.college || 'N/A'}</p>
+                <p className="text-sm text-brand-500">{academic.degree || ''}{academic.branch ? ` — ${academic.branch}` : ''}</p>
+                <p className="text-xs text-brand-400">{academic.graduationYear ? `Class of ${academic.graduationYear}` : ''}{academic.cgpa ? ` · CGPA: ${academic.cgpa}` : ''}</p>
               </div>
             </div>
 
             {/* Skills */}
             {professional.skills?.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
+                <h4 className="text-sm font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
                   <Code className="h-4 w-4 text-brand-500" /> Skills
                 </h4>
                 <div className="flex flex-wrap gap-1.5">
@@ -128,21 +128,21 @@ function ProfileModal({ studentId, onClose }) {
             {/* Projects */}
             {professional.projects?.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
+                <h4 className="text-sm font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
                   <Star className="h-4 w-4 text-brand-500" /> Projects
                 </h4>
                 <div className="space-y-2">
                   {professional.projects.map((proj, i) => (
                     <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-100">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium text-slate-900 text-sm">{proj.name || proj.title || 'Project'}</p>
+                        <p className="font-medium text-brand-900 text-sm">{proj.name || proj.title || 'Project'}</p>
                         {proj.link && (
                           <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-brand-500 hover:text-brand-700">
                             <ExternalLink className="h-3 w-3" />
                           </a>
                         )}
                       </div>
-                      {proj.description && <p className="text-xs text-slate-500 mt-1">{proj.description}</p>}
+                      {proj.description && <p className="text-xs text-brand-500 mt-1">{proj.description}</p>}
                       {proj.technologies?.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-1.5">
                           {proj.technologies.map((t, j) => (
@@ -159,15 +159,15 @@ function ProfileModal({ studentId, onClose }) {
             {/* Experience */}
             {professional.experience?.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
+                <h4 className="text-sm font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
                   <Briefcase className="h-4 w-4 text-brand-500" /> Experience
                 </h4>
                 <div className="space-y-2">
                   {professional.experience.map((exp, i) => (
                     <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-100">
-                      <p className="font-medium text-slate-900 text-sm">{exp.role || exp.title || 'Role'}</p>
-                      <p className="text-xs text-slate-500">{exp.company || ''}{exp.duration ? ` · ${exp.duration}` : ''}</p>
-                      {exp.description && <p className="text-xs text-slate-400 mt-1">{exp.description}</p>}
+                      <p className="font-medium text-brand-900 text-sm">{exp.role || exp.title || 'Role'}</p>
+                      <p className="text-xs text-brand-500">{exp.company || ''}{exp.duration ? ` · ${exp.duration}` : ''}</p>
+                      {exp.description && <p className="text-xs text-brand-400 mt-1">{exp.description}</p>}
                     </div>
                   ))}
                 </div>
@@ -177,15 +177,15 @@ function ProfileModal({ studentId, onClose }) {
             {/* Certifications */}
             {professional.certifications?.length > 0 && (
               <div>
-                <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5 mb-2">
+                <h4 className="text-sm font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
                   <Award className="h-4 w-4 text-brand-500" /> Certifications
                 </h4>
                 <div className="space-y-1.5">
                   {professional.certifications.map((cert, i) => (
                     <div key={i} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2">
-                      <FileText className="h-3.5 w-3.5 text-slate-400" />
-                      <span className="text-sm text-slate-700">{cert.name || cert.title || cert}</span>
-                      {cert.issuer && <span className="text-xs text-slate-400">— {cert.issuer}</span>}
+                      <FileText className="h-3.5 w-3.5 text-brand-400" />
+                      <span className="text-sm text-brand-700">{cert.name || cert.title || cert}</span>
+                      {cert.issuer && <span className="text-xs text-brand-400">— {cert.issuer}</span>}
                     </div>
                   ))}
                 </div>
@@ -272,11 +272,11 @@ export default function JobApplicantsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <Link to="/employer/jobs" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-600 mb-2 transition-colors">
+          <Link to="/employer/jobs" className="inline-flex items-center gap-1 text-sm text-brand-500 hover:text-brand-600 mb-2 transition-colors">
             <ArrowLeft className="h-3.5 w-3.5" /> Back to Jobs
           </Link>
-          <h1 className="text-2xl font-bold text-slate-900">Applicants</h1>
-          <p className="text-sm text-slate-500">
+          <h1 className="text-2xl font-bold text-brand-900">Applicants</h1>
+          <p className="text-sm text-brand-500">
             {jobData?.title ? `"${jobData.title}"` : 'Job'} — {allApplicants.length} applicant{allApplicants.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -286,7 +286,7 @@ export default function JobApplicantsPage() {
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setStatusFilter('')}
-          className={`badge cursor-pointer transition-all ${!statusFilter ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+          className={`badge cursor-pointer transition-all ${!statusFilter ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300' : 'bg-slate-100 text-brand-600 hover:bg-slate-200'}`}
         >
           All ({allApplicants.length})
         </button>
@@ -297,7 +297,7 @@ export default function JobApplicantsPage() {
             <button
               key={key}
               onClick={() => setStatusFilter(statusFilter === key ? '' : key)}
-              className={`badge cursor-pointer transition-all ${statusFilter === key ? `${cfg.cls} ring-1` : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+              className={`badge cursor-pointer transition-all ${statusFilter === key ? `${cfg.cls} ring-1` : 'bg-slate-100 text-brand-600 hover:bg-slate-200'}`}
             >
               {cfg.label} ({cnt})
             </button>
@@ -312,11 +312,11 @@ export default function JobApplicantsPage() {
         </div>
       ) : applicants.length === 0 ? (
         <div className="card p-12 text-center">
-          <UserCheck className="h-10 w-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-slate-500 font-medium">
+          <UserCheck className="h-10 w-10 text-brand-300 mx-auto mb-3" />
+          <p className="text-brand-500 font-medium">
             {statusFilter ? `No ${STATUS_CONFIG[statusFilter]?.label?.toLowerCase()} applicants` : 'No applicants yet'}
           </p>
-          <p className="text-sm text-slate-400 mt-1">Applications will appear here as candidates apply</p>
+          <p className="text-sm text-brand-400 mt-1">Applications will appear here as candidates apply</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -332,12 +332,12 @@ export default function JobApplicantsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-slate-900">{app.studentName || 'Student'}</h3>
+                        <h3 className="font-semibold text-brand-900">{app.studentName || 'Student'}</h3>
                         <span className={cfg.cls}>{cfg.label}</span>
                       </div>
 
                       {app.coverLetter && (
-                        <p className="text-sm text-slate-500 mt-1 line-clamp-2">{app.coverLetter}</p>
+                        <p className="text-sm text-brand-500 mt-1 line-clamp-2">{app.coverLetter}</p>
                       )}
                       {app.skillsSnapshot?.length > 0 && (
                         <div className="flex flex-wrap gap-1 mt-2">
@@ -347,7 +347,7 @@ export default function JobApplicantsPage() {
                           {app.skillsSnapshot.length > 6 && <span className="badge-default text-[10px]">+{app.skillsSnapshot.length - 6}</span>}
                         </div>
                       )}
-                      <p className="text-xs text-slate-400 mt-1.5">Applied {timeAgo(app.createdAt)}</p>
+                      <p className="text-xs text-brand-400 mt-1.5">Applied {timeAgo(app.createdAt)}</p>
                     </div>
                   </div>
 

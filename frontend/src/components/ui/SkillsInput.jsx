@@ -27,7 +27,7 @@ export function SkillsInput({ value = [], onChange, placeholder = 'Add a skill..
 
   return (
     <div
-      className="min-h-[44px] w-full rounded-xl border-0 px-3 py-2 bg-white ring-1 ring-inset ring-slate-200 focus-within:ring-2 focus-within:ring-brand-500 flex flex-wrap gap-1.5 items-center cursor-text transition-shadow"
+      className="min-h-[44px] w-full rounded-xl border-0 px-3 py-2 bg-white ring-1 ring-inset ring-brand-200 focus-within:ring-2 focus-within:ring-brand-500 flex flex-wrap gap-1.5 items-center cursor-text transition-shadow"
       onClick={() => inputRef.current?.focus()}
     >
       {value.map((skill) => (
@@ -50,7 +50,7 @@ export function SkillsInput({ value = [], onChange, placeholder = 'Add a skill..
         onKeyDown={handleKeyDown}
         onBlur={() => inputVal.trim() && addSkill(inputVal)}
         placeholder={value.length === 0 ? placeholder : ''}
-        className="flex-1 min-w-[120px] border-0 bg-transparent p-0 text-sm text-slate-900 placeholder:text-slate-400 focus:ring-0 outline-none"
+        className="flex-1 min-w-[120px] border-0 bg-transparent p-0 text-sm text-brand-900 placeholder:text-brand-400 focus:ring-0 outline-none"
       />
       {inputVal && (
         <button

@@ -11,7 +11,7 @@ const TYPE_ICONS = {
   application_status:    <FileText className="h-4 w-4 text-brand-500" />,
   job_removed:           <AlertCircle className="h-4 w-4 text-red-500" />,
   ai_ready:              <Sparkles className="h-4 w-4 text-brand-500" />,
-  system:                <Bell className="h-4 w-4 text-slate-500" />,
+  system:                <Bell className="h-4 w-4 text-brand-500" />,
 };
 
 function NotifCard({ notif, onMarkRead }) {
@@ -24,10 +24,10 @@ function NotifCard({ notif, onMarkRead }) {
         {icon}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`text-sm leading-snug ${!notif.read ? 'font-medium text-slate-900' : 'text-slate-700'}`}>
+        <p className={`text-sm leading-snug ${!notif.read ? 'font-medium text-brand-900' : 'text-brand-700'}`}>
           {notif.message || notif.body}
         </p>
-        <p className="text-xs text-slate-400 mt-1">{timeAgo(notif.createdAt)}</p>
+        <p className="text-xs text-brand-400 mt-1">{timeAgo(notif.createdAt)}</p>
       </div>
       {!notif.read && (
         <button
@@ -72,7 +72,7 @@ export default function NotificationsPage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Notifications</h1>
+          <h1 className="text-2xl font-bold text-brand-900">Notifications</h1>
           {unread > 0 && (
             <p className="text-sm text-brand-600 mt-0.5 font-medium">{unread} unread</p>
           )}

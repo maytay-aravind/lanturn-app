@@ -32,8 +32,8 @@ function OverallScoreRing({ score, size = 96 }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold text-slate-900">{score}</span>
-        <span className="text-[10px] uppercase tracking-wide text-slate-400 font-medium">Overall</span>
+        <span className="text-2xl font-bold text-brand-900">{score}</span>
+        <span className="text-[10px] uppercase tracking-wide text-brand-400 font-medium">Overall</span>
       </div>
     </div>
   );
@@ -41,7 +41,7 @@ function OverallScoreRing({ score, size = 96 }) {
 
 function InsightList({ title, items, icon: Icon, tone = 'default' }) {
   const toneClass = {
-    default: 'text-slate-900',
+    default: 'text-brand-900',
     success: 'text-emerald-700',
     warning: 'text-amber-700',
     info: 'text-brand-700',
@@ -55,8 +55,8 @@ function InsightList({ title, items, icon: Icon, tone = 'default' }) {
       </p>
       <ul className="space-y-2">
         {items.map((item, i) => (
-          <li key={i} className="text-sm text-slate-700 flex gap-2">
-            <ChevronRight className="h-4 w-4 text-slate-300 flex-shrink-0 mt-0.5" />
+          <li key={i} className="text-sm text-brand-700 flex gap-2">
+            <ChevronRight className="h-4 w-4 text-brand-300 flex-shrink-0 mt-0.5" />
             <span>{item}</span>
           </li>
         ))}
@@ -104,8 +104,8 @@ export function CareerDNAPanel() {
             <Dna className="h-6 w-6 text-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-slate-900">AI Career DNA</h3>
-            <p className="text-sm text-slate-600 mt-1">
+            <h3 className="font-semibold text-brand-900">AI Career DNA</h3>
+            <p className="text-sm text-brand-600 mt-1">
               Gemini reads your resume and builds a personalized radar profile — dimensions change
               based on your profession, not a fixed template.
             </p>
@@ -134,7 +134,7 @@ export function CareerDNAPanel() {
       {(dnaMutation.isPending || isFetchingSaved) && (
         <div className="card p-8 flex flex-col items-center gap-4 animate-pulse">
           <div className="h-64 w-64 rounded-full bg-slate-100" />
-          <p className="text-sm text-slate-500">Mapping your unique career dimensions…</p>
+          <p className="text-sm text-brand-500">Mapping your unique career dimensions…</p>
         </div>
       )}
 
@@ -149,9 +149,9 @@ export function CareerDNAPanel() {
                 <p className="text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">
                   Your Career DNA
                 </p>
-                <h3 className="text-xl font-bold text-slate-900">{result.careerField}</h3>
+                <h3 className="text-xl font-bold text-brand-900">{result.careerField}</h3>
                 <span className="inline-flex mt-2 badge-brand">{result.candidateLevel}</span>
-                <p className="text-sm text-slate-500 mt-3">
+                <p className="text-sm text-brand-500 mt-3">
                   Click any point on the chart to see why you scored that way and how to improve.
                 </p>
               </div>
@@ -176,7 +176,7 @@ export function CareerDNAPanel() {
                   className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
                     selectedIndex === i
                       ? 'bg-brand-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                      : 'bg-slate-100 text-brand-600 hover:bg-slate-200'
                   }`}
                 >
                   {dim.label} · {dim.score}
@@ -211,7 +211,7 @@ export function CareerDNAPanel() {
             <button
               onClick={() => dnaMutation.mutate()}
               disabled={dnaMutation.isPending}
-              className="px-4 py-2 bg-slate-100 text-slate-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-slate-100 text-brand-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
             >
               <RefreshCw className="h-4 w-4" />
               Re-analyze Resume
@@ -244,21 +244,21 @@ export function CareerDNAPanel() {
                 {selected.score}
               </div>
               <div>
-                <p className="text-sm text-slate-500">Score out of 100</p>
-                <p className="font-semibold text-slate-900">{selected.label}</p>
+                <p className="text-sm text-brand-500">Score out of 100</p>
+                <p className="font-semibold text-brand-900">{selected.label}</p>
               </div>
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand-400 mb-2">
                 AI Analysis
               </p>
-              <p className="text-sm text-slate-700 leading-relaxed">{selected.reason}</p>
+              <p className="text-sm text-brand-700 leading-relaxed">{selected.reason}</p>
             </div>
 
             {selected.suggestions?.length > 0 && (
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2 flex items-center gap-1.5">
+                <p className="text-xs font-semibold uppercase tracking-wide text-brand-400 mb-2 flex items-center gap-1.5">
                   <Lightbulb className="h-3.5 w-3.5" />
                   Suggestions to Improve
                 </p>
@@ -266,7 +266,7 @@ export function CareerDNAPanel() {
                   {selected.suggestions.map((tip, i) => (
                     <li
                       key={i}
-                      className="text-sm text-slate-700 flex gap-2 p-3 rounded-xl bg-slate-50"
+                      className="text-sm text-brand-700 flex gap-2 p-3 rounded-xl bg-slate-50"
                     >
                       <span className="text-brand-500 font-bold flex-shrink-0">{i + 1}.</span>
                       {tip}

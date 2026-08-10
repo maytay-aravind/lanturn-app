@@ -24,7 +24,7 @@ const CircularProgress = ({ value, label, colorClass, size = 40, strokeWidth = 4
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} className="transform -rotate-90">
           <circle
-            className="text-slate-100"
+            className="text-brand-100"
             strokeWidth={strokeWidth}
             stroke="currentColor"
             fill="transparent"
@@ -47,10 +47,10 @@ const CircularProgress = ({ value, label, colorClass, size = 40, strokeWidth = 4
           />
         </svg>
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-xs font-bold text-slate-700">{value}%</span>
+          <span className="text-xs font-bold text-brand-700">{value}%</span>
         </div>
       </div>
-      {label && <span className="text-[10px] font-medium text-slate-500 uppercase tracking-wider">{label}</span>}
+      {label && <span className="text-[10px] font-medium text-brand-500 uppercase tracking-wider">{label}</span>}
     </div>
   );
 };
@@ -68,7 +68,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
   const overallColor = getScoreColor(matchData.matchScore);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+    <div className="bg-white border border-brand-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
       {/* Top Banner (Score) */}
       <div className={`px-4 py-3 border-b flex items-center justify-between ${overallColor.split(' ')[2]} ${overallColor.split(' ')[3]}`}>
         <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
         {/* Left Column: Candidate Info & Breakdown */}
         <div className="flex-1 space-y-5">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 border border-slate-200">
+            <div className="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 border border-brand-200">
               {candidate?.studentPhotoURL ? (
                 <img src={candidate.studentPhotoURL} alt={candidate.studentName} className="h-full w-full object-cover" />
               ) : (
@@ -98,10 +98,10 @@ export default function CandidateMatchCard({ candidate, matchData }) {
               )}
             </div>
             <div className="min-w-0 flex-1">
-              <h3 className="text-lg font-bold text-slate-900 group-hover:text-brand-600 transition-colors truncate">
+              <h3 className="text-lg font-bold text-brand-900 group-hover:text-brand-600 transition-colors truncate">
                 {candidate?.studentName || 'Unknown Candidate'}
               </h3>
-              <p className="text-sm text-slate-500 flex items-center gap-1 mt-0.5">
+              <p className="text-sm text-brand-500 flex items-center gap-1 mt-0.5">
                 <Star className="h-3.5 w-3.5 text-brand-500 fill-brand-500" />
                 {matchData.overallReason || 'Good fit for the role'}
               </p>
@@ -120,24 +120,24 @@ export default function CandidateMatchCard({ candidate, matchData }) {
         <div className="flex-1 flex flex-col justify-between space-y-4 md:border-l md:border-slate-100 md:pl-6">
           <div className="space-y-4">
             <div>
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-brand-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <TrendingUp className="h-3.5 w-3.5 text-green-500" /> Top Strengths
               </h4>
               <ul className="space-y-1.5">
                 {(matchData.recommendations || []).slice(0, 2).map((str, i) => (
-                  <li key={i} className="text-sm text-slate-700 flex items-start gap-2">
+                  <li key={i} className="text-sm text-brand-700 flex items-start gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0 mt-0.5" />
                     <span className="leading-tight">{str}</span>
                   </li>
                 ))}
                 {(!matchData.recommendations || matchData.recommendations.length === 0) && (
-                  <li className="text-sm text-slate-400 italic">No specific strengths highlighted</li>
+                  <li className="text-sm text-brand-400 italic">No specific strengths highlighted</li>
                 )}
               </ul>
             </div>
 
             <div>
-              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <h4 className="text-xs font-bold text-brand-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <AlertTriangle className="h-3.5 w-3.5 text-amber-500" /> Missing / Gap
               </h4>
               <div className="flex flex-wrap gap-1.5">
@@ -147,7 +147,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
                   </span>
                 ))}
                 {(!matchData.missingSkills || matchData.missingSkills.length === 0) && (
-                  <span className="text-sm text-slate-400 italic">No significant gaps detected</span>
+                  <span className="text-sm text-brand-400 italic">No significant gaps detected</span>
                 )}
               </div>
             </div>
@@ -155,7 +155,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
 
           <Link
             to={`/employer/applicants/${candidate?.applicationId}`}
-            className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-50 hover:bg-brand-50 text-slate-700 hover:text-brand-700 text-sm font-semibold rounded-xl border border-slate-200 hover:border-brand-200 transition-colors"
+            className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-50 hover:bg-brand-50 text-brand-700 hover:text-brand-700 text-sm font-semibold rounded-xl border border-brand-200 hover:border-brand-200 transition-colors"
           >
             View Full Profile <ChevronRight className="h-4 w-4" />
           </Link>

@@ -56,9 +56,9 @@ function DetailRow({ icon: Icon, label, value }) {
   if (!value) return null;
   return (
     <div className="flex items-center gap-2.5 text-sm py-1">
-      <Icon className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-      <span className="text-slate-500 min-w-[80px]">{label}</span>
-      <span className="font-medium text-slate-800 truncate">{value}</span>
+      <Icon className="h-3.5 w-3.5 text-brand-400 flex-shrink-0" />
+      <span className="text-brand-500 min-w-[80px]">{label}</span>
+      <span className="font-medium text-brand-800 truncate">{value}</span>
     </div>
   );
 }
@@ -78,9 +78,9 @@ function TagsInput({ value = [], onChange, placeholder = 'Add item...' }) {
     <div>
       <div className="flex flex-wrap gap-2 mb-3">
         {value.map((tag, i) => (
-          <span key={i} className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-200 shadow-sm text-slate-700 text-sm font-medium px-3 py-1.5 hover:border-brand-300 hover:bg-brand-50 transition-colors animate-scale-in">
+          <span key={i} className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-brand-200 shadow-sm text-brand-700 text-sm font-medium px-3 py-1.5 hover:border-brand-300 hover:bg-brand-50 transition-colors animate-scale-in">
             {tag}
-            <button type="button" onClick={() => onChange(value.filter((_, idx) => idx !== i))} className="text-slate-400 hover:text-red-500 transition-colors focus:outline-none">
+            <button type="button" onClick={() => onChange(value.filter((_, idx) => idx !== i))} className="text-brand-400 hover:text-red-500 transition-colors focus:outline-none">
               <X className="h-3.5 w-3.5" />
             </button>
           </span>
@@ -88,7 +88,7 @@ function TagsInput({ value = [], onChange, placeholder = 'Add item...' }) {
       </div>
       <div className="flex gap-2">
         <input
-          className="input flex-1 bg-slate-50 border-slate-200 focus:bg-white"
+          className="input flex-1 bg-slate-50 border-brand-200 focus:bg-white"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
@@ -215,10 +215,10 @@ export default function EmployerProfilePage() {
       
       {/* ── Top Header / Edit Toggle ───────────────────────────── */}
       <div className="flex items-center justify-between px-2">
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Company Profile</h1>
+        <h1 className="text-2xl font-bold text-brand-900 tracking-tight">Company Profile</h1>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className={`btn ${isEditing ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'btn-primary shadow-sm'}`}
+          className={`btn ${isEditing ? 'bg-slate-100 text-brand-700 hover:bg-slate-200' : 'btn-primary shadow-sm'}`}
         >
           {isEditing ? (
             <>Cancel Edit</>
@@ -243,7 +243,7 @@ export default function EmployerProfilePage() {
                 {p.logoURL ? (
                   <img src={p.logoURL} alt="Logo" className="h-full w-full object-cover" />
                 ) : (
-                  <Building2 className="h-12 w-12 text-slate-300" strokeWidth={1.5} />
+                  <Building2 className="h-12 w-12 text-brand-300" strokeWidth={1.5} />
                 )}
               </div>
               <button
@@ -276,7 +276,7 @@ export default function EmployerProfilePage() {
           </div>
 
           <div className="space-y-1">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-bold text-brand-900 tracking-tight">
               {p.companyName || 'Your Company Name'}
             </h1>
             <p className="text-brand-600 font-medium">
@@ -307,8 +307,8 @@ export default function EmployerProfilePage() {
                 <DetailRow icon={Users} label="Employees" value={p.employeeCount} />
                 {p.website && (
                   <div className="flex items-center gap-2.5 text-sm py-1">
-                    <Globe className="h-3.5 w-3.5 text-slate-400 flex-shrink-0" />
-                    <span className="text-slate-500 min-w-[80px]">Website</span>
+                    <Globe className="h-3.5 w-3.5 text-brand-400 flex-shrink-0" />
+                    <span className="text-brand-500 min-w-[80px]">Website</span>
                     <a href={p.website} target="_blank" rel="noreferrer" className="font-medium text-brand-600 hover:underline truncate">
                       {p.website.replace(/^https?:\/\//, '')}
                     </a>
@@ -337,24 +337,24 @@ export default function EmployerProfilePage() {
             <div className="space-y-6">
               {p.description && (
                 <div>
-                  <h3 className="text-sm font-medium text-slate-500 mb-2">About Us</h3>
-                  <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{p.description}</p>
+                  <h3 className="text-sm font-medium text-brand-500 mb-2">About Us</h3>
+                  <p className="text-sm text-brand-700 whitespace-pre-wrap leading-relaxed">{p.description}</p>
                 </div>
               )}
               {p.companyCulture && (
                 <div>
-                  <h3 className="text-sm font-medium text-slate-500 mb-2">Company Culture</h3>
-                  <p className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed">{p.companyCulture}</p>
+                  <h3 className="text-sm font-medium text-brand-500 mb-2">Company Culture</h3>
+                  <p className="text-sm text-brand-700 whitespace-pre-wrap leading-relaxed">{p.companyCulture}</p>
                 </div>
               )}
               
               <Grid2>
                 {p.technologies?.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-medium text-slate-500 mb-2 flex items-center gap-1.5"><Cpu className="h-4 w-4"/> Technologies</h3>
+                    <h3 className="text-sm font-medium text-brand-500 mb-2 flex items-center gap-1.5"><Cpu className="h-4 w-4"/> Technologies</h3>
                     <div className="flex flex-wrap gap-1.5">
                       {p.technologies.map((tech, i) => (
-                        <span key={i} className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200">
+                        <span key={i} className="px-2.5 py-1 rounded-md bg-slate-100 text-brand-600 text-xs font-medium border border-brand-200">
                           {tech}
                         </span>
                       ))}
@@ -363,7 +363,7 @@ export default function EmployerProfilePage() {
                 )}
                 {p.benefits?.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-medium text-slate-500 mb-2 flex items-center gap-1.5"><Heart className="h-4 w-4"/> Benefits</h3>
+                    <h3 className="text-sm font-medium text-brand-500 mb-2 flex items-center gap-1.5"><Heart className="h-4 w-4"/> Benefits</h3>
                     <div className="flex flex-wrap gap-1.5">
                       {p.benefits.map((ben, i) => (
                         <span key={i} className="px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-medium border border-emerald-100">
@@ -377,10 +377,10 @@ export default function EmployerProfilePage() {
 
               {p.achievements?.length > 0 && (
                 <div>
-                  <h3 className="text-sm font-medium text-slate-500 mb-2 flex items-center gap-1.5"><Star className="h-4 w-4"/> Achievements</h3>
+                  <h3 className="text-sm font-medium text-brand-500 mb-2 flex items-center gap-1.5"><Star className="h-4 w-4"/> Achievements</h3>
                   <ul className="space-y-2">
                     {p.achievements.map((ach, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                      <li key={i} className="flex items-start gap-2 text-sm text-brand-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
                         <Star className="h-4 w-4 text-brand-500 flex-shrink-0 mt-0.5" />
                         <span>{ach}</span>
                       </li>
@@ -496,7 +496,7 @@ export default function EmployerProfilePage() {
               </Field>
             </Grid2>
             <div className="pt-4 border-t border-slate-100 mt-4">
-              <h3 className="text-sm font-semibold text-slate-700 mb-3">HR Contact Person</h3>
+              <h3 className="text-sm font-semibold text-brand-700 mb-3">HR Contact Person</h3>
               <Grid2>
                 <Field label="HR Name">
                   <input
@@ -543,7 +543,7 @@ export default function EmployerProfilePage() {
             </Field>
             <Field label="LinkedIn URL">
               <div className="relative">
-                <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <LinkedInIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-brand-400" />
                 <input
                   type="url"
                   className="input pl-10"
@@ -582,7 +582,7 @@ export default function EmployerProfilePage() {
 
           {/* Company DNA Preview */}
           <Section icon={Sparkles} title="Company DNA">
-            <p className="text-sm text-slate-500 -mt-2 mb-3">
+            <p className="text-sm text-brand-500 -mt-2 mb-3">
               This AI-generated personality card is what students see when viewing your company profile.
             </p>
             <CompanyDNAPanel
@@ -603,7 +603,7 @@ export default function EmployerProfilePage() {
           {/* Global Save Button */}
           <div className="sticky bottom-6 z-30 flex justify-end">
             <div className="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-brand-100 animate-slide-up flex items-center gap-4">
-              <span className="text-sm font-medium text-slate-500">Unsaved changes</span>
+              <span className="text-sm font-medium text-brand-500">Unsaved changes</span>
               <button
                 onClick={handleSaveAll}
                 disabled={saveMutation.isPending}

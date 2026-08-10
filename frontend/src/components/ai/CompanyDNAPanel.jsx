@@ -45,8 +45,8 @@ function ScoreRing({ score, size = 96, label = 'Overall' }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold text-slate-900">{animatedScore}</span>
-        <span className="text-[10px] uppercase tracking-wide text-slate-400 font-medium">{label}</span>
+        <span className="text-2xl font-bold text-brand-900">{animatedScore}</span>
+        <span className="text-[10px] uppercase tracking-wide text-brand-400 font-medium">{label}</span>
       </div>
     </div>
   );
@@ -77,12 +77,12 @@ function AnimatedBar({ score, name, delay = 0, onClick }) {
       className="w-full text-left group p-3 rounded-xl hover:bg-slate-50/80 transition-colors"
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-slate-700 group-hover:text-brand-700 transition-colors">
+        <span className="text-sm font-medium text-brand-700 group-hover:text-brand-700 transition-colors">
           {name}
         </span>
         <div className="flex items-center gap-1.5">
-          <span className="text-sm font-bold text-slate-900">{score}%</span>
-          <ChevronRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-brand-500 transition-colors" />
+          <span className="text-sm font-bold text-brand-900">{score}%</span>
+          <ChevronRight className="h-3.5 w-3.5 text-brand-300 group-hover:text-brand-500 transition-colors" />
         </div>
       </div>
       <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden" ref={barRef}>
@@ -115,7 +115,7 @@ export function CompanyDNAPanel({
     return (
       <div className="card p-8 flex flex-col items-center gap-4 animate-pulse">
         <div className="h-48 w-48 rounded-full bg-slate-100" />
-        <p className="text-sm text-slate-500">Loading Company DNA…</p>
+        <p className="text-sm text-brand-500">Loading Company DNA…</p>
       </div>
     );
   }
@@ -132,8 +132,8 @@ export function CompanyDNAPanel({
               <Building2 className="h-6 w-6 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-slate-900">AI Company DNA</h3>
-              <p className="text-sm text-slate-600 mt-1">
+              <h3 className="font-semibold text-brand-900">AI Company DNA</h3>
+              <p className="text-sm text-brand-600 mt-1">
                 Generate an AI-powered workplace personality profile. Students will see this when
                 viewing your company — helping them understand your culture, values, and work environment.
               </p>
@@ -195,11 +195,11 @@ export function CompanyDNAPanel({
               <Sparkles className="h-3.5 w-3.5" />
               Company DNA
             </p>
-            <h3 className="text-xl font-bold text-slate-900">{companyName}</h3>
+            <h3 className="text-xl font-bold text-brand-900">{companyName}</h3>
             <span className="inline-flex mt-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 border border-brand-100">
               {data.companyPersonality}
             </span>
-            <p className="text-sm text-slate-600 mt-2 leading-relaxed">{data.summary}</p>
+            <p className="text-sm text-brand-600 mt-2 leading-relaxed">{data.summary}</p>
           </div>
         </div>
       </div>
@@ -211,8 +211,8 @@ export function CompanyDNAPanel({
           onClick={() => setShowRadar(true)}
           className={`text-xs px-4 py-1.5 rounded-lg font-medium transition-all ${
             showRadar
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-500 hover:text-slate-700'
+              ? 'bg-white text-brand-900 shadow-sm'
+              : 'text-brand-500 hover:text-brand-700'
           }`}
         >
           Radar Chart
@@ -222,8 +222,8 @@ export function CompanyDNAPanel({
           onClick={() => setShowRadar(false)}
           className={`text-xs px-4 py-1.5 rounded-lg font-medium transition-all ${
             !showRadar
-              ? 'bg-white text-slate-900 shadow-sm'
-              : 'text-slate-500 hover:text-slate-700'
+              ? 'bg-white text-brand-900 shadow-sm'
+              : 'text-brand-500 hover:text-brand-700'
           }`}
         >
           Progress Bars
@@ -249,7 +249,7 @@ export function CompanyDNAPanel({
                 className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
                   selectedIndex === i
                     ? 'bg-brand-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    : 'bg-slate-100 text-brand-600 hover:bg-slate-200'
                 }`}
               >
                 {dim.label} · {dim.score}
@@ -278,7 +278,7 @@ export function CompanyDNAPanel({
           <button
             onClick={onRegenerate}
             disabled={isRegenerating}
-            className="px-4 py-2 bg-slate-100 text-slate-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-slate-100 text-brand-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
           >
             {isRegenerating ? (
               <>
@@ -297,7 +297,7 @@ export function CompanyDNAPanel({
 
       {/* Click hint for students */}
       {!isEmployerView && (
-        <p className="text-xs text-slate-400 text-center flex items-center justify-center gap-1">
+        <p className="text-xs text-brand-400 text-center flex items-center justify-center gap-1">
           <Info className="h-3 w-3" />
           Click any dimension to see the AI explanation
         </p>
@@ -327,16 +327,16 @@ export function CompanyDNAPanel({
                 {selected.score}
               </div>
               <div>
-                <p className="text-sm text-slate-500">Score out of 100</p>
-                <p className="font-semibold text-slate-900">{selected.name}</p>
+                <p className="text-sm text-brand-500">Score out of 100</p>
+                <p className="font-semibold text-brand-900">{selected.name}</p>
               </div>
             </div>
 
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-brand-400 mb-2">
                 AI Analysis
               </p>
-              <p className="text-sm text-slate-700 leading-relaxed">{selected.reason}</p>
+              <p className="text-sm text-brand-700 leading-relaxed">{selected.reason}</p>
             </div>
           </div>
         )}

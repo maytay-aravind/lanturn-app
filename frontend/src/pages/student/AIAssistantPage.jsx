@@ -45,7 +45,7 @@ function ScoreRing({ score, size = 80, label = 'Score' }) {
         <text x="50%" y="50%" dominantBaseline="middle" textAnchor="middle"
               fontSize="16" fontWeight="700" fill={color}>{score}</text>
       </svg>
-      <span className="text-xs text-slate-500">{label}</span>
+      <span className="text-xs text-brand-500">{label}</span>
     </div>
   );
 }
@@ -101,7 +101,7 @@ function ChatTab() {
             }`}>
               {m.role === 'assistant'
                 ? <Bot className="h-3.5 w-3.5 text-brand-600" />
-                : <User className="h-3.5 w-3.5 text-slate-600" />
+                : <User className="h-3.5 w-3.5 text-brand-600" />
               }
             </div>
             <div className={m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}>
@@ -115,8 +115,8 @@ function ChatTab() {
               <Bot className="h-3.5 w-3.5 text-brand-600" />
             </div>
             <div className="chat-bubble-ai flex items-center gap-1.5">
-              <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-400" />
-              <span className="text-slate-400 text-xs">Thinking...</span>
+              <Loader2 className="h-3.5 w-3.5 animate-spin text-brand-400" />
+              <span className="text-brand-400 text-xs">Thinking...</span>
             </div>
           </div>
         )}
@@ -130,7 +130,7 @@ function ChatTab() {
             <button
               key={s}
               onClick={() => { setInput(s); }}
-              className="text-xs px-3 py-1.5 rounded-full bg-white ring-1 ring-slate-200 text-slate-600 hover:ring-brand-300 hover:text-brand-700 transition-colors"
+              className="text-xs px-3 py-1.5 rounded-full bg-white ring-1 ring-brand-200 text-brand-600 hover:ring-brand-300 hover:text-brand-700 transition-colors"
             >
               {s}
             </button>
@@ -183,7 +183,7 @@ function ResumeReviewTab() {
     <div className="space-y-5">
       <div className="p-4 rounded-2xl bg-slate-50 space-y-3">
         <div>
-          <label className="label">Target Role <span className="text-slate-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
+          <label className="label">Target Role <span className="text-brand-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
           <input className="input" placeholder="Will be predicted from your resume…" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
         </div>
         <button
@@ -203,8 +203,8 @@ function ResumeReviewTab() {
             <div className="card p-5 flex items-center gap-6">
               <ScoreRing score={result.score ?? result.ats_score ?? 0} label="Score" />
               <div>
-                <p className="font-semibold text-slate-900">Resume Score</p>
-                <p className="text-sm text-slate-500">Powered by Gemini AI</p>
+                <p className="font-semibold text-brand-900">Resume Score</p>
+                <p className="text-sm text-brand-500">Powered by Gemini AI</p>
                 {result.predictedRole && (
                   <p className="text-xs text-brand-600 mt-1">🎯 Analyzed for: <span className="font-medium">{result.predictedRole}</span></p>
                 )}
@@ -219,7 +219,7 @@ function ResumeReviewTab() {
               <div className="flex flex-wrap gap-2">
                 {result.resumeKeywords.map((k) => <span key={k} className="badge-brand">{k}</span>)}
               </div>
-              <p className="text-xs text-slate-400 mt-2">These keywords were extracted from your resume and sent to AI for scoring</p>
+              <p className="text-xs text-brand-400 mt-2">These keywords were extracted from your resume and sent to AI for scoring</p>
             </div>
           )}
 
@@ -228,7 +228,7 @@ function ResumeReviewTab() {
             <div className="card p-5">
               <p className="section-title mb-3 text-emerald-700">✅ Strengths</p>
               <ul className="space-y-1">
-                {result.strengths.map((s, i) => <li key={i} className="text-sm text-slate-700 flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />{s}</li>)}
+                {result.strengths.map((s, i) => <li key={i} className="text-sm text-brand-700 flex gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0 mt-0.5" />{s}</li>)}
               </ul>
             </div>
           )}
@@ -238,8 +238,8 @@ function ResumeReviewTab() {
             <div className="card p-5">
               <p className="section-title mb-3 text-amber-700">⚠️ Improvements</p>
               <ul className="space-y-1">
-                {(result.weaknesses || []).map((w, i) => <li key={i} className="text-sm text-slate-700 flex gap-2"><AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />{w}</li>)}
-                {(result.suggestions || []).map((s, i) => <li key={i} className="text-sm text-slate-700 flex gap-2"><ChevronRight className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" /><span><b>{s.area}</b>: {s.fix}</span></li>)}
+                {(result.weaknesses || []).map((w, i) => <li key={i} className="text-sm text-brand-700 flex gap-2"><AlertCircle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />{w}</li>)}
+                {(result.suggestions || []).map((s, i) => <li key={i} className="text-sm text-brand-700 flex gap-2"><ChevronRight className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" /><span><b>{s.area}</b>: {s.fix}</span></li>)}
               </ul>
             </div>
           )}
@@ -248,7 +248,7 @@ function ResumeReviewTab() {
           {result.keywordsMissing?.length > 0 && (
             <div className="card p-5">
               <p className="section-title mb-3 text-red-700">🔍 Missing Keywords</p>
-              <p className="text-xs text-slate-500 mb-2">Add these keywords to your resume to improve your score</p>
+              <p className="text-xs text-brand-500 mb-2">Add these keywords to your resume to improve your score</p>
               <div className="flex flex-wrap gap-2">
                 {result.keywordsMissing.map((k) => <span key={k} className="badge-red">{k}</span>)}
               </div>
@@ -316,7 +316,7 @@ function JobMatchTab() {
               return <ScoreRing score={displayScore} label="Match" />;
             })()}
             <div>
-              <p className="font-semibold text-slate-900">Resume Match Score</p>
+              <p className="font-semibold text-brand-900">Resume Match Score</p>
               {result.experienceFit && (
                 <span className={`badge mt-1 ${result.experienceFit === 'strong' ? 'badge-green' : result.experienceFit === 'partial' ? 'badge-yellow' : 'badge-red'}`}>
                   {result.experienceFit} experience fit
@@ -328,7 +328,7 @@ function JobMatchTab() {
           {result.summary && (
             <div className="card p-5">
               <p className="section-title mb-2">Summary</p>
-              <p className="text-sm text-slate-700">{result.summary}</p>
+              <p className="text-sm text-brand-700">{result.summary}</p>
             </div>
           )}
 
@@ -374,8 +374,8 @@ export default function AIAssistantPage() {
           <Sparkles className="h-5 w-5 text-white" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">AI Career Assistant</h1>
-          <p className="text-sm text-slate-500">Powered by Gemini AI</p>
+          <h1 className="text-2xl font-bold text-brand-900">AI Career Assistant</h1>
+          <p className="text-sm text-brand-500">Powered by Gemini AI</p>
         </div>
       </div>
 
@@ -386,7 +386,7 @@ export default function AIAssistantPage() {
             key={id}
             onClick={() => changeTab(id)}
             className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
-              tab === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              tab === id ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'
             }`}
           >
             <Icon className="h-4 w-4" />

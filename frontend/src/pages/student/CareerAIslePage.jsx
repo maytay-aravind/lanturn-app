@@ -60,11 +60,11 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
       >
         <div className="p-6 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
           <div>
-            <h2 className="text-xl font-bold text-slate-900">Choose a Career Path</h2>
-            <p className="text-sm text-slate-500 mt-0.5">{domains.length} domains available</p>
+            <h2 className="text-xl font-bold text-brand-900">Choose a Career Path</h2>
+            <p className="text-sm text-brand-500 mt-0.5">{domains.length} domains available</p>
           </div>
           <button onClick={onClose} className="h-8 w-8 rounded-xl bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
-            <X className="h-4 w-4 text-slate-500" />
+            <X className="h-4 w-4 text-brand-500" />
           </button>
         </div>
         <div className="px-6 py-3 border-b border-slate-100 flex-shrink-0">
@@ -85,7 +85,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   className={`text-left p-4 rounded-2xl ring-1 transition-all duration-200 ${
                     isEnrolled
                       ? 'bg-emerald-50 ring-emerald-200 cursor-default'
-                      : 'bg-white ring-slate-200 hover:ring-brand-300 hover:shadow-md cursor-pointer'
+                      : 'bg-white ring-brand-200 hover:ring-brand-300 hover:shadow-md cursor-pointer'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -98,11 +98,11 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-slate-900 text-sm">{domain.title}</span>
+                        <span className="font-semibold text-brand-900 text-sm">{domain.title}</span>
                         {isEnrolled && <span className="badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 text-xs">Enrolled</span>}
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{domain.description}</p>
-                      <div className="flex items-center gap-3 mt-1.5 text-xs text-slate-400">
+                      <p className="text-xs text-brand-500 mt-0.5 line-clamp-2">{domain.description}</p>
+                      <div className="flex items-center gap-3 mt-1.5 text-xs text-brand-400">
                         <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{domain.estimatedMonths}mo</span>
                         <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{domain.stageCount} stages</span>
                       </div>
@@ -132,12 +132,12 @@ function TopicRow({ topic, checked, onToggle, isLoading, accentColor, stageCompl
         checked
           ? 'bg-emerald-50 ring-1 ring-emerald-200'
           : stageCompleted
-          ? 'bg-slate-50 ring-1 ring-slate-200'
-          : 'bg-slate-50/50 hover:bg-slate-100 ring-1 ring-transparent hover:ring-slate-200'
+          ? 'bg-slate-50 ring-1 ring-brand-200'
+          : 'bg-slate-50/50 hover:bg-slate-100 ring-1 ring-transparent hover:ring-brand-200'
       }`}
     >
       <span className={`text-sm pr-3 font-medium transition-all duration-300 ${
-        checked ? 'line-through text-emerald-600/60' : 'text-slate-700 group-hover:text-slate-900'
+        checked ? 'line-through text-emerald-600/60' : 'text-brand-700 group-hover:text-brand-900'
       }`}>
         {topic}
       </span>
@@ -153,7 +153,7 @@ function TopicRow({ topic, checked, onToggle, isLoading, accentColor, stageCompl
             <CheckCircle2 className="h-5 w-5 text-emerald-500 keep-color" />
           </motion.div>
         ) : (
-          <div className="h-5 w-5 rounded-full border-2 border-slate-300 group-hover:border-slate-400 transition-colors" />
+          <div className="h-5 w-5 rounded-full border-2 border-brand-300 group-hover:border-slate-400 transition-colors" />
         )}
       </div>
     </motion.button>
@@ -194,10 +194,10 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
         {/* Header row */}
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-400">
               Timeframe: Weeks {startWeek}–{endWeek}
             </p>
-            <p className="text-base font-bold text-slate-900 mt-0.5">{stage.title}</p>
+            <p className="text-base font-bold text-brand-900 mt-0.5">{stage.title}</p>
           </div>
           {stageCompleted && (
             <motion.div
@@ -259,20 +259,20 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
               : 'linear-gradient(135deg, #f8fafc, #f1f5f9)',
           }}
           transition={{ duration: 0.5 }}
-          className="rounded-2xl p-4 mb-4 ring-1 ring-slate-200"
+          className="rounded-2xl p-4 mb-4 ring-1 ring-brand-200"
         >
           <p className="text-[10px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"
              style={{ color: accentHex }}>
             <Code2 className="h-3.5 w-3.5" /> Stage Project
           </p>
-          <p className="text-sm font-semibold text-slate-900">{stage.project.title}</p>
-          <p className="text-xs text-slate-500 mt-1 leading-relaxed">{stage.project.description}</p>
+          <p className="text-sm font-semibold text-brand-900">{stage.project.title}</p>
+          <p className="text-xs text-brand-500 mt-1 leading-relaxed">{stage.project.description}</p>
         </motion.div>
 
         {/* Resources */}
         {stage.resources.length > 0 && (
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2.5">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-2.5">
               Recommended Study Resources
             </p>
             <div className="space-y-2">
@@ -340,13 +340,13 @@ function RoadmapTimeline({ roadmap, onRemove }) {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between px-2 bg-slate-50/50 py-3 rounded-2xl ring-1 ring-slate-200/60"
+        className="flex items-center justify-between px-2 bg-slate-50/50 py-3 rounded-2xl ring-1 ring-brand-200/60"
       >
-        <div className="flex gap-6 text-sm text-slate-600 font-medium px-4 flex-wrap">
+        <div className="flex gap-6 text-sm text-brand-600 font-medium px-4 flex-wrap">
           <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-brand-400" /> {roadmap.percentComplete}% Complete</span>
           <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400" /> {roadmap.completedTopics}/{roadmap.totalTopics} topics</span>
-          <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-slate-400" /> {roadmap.domain.stages.length} stages</span>
-          <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-slate-400" /> ~{roadmap.domain.estimatedMonths} months</span>
+          <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-brand-400" /> {roadmap.domain.stages.length} stages</span>
+          <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-brand-400" /> ~{roadmap.domain.estimatedMonths} months</span>
         </div>
         <button
           onClick={handleRemove}
@@ -419,11 +419,11 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                   >
                     <motion.p
                       animate={{ opacity: 1 }}
-                      className="text-slate-900/80 text-[11px] font-black uppercase tracking-widest"
+                      className="text-brand-900/80 text-[11px] font-black uppercase tracking-widest"
                     >
                       {stageCompleted ? '✓ Complete' : `Stage ${si + 1}`}
                     </motion.p>
-                    <p className="text-slate-900 text-base font-black leading-tight mt-1.5">
+                    <p className="text-brand-900 text-base font-black leading-tight mt-1.5">
                       {stage.title}
                     </p>
                   </motion.div>
@@ -519,9 +519,9 @@ export default function CareerAIslePage() {
             <div className="h-9 w-9 rounded-xl bg-brand-600 flex items-center justify-center shadow-md">
               <Map className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">CareerAIsle</h1>
+            <h1 className="text-2xl font-bold text-brand-900">CareerAIsle</h1>
           </div>
-          <p className="text-sm text-slate-500 mt-1 ml-[44px]">Structured, stage-by-stage career learning paths</p>
+          <p className="text-sm text-brand-500 mt-1 ml-[44px]">Structured, stage-by-stage career learning paths</p>
         </div>
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -549,12 +549,12 @@ export default function CareerAIslePage() {
                 className={`flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition-all ${
                   isActive
                     ? 'bg-slate-900 text-white shadow-md'
-                    : 'bg-white ring-1 ring-slate-200 text-slate-600 hover:ring-slate-300'
+                    : 'bg-white ring-1 ring-brand-200 text-brand-600 hover:ring-brand-300'
                 }`}
               >
                 <DIcon className="h-4 w-4" />
                 <span>{rm.domainTitle}</span>
-                <span className={`text-xs font-medium ${isActive ? 'opacity-70' : 'text-slate-400'}`}>
+                <span className={`text-xs font-medium ${isActive ? 'opacity-70' : 'text-brand-400'}`}>
                   {rm.percentComplete}%
                 </span>
               </motion.button>
@@ -573,8 +573,8 @@ export default function CareerAIslePage() {
           <div className="h-16 w-16 rounded-3xl bg-brand-50 flex items-center justify-center mx-auto">
             <Map className="h-8 w-8 text-brand-500" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900">Start your career journey</h2>
-          <p className="text-sm text-slate-500 max-w-md mx-auto">
+          <h2 className="text-xl font-bold text-brand-900">Start your career journey</h2>
+          <p className="text-sm text-brand-500 max-w-md mx-auto">
             Pick a career domain and get a structured stage-by-stage roadmap with topics, projects, and curated resources.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
@@ -584,7 +584,7 @@ export default function CareerAIslePage() {
                 <button
                   key={d.id}
                   onClick={() => setShowPicker(true)}
-                  className="flex items-center gap-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium px-3 py-1.5 hover:bg-brand-50 hover:text-brand-700 transition-colors"
+                  className="flex items-center gap-1.5 rounded-full bg-slate-100 text-brand-700 text-xs font-medium px-3 py-1.5 hover:bg-brand-50 hover:text-brand-700 transition-colors"
                 >
                   <DIcon className="h-3.5 w-3.5" /> {d.title}
                 </button>

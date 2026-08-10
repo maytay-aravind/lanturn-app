@@ -86,7 +86,7 @@ export default function Navbar() {
                 `flex items-center gap-2 px-3 py-1.5 rounded-xl text-sm font-medium transition-colors ${
                   isActive
                     ? 'bg-brand-50 text-brand-700'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    : 'text-brand-600 hover:bg-slate-50 hover:text-brand-900'
                 }`
               }
             >
@@ -103,7 +103,7 @@ export default function Navbar() {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            className="h-9 w-9 rounded-xl flex items-center justify-center text-brand-500 hover:bg-slate-100 hover:text-brand-900 transition-colors"
             title="Toggle theme"
           >
             {isDark ? <Sun className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} /> : <Moon className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />}
@@ -112,7 +112,7 @@ export default function Navbar() {
           {/* Notifications */}
           <NavLink
             to={role === 'employer' ? '/employer/notifications' : '/notifications'}
-            className="relative h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            className="relative h-9 w-9 rounded-xl flex items-center justify-center text-brand-500 hover:bg-slate-100 hover:text-brand-900 transition-colors"
           >
             <Bell className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
             {unread > 0 && (
@@ -124,19 +124,19 @@ export default function Navbar() {
 
           {/* User menu */}
           <div className="relative group">
-            <button className="flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors">
+            <button className="flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm font-medium text-brand-700 hover:bg-slate-100 transition-colors">
               <div className="h-6 w-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xs font-bold flex-shrink-0">
                 {displayName.charAt(0).toUpperCase()}
               </div>
               <span className="hidden sm:block max-w-[100px] truncate">{displayName}</span>
-              <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+              <ChevronDown className="h-3.5 w-3.5 text-brand-400" />
             </button>
 
             {/* Dropdown */}
-            <div className="absolute right-0 top-full mt-1 w-44 rounded-xl bg-white shadow-lg ring-1 ring-slate-200 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 animate-scale-in">
+            <div className="absolute right-0 top-full mt-1 w-44 rounded-xl bg-white shadow-lg ring-1 ring-brand-200 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 animate-scale-in">
               <NavLink
                 to={role === 'employer' ? '/employer/profile' : '/profile'}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-50 w-full"
+                className="flex items-center gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-slate-50 w-full"
               >
                 <User className="h-3.5 w-3.5" /> Profile
               </NavLink>
@@ -153,7 +153,7 @@ export default function Navbar() {
           {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100"
+            className="lg:hidden h-9 w-9 rounded-xl flex items-center justify-center text-brand-500 hover:bg-slate-100"
           >
             {mobileOpen ? <X className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} /> : <Menu className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />}
           </button>
