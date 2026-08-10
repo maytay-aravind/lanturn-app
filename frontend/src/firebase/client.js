@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, connectAuthEmulator } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 /**
- * Firebase is used ONLY for Google Authentication.
+ * Firebase is used for Authentication (Google, Email/Password, Phone).
  * All database and storage operations go through the backend API (Supabase).
  */
 const firebaseConfig = {
@@ -25,5 +25,11 @@ export {
   onAuthStateChanged,
   signInWithPopup,
   signOut,
+  // Email/Password auth
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  // Phone auth
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
 } from 'firebase/auth';
 

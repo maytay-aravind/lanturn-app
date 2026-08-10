@@ -1,18 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import toast from 'react-hot-toast';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles, Loader2, Mail, Phone, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
-  const { loginWithGoogle, logout, firebaseUser, role, isOnboarded, loading } = useAuth();
+  const {
+    loginWithGoogle, loginWithEmail, registerWithEmail,
+    setupRecaptcha, requestPhoneOtp, verifyPhoneOtp,
+    logout, firebaseUser, role, isOnboarded, loading,
+  } = useAuth();
   const navigate = useNavigate();
-  const [signingIn, setSigningIn] = useState(false);
-  const [mode, setMode] = useState('signin'); // 'signin' | 'signup'
 
-  // Redirect users who arrive at /login while already authenticated (e.g. page
-  // refresh). The signingIn guard prevents this from firing mid-handler while
-  // Firebase / session state is still transitioning after a fresh sign-in.
+  const [signingIn, setSigningIn] = useState(false);
+  const [mode, setMode] = useState('signin');           // 'signin' | 'signup'
+  const [authMethod, setAuthMethod] = useState('email'); // 'email' | 'phone'
+
+  // Email form state
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Phone form state
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const confirmationRef = useRef(null);
+
+  // ── Redirect authenticated users ──────────────────────────────────────
   useEffect(() => {
     if (!loading && firebaseUser && !signingIn) {
       if (isOnboarded && role) {
@@ -20,70 +35,180 @@ export default function LoginPage() {
         else if (role === 'employer') navigate('/employer/dashboard',  { replace: true });
         else if (role === 'admin')    navigate('/admin',               { replace: true });
       }
-      // NOTE: do NOT auto-redirect to /onboarding here.
-      // New users are sent there explicitly inside handleSignUp.
     }
   }, [loading, firebaseUser, role, isOnboarded, navigate, signingIn]);
 
-  // ── SIGN IN ──────────────────────────────────────────────────────────────
-  const handleSignIn = async () => {
+  // Reset form when switching modes
+  useEffect(() => {
+    setEmail('');
+    setPassword('');
+    setPhoneNumber('');
+    setOtp('');
+    setOtpSent(false);
+    confirmationRef.current = null;
+  }, [mode, authMethod]);
+
+  // ── Helpers ────────────────────────────────────────────────────────────
+  function mapFirebaseError(err) {
+    const map = {
+      'auth/user-not-found':          'No account found with this email.',
+      'auth/wrong-password':          'Incorrect password.',
+      'auth/invalid-credential':      'Invalid email or password.',
+      'auth/email-already-in-use':    'This email is already registered. Try signing in.',
+      'auth/weak-password':           'Password must be at least 6 characters.',
+      'auth/invalid-email':           'Please enter a valid email address.',
+      'auth/too-many-requests':       'Too many attempts. Please try again later.',
+      'auth/invalid-phone-number':    'Please enter a valid phone number (e.g. +91…).',
+      'auth/invalid-verification-code': 'Invalid OTP code. Please try again.',
+      'auth/code-expired':            'OTP has expired. Please request a new one.',
+      'auth/popup-closed-by-user':    null, // silent
+      'auth/cancelled-popup-request': null, // silent
+    };
+    return map[err.code] ?? (err.code?.startsWith('auth/') ? 'Authentication failed. Please try again.' : null);
+  }
+
+  // ── Google handlers (unchanged logic) ─────────────────────────────────
+  const handleGoogleSignIn = async () => {
     setSigningIn(true);
     try {
       const { session } = await loginWithGoogle();
-
       if (!session?.role) {
-        // Google auth succeeded but no lanTURN account exists for this user.
         toast.error('No account found. Please sign up first.');
-        // Clean up the Firebase session so the app returns to a logged-out state.
         await logout();
         return;
       }
-
       toast.success('Welcome back!');
-      // useEffect fires when signingIn becomes false → redirects to dashboard.
     } catch (err) {
-      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
-      if (err.code?.startsWith('auth/')) {
-        toast.error('Google sign-in failed. Please try again.');
-        console.error('Firebase auth error:', err.code, err.message);
-        return;
-      }
-      toast.error('Something went wrong. Please try again.');
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'Something went wrong. Please try again.');
       console.error('Sign-in error:', err);
     } finally {
       setSigningIn(false);
     }
   };
 
-  // ── SIGN UP ──────────────────────────────────────────────────────────────
-  const handleSignUp = async () => {
+  const handleGoogleSignUp = async () => {
     setSigningIn(true);
     try {
       const { session } = await loginWithGoogle();
-
       if (session?.role) {
-        // This Google account is already registered on lanTURN.
         toast.success('You already have an account! Taking you to your dashboard.');
-        // useEffect handles the redirect once signingIn becomes false.
         return;
       }
-
-      // Genuinely new user — send to onboarding.
       navigate('/onboarding', { replace: true });
     } catch (err) {
-      if (err.code === 'auth/popup-closed-by-user' || err.code === 'auth/cancelled-popup-request') return;
-      if (err.code?.startsWith('auth/')) {
-        toast.error('Google sign-up failed. Please try again.');
-        console.error('Firebase auth error:', err.code, err.message);
-        return;
-      }
-      toast.error('Something went wrong. Please try again.');
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'Something went wrong. Please try again.');
       console.error('Sign-up error:', err);
     } finally {
       setSigningIn(false);
     }
   };
 
+  // ── Email handlers ────────────────────────────────────────────────────
+  const handleEmailSignIn = async (e) => {
+    e.preventDefault();
+    if (!email || !password) return toast.error('Please enter both email and password.');
+    setSigningIn(true);
+    try {
+      const { session } = await loginWithEmail(email, password);
+      if (!session?.role) {
+        toast.error('No account found. Please sign up first.');
+        await logout();
+        return;
+      }
+      toast.success('Welcome back!');
+    } catch (err) {
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'Sign-in failed. Please try again.');
+      console.error('Email sign-in error:', err);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const handleEmailSignUp = async (e) => {
+    e.preventDefault();
+    if (!email || !password) return toast.error('Please enter both email and password.');
+    if (password.length < 6) return toast.error('Password must be at least 6 characters.');
+    setSigningIn(true);
+    try {
+      const { session } = await registerWithEmail(email, password);
+      if (session?.role) {
+        toast.success('You already have an account! Taking you to your dashboard.');
+        return;
+      }
+      navigate('/onboarding', { replace: true });
+    } catch (err) {
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'Sign-up failed. Please try again.');
+      console.error('Email sign-up error:', err);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  // ── Phone handlers ────────────────────────────────────────────────────
+  const handleSendOtp = async (e) => {
+    e.preventDefault();
+    if (!phoneNumber) return toast.error('Please enter your phone number.');
+    if (!/^\+\d{10,15}$/.test(phoneNumber.replace(/\s/g, ''))) {
+      return toast.error('Enter a valid phone number with country code (e.g. +91XXXXXXXXXX).');
+    }
+    setSigningIn(true);
+    try {
+      const appVerifier = setupRecaptcha('recaptcha-container');
+      const confirmation = await requestPhoneOtp(phoneNumber, appVerifier);
+      confirmationRef.current = confirmation;
+      setOtpSent(true);
+      toast.success('OTP sent! Check your phone.');
+    } catch (err) {
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'Failed to send OTP. Please try again.');
+      console.error('OTP send error:', err);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault();
+    if (!otp) return toast.error('Please enter the OTP code.');
+    setSigningIn(true);
+    try {
+      const { session } = await verifyPhoneOtp(confirmationRef.current, otp);
+
+      if (mode === 'signin') {
+        if (!session?.role) {
+          toast.error('No account found. Please sign up first.');
+          await logout();
+          return;
+        }
+        toast.success('Welcome back!');
+      } else {
+        // signup
+        if (session?.role) {
+          toast.success('You already have an account! Taking you to your dashboard.');
+          return;
+        }
+        navigate('/onboarding', { replace: true });
+      }
+    } catch (err) {
+      const msg = mapFirebaseError(err);
+      if (msg === null) return;
+      toast.error(msg || 'OTP verification failed. Please try again.');
+      console.error('OTP verify error:', err);
+    } finally {
+      setSigningIn(false);
+    }
+  };
+
+  // ── Loading state ─────────────────────────────────────────────────────
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[80vh]">
@@ -92,6 +217,7 @@ export default function LoginPage() {
     );
   }
 
+  // ── Render ────────────────────────────────────────────────────────────
   return (
     <div className="flex items-center justify-center min-h-[85vh]">
       <div className="w-full max-w-md">
@@ -137,46 +263,238 @@ export default function LoginPage() {
             </button>
           </div>
 
-          {/* Heading + action button — switches by mode */}
-          {mode === 'signin' ? (
-            <>
-              <h2 className="text-xl font-bold text-slate-900 mb-1 text-center">Welcome back</h2>
-              <p className="text-sm text-slate-500 mb-6 text-center">
-                Sign in to continue to your dashboard
-              </p>
+          {/* Heading */}
+          <h2 className="text-xl font-bold text-slate-900 mb-1 text-center">
+            {mode === 'signin' ? 'Welcome back' : 'Create your account'}
+          </h2>
+          <p className="text-sm text-slate-500 mb-6 text-center">
+            {mode === 'signin'
+              ? 'Sign in to continue to your dashboard'
+              : 'Join lanTURN to kick-start your career journey'}
+          </p>
+
+          {/* Google button */}
+          <button
+            id={mode === 'signin' ? 'btn-google-signin' : 'btn-google-signup'}
+            onClick={mode === 'signin' ? handleGoogleSignIn : handleGoogleSignUp}
+            disabled={signingIn}
+            className={`w-full flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold
+                       transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${
+              mode === 'signin'
+                ? 'bg-white text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 hover:ring-slate-300'
+                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+            }`}
+          >
+            {signingIn && authMethod === 'email' ? null : (
+              signingIn ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleLogo white={mode === 'signup'} />
+            )}
+            {mode === 'signin' ? 'Continue with Google' : 'Sign up with Google'}
+          </button>
+
+          {/* OR divider */}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-slate-200" />
+            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">or</span>
+            <div className="flex-1 h-px bg-slate-200" />
+          </div>
+
+          {/* Email / Phone toggle */}
+          <div className="flex rounded-lg overflow-hidden border border-slate-200 mb-5 p-0.5 bg-slate-50 gap-0.5">
+            <button
+              id="toggle-email"
+              onClick={() => setAuthMethod('email')}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${
+                authMethod === 'email'
+                  ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Mail className="h-3.5 w-3.5" />
+              Email
+            </button>
+            <button
+              id="toggle-phone"
+              onClick={() => setAuthMethod('phone')}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${
+                authMethod === 'phone'
+                  ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200'
+                  : 'text-slate-500 hover:text-slate-700'
+              }`}
+            >
+              <Phone className="h-3.5 w-3.5" />
+              Phone
+            </button>
+          </div>
+
+          {/* ── Email form ─────────────────────────────────────────── */}
+          {authMethod === 'email' && (
+            <form onSubmit={mode === 'signin' ? handleEmailSignIn : handleEmailSignUp} className="space-y-4">
+              <div>
+                <label htmlFor="email-input" className="block text-sm font-medium text-slate-700 mb-1">
+                  Email address
+                </label>
+                <input
+                  id="email-input"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
+                             placeholder:text-slate-400 outline-none
+                             focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                             transition-all duration-200"
+                />
+              </div>
+              <div>
+                <label htmlFor="password-input" className="block text-sm font-medium text-slate-700 mb-1">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    id="password-input"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete={mode === 'signin' ? 'current-password' : 'new-password'}
+                    required
+                    minLength={6}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={mode === 'signin' ? 'Enter your password' : 'Create a password (min. 6 chars)'}
+                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-11 text-sm text-slate-900
+                               placeholder:text-slate-400 outline-none
+                               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                               transition-all duration-200"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
+                  </button>
+                </div>
+              </div>
               <button
-                id="btn-google-signin"
-                onClick={handleSignIn}
+                id={mode === 'signin' ? 'btn-email-signin' : 'btn-email-signup'}
+                type="submit"
                 disabled={signingIn}
-                className="w-full flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold
-                           bg-white text-slate-700 ring-1 ring-inset ring-slate-200
-                           hover:bg-slate-50 hover:ring-slate-300 active:scale-[0.98]
+                className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+                           bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]
                            transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {signingIn ? <Loader2 className="h-5 w-5 animate-spin text-brand-600" /> : <GoogleLogo />}
-                {signingIn ? 'Signing in\u2026' : 'Continue with Google'}
+                {signingIn ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <>
+                    {mode === 'signin' ? 'Sign In' : 'Create Account'}
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
               </button>
-            </>
-          ) : (
+            </form>
+          )}
+
+          {/* ── Phone form ─────────────────────────────────────────── */}
+          {authMethod === 'phone' && (
             <>
-              <h2 className="text-xl font-bold text-slate-900 mb-1 text-center">Create your account</h2>
-              <p className="text-sm text-slate-500 mb-6 text-center">
-                Join lanTURN to kick-start your career journey
-              </p>
-              <button
-                id="btn-google-signup"
-                onClick={handleSignUp}
-                disabled={signingIn}
-                className="w-full flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold
-                           bg-indigo-600 text-white
-                           hover:bg-indigo-700 active:scale-[0.98]
-                           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {signingIn ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <GoogleLogo white />}
-                {signingIn ? 'Creating account\u2026' : 'Sign up with Google'}
-              </button>
+              {!otpSent ? (
+                <form onSubmit={handleSendOtp} className="space-y-4">
+                  <div>
+                    <label htmlFor="phone-input" className="block text-sm font-medium text-slate-700 mb-1">
+                      Phone number
+                    </label>
+                    <input
+                      id="phone-input"
+                      type="tel"
+                      autoComplete="tel"
+                      required
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      placeholder="+91 98765 43210"
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
+                                 placeholder:text-slate-400 outline-none
+                                 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                                 transition-all duration-200"
+                    />
+                    <p className="text-xs text-slate-400 mt-1.5">Include country code (e.g. +91 for India)</p>
+                  </div>
+                  <button
+                    id="btn-send-otp"
+                    type="submit"
+                    disabled={signingIn}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+                               bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]
+                               transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {signingIn ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        Send OTP
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
+                  <div>
+                    <label htmlFor="otp-input" className="block text-sm font-medium text-slate-700 mb-1">
+                      Enter OTP
+                    </label>
+                    <input
+                      id="otp-input"
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      required
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                      placeholder="123456"
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
+                                 placeholder:text-slate-400 outline-none text-center tracking-[0.3em] font-mono text-lg
+                                 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                                 transition-all duration-200"
+                    />
+                    <p className="text-xs text-slate-400 mt-1.5">
+                      Code sent to <span className="font-medium text-slate-600">{phoneNumber}</span>
+                      {' · '}
+                      <button
+                        type="button"
+                        onClick={() => { setOtpSent(false); setOtp(''); confirmationRef.current = null; }}
+                        className="text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
+                      >
+                        Change number
+                      </button>
+                    </p>
+                  </div>
+                  <button
+                    id="btn-verify-otp"
+                    type="submit"
+                    disabled={signingIn}
+                    className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+                               bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]
+                               transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {signingIn ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <>
+                        Verify & {mode === 'signin' ? 'Sign In' : 'Create Account'}
+                        <ArrowRight className="h-4 w-4" />
+                      </>
+                    )}
+                  </button>
+                </form>
+              )}
             </>
           )}
+
+          {/* Invisible reCAPTCHA container — required by Firebase Phone Auth */}
+          <div id="recaptcha-container" />
 
           <div className="divider my-6" />
 

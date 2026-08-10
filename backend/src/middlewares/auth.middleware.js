@@ -38,13 +38,14 @@ export async function authenticate(req, res, next) {
     // same new user (race condition) never fail with a unique-key violation.
     // If the row already existed, the upsert is a no-op and we re-fetch it.
     if (!userData) {
+      const signInProvider = decoded.firebase?.sign_in_provider || 'unknown';
       const stub = {
         uid,
         email: decoded.email?.toLowerCase() || '',
         email_verified: decoded.email_verified || false,
         display_name: decoded.name || '',
         photo_url: decoded.picture || '',
-        auth_provider: decoded.firebase?.sign_in_provider || 'google.com',
+        auth_provider: signInProvider,
         role: null,
         profile_complete: false,
         status: USER_STATUS.ACTIVE,
