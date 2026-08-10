@@ -71,11 +71,7 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center px-4 gap-3">
         {/* Logo */}
         <NavLink to="/dashboard" className="flex items-center gap-2 mr-4 flex-shrink-0">
-          <div className="h-7 w-7 rounded-lg flex items-center justify-center"
-               style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' }}>
-            <Sparkles className="h-4 w-4 text-white" />
-          </div>
-          <span className="text-base font-bold gradient-text hidden sm:block">lanTURN</span>
+          <img src="/logo.jpeg" alt="lanTURN" className="h-8 w-auto object-contain rounded-md" />
         </NavLink>
 
         {/* Desktop nav — hidden (sidebar used on desktop) */}

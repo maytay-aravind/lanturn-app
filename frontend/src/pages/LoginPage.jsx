@@ -245,13 +245,7 @@ export default function LoginPage() {
 
         {/* Logo + brand */}
         <div className="text-center mb-8 animate-fade-in">
-          <div
-            className="mx-auto h-16 w-16 rounded-2xl flex items-center justify-center mb-4"
-            style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)' }}
-          >
-            <Sparkles className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-3xl font-extrabold gradient-text mb-2">lanTURN</h1>
+          <img src="/logo.jpeg" alt="lanTURN Logo" className="mx-auto h-24 w-auto object-contain mb-4 rounded-xl shadow-sm" />
           <p className="text-slate-500 text-sm">AI-powered career platform for students &amp; recruiters</p>
         </div>
 
