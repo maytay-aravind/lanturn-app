@@ -7,12 +7,12 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────── */
 :root {
-  --brand-50:  #eef2ff;
-  --brand-100: #e0e7ff;
-  --brand-400: #818cf8;
-  --brand-500: #6366f1;
-  --brand-600: #4f46e5;
-  --brand-700: #4338ca;
+  --brand-50:  #eff6ff;
+  --brand-100: #dbeafe;
+  --brand-400: #60a5fa;
+  --brand-500: #3b82f6;
+  --brand-600: #1e3a8a;
+  --brand-700: #172554;
   --sidebar-w: 240px;
 }
 
@@ -42,10 +42,10 @@
   }
   .btn-primary {
     @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700 active:scale-[0.98] focus:ring-brand-500;
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #ca8a04 100%);
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    background: linear-gradient(135deg, #172554 0%, #a16207 100%);
   }
   .btn-secondary {
     @apply btn bg-white text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 hover:ring-slate-300 active:scale-[0.98] focus:ring-brand-500;
@@ -117,7 +117,7 @@
 
   /* Gradient text */
   .gradient-text {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 60%, #a855f7 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, #ca8a04 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -154,7 +154,7 @@
   }
   .progress-fill {
     @apply h-full rounded-full transition-all duration-300;
-    background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%);
+    background: linear-gradient(90deg, #1e3a8a 0%, #ca8a04 100%);
   }
 
   /* Pill tag */
