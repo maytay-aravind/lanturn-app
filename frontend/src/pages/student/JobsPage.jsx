@@ -650,7 +650,7 @@ function InternalJobCard({ job, studentProfile, onClick }) {
 export default function JobsPage() {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
-  const [page, setPage] = useState({ limit: 10, cursor: null });
+  const [page, setPage] = useState({ limit: 50, cursor: null });
   const [selectedJob, setSelectedJob] = useState(null);
 
   const { data: studentProfile } = useQuery({
@@ -669,12 +669,15 @@ export default function JobsPage() {
 
   // Sort jobs in descending order based on match percentage score
   const jobs = useMemo(() => {
-    if (!studentProfile || rawJobs.length === 0) return rawJobs;
-    return [...rawJobs].sort((a, b) => {
-      const scoreA = computeJobMatch(a, studentProfile).score;
-      const scoreB = computeJobMatch(b, studentProfile).score;
-      return scoreB - scoreA;
-    });
+    if (!rawJobs || rawJobs.length === 0) return [];
+    if (!studentProfile) return rawJobs;
+    
+    const sorted = [...rawJobs]
+      .map(job => ({ job, score: computeJobMatch(job, studentProfile).score }))
+      .sort((a, b) => b.score - a.score)
+      .map(item => item.job);
+
+    return sorted;
   }, [rawJobs, studentProfile]);
 
   const applyMutation = useMutation({
