@@ -71,7 +71,8 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center px-4 gap-3">
         {/* Logo */}
         <NavLink to="/dashboard" className="flex items-center gap-2 mr-4 flex-shrink-0">
-          <img src="/logo.jpeg" alt="lanTURN" className="h-8 w-auto object-contain rounded-md" />
+          <img src="/logo.jpeg" alt="lanTURN Logo" className="h-10 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast' }} />
+          <span className="text-lg font-extrabold gradient-text hidden sm:block tracking-tight">LanTURN</span>
         </NavLink>
 
         {/* Desktop nav — hidden (sidebar used on desktop) */}
