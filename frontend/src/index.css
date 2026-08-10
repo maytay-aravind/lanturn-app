@@ -233,3 +233,9 @@ html.dark-theme .avatar {
   filter: invert(1) hue-rotate(180deg);
 }
 
+
+/* Keep color in dark mode (double inversion) */
+html.dark-theme .keep-color {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+

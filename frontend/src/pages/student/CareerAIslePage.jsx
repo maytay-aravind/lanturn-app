@@ -150,7 +150,7 @@ function TopicRow({ topic, checked, onToggle, isLoading, accentColor, stageCompl
             animate={{ scale: 1, rotate: 0 }}
             transition={{ type: 'spring', stiffness: 500, damping: 25 }}
           >
-            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+            <CheckCircle2 className="h-5 w-5 text-emerald-500 keep-color" />
           </motion.div>
         ) : (
           <div className="h-5 w-5 rounded-full border-2 border-slate-300 group-hover:border-slate-400 transition-colors" />
@@ -182,7 +182,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
     >
       {/* Coloured top accent bar */}
       <motion.div
-        className="h-1.5 w-full"
+        className="h-1.5 w-full keep-color"
         animate={{ background: stageCompleted
           ? 'linear-gradient(90deg, #10b981, #059669)'
           : `linear-gradient(90deg, ${color.hex}, ${color.hex}cc)`
@@ -204,7 +204,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-              className="h-9 w-9 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-md shadow-emerald-200 flex-shrink-0"
+              className="h-9 w-9 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-md shadow-emerald-200 flex-shrink-0 keep-color"
             >
               <CheckCircle2 className="h-5 w-5 text-white" />
             </motion.div>
@@ -215,7 +215,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
         <div className="flex items-center gap-3 mb-5">
           <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
             <motion.div
-              className="h-full rounded-full"
+              className="h-full rounded-full keep-color"
               animate={{
                 width: `${pct}%`,
                 background: stageCompleted
@@ -366,7 +366,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
             initial={{ height: 0 }}
             animate={{ height: `${roadmap.percentComplete}%` }}
             transition={{ duration: 1.2, ease: 'easeOut' }}
-            className="w-full bg-blue-500"
+            className="w-full bg-blue-500 keep-color"
           />
         </div>
 
@@ -414,7 +414,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                     }}
                     transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
                     whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
-                    className="rounded-2xl px-6 py-5 text-center cursor-default border-[3px] border-slate-900 z-10"
+                    className="rounded-2xl px-6 py-5 text-center cursor-default border-[3px] border-slate-900 z-10 keep-color"
                     style={{ minWidth: 170 }}
                   >
                     <motion.p
