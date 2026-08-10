@@ -221,3 +221,15 @@
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { @apply rounded-full bg-slate-200; }
 ::-webkit-scrollbar-thumb:hover { @apply bg-slate-300; }
+
+/* ── Dark Theme Invert ─────────────────────────────────────────────── */
+html.dark-theme {
+  filter: invert(1) hue-rotate(180deg);
+}
+html.dark-theme img,
+html.dark-theme video,
+html.dark-theme iframe,
+html.dark-theme .avatar {
+  filter: invert(1) hue-rotate(180deg);
+}
+

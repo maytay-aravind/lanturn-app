@@ -5,9 +5,9 @@ import { notificationService } from '../services/notification.service.js';
 import {
   LayoutDashboard, Briefcase, FileText, User, Sparkles,
   Search, Bell, LogOut, ChevronDown, Menu, X, Settings,
-  Building2, Map, Bot,
+  Building2, Map, Bot, Moon, Sun
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const STUDENT_LINKS = [
   { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -31,6 +31,23 @@ export default function Navbar() {
   const { session, role, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme') === 'dark';
+    if (saved) document.documentElement.classList.add('dark-theme');
+    return saved;
+  });
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    if (next) {
+      document.documentElement.classList.add('dark-theme');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark-theme');
+      localStorage.setItem('theme', 'light');
+    }
+  };
 
   const { data: notifs } = useQuery({
     queryKey: ['notifications'],
@@ -85,6 +102,15 @@ export default function Navbar() {
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="h-9 w-9 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+            title="Toggle theme"
+          >
+            {isDark ? <Sun className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} /> : <Moon className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />}
+          </button>
+
           {/* Notifications */}
           <NavLink
             to={role === 'employer' ? '/employer/notifications' : '/notifications'}
