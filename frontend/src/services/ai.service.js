@@ -6,8 +6,12 @@ export const aiService = {
   reviewResume: (body) => apiClient.post('/ai/resume-review', body).then(unwrap),
   matchJob: (body) => apiClient.post('/ai/resume-match', body).then(unwrap),
   skillGap: (body) => apiClient.post('/ai/skill-gap', body).then(unwrap),
-  interviewQuestions: (body) => apiClient.post('/ai/interview-questions', body).then(unwrap),
   coverLetter: (body) => apiClient.post('/ai/cover-letter', body).then(unwrap),
+
+  // Skill Test Arena
+  generateSkillTest: (body) => apiClient.post('/ai/skill-test/generate', body).then(unwrap),
+  evaluateSkillTest: (body) => apiClient.post('/ai/skill-test/evaluate', body).then(unwrap),
+  getSkillMedals: () => apiClient.get('/ai/skill-medals').then(unwrap),
 
   // Career chat
   careerChat: (body) => apiClient.post('/ai/career-chat', body).then(unwrap),

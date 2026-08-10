@@ -13,13 +13,44 @@ export const jobTargetSchema = z
   })
   .strict();
 
-export const interviewQuestionsSchema = z
+export const skillTestSchema = z
   .object({
-    jobId: z.string().min(1).max(200).optional(),
-    skills: z.array(z.string().max(60)).max(20).optional(),
-    difficulty: z.enum(['easy', 'medium', 'hard']).optional(),
+    skill: z.string().min(1).max(100),
+    rating: z.number().int().min(0).max(100),
   })
   .strict();
+
+export const skillTestEvalSchema = z
+  .object({
+    skill: z.string().min(1).max(100),
+    rating: z.number().int().min(0).max(100),
+    questions: z.array(z.object({
+      question: z.string().min(1),
+      answer: z.string().min(1).max(3000),
+    })).min(3).max(3),
+  })
+  .strict();
+
+/** Validated Gemini output for Skill Test question generation */
+export const skillTestQuestionResponseSchema = z.object({
+  questions: z.array(z.object({
+    id: z.number(),
+    question: z.string().min(1),
+    difficulty: z.string().min(1),
+  })).length(3),
+});
+
+/** Validated Gemini output for Skill Test evaluation */
+export const skillTestEvalResponseSchema = z.object({
+  passed: z.boolean(),
+  medal: z.enum(['gold', 'silver', 'bronze', 'basic', 'none']),
+  score: z.string(),
+  results: z.array(z.object({
+    questionId: z.number(),
+    correct: z.boolean(),
+    feedback: z.string().min(1),
+  })).length(3),
+});
 
 export const coverLetterSchema = z
   .object({

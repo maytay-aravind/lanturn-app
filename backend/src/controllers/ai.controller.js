@@ -42,10 +42,25 @@ export const skillGap = [
   }),
 ];
 
-export const interviewQuestions = [
+export const generateSkillTest = [
   ensureGeminiConfigured,
   asyncHandler(async (req, res) => {
-    const data = await aiService.generateInterviewQuestions(req.user.uid, req.body);
+    const data = await aiService.generateSkillTest(req.user.uid, req.body);
+    res.json({ data, meta: { requestId: req.id } });
+  }),
+];
+
+export const evaluateSkillTest = [
+  ensureGeminiConfigured,
+  asyncHandler(async (req, res) => {
+    const data = await aiService.evaluateSkillTest(req.user.uid, req.body);
+    res.json({ data, meta: { requestId: req.id } });
+  }),
+];
+
+export const getSkillMedals = [
+  asyncHandler(async (req, res) => {
+    const data = await aiService.getSkillMedals(req.user.uid);
     res.json({ data, meta: { requestId: req.id } });
   }),
 ];

@@ -6,11 +6,12 @@ import { jobService } from '../../services/job.service.js';
 import toast from 'react-hot-toast';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';
 import {
-  Sparkles, Send, MessageSquare, FileSearch, Target, Star,
+  Sparkles, Send, MessageSquare, FileSearch, Target, Trophy,
   ChevronRight, Bot, User, Loader2, RefreshCw, CheckCircle2,
   AlertCircle, Dna,
 } from 'lucide-react';
 import { CareerDNAPanel } from '../../components/ai/CareerDNAPanel.jsx';
+import { SkillTestArena } from '../../components/ai/SkillTestArena.jsx';
 
 // ─── Tab bar ─────────────────────────────────────────────────
 const TABS = [
@@ -18,7 +19,7 @@ const TABS = [
   { id: 'dna',      icon: Dna,           label: 'Career DNA' },
   { id: 'review',  icon: FileSearch,    label: 'Resume Review' },
   { id: 'match',   icon: Target,        label: 'Job Match' },
-  { id: 'interview', icon: Star,        label: 'Interview Prep' },
+  { id: 'arena', icon: Trophy,      label: 'Skill Arena' },
 ];
 
 // ─── Score ring ───────────────────────────────────────────────
@@ -258,91 +259,6 @@ function ResumeReviewTab() {
 }
 
 
-// ─── Interview Prep tab ───────────────────────────────────────
-function InterviewPrepTab() {
-  const [skills, setSkillInput] = useState('');
-  const [difficulty, setDifficulty] = useState('medium');
-  const [result, setResult] = useState(null);
-  const [expanded, setExpanded] = useState(null);
-
-  const interviewMutation = useMutation({
-    mutationFn: () => aiService.interviewQuestions({
-      skills: skills.split(',').map((s) => s.trim()).filter(Boolean),
-      difficulty,
-    }),
-    onSuccess: (data) => setResult(data),
-    onError: (err) => toast.error(err.message || 'Failed to generate questions'),
-  });
-
-  const CATEGORIES = ['technical', 'behavioral', 'situational'];
-  const categoryColor = { technical: 'badge-blue', behavioral: 'badge-purple', situational: 'badge-yellow' };
-
-  return (
-    <div className="space-y-5">
-      <div className="p-4 rounded-2xl bg-slate-50 space-y-3">
-        <div>
-          <label className="label">Skills / Topics</label>
-          <input
-            className="input"
-            placeholder="e.g. React, Node.js, System Design"
-            value={skills}
-            onChange={(e) => setSkillInput(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="label">Difficulty</label>
-          <div className="flex gap-2">
-            {['easy', 'medium', 'hard'].map((d) => (
-              <button
-                key={d}
-                onClick={() => setDifficulty(d)}
-                className={`btn btn-sm flex-1 capitalize ${difficulty === d ? 'btn-primary' : 'btn-secondary'}`}
-              >
-                {d}
-              </button>
-            ))}
-          </div>
-        </div>
-        <button
-          onClick={() => interviewMutation.mutate()}
-          disabled={interviewMutation.isPending || !skills.trim()}
-          className="btn-primary flex items-center gap-2"
-        >
-          {interviewMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Star className="h-4 w-4" />}
-          {interviewMutation.isPending ? 'Generating...' : 'Generate Questions'}
-        </button>
-      </div>
-
-      {result?.questions && (
-        <div className="space-y-3 animate-slide-up">
-          {result.questions.map((q, i) => (
-            <div key={i} className="card p-4">
-              <button
-                onClick={() => setExpanded(expanded === i ? null : i)}
-                className="w-full text-left"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <p className="text-sm font-medium text-slate-800 flex-1">Q{i + 1}. {q.question}</p>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className={categoryColor[q.category] || 'badge-default'}>{q.category}</span>
-                    <ChevronRight className={`h-4 w-4 text-slate-400 transition-transform ${expanded === i ? 'rotate-90' : ''}`} />
-                  </div>
-                </div>
-              </button>
-              {expanded === i && q.hint && (
-                <div className="mt-3 pt-3 border-t border-slate-100 animate-fade-in">
-                  <p className="text-xs text-slate-500 font-medium mb-1">💡 Hint</p>
-                  <p className="text-sm text-slate-700">{q.hint}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 // ─── Job Match tab ────────────────────────────────────────────
 function JobMatchTab() {
   const [jobId, setJobId] = useState('');
@@ -473,7 +389,7 @@ export default function AIAssistantPage() {
         {tab === 'dna'       && <CareerDNAPanel />}
         {tab === 'review'    && <ResumeReviewTab />}
         {tab === 'match'     && <JobMatchTab />}
-        {tab === 'interview' && <InterviewPrepTab />}
+        {tab === 'arena'     && <SkillTestArena />}
       </div>
     </div>
   );

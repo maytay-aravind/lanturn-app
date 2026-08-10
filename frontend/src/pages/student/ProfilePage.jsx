@@ -6,6 +6,7 @@ import { uploadService } from '../../services/upload.service.js';
 import { aiService } from '../../services/ai.service.js';
 import { SkillsInput } from '../../components/ui/SkillsInput.jsx';
 import { SkeletonProfile } from '../../components/ui/Skeleton.jsx';
+import { SkillMedalBadge } from '../../components/ui/SkillMedalBadge.jsx';
 import toast from 'react-hot-toast';
 import {
   User, GraduationCap, Briefcase, Link2, Upload,
@@ -442,6 +443,24 @@ export default function ProfilePage() {
                 <div className="flex flex-wrap gap-1.5">
                   {pro.skills.map((s) => (
                     <span key={s} className="pill">{s}</span>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Skill Medals */}
+          {(pro.skillMedals?.length ?? 0) > 0 && (
+            <>
+              <div className="divider my-4" />
+              <div>
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <Star className="h-3 w-3" />
+                  Skill Medals
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {pro.skillMedals.map((m) => (
+                    <SkillMedalBadge key={m.skill} skill={m.skill} medal={m.medal} />
                   ))}
                 </div>
               </div>

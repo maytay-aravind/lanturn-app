@@ -4,7 +4,8 @@ import * as aiCtrl from '#controllers/ai.controller.js';
 import {
   resumeReviewSchema,
   jobTargetSchema,
-  interviewQuestionsSchema,
+  skillTestSchema,
+  skillTestEvalSchema,
   coverLetterSchema,
   careerChatSchema,
 } from '#schemas/ai.schema.js';
@@ -18,7 +19,9 @@ router.post('/resume-extract', ...extractGuard, ...aiCtrl.extractResume);
 router.post('/resume-review', ...guard, validate({ body: resumeReviewSchema }), ...aiCtrl.reviewResume);
 router.post('/resume-match', ...guard, validate({ body: jobTargetSchema }), ...aiCtrl.matchResume);
 router.post('/skill-gap', ...guard, validate({ body: jobTargetSchema }), ...aiCtrl.skillGap);
-router.post('/interview-questions', ...guard, validate({ body: interviewQuestionsSchema }), ...aiCtrl.interviewQuestions);
+router.post('/skill-test/generate', ...guard, validate({ body: skillTestSchema }), ...aiCtrl.generateSkillTest);
+router.post('/skill-test/evaluate', ...guard, validate({ body: skillTestEvalSchema }), ...aiCtrl.evaluateSkillTest);
+router.get('/skill-medals', authenticate, requireRole('student'), ...aiCtrl.getSkillMedals);
 router.post('/cover-letter', ...guard, validate({ body: coverLetterSchema }), ...aiCtrl.coverLetter);
 router.post('/career-chat', ...guard, validate({ body: careerChatSchema }), ...aiCtrl.careerChat);
 router.post('/career-dna', ...guard, ...aiCtrl.careerDna);
