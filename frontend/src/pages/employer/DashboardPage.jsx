@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employerService } from '../../services/employer.service.js';
 import { Link } from 'react-router-dom';
 import { timeAgo } from '../../lib/utils.js';
@@ -8,6 +8,8 @@ import {
   Sparkles, Star
 } from 'lucide-react';
 import CandidateMatchCard from '../../components/employer/CandidateMatchCard.jsx';
+import { CompanyDNAPanel } from '../../components/ai/CompanyDNAPanel.jsx';
+import toast from 'react-hot-toast';
 
 /* ── Tiny SVG donut chart ─────────────────────────────────── */
 function DonutChart({ segments, size = 160 }) {
@@ -183,6 +185,23 @@ export default function EmployerDashboard() {
   const { data: aiRecommendations, isLoading: recommendationsLoading } = useQuery({
     queryKey: ['employer', 'recommendations'],
     queryFn: employerService.getTopRecommendations,
+  });
+
+  // Company DNA
+  const queryClient = useQueryClient();
+  const { data: companyDna, isLoading: dnaLoading } = useQuery({
+    queryKey: ['employer', 'companyDna'],
+    queryFn: employerService.getCompanyDna,
+    retry: false,
+  });
+
+  const dnaMutation = useMutation({
+    mutationFn: () => employerService.generateCompanyDna(),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['employer', 'companyDna'], data);
+      toast.success('Company DNA generated successfully!');
+    },
+    onError: (err) => toast.error(err.response?.data?.error?.message || err.message || 'Failed to generate Company DNA'),
   });
 
   const isLoading = analyticsLoading || recommendationsLoading;
@@ -389,6 +408,27 @@ export default function EmployerDashboard() {
             <p className="text-xs text-slate-400 mt-1">Our AI will highlight the best fits once candidates start applying to your jobs.</p>
           </div>
         )}
+      </div>
+
+      {/* ── Company DNA Preview ──────────────────────────── */}
+      <div className="card p-6 animate-slide-up">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="h-8 w-8 rounded-lg bg-brand-100 flex items-center justify-center">
+            <Sparkles className="h-4 w-4 text-brand-600" />
+          </div>
+          <h2 className="section-title text-lg font-bold">Company DNA Preview</h2>
+        </div>
+        <p className="text-sm text-slate-500 mb-4">
+          This is how students see your company when browsing jobs. AI analyzes your profile to generate a workplace personality card.
+        </p>
+        <CompanyDNAPanel
+          data={companyDna}
+          companyName={profile?.companyName || 'Your Company'}
+          isEmployerView={true}
+          isLoading={dnaLoading}
+          onRegenerate={() => dnaMutation.mutate()}
+          isRegenerating={dnaMutation.isPending}
+        />
       </div>
 
       {/* ── Recent Applications ─────────────────────────── */}

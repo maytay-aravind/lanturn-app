@@ -4,6 +4,7 @@ import * as employerCtrl from '#controllers/employer.controller.js';
 import * as employerMatchesCtrl from '#controllers/employerMatches.controller.js';
 import * as employerAICtrl from '#controllers/employerAI.controller.js';
 import * as jobDescAICtrl from '#controllers/jobDescriptionAI.controller.js';
+import * as companyDnaCtrl from '#controllers/companyDna.controller.js';
 import { employerProfileUpdateSchema } from '#schemas/employer.schema.js';
 
 const router = Router();
@@ -26,7 +27,11 @@ router.delete('/ai/threads/:threadId', authenticate, requireRole('employer'), re
 // AI Job Description Generator
 router.post('/ai/generate-job-description', authenticate, requireRole('employer'), requireProfileComplete, jobDescAICtrl.generate);
 
+// Company DNA
+router.post('/company-dna/generate', authenticate, requireRole('employer'), requireProfileComplete, ...companyDnaCtrl.generate);
+router.get('/me/company-dna', authenticate, requireRole('employer'), requireProfileComplete, ...companyDnaCtrl.getPreview);
+router.get('/:uid/company-dna', ...companyDnaCtrl.getPublic);
+
 router.get('/:uid', employerCtrl.getPublic);
 
 export default router;
-

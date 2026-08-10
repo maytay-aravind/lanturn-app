@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employerService } from '../../services/employer.service.js';
 import { uploadService } from '../../services/upload.service.js';
+import { CompanyDNAPanel } from '../../components/ai/CompanyDNAPanel.jsx';
 import toast from 'react-hot-toast';
 import {
   Building2, Globe, Users, MapPin, Phone, Mail,
@@ -577,6 +578,26 @@ export default function EmployerProfilePage() {
                 placeholder="e.g. Best Startup 2023..."
               />
             </Field>
+          </Section>
+
+          {/* Company DNA Preview */}
+          <Section icon={Sparkles} title="Company DNA">
+            <p className="text-sm text-slate-500 -mt-2 mb-3">
+              This AI-generated personality card is what students see when viewing your company profile.
+            </p>
+            <CompanyDNAPanel
+              data={profile?.companyDna}
+              companyName={profile?.companyName || 'Your Company'}
+              isEmployerView={true}
+              onRegenerate={() => {
+                employerService.generateCompanyDna()
+                  .then(() => {
+                    queryClient.invalidateQueries({ queryKey: ['employer', 'me'] });
+                    toast.success('Company DNA generated!');
+                  })
+                  .catch(err => toast.error(err.response?.data?.error?.message || err.message || 'Failed'));
+              }}
+            />
           </Section>
 
           {/* Global Save Button */}

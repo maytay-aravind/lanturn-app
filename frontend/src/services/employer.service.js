@@ -16,5 +16,9 @@ export const employerService = {
 
   // AI Job Description Generator
   aiGenerateJobDesc: (body) => apiClient.post('/employers/ai/generate-job-description', body).then(unwrap),
-};
 
+  // Company DNA
+  generateCompanyDna: () => apiClient.post('/employers/company-dna/generate').then(unwrap),
+  getCompanyDna: () => apiClient.get('/employers/me/company-dna').then(unwrap),
+  getPublicCompanyDna: (uid) => apiClient.get(`/employers/${uid}/company-dna`).then(unwrap),
+};

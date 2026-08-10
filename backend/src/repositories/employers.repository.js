@@ -30,6 +30,7 @@ function rowToEmployer(row) {
     employeeCount:  row.employee_count ?? null,
     linkedin:       row.hr_contact?.linkedin || '',
     achievements:   row.hr_contact?.achievements || [],
+    companyDna:     row.company_dna || null,
     createdAt:      row.created_at,
     updatedAt:      row.updated_at,
   };
@@ -58,6 +59,7 @@ function toDbPayload(data) {
   if (data.companyCulture !== undefined) p.company_culture = data.companyCulture;
   if (data.officeImages   !== undefined) p.office_images   = data.officeImages;
   if (data.employeeCount  !== undefined) p.employee_count  = data.employeeCount;
+  if (data.companyDna     !== undefined) p.company_dna     = data.companyDna;
 
   // Workaround: Store linkedin and achievements in the hr_contact JSONB column
   // because the actual columns do not exist in the remote Supabase database yet.

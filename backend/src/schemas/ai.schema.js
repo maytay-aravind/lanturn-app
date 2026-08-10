@@ -55,3 +55,17 @@ export const careerDnaResponseSchema = z.object({
   weaknesses: z.array(z.string().min(1).max(400)).min(1).max(8),
   recommendations: z.array(z.string().min(1).max(400)).min(1).max(8),
 });
+
+/** Validated Gemini output for AI Company DNA analysis */
+export const companyDnaDimensionSchema = z.object({
+  name: z.string().min(1).max(80),
+  score: z.number().min(0).max(100),
+  reason: z.string().min(1).max(600),
+});
+
+export const companyDnaResponseSchema = z.object({
+  companyPersonality: z.string().min(1).max(200),
+  summary: z.string().min(1).max(500),
+  overallScore: z.number().min(0).max(100),
+  companyDNA: z.array(companyDnaDimensionSchema).length(6),
+});

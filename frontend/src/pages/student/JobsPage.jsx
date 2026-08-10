@@ -5,6 +5,7 @@ import { applicationService } from '../../services/application.service.js';
 import { employerService } from '../../services/employer.service.js';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { SkeletonList } from '../../components/ui/Skeleton.jsx';
+import { CompanyDNAPanel } from '../../components/ai/CompanyDNAPanel.jsx';
 import { formatSalary, timeAgo } from '../../lib/utils.js';
 import toast from 'react-hot-toast';
 import {
@@ -36,6 +37,14 @@ function JobDetailDialog({ job, onClose, onApply, isApplying }) {
     queryKey: ['employer', 'public', job.employerId],
     queryFn: () => employerService.getPublic(job.employerId),
     enabled: showCompanyProfile && !!job.employerId,
+  });
+
+  // Fetch Company DNA when company profile is shown
+  const { data: companyDna, isLoading: dnaLoading } = useQuery({
+    queryKey: ['companyDna', 'public', job.employerId],
+    queryFn: () => employerService.getPublicCompanyDna(job.employerId),
+    enabled: showCompanyProfile && !!job.employerId,
+    retry: false,
   });
 
   const j = fullJob || job;
@@ -175,6 +184,13 @@ function JobDetailDialog({ job, onClose, onApply, isApplying }) {
                       </div>
                     )}
                   </div>
+
+                  {/* Company DNA */}
+                  <CompanyDNAPanel
+                    data={companyDna}
+                    companyName={company.companyName || j.companyName}
+                    isLoading={dnaLoading}
+                  />
 
                   {company.technologies?.length > 0 && (
                     <div>
