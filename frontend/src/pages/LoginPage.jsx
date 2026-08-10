@@ -245,7 +245,7 @@ export default function LoginPage() {
 
         {/* Logo + brand */}
         <div className="text-center mb-8 animate-fade-in">
-          <img src="/logo.jpeg" alt="LanTURN Logo" className="mx-auto h-32 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(8%)', margin: '-10px 0' }} />
+          <img src="/logo.jpeg" alt="LanTURN Logo" className="mx-auto h-32 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
           <h1 className="text-3xl font-extrabold gradient-text mt-4 mb-2 tracking-tight">LanTURN</h1>
           <p className="text-slate-500 text-sm">AI-powered career platform for students &amp; recruiters</p>
         </div>
