@@ -61,6 +61,7 @@ export default function LoginPage() {
       'auth/invalid-phone-number':    'Please enter a valid phone number (e.g. +91…).',
       'auth/invalid-verification-code': 'Invalid OTP code. Please try again.',
       'auth/code-expired':            'OTP has expired. Please request a new one.',
+      'auth/operation-not-allowed':   'SMS is not available for this region. Please contact the admin or use email sign-in.',
       'auth/popup-closed-by-user':    null, // silent
       'auth/cancelled-popup-request': null, // silent
     };
