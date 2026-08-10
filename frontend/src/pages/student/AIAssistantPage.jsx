@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 import { aiService } from '../../services/ai.service.js';
 import { jobService } from '../../services/job.service.js';
+import { studentService } from '../../services/student.service.js';
+import { computeJobMatch } from './JobsPage.jsx';
 import toast from 'react-hot-toast';
 import { Skeleton } from '../../components/ui/Skeleton.jsx';
 import {
@@ -269,6 +271,11 @@ function JobMatchTab() {
     queryFn: () => jobService.list({ limit: 50 }),
   });
 
+  const { data: studentProfile } = useQuery({
+    queryKey: ['studentProfile', 'me'],
+    queryFn: () => studentService.getMe(),
+  });
+
   const geminiMutation = useMutation({
     mutationFn: () => aiService.matchJob({ jobId }),
     onSuccess: (data) => setResult({ ...data, _source: 'gemini' }),
@@ -302,7 +309,12 @@ function JobMatchTab() {
       {result && (
         <div className="space-y-4 animate-slide-up">
           <div className="card p-5 flex items-center gap-6">
-            <ScoreRing score={result.matchScore ?? result.score ?? 0} label="Match" />
+            {(() => {
+              const selectedJob = jobs?.items?.find((j) => j.jobId === jobId);
+              const localMatchInfo = selectedJob && studentProfile ? computeJobMatch(selectedJob, studentProfile) : null;
+              const displayScore = localMatchInfo ? localMatchInfo.score : (result.matchScore ?? result.score ?? 0);
+              return <ScoreRing score={displayScore} label="Match" />;
+            })()}
             <div>
               <p className="font-semibold text-slate-900">Resume Match Score</p>
               {result.experienceFit && (
