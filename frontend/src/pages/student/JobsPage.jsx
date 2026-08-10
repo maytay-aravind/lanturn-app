@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { jobService } from '../../services/job.service.js';
 import { applicationService } from '../../services/application.service.js';
@@ -664,8 +664,18 @@ export default function JobsPage() {
     queryFn: () => jobService.list({ q: search || undefined, jobType: typeFilter || undefined, ...page }),
   });
 
-  const jobs = data?.items ?? [];
+  const rawJobs = data?.items ?? [];
   const nextCursor = data?.nextCursor;
+
+  // Sort jobs in descending order based on match percentage score
+  const jobs = useMemo(() => {
+    if (!studentProfile || rawJobs.length === 0) return rawJobs;
+    return [...rawJobs].sort((a, b) => {
+      const scoreA = computeJobMatch(a, studentProfile).score;
+      const scoreB = computeJobMatch(b, studentProfile).score;
+      return scoreB - scoreA;
+    });
+  }, [rawJobs, studentProfile]);
 
   const applyMutation = useMutation({
     mutationFn: (jobId) => applicationService.apply(jobId),
