@@ -8,7 +8,7 @@ import { Bell, CheckCheck, Check, Briefcase, FileText, AlertCircle, Sparkles } f
 
 const TYPE_ICONS = {
   application_received:  <Briefcase className="h-4 w-4 text-blue-500" />,
-  application_status:    <FileText className="h-4 w-4 text-purple-500" />,
+  application_status:    <FileText className="h-4 w-4 text-brand-500" />,
   job_removed:           <AlertCircle className="h-4 w-4 text-red-500" />,
   ai_ready:              <Sparkles className="h-4 w-4 text-brand-500" />,
   system:                <Bell className="h-4 w-4 text-slate-500" />,

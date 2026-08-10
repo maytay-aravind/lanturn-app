@@ -260,7 +260,7 @@ export default function EmployerDashboard() {
         />
         <StatCard
           icon={Users} label="Total Applicants" value={a.totalApplicants ?? 0}
-          color="bg-violet-50 text-violet-600"
+          color="bg-brand-50 text-brand-600"
         />
         <StatCard
           icon={UserCheck} label="Shortlisted" value={sb.shortlisted ?? 0}
@@ -328,7 +328,7 @@ export default function EmployerDashboard() {
             <MetricBar label="Hired" value={sb.accepted || 0} max={a.totalApplicants || 0} color="#8b5cf6" />
             <MetricBar label="Rejected" value={sb.rejected || 0} max={a.totalApplicants || 0} color="#ef4444" />
           </div>
-          <div className="mt-4 p-3 rounded-xl bg-gradient-to-r from-brand-50 to-violet-50 border border-brand-100">
+          <div className="mt-4 p-3 rounded-xl bg-gradient-to-r from-brand-50 to-brand-50 border border-brand-100">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-brand-700">Hiring Conversion Rate</span>
               <span className="text-xl font-bold text-brand-700">{a.conversionRate ?? 0}%</span>
@@ -355,9 +355,9 @@ export default function EmployerDashboard() {
               <p className="text-2xl font-bold text-slate-700">{a.closedJobs ?? 0}</p>
               <p className="text-xs text-slate-500 mt-0.5">Closed</p>
             </div>
-            <div className="p-3 rounded-xl bg-violet-50 border border-violet-100">
-              <p className="text-2xl font-bold text-violet-700">{a.totalJobs ?? 0}</p>
-              <p className="text-xs text-violet-600 mt-0.5">Total Posted</p>
+            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+              <p className="text-2xl font-bold text-brand-700">{a.totalJobs ?? 0}</p>
+              <p className="text-xs text-brand-600 mt-0.5">Total Posted</p>
             </div>
           </div>
         </div>

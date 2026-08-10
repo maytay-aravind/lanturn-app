@@ -95,8 +95,8 @@ export default function StudentDashboard() {
 
           <div className="card p-5 flex flex-col justify-between">
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-xl bg-purple-50 flex items-center justify-center">
-                <Star className="h-5 w-5 text-purple-600" />
+              <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center">
+                <Star className="h-5 w-5 text-brand-600" />
               </div>
               <div>
                 <p className="text-sm font-medium text-slate-500">Top Skills</p>

@@ -324,13 +324,13 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                 return (
                   <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
                     matchInfo.matchColor === 'emerald' ? 'bg-emerald-50/70 border-emerald-200' :
-                    matchInfo.matchColor === 'indigo' ? 'bg-indigo-50/70 border-indigo-200' :
+                    matchInfo.matchColor === 'indigo' ? 'bg-brand-50/70 border-brand-200' :
                     matchInfo.matchColor === 'amber' ? 'bg-amber-50/70 border-amber-200' : 'bg-slate-50 border-slate-200'
                   }`}>
                     <div className="flex items-center gap-3">
                       <div className={`h-12 w-12 rounded-xl flex items-center justify-center font-extrabold text-base border shadow-sm ${
                         matchInfo.matchColor === 'emerald' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
-                        matchInfo.matchColor === 'indigo' ? 'bg-indigo-100 text-indigo-800 border-indigo-300' :
+                        matchInfo.matchColor === 'indigo' ? 'bg-brand-100 text-brand-800 border-brand-300' :
                         matchInfo.matchColor === 'amber' ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-slate-200 text-slate-700 border-slate-300'
                       }`}>
                         {matchInfo.score}%
@@ -338,12 +338,12 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                       <div>
                         <div className="flex items-center gap-2">
                           <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1">
-                            <Sparkles className="h-4 w-4 text-indigo-600" />
+                            <Sparkles className="h-4 w-4 text-brand-600" />
                             Qualification Match
                           </h4>
                           <span className={`text-[11px] font-semibold px-2 py-0.5 rounded-md ${
                             matchInfo.matchColor === 'emerald' ? 'bg-emerald-200/80 text-emerald-900' :
-                            matchInfo.matchColor === 'indigo' ? 'bg-indigo-200/80 text-indigo-900' :
+                            matchInfo.matchColor === 'indigo' ? 'bg-brand-200/80 text-brand-900' :
                             matchInfo.matchColor === 'amber' ? 'bg-amber-200/80 text-amber-900' : 'bg-slate-200 text-slate-700'
                           }`}>
                             {matchInfo.matchLabel}
@@ -579,12 +579,12 @@ function InternalJobCard({ job, studentProfile, onClick }) {
                   matchInfo.matchColor === 'emerald'
                     ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                     : matchInfo.matchColor === 'indigo'
-                    ? 'bg-indigo-50 text-indigo-700 border-indigo-200'
+                    ? 'bg-brand-50 text-brand-700 border-brand-200'
                     : matchInfo.matchColor === 'amber'
                     ? 'bg-amber-50 text-amber-700 border-amber-200'
                     : 'bg-slate-100 text-slate-600 border-slate-200'
                 }`}>
-                  <Sparkles className="h-3 w-3 text-indigo-600" />
+                  <Sparkles className="h-3 w-3 text-brand-600" />
                   {matchInfo.score}% Match
                 </span>
               )}

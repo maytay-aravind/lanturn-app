@@ -10,7 +10,7 @@ import {
 /* ── Suggested prompts shown for new conversations ────────── */
 const SUGGESTED_PROMPTS = [
   { icon: Users, text: 'Find me candidates for React internship', color: 'text-blue-600 bg-blue-50 ring-blue-200' },
-  { icon: BriefcaseBusiness, text: 'Who are the top full-stack developers?', color: 'text-violet-600 bg-violet-50 ring-violet-200' },
+  { icon: BriefcaseBusiness, text: 'Who are the top full-stack developers?', color: 'text-brand-600 bg-brand-50 ring-brand-200' },
   { icon: Zap, text: 'Show me students with deployed projects', color: 'text-amber-600 bg-amber-50 ring-amber-200' },
   { icon: GraduationCap, text: 'Find candidates graduating in 2026', color: 'text-emerald-600 bg-emerald-50 ring-emerald-200' },
 ];
@@ -98,7 +98,7 @@ function renderMarkdown(text) {
 function TypingIndicator() {
   return (
     <div className="flex items-start gap-3 animate-fade-in">
-      <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center flex-shrink-0 shadow-md">
+      <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-md">
         <Bot className="h-4 w-4 text-white" />
       </div>
       <div className="chat-bubble-ai flex items-center gap-1.5 py-4">
@@ -422,7 +422,7 @@ export default function AIHiringAssistantPage() {
             )}
           </button>
 
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-md shadow-brand-500/20">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-md shadow-brand-500/20">
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
@@ -456,8 +456,8 @@ export default function AIHiringAssistantPage() {
             <div className="flex flex-col items-center justify-center h-full max-w-lg mx-auto text-center px-4">
               {/* Glowing AI avatar */}
               <div className="relative mb-6">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-400 to-violet-500 blur-xl opacity-30 animate-pulse" />
-                <div className="relative h-20 w-20 rounded-2xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center shadow-xl shadow-brand-500/25">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-400 to-brand-500 blur-xl opacity-30 animate-pulse" />
+                <div className="relative h-20 w-20 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/25">
                   <Sparkles className="h-10 w-10 text-white" />
                 </div>
               </div>
@@ -497,7 +497,7 @@ export default function AIHiringAssistantPage() {
                 >
                   {/* Avatar */}
                   {msg.role === 'assistant' && (
-                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-violet-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-brand-500/15 mt-0.5">
+                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-brand-500/15 mt-0.5">
                       <Bot className="h-4 w-4 text-white" />
                     </div>
                   )}

@@ -485,7 +485,7 @@ export default function ProfilePage() {
                     </a>
                   )}
                   {portfolioUrl && (
-                    <a href={portfolioUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-violet-600 text-white hover:bg-violet-700 transition-colors">
+                    <a href={portfolioUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-brand-600 text-white hover:bg-brand-700 transition-colors">
                       <ExternalLink className="h-3 w-3" /> Portfolio
                     </a>
                   )}

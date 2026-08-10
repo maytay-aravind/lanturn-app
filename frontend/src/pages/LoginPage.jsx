@@ -261,7 +261,7 @@ export default function LoginPage() {
               onClick={() => setMode('signin')}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 mode === 'signin'
-                  ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200'
+                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -272,7 +272,7 @@ export default function LoginPage() {
               onClick={() => setMode('signup')}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 mode === 'signup'
-                  ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200'
+                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -299,7 +299,7 @@ export default function LoginPage() {
                        transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${
               mode === 'signin'
                 ? 'bg-white text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 hover:ring-slate-300'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                : 'bg-brand-600 text-white hover:bg-brand-700'
             }`}
           >
             {signingIn && authMethod === 'email' ? null : (
@@ -322,7 +322,7 @@ export default function LoginPage() {
               onClick={() => setAuthMethod('email')}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${
                 authMethod === 'email'
-                  ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200'
+                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -334,7 +334,7 @@ export default function LoginPage() {
               onClick={() => setAuthMethod('phone')}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${
                 authMethod === 'phone'
-                  ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-slate-200'
+                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
@@ -360,7 +360,7 @@ export default function LoginPage() {
                   placeholder="you@example.com"
                   className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
                              placeholder:text-slate-400 outline-none
-                             focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                             focus:border-brand-400 focus:ring-2 focus:ring-brand-100
                              transition-all duration-200"
                 />
               </div>
@@ -373,7 +373,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={handleForgotPassword}
-                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition-colors"
+                      className="text-xs font-semibold text-brand-600 hover:text-brand-800 transition-colors"
                     >
                       Forgot password?
                     </button>
@@ -391,7 +391,7 @@ export default function LoginPage() {
                     placeholder={mode === 'signin' ? 'Enter your password' : 'Create a password (min. 6 chars)'}
                     className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-11 text-sm text-slate-900
                                placeholder:text-slate-400 outline-none
-                               focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                               focus:border-brand-400 focus:ring-2 focus:ring-brand-100
                                transition-all duration-200"
                   />
                   <button
@@ -409,7 +409,7 @@ export default function LoginPage() {
                 type="submit"
                 disabled={signingIn}
                 className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
-                           bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]
+                           bg-brand-600 text-white hover:bg-brand-700 active:scale-[0.98]
                            transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {signingIn ? (
@@ -443,7 +443,7 @@ export default function LoginPage() {
                       placeholder="+91 98765 43210"
                       className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
                                  placeholder:text-slate-400 outline-none
-                                 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                                 focus:border-brand-400 focus:ring-2 focus:ring-brand-100
                                  transition-all duration-200"
                     />
                     <p className="text-xs text-slate-400 mt-1.5">Include country code (e.g. +91 for India)</p>
@@ -453,7 +453,7 @@ export default function LoginPage() {
                     type="submit"
                     disabled={signingIn}
                     className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
-                               bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]
+                               bg-brand-600 text-white hover:bg-brand-700 active:scale-[0.98]
                                transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {signingIn ? (
@@ -484,7 +484,7 @@ export default function LoginPage() {
                       placeholder="123456"
                       className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
                                  placeholder:text-slate-400 outline-none text-center tracking-[0.3em] font-mono text-lg
-                                 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100
+                                 focus:border-brand-400 focus:ring-2 focus:ring-brand-100
                                  transition-all duration-200"
                     />
                     <p className="text-xs text-slate-400 mt-1.5">
@@ -493,7 +493,7 @@ export default function LoginPage() {
                       <button
                         type="button"
                         onClick={() => { setOtpSent(false); setOtp(''); confirmationRef.current = null; }}
-                        className="text-indigo-600 hover:text-indigo-800 underline underline-offset-2"
+                        className="text-brand-600 hover:text-brand-800 underline underline-offset-2"
                       >
                         Change number
                       </button>
@@ -504,7 +504,7 @@ export default function LoginPage() {
                     type="submit"
                     disabled={signingIn}
                     className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
-                               bg-indigo-600 text-white hover:bg-indigo-700 active:scale-[0.98]
+                               bg-brand-600 text-white hover:bg-brand-700 active:scale-[0.98]
                                transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {signingIn ? (

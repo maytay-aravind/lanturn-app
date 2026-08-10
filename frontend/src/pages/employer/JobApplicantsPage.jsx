@@ -26,7 +26,7 @@ const STATUS_CONFIG = {
 const ACTIONS = [
   { status: 'reviewed',    label: 'Mark Reviewing', icon: Eye,       cls: 'text-amber-600 bg-amber-50 hover:bg-amber-100 border-amber-200' },
   { status: 'shortlisted', label: 'Shortlist',      icon: UserCheck, cls: 'text-emerald-600 bg-emerald-50 hover:bg-emerald-100 border-emerald-200' },
-  { status: 'accepted',    label: 'Hire',           icon: Award,     cls: 'text-violet-600 bg-violet-50 hover:bg-violet-100 border-violet-200' },
+  { status: 'accepted',    label: 'Hire',           icon: Award,     cls: 'text-brand-600 bg-brand-50 hover:bg-brand-100 border-brand-200' },
   { status: 'rejected',    label: 'Reject',         icon: UserX,     cls: 'text-red-600 bg-red-50 hover:bg-red-100 border-red-200' },
 ];
 

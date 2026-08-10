@@ -32,11 +32,11 @@ const DOMAIN_ICONS = {
 
 // ── Stage node colors (cycles) ───────────────────────────────
 const STAGE_COLORS = [
-  { bg: 'bg-indigo-600',  border: 'border-indigo-600',  text: 'text-indigo-600',  light: 'bg-indigo-50',  hex: '#4f46e5' },
+  { bg: 'bg-brand-600',  border: 'border-brand-600',  text: 'text-brand-600',  light: 'bg-brand-50',  hex: '#4f46e5' },
   { bg: 'bg-amber-400',   border: 'border-amber-400',   text: 'text-amber-500',   light: 'bg-amber-50',   hex: '#f59e0b' },
   { bg: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-600', light: 'bg-emerald-50', hex: '#10b981' },
   { bg: 'bg-rose-500',    border: 'border-rose-500',    text: 'text-rose-600',    light: 'bg-rose-50',    hex: '#f43f5e' },
-  { bg: 'bg-violet-500',  border: 'border-violet-500',  text: 'text-violet-600',  light: 'bg-violet-50',  hex: '#8b5cf6' },
+  { bg: 'bg-brand-500',  border: 'border-brand-500',  text: 'text-brand-600',  light: 'bg-brand-50',  hex: '#8b5cf6' },
 ];
 
 // ── Domain picker modal ──────────────────────────────────────
@@ -85,16 +85,16 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   className={`text-left p-4 rounded-2xl ring-1 transition-all duration-200 ${
                     isEnrolled
                       ? 'bg-emerald-50 ring-emerald-200 cursor-default'
-                      : 'bg-white ring-slate-200 hover:ring-indigo-300 hover:shadow-md cursor-pointer'
+                      : 'bg-white ring-slate-200 hover:ring-brand-300 hover:shadow-md cursor-pointer'
                   }`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      isEnrolled ? 'bg-emerald-100' : 'bg-indigo-50'
+                      isEnrolled ? 'bg-emerald-100' : 'bg-brand-50'
                     }`}>
                       {enrolling === domain.id
-                        ? <Loader2 className={`h-4 w-4 animate-spin ${isEnrolled ? 'text-emerald-600' : 'text-indigo-500'}`} />
-                        : <DIcon className={`h-4 w-4 ${isEnrolled ? 'text-emerald-600' : 'text-indigo-600'}`} />}
+                        ? <Loader2 className={`h-4 w-4 animate-spin ${isEnrolled ? 'text-emerald-600' : 'text-brand-500'}`} />
+                        : <DIcon className={`h-4 w-4 ${isEnrolled ? 'text-emerald-600' : 'text-brand-600'}`} />}
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -284,7 +284,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
                   rel="noopener noreferrer"
                   whileHover={{ x: 4 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  className="flex items-center gap-2 text-sm font-medium text-indigo-500 hover:text-indigo-700 transition-colors"
+                  className="flex items-center gap-2 text-sm font-medium text-brand-500 hover:text-brand-700 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5 flex-shrink-0" />
                   {res.title}
@@ -343,7 +343,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
         className="flex items-center justify-between px-2 bg-slate-50/50 py-3 rounded-2xl ring-1 ring-slate-200/60"
       >
         <div className="flex gap-6 text-sm text-slate-600 font-medium px-4 flex-wrap">
-          <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-indigo-400" /> {roadmap.percentComplete}% Complete</span>
+          <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-brand-400" /> {roadmap.percentComplete}% Complete</span>
           <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400" /> {roadmap.completedTopics}/{roadmap.totalTopics} topics</span>
           <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-slate-400" /> {roadmap.domain.stages.length} stages</span>
           <span className="flex items-center gap-2"><Clock className="h-4 w-4 text-slate-400" /> ~{roadmap.domain.estimatedMonths} months</span>
@@ -516,7 +516,7 @@ export default function CareerAIslePage() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-md">
+            <div className="h-9 w-9 rounded-xl bg-brand-600 flex items-center justify-center shadow-md">
               <Map className="h-5 w-5 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-slate-900">CareerAIsle</h1>
@@ -570,8 +570,8 @@ export default function CareerAIslePage() {
           animate={{ opacity: 1, y: 0 }}
           className="card p-14 text-center space-y-4"
         >
-          <div className="h-16 w-16 rounded-3xl bg-indigo-50 flex items-center justify-center mx-auto">
-            <Map className="h-8 w-8 text-indigo-500" />
+          <div className="h-16 w-16 rounded-3xl bg-brand-50 flex items-center justify-center mx-auto">
+            <Map className="h-8 w-8 text-brand-500" />
           </div>
           <h2 className="text-xl font-bold text-slate-900">Start your career journey</h2>
           <p className="text-sm text-slate-500 max-w-md mx-auto">
@@ -584,7 +584,7 @@ export default function CareerAIslePage() {
                 <button
                   key={d.id}
                   onClick={() => setShowPicker(true)}
-                  className="flex items-center gap-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium px-3 py-1.5 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+                  className="flex items-center gap-1.5 rounded-full bg-slate-100 text-slate-700 text-xs font-medium px-3 py-1.5 hover:bg-brand-50 hover:text-brand-700 transition-colors"
                 >
                   <DIcon className="h-3.5 w-3.5" /> {d.title}
                 </button>

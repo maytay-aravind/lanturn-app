@@ -110,7 +110,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
 
           <div className="flex flex-wrap items-center justify-between gap-4 py-3 border-y border-slate-100">
             <CircularProgress value={matchData.skillMatchScore || 0} label="Skills" colorClass="text-blue-500" />
-            <CircularProgress value={matchData.projectScore || 0} label="Projects" colorClass="text-purple-500" />
+            <CircularProgress value={matchData.projectScore || 0} label="Projects" colorClass="text-brand-500" />
             <CircularProgress value={matchData.experienceScore || 0} label="Experience" colorClass="text-amber-500" />
             <CircularProgress value={matchData.educationScore || 0} label="Education" colorClass="text-emerald-500" />
           </div>

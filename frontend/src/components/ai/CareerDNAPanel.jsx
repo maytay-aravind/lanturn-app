@@ -95,7 +95,7 @@ export function CareerDNAPanel() {
   return (
     <div className="space-y-6">
       {/* Intro + action */}
-      <div className="p-5 rounded-2xl bg-gradient-to-br from-brand-50 via-violet-50 to-fuchsia-50 ring-1 ring-brand-100">
+      <div className="p-5 rounded-2xl bg-gradient-to-br from-brand-50 via-brand-50 to-fuchsia-50 ring-1 ring-brand-100">
         <div className="flex items-start gap-4">
           <div
             className="h-12 w-12 rounded-2xl flex items-center justify-center flex-shrink-0"

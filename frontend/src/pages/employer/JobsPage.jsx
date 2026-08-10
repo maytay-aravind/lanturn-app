@@ -320,7 +320,7 @@ export default function EmployerJobsPage() {
                   type="button"
                   onClick={handleAIGenerate}
                   disabled={aiDescMutation.isPending}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-brand-500 to-violet-600 text-white hover:from-brand-600 hover:to-violet-700 shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-60 disabled:cursor-wait"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-gradient-to-r from-brand-500 to-brand-600 text-white hover:from-brand-600 hover:to-brand-700 shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-60 disabled:cursor-wait"
                 >
                   {aiDescMutation.isPending ? (
                     <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Generating...</>

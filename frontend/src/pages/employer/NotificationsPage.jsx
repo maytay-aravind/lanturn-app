@@ -9,7 +9,7 @@ import {
 
 const TYPE_ICONS = {
   application_received: { icon: UserPlus,     cls: 'bg-blue-50 text-blue-600' },
-  application_status:   { icon: Briefcase,    cls: 'bg-violet-50 text-violet-600' },
+  application_status:   { icon: Briefcase,    cls: 'bg-brand-50 text-brand-600' },
   job_removed:          { icon: AlertCircle,  cls: 'bg-red-50 text-red-600' },
   system:               { icon: Sparkles,     cls: 'bg-amber-50 text-amber-600' },
   ai_ready:             { icon: Sparkles,     cls: 'bg-emerald-50 text-emerald-600' },

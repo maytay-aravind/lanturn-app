@@ -34,24 +34,24 @@ function RoleCard({ role, selected, onClick, icon: Icon, title, description }) {
       onClick={() => onClick(role)}
       className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
         selected
-          ? 'border-indigo-500 bg-indigo-50 shadow-sm'
+          ? 'border-brand-500 bg-brand-50 shadow-sm'
           : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
       }`}
     >
       <div className="flex items-start gap-4">
         <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
-          selected ? 'bg-indigo-100' : 'bg-slate-100 group-hover:bg-slate-200'
+          selected ? 'bg-brand-100' : 'bg-slate-100 group-hover:bg-slate-200'
         }`}>
-          <Icon className={`h-5 w-5 ${selected ? 'text-indigo-600' : 'text-slate-500'}`} />
+          <Icon className={`h-5 w-5 ${selected ? 'text-brand-600' : 'text-slate-500'}`} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`font-semibold text-sm ${selected ? 'text-indigo-700' : 'text-slate-800'}`}>
+          <p className={`font-semibold text-sm ${selected ? 'text-brand-700' : 'text-slate-800'}`}>
             {title}
           </p>
           <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{description}</p>
         </div>
         <div className={`h-5 w-5 rounded-full border-2 flex-shrink-0 mt-0.5 transition-colors ${
-          selected ? 'border-indigo-500 bg-indigo-500' : 'border-slate-300'
+          selected ? 'border-brand-500 bg-brand-500' : 'border-slate-300'
         }`}>
           {selected && (
             <svg className="w-full h-full text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>

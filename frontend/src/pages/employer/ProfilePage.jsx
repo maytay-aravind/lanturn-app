@@ -231,7 +231,7 @@ export default function EmployerProfilePage() {
       {/* ── Profile Summary Card ───────────────────────────────── */}
       <div className="card overflow-hidden">
         {/* Cover gradient */}
-        <div className="h-32 bg-gradient-to-r from-brand-600 via-indigo-500 to-purple-600 opacity-90 relative">
+        <div className="h-32 bg-gradient-to-r from-brand-600 via-brand-500 to-brand-600 opacity-90 relative">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 mix-blend-overlay"></div>
         </div>
         
