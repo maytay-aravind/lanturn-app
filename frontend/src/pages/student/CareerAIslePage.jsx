@@ -11,7 +11,8 @@ import {
   ChevronLeft, ChevronRight, ArrowRight, Map, Search, Eye, Filter,
   ShieldCheck, PieChart, Network, UserCheck, Glasses, MessageSquare,
   FileText, Wifi, HardDrive, Rocket, Atom, Target, Package,
-  Landmark, Users, Handshake, Flame, Layers3, Check, Bot, CheckSquare
+  Landmark, Users, Handshake, Flame, Layers3, Check, Bot, CheckSquare,
+  Compass, ArrowUpRight, Zap
 } from 'lucide-react';
 
 // ── Domain icon mapping (lucide) ────────────────────────────
@@ -154,7 +155,9 @@ const CATEGORIES = [
   'Emerging & Hardware',
 ];
 
-// ── Domain picker modal (Redesigned with categories, search, difficulty filter & roadmap preview) ──
+const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+
+// ── Senior UI/UX Domain Picker Modal ─────────────────────────
 function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling }) {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Roles');
@@ -198,39 +201,50 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
+      {/* Backdrop with ultra-smooth blur */}
+      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-xl transition-all" onClick={onClose} />
+
       <motion.div
-        className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100"
-        initial={{ scale: 0.94, y: 16 }}
+        className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200/80"
+        initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.94, y: 16 }}
-        transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+        exit={{ scale: 0.95, y: 20 }}
+        transition={{ type: 'spring', stiffness: 350, damping: 28 }}
       >
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-brand-950 to-slate-900 text-white flex flex-col gap-4 flex-shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-2xl bg-brand-500/20 border border-brand-400/30 flex items-center justify-center text-brand-300">
+        <div className="p-6 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col gap-5 flex-shrink-0 relative overflow-hidden">
+          {/* Ambient Glow Gradient */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-500/10 blur-[100px] rounded-full pointer-events-none" />
+
+          <div className="flex items-center justify-between relative z-10">
+            <div className="flex items-center gap-3.5">
+              <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 border border-brand-400/30 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Explore Career Paths</h2>
-                <p className="text-xs sm:text-sm text-slate-300">
-                  {domains.length} structured, stage-by-stage learning roadmaps across 7 major technology fields
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                  Explore Career Paths
+                  <span className="text-xs font-extrabold bg-white/10 text-brand-300 px-2.5 py-0.5 rounded-full border border-white/10">
+                    {domains.length} Paths
+                  </span>
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                  Select a career domain to unlock structured, stage-by-stage learning roadmaps
                 </p>
               </div>
             </div>
+
             <button
               onClick={onClose}
-              className="h-9 w-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+              className="h-10 w-10 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-all transform hover:rotate-90 duration-300"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Category Pill Navigation */}
+          {/* Category Pill Navigation with Framer Motion Animated Layout */}
           {!previewDomain && (
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1 scroll-smooth">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar pt-1 scroll-smooth relative z-10">
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
                 const count = categoryCounts[cat] || 0;
@@ -238,19 +252,20 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
-                      isActive
-                        ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30'
-                        : 'bg-white/10 text-slate-300 hover:bg-white/15 hover:text-white'
-                    }`}
+                    className="relative px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors"
                   >
-                    <span>{cat}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
-                      }`}
-                    >
-                      {count}
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeCategoryTab"
+                        className="absolute inset-0 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-xl shadow-lg shadow-brand-500/30"
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                    <span className={`relative z-10 flex items-center gap-1.5 ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}>
+                      {cat}
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                        {count}
+                      </span>
                     </span>
                   </button>
                 );
@@ -261,55 +276,71 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
         {/* Modal Body: Search & Filters or Stage Preview */}
         {previewDomain ? (
-          /* Roadmap Stage Preview Drawer */
-          <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
-            <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+          /* Roadmap Stage Preview View */
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="flex-1 flex flex-col overflow-hidden bg-slate-50/80"
+          >
+            {/* Top Navigation Bar */}
+            <div className="p-4 bg-white/90 backdrop-blur-md border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
               <button
                 onClick={() => setPreviewDomain(null)}
-                className="flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:text-brand-800 bg-brand-50 px-3 py-1.5 rounded-xl transition-colors"
+                className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-brand-600 bg-slate-100 hover:bg-brand-50 px-3.5 py-2 rounded-xl transition-all"
               >
-                <ChevronLeft className="h-4 w-4" /> Back to All Roles
+                <ChevronLeft className="h-4 w-4" /> Back to Career Catalog
               </button>
-              <span className="text-xs font-medium text-slate-500 flex items-center gap-1">
-                <BookOpen className="h-3.5 w-3.5" /> Previewing Roadmap
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                  <BookOpen className="h-4 w-4 text-brand-500" /> Interactive Roadmap Preview
+                </span>
+              </div>
             </div>
 
+            {/* Preview Content Area */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {/* Preview Header Banner */}
+              {/* Hero Banner Card */}
               <div
-                className="rounded-3xl p-6 text-white shadow-lg relative overflow-hidden"
+                className="rounded-3xl p-6 text-white shadow-xl relative overflow-hidden border border-white/10"
                 style={{ background: `linear-gradient(135deg, ${previewDomain.color || '#4f46e5'}, #0f172a)` }}
               >
-                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="flex items-start gap-4">
-                    <div className="h-14 w-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0">
+                    <div className="h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-lg">
                       {previewDomain.icon || '🌐'}
                     </div>
                     <div>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-bold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="text-[11px] font-extrabold bg-white/20 backdrop-blur-md px-3 py-0.5 rounded-full uppercase tracking-wider text-white">
                           {getDomainCategory(previewDomain)}
                         </span>
-                        <span className="text-xs text-white/80 font-medium flex items-center gap-1">
-                          <Clock className="h-3.5 w-3.5" /> ~{previewDomain.estimatedMonths} months
+                        <span className="text-xs text-white/80 font-semibold flex items-center gap-1">
+                          <Clock className="h-3.5 w-3.5" /> ~{previewDomain.estimatedMonths} Months Duration
                         </span>
                       </div>
-                      <h3 className="text-2xl font-bold mt-1">{previewDomain.title}</h3>
-                      <p className="text-sm text-white/90 mt-1 max-w-xl">{previewDomain.description}</p>
+                      <h3 className="text-2xl sm:text-3xl font-black text-white">{previewDomain.title}</h3>
+                      <p className="text-xs sm:text-sm text-white/90 mt-1 max-w-2xl leading-relaxed">{previewDomain.description}</p>
                     </div>
                   </div>
+
                   <button
                     disabled={enrolledIds.has(previewDomain.id) || enrolling === previewDomain.id}
                     onClick={() => onEnroll(previewDomain.id)}
-                    className="btn-primary bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg border-none px-6 py-3 self-start sm:self-center shrink-0"
+                    className="btn-primary bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl hover:shadow-emerald-500/30 border-none px-6 py-3.5 text-sm font-bold self-start md:self-center shrink-0 flex items-center gap-2 transform hover:scale-105 transition-all"
                   >
                     {enrolling === previewDomain.id ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : enrolledIds.has(previewDomain.id) ? (
-                      'Already Enrolled'
+                      <>
+                        <Check className="h-4 w-4" /> Already Enrolled
+                      </>
                     ) : (
-                      'Enroll in this Path'
+                      <>
+                        <Zap className="h-4 w-4" /> Enroll in this Career Path
+                      </>
                     )}
                   </button>
                 </div>
@@ -317,74 +348,134 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
               {/* Stages List */}
               <div className="space-y-4">
-                <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
-                  <Layers3 className="h-5 w-5 text-brand-600" />
-                  Roadmap Stages ({previewDomain.stages?.length || 0} Stages)
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <Layers3 className="h-5 w-5 text-brand-600" />
+                    Stage-by-Stage Curriculum ({previewDomain.stages?.length || 0} Stages)
+                  </h4>
+                  <span className="text-xs font-semibold text-slate-400">
+                    {previewDomain.stages?.reduce((sum, s) => sum + (s.topics?.length || 0), 0)} Total Skill Topics
+                  </span>
+                </div>
 
-                {previewDomain.stages?.map((stage, idx) => (
-                  <div
-                    key={idx}
-                    className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow"
-                  >
-                    <div className="flex items-start justify-between gap-3 mb-3">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="h-6 w-6 rounded-full bg-brand-100 text-brand-700 text-xs font-bold flex items-center justify-center">
+                <div className="space-y-3.5">
+                  {previewDomain.stages?.map((stage, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                      className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all"
+                    >
+                      <div className="flex items-start justify-between gap-3 mb-3">
+                        <div className="flex items-start gap-3">
+                          <span className="h-7 w-7 rounded-xl bg-brand-600 text-white text-xs font-extrabold flex items-center justify-center shrink-0 shadow-md shadow-brand-500/20">
                             {idx + 1}
                           </span>
-                          <h5 className="font-bold text-slate-900 text-base">{stage.title}</h5>
-                          {stage.difficulty && (
-                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
-                              {stage.difficulty}
-                            </span>
-                          )}
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <h5 className="font-bold text-slate-900 text-base">{stage.title}</h5>
+                              {stage.difficulty && (
+                                <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                                  stage.difficulty === 'Beginner'
+                                    ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+                                    : stage.difficulty === 'Intermediate'
+                                    ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'
+                                    : 'bg-purple-50 text-purple-700 ring-1 ring-purple-200'
+                                }`}>
+                                  {stage.difficulty}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-slate-500 mt-1">{stage.description}</p>
+                          </div>
                         </div>
-                        <p className="text-xs text-slate-500 mt-1">{stage.description}</p>
-                      </div>
-                      <span className="text-xs font-medium text-slate-400 shrink-0 flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5" /> {stage.durationWeeks} wks
-                      </span>
-                    </div>
-
-                    {/* Topics */}
-                    <div className="mb-3">
-                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                        Key Learning Topics
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {stage.topics?.map((topic, ti) => (
-                          <span key={ti} className="text-xs bg-slate-100 text-slate-700 font-medium px-2.5 py-1 rounded-lg">
-                            {topic}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Stage Project */}
-                    {stage.project && (
-                      <div className="bg-brand-50/60 rounded-xl p-3 border border-brand-100 text-xs mt-3">
-                        <span className="font-bold text-brand-900 flex items-center gap-1.5">
-                          <Code2 className="h-3.5 w-3.5 text-brand-600" /> Stage Hands-on Project: {stage.project.title}
+                        <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-xl shrink-0 flex items-center gap-1">
+                          <Clock className="h-3.5 w-3.5" /> {stage.durationWeeks} weeks
                         </span>
-                        <p className="text-brand-700 mt-0.5">{stage.project.description}</p>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      {/* Topics */}
+                      <div className="mb-3.5">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+                          Core Topics Covered
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {stage.topics?.map((topic, ti) => (
+                            <span key={ti} className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-700 font-medium px-3 py-1 rounded-lg transition-colors">
+                              {topic}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Stage Project Card */}
+                      {stage.project && (
+                        <div className="bg-gradient-to-r from-brand-50/80 to-indigo-50/50 rounded-xl p-3.5 border border-brand-100 text-xs">
+                          <span className="font-bold text-brand-900 flex items-center gap-1.5">
+                            <Code2 className="h-4 w-4 text-brand-600" /> Stage Capstone Project: {stage.project.title}
+                          </span>
+                          <p className="text-brand-700 mt-1 leading-relaxed">{stage.project.description}</p>
+                        </div>
+                      )}
+
+                      {/* Study Resources */}
+                      {stage.resources?.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-3 flex-wrap text-xs">
+                          <span className="font-bold text-slate-400 text-[10px] uppercase tracking-wider">Resources:</span>
+                          {stage.resources.map((res, ri) => (
+                            <a
+                              key={ri}
+                              href={res.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-brand-600 hover:text-brand-800 font-semibold flex items-center gap-1 hover:underline"
+                            >
+                              {res.title} <ArrowUpRight className="h-3 w-3" />
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+
+            {/* Sticky Bottom Action Bar */}
+            <div className="p-4 bg-white/90 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-between shrink-0">
+              <button
+                onClick={() => setPreviewDomain(null)}
+                className="text-xs font-bold text-slate-600 hover:text-slate-900 px-4 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+              >
+                ← Return to Catalog
+              </button>
+              <button
+                disabled={enrolledIds.has(previewDomain.id) || enrolling === previewDomain.id}
+                onClick={() => onEnroll(previewDomain.id)}
+                className="btn-primary bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 flex items-center gap-2"
+              >
+                {enrolling === previewDomain.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : enrolledIds.has(previewDomain.id) ? (
+                  'Enrolled'
+                ) : (
+                  'Enroll in this Career Path →'
+                )}
+              </button>
+            </div>
+          </motion.div>
         ) : (
-          /* Normal Search & Browse View */
-          <div className="flex-1 flex flex-col overflow-hidden">
+          /* Normal Search & Catalog View */
+          <div className="flex-1 flex flex-col overflow-hidden bg-slate-50/50">
             {/* Search & Difficulty Filter Bar */}
-            <div className="p-4 border-b border-slate-100 bg-slate-50/70 flex flex-col sm:flex-row items-center gap-3 flex-shrink-0">
+            <div className="p-4 border-b border-slate-200/70 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 flex-shrink-0">
+              {/* Search Box */}
               <div className="relative flex-1 w-full">
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
-                  className="input pl-10 pr-8 py-2 text-sm bg-white"
-                  placeholder="Search role by name, skill, or field (e.g. Flutter, Pentest, Quantum, Product)..."
+                  className="input pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-slate-50 border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-brand-500/20 transition-all"
+                  placeholder="Search 57 roles by title, skill, or topic (e.g. Flutter, Quantum, AWS, Pentesting)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   autoFocus
@@ -392,105 +483,114 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                 {search && (
                   <button
                     onClick={() => setSearch('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
                 )}
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
-                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1 shrink-0">
-                  <Filter className="h-3.5 w-3.5" /> Difficulty:
-                </span>
-                <select
-                  value={difficultyFilter}
-                  onChange={(e) => setDifficultyFilter(e.target.value)}
-                  className="input py-2 text-xs bg-white shrink-0 cursor-pointer"
-                >
-                  <option value="All">All Levels</option>
-                  <option value="Beginner">Beginner Friendly</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                </select>
+              {/* Difficulty Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto shrink-0 pb-1 sm:pb-0">
+                <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mr-1 shrink-0">Level:</span>
+                {DIFFICULTIES.map((diff) => {
+                  const isActive = difficultyFilter === diff;
+                  return (
+                    <button
+                      key={diff}
+                      onClick={() => setDifficultyFilter(diff)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                        isActive
+                          ? 'bg-slate-900 text-white shadow-sm'
+                          : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                      }`}
+                    >
+                      {diff}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {/* Roles Grid */}
-            <div className="overflow-y-auto flex-1 p-5">
+            <div className="overflow-y-auto flex-1 p-5 sm:p-6">
               {filtered.length === 0 ? (
-                <div className="text-center py-12 space-y-3">
-                  <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
-                    <Search className="h-6 w-6" />
+                <div className="text-center py-16 space-y-3">
+                  <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+                    <Search className="h-7 w-7 text-slate-400" />
                   </div>
-                  <p className="text-base font-bold text-slate-700">No career paths match your criteria</p>
-                  <p className="text-xs text-slate-400">Try adjusting your search terms or selecting another category</p>
+                  <p className="text-lg font-bold text-slate-800">No career paths match your criteria</p>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                    Try searching for another keyword or reset category and difficulty filters to browse all 57 paths.
+                  </p>
                   <button
                     onClick={() => {
                       setSearch('');
                       setSelectedCategory('All Roles');
                       setDifficultyFilter('All');
                     }}
-                    className="text-xs font-bold text-brand-600 hover:underline pt-2 inline-block"
+                    className="btn-primary bg-slate-900 text-white text-xs px-4 py-2 mt-2 inline-flex items-center gap-1.5"
                   >
                     Reset all filters
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {filtered.map((domain) => {
                     const DIcon = DOMAIN_ICONS[domain.id] ?? Globe;
                     const isEnrolled = enrolledIds.has(domain.id);
                     const domainCat = getDomainCategory(domain);
+
                     return (
                       <motion.div
                         key={domain.id}
-                        whileHover={{ y: -2 }}
-                        className={`p-4.5 rounded-2xl ring-1 transition-all duration-200 flex flex-col justify-between ${
+                        whileHover={{ y: -3 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                        className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between group ${
                           isEnrolled
-                            ? 'bg-emerald-50/50 ring-emerald-200'
-                            : 'bg-white ring-slate-200 hover:ring-brand-400 hover:shadow-md'
+                            ? 'bg-emerald-50/40 border-emerald-200/80 shadow-sm'
+                            : 'bg-white border-slate-200/80 hover:border-brand-400/60 shadow-sm hover:shadow-xl hover:shadow-brand-500/5'
                         }`}
                       >
                         <div>
                           {/* Top Row: Icon + Title + Enrolled Badge */}
-                          <div className="flex items-start justify-between gap-3 mb-2">
-                            <div className="flex items-center gap-3">
+                          <div className="flex items-start justify-between gap-3 mb-3">
+                            <div className="flex items-center gap-3.5">
                               <div
-                                className={`h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
+                                className={`h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105 ${
                                   isEnrolled
-                                    ? 'bg-emerald-100 text-emerald-600'
-                                    : 'bg-brand-50 text-brand-600'
+                                    ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
+                                    : 'bg-gradient-to-br from-brand-50 to-indigo-50 text-brand-600 border border-brand-100'
                                 }`}
                               >
-                                <DIcon className="h-5 w-5" />
+                                <DIcon className="h-6 w-6" />
                               </div>
                               <div>
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-500">
+                                <span className="text-[10px] font-extrabold uppercase tracking-widest text-brand-600">
                                   {domainCat}
                                 </span>
-                                <h3 className="font-bold text-slate-900 text-base leading-tight">
+                                <h3 className="font-extrabold text-slate-900 text-base leading-tight group-hover:text-brand-600 transition-colors">
                                   {domain.title}
                                 </h3>
                               </div>
                             </div>
 
                             {isEnrolled && (
-                              <span className="badge bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300 text-xs font-semibold flex items-center gap-1 shrink-0">
+                              <span className="badge bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold flex items-center gap-1 shrink-0 px-2.5 py-1">
                                 <Check className="h-3 w-3" /> Enrolled
                               </span>
                             )}
                           </div>
 
                           {/* Description */}
-                          <p className="text-xs text-slate-600 line-clamp-2 mb-3 leading-relaxed">
+                          <p className="text-xs text-slate-600 line-clamp-2 mb-4 leading-relaxed font-normal">
                             {domain.description}
                           </p>
                         </div>
 
-                        {/* Footer stats & Actions */}
-                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between mt-1">
-                          <div className="flex items-center gap-3 text-xs text-slate-400 font-medium">
+                        {/* Footer stats & Action Buttons */}
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                          <div className="flex items-center gap-3 text-xs text-slate-400 font-semibold">
                             <span className="flex items-center gap-1">
                               <Clock className="h-3.5 w-3.5 text-slate-400" />
                               {domain.estimatedMonths}m
@@ -501,24 +601,24 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-1.5">
-                            {/* Preview Button */}
+                          <div className="flex items-center gap-2">
+                            {/* Quick Preview Button */}
                             <button
                               onClick={() => setPreviewDomain(domain)}
-                              className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 transition-colors"
-                              title="Preview Roadmap Stages"
+                              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                              title="Preview Full Roadmap Stages"
                             >
                               <Eye className="h-3.5 w-3.5 text-slate-500" /> Preview
                             </button>
 
-                            {/* Enroll Button */}
+                            {/* Select / Enroll Button */}
                             <button
                               disabled={isEnrolled || enrolling === domain.id}
                               onClick={() => !isEnrolled && onEnroll(domain.id)}
-                              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 ${
+                              className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
                                 isEnrolled
                                   ? 'bg-emerald-100 text-emerald-700 cursor-default'
-                                  : 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm hover:shadow-brand-500/20'
+                                  : 'bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 hover:shadow-brand-500/30'
                               }`}
                             >
                               {enrolling === domain.id ? (
