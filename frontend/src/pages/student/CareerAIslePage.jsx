@@ -11,46 +11,127 @@ import {
   ChevronLeft, ChevronRight, ArrowRight, Map, Search, Eye, Filter,
   ShieldCheck, PieChart, Network, UserCheck, Glasses, MessageSquare,
   FileText, Wifi, HardDrive, Rocket, Atom, Target, Package,
-  Landmark, Users, Handshake, Flame, Layers3, Check, Sparkle
+  Landmark, Users, Handshake, Flame, Layers3, Check, Bot, CheckSquare
 } from 'lucide-react';
 
 // ── Domain icon mapping (lucide) ────────────────────────────
 const DOMAIN_ICONS = {
-  frontend:      Globe,
-  backend:       Server,
-  fullstack:     Layers,
-  aiml:          Brain,
-  android:       Smartphone,
-  ios:           Smartphone,
-  datasci:       BarChart2,
-  dataanalytics: PieChart,
-  devops:        RefreshCw,
-  cybersec:      Shield,
-  cloudsec:      ShieldCheck,
-  cloud:         Cloud,
-  uiux:          Palette,
-  blockchain:    Link,
-  gamedev:       Gamepad2,
-  qa:            FlaskConical,
-  embedded:      Cpu,
-  dataeng:       Database,
-  marketing:     TrendingUp,
-  product:       Package,
-  finance:       Landmark,
-  hr:            Users,
-  sales:         Handshake,
-  sre:           Flame,
-  prompteng:     Sparkles,
-  sysarch:       Network,
-  engmgmt:       UserCheck,
-  arvr:          Glasses,
-  devrel:        MessageSquare,
-  bizanalyst:    FileText,
-  neteng:        Wifi,
-  dba:           HardDrive,
-  growth:        Rocket,
-  quantum:       Atom,
-  gamedesign:    Target,
+  frontend:       Globe,
+  backend:        Server,
+  fullstack:      Layers,
+  sysarch:        Network,
+  qa:             FlaskConical,
+  gamedev:        Gamepad2,
+  compilers:      Cpu,
+  microservices:  Layers3,
+
+  android:        Smartphone,
+  ios:            Smartphone,
+  flutter:        Smartphone,
+  reactnative:    Smartphone,
+  mobileqa:       Smartphone,
+
+  aiml:           Brain,
+  datasci:        BarChart2,
+  dataanalytics:  PieChart,
+  dataeng:        Database,
+  prompteng:      Sparkles,
+  quantum:        Atom,
+  nlp:            MessageSquare,
+  computervision: Eye,
+  mlops:          RefreshCw,
+
+  devops:         RefreshCw,
+  cybersec:       Shield,
+  cloudsec:       ShieldCheck,
+  cloud:          Cloud,
+  sre:            Flame,
+  neteng:         Wifi,
+  dba:            HardDrive,
+  secops:         ShieldCheck,
+
+  uiux:           Palette,
+  product:        Package,
+  gamedesign:     Target,
+  uxresearch:     Search,
+
+  engmgmt:        UserCheck,
+  finance:        Landmark,
+  hr:             Users,
+  sales:          Handshake,
+  marketing:      TrendingUp,
+  devrel:         MessageSquare,
+  bizanalyst:     FileText,
+  growth:         Rocket,
+  scrum:          CheckSquare,
+
+  blockchain:     Link,
+  arvr:           Glasses,
+  embedded:       Cpu,
+  robotics:       Bot,
+};
+
+// ── Fallback Category Mapping ────────────────────────────────
+const DOMAIN_CATEGORY_MAP = {
+  frontend:       'Software Engineering',
+  backend:        'Software Engineering',
+  fullstack:      'Software Engineering',
+  sysarch:        'Software Engineering',
+  qa:             'Software Engineering',
+  gamedev:        'Software Engineering',
+  compilers:      'Software Engineering',
+  microservices:  'Software Engineering',
+
+  android:        'Mobile Development',
+  ios:            'Mobile Development',
+  flutter:        'Mobile Development',
+  reactnative:    'Mobile Development',
+  mobileqa:       'Mobile Development',
+
+  aiml:           'AI & Data Science',
+  datasci:        'AI & Data Science',
+  dataanalytics:  'AI & Data Science',
+  dataeng:        'AI & Data Science',
+  prompteng:      'AI & Data Science',
+  quantum:        'AI & Data Science',
+  nlp:            'AI & Data Science',
+  computervision: 'AI & Data Science',
+  mlops:          'AI & Data Science',
+
+  devops:         'Cloud & Security',
+  cybersec:       'Cloud & Security',
+  cloudsec:       'Cloud & Security',
+  cloud:          'Cloud & Security',
+  sre:            'Cloud & Security',
+  neteng:         'Cloud & Security',
+  dba:            'Cloud & Security',
+  secops:         'Cloud & Security',
+
+  uiux:           'Product & Design',
+  product:        'Product & Design',
+  gamedesign:     'Product & Design',
+  uxresearch:     'Product & Design',
+
+  engmgmt:        'Management & Business',
+  finance:        'Management & Business',
+  hr:             'Management & Business',
+  sales:          'Management & Business',
+  marketing:      'Management & Business',
+  devrel:         'Management & Business',
+  bizanalyst:     'Management & Business',
+  growth:         'Management & Business',
+  scrum:          'Management & Business',
+
+  blockchain:     'Emerging & Hardware',
+  arvr:           'Emerging & Hardware',
+  embedded:       'Emerging & Hardware',
+  robotics:       'Emerging & Hardware',
+};
+
+const getDomainCategory = (domain) => {
+  if (domain && domain.category) return domain.category;
+  if (domain && domain.id && DOMAIN_CATEGORY_MAP[domain.id]) return DOMAIN_CATEGORY_MAP[domain.id];
+  return 'Software Engineering';
 };
 
 // ── Stage node colors (cycles) ───────────────────────────────
@@ -84,7 +165,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
   const categoryCounts = useMemo(() => {
     const counts = { 'All Roles': domains.length };
     domains.forEach((d) => {
-      const cat = d.category || 'Software Engineering';
+      const cat = getDomainCategory(d);
       counts[cat] = (counts[cat] || 0) + 1;
     });
     return counts;
@@ -93,13 +174,14 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
   // Filtered domains
   const filtered = useMemo(() => {
     return domains.filter((d) => {
+      const cat = getDomainCategory(d);
       const matchesSearch =
         d.title.toLowerCase().includes(search.toLowerCase()) ||
         d.description.toLowerCase().includes(search.toLowerCase()) ||
-        (d.category && d.category.toLowerCase().includes(search.toLowerCase()));
+        cat.toLowerCase().includes(search.toLowerCase());
 
       const matchesCat =
-        selectedCategory === 'All Roles' || (d.category || 'Software Engineering') === selectedCategory;
+        selectedCategory === 'All Roles' || cat === selectedCategory;
 
       const matchesDifficulty =
         difficultyFilter === 'All' ||
@@ -134,7 +216,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Explore Career Paths</h2>
                 <p className="text-xs sm:text-sm text-slate-300">
-                  {domains.length} structured, stage-by-stage learning roadmaps with resources & projects
+                  {domains.length} structured, stage-by-stage learning roadmaps across 7 major technology fields
                 </p>
               </div>
             </div>
@@ -156,7 +238,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
                       isActive
                         ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30'
                         : 'bg-white/10 text-slate-300 hover:bg-white/15 hover:text-white'
@@ -207,7 +289,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-xs font-bold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                          {previewDomain.category || 'Software Engineering'}
+                          {getDomainCategory(previewDomain)}
                         </span>
                         <span className="text-xs text-white/80 font-medium flex items-center gap-1">
                           <Clock className="h-3.5 w-3.5" /> ~{previewDomain.estimatedMonths} months
@@ -302,7 +384,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                 <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   className="input pl-10 pr-8 py-2 text-sm bg-white"
-                  placeholder="Search role by name, skill, or keyword (e.g. React, Cyber, Quantum)..."
+                  placeholder="Search role by name, skill, or field (e.g. Flutter, Pentest, Quantum, Product)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   autoFocus
@@ -342,7 +424,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                     <Search className="h-6 w-6" />
                   </div>
                   <p className="text-base font-bold text-slate-700">No career paths match your criteria</p>
-                  <p className="text-xs text-slate-400">Try adjusting your search terms or clearing category filters</p>
+                  <p className="text-xs text-slate-400">Try adjusting your search terms or selecting another category</p>
                   <button
                     onClick={() => {
                       setSearch('');
@@ -359,6 +441,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   {filtered.map((domain) => {
                     const DIcon = DOMAIN_ICONS[domain.id] ?? Globe;
                     const isEnrolled = enrolledIds.has(domain.id);
+                    const domainCat = getDomainCategory(domain);
                     return (
                       <motion.div
                         key={domain.id}
@@ -384,7 +467,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                               </div>
                               <div>
                                 <span className="text-[10px] font-bold uppercase tracking-wider text-brand-500">
-                                  {domain.category || 'Software Engineering'}
+                                  {domainCat}
                                 </span>
                                 <h3 className="font-bold text-slate-900 text-base leading-tight">
                                   {domain.title}
@@ -414,7 +497,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                             </span>
                             <span className="flex items-center gap-1">
                               <BookOpen className="h-3.5 w-3.5 text-slate-400" />
-                              {domain.stageCount} stages
+                              {domain.stageCount || domain.stages?.length || 0} stages
                             </span>
                           </div>
 
@@ -615,7 +698,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
         </motion.div>
 
         {/* Resources */}
-        {stage.resources.length > 0 && (
+        {stage.resources?.length > 0 && (
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-brand-400 mb-2.5">
               Recommended Study Resources
@@ -923,7 +1006,7 @@ export default function CareerAIslePage() {
             Pick a career domain and get a structured stage-by-stage roadmap with topics, projects, and curated resources.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
-            {domains.slice(0, 6).map((d) => {
+            {domains.slice(0, 7).map((d) => {
               const DIcon = DOMAIN_ICONS[d.id] ?? Globe;
               return (
                 <button
@@ -942,7 +1025,7 @@ export default function CareerAIslePage() {
             onClick={() => setShowPicker(true)}
             className="btn-primary mt-2 inline-flex items-center gap-2"
           >
-            <Sparkles className="h-4 w-4" /> Browse 35 Career Paths
+            <Sparkles className="h-4 w-4" /> Browse All Career Paths
           </motion.button>
         </motion.div>
       )}
