@@ -21,4 +21,18 @@ export const roadmapService = {
     apiClient
       .patch(`/roadmaps/me/${roadmapId}/progress`, { stageIndex, topicIndex, completed })
       .then(unwrap),
+
+  /** AI Resume Gap Analyzer — upload PDF + domainId */
+  analyzeResume: (formData) =>
+    apiClient
+      .post('/roadmaps/analyze-resume', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        timeout: 60000, // PDF parsing + AI can take time
+      })
+      .then(unwrap),
+
+  /** Batch-sync matched resume topics to roadmap progress */
+  syncResumeProgress: (roadmapId, topicKeys) =>
+    apiClient.post('/roadmaps/sync-resume-progress', { roadmapId, topicKeys }).then(unwrap),
 };
+

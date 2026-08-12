@@ -1,4 +1,5 @@
 import * as roadmapService from '#services/roadmap.service.js';
+import * as resumeAnalyzerService from '#services/resumeAnalyzer.service.js';
 import { asyncHandler } from '#utils/asyncHandler.js';
 
 /** GET /roadmaps/domains — list all available career domains */
@@ -43,4 +44,37 @@ export const updateProgress = asyncHandler(async (req, res) => {
     Boolean(completed)
   );
   res.json({ data, meta: { requestId: req.id } });
+});
+
+/** POST /roadmaps/analyze-resume — AI resume gap analysis against a career domain */
+export const analyzeResume = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: { code: 'MISSING_FILE', message: 'Please upload a PDF resume.' } });
+  }
+  const domainId = req.body.domainId;
+  if (!domainId) {
+    return res.status(400).json({ error: { code: 'MISSING_DOMAIN', message: 'Please select a target career domain.' } });
+  }
+
+  const data = await resumeAnalyzerService.analyzeResumeGap(req.file.buffer, domainId);
+  res.json({ data, meta: { requestId: req.id } });
+});
+
+/** POST /roadmaps/sync-resume-progress — batch-complete matched topics from resume analysis */
+export const syncResumeTopics = asyncHandler(async (req, res) => {
+  const { roadmapId, topicKeys } = req.body;
+  if (!roadmapId || !Array.isArray(topicKeys) || topicKeys.length === 0) {
+    return res.status(400).json({ error: { code: 'INVALID_INPUT', message: 'roadmapId and topicKeys[] are required.' } });
+  }
+
+  let synced = 0;
+  for (const key of topicKeys) {
+    const [si, ti] = key.split('-').map(Number);
+    if (!isNaN(si) && !isNaN(ti)) {
+      await roadmapService.toggleTopic(req.user.uid, roadmapId, si, ti, true);
+      synced++;
+    }
+  }
+
+  res.json({ data: { synced, roadmapId }, meta: { requestId: req.id } });
 });

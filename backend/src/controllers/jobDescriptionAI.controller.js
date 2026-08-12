@@ -1,3 +1,4 @@
+
 import { generateJobDescription } from '#services/jobDescriptionAI.service.js';
 import { asyncHandler } from '#utils/asyncHandler.js';
 
@@ -22,3 +23,5 @@ export const generate = asyncHandler(async (req, res) => {
     meta: { requestId: req.id },
   });
 });
+
+

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { roadmapService } from '../../services/roadmap.service.js';
+import ResumeGapAnalyzerModal from '../../components/ai/ResumeGapAnalyzerModal.jsx';
 import toast from 'react-hot-toast';
 import {
   Globe, Server, Layers, Brain, Smartphone, BarChart2, RefreshCw,
@@ -995,6 +996,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 export default function CareerAIslePage() {
   const qc = useQueryClient();
   const [showPicker, setShowPicker] = useState(false);
+  const [showResumeAnalyzer, setShowResumeAnalyzer] = useState(false);
   const [enrolling, setEnrolling] = useState(null);
   const [activeTab, setActiveTab] = useState(null);
 
@@ -1051,15 +1053,26 @@ export default function CareerAIslePage() {
           </div>
           <p className="text-sm text-brand-500 mt-1 ml-[44px]">Structured, stage-by-stage career learning paths</p>
         </div>
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setShowPicker(true)}
-          className="btn-primary flex items-center gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          Add Career Path
-        </motion.button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setShowResumeAnalyzer(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
+          >
+            <FileText className="h-4 w-4" />
+            Scan Resume with AI
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => setShowPicker(true)}
+            className="btn-primary flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Add Career Path
+          </motion.button>
+        </div>
       </div>
 
       {/* Roadmap tabs */}
@@ -1157,6 +1170,18 @@ export default function CareerAIslePage() {
             onEnroll={handleEnroll}
             onClose={() => setShowPicker(false)}
             enrolling={enrolling}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* AI Resume Gap Analyzer Modal */}
+      <AnimatePresence>
+        {showResumeAnalyzer && (
+          <ResumeGapAnalyzerModal
+            domains={domains}
+            enrolledRoadmaps={myRoadmaps}
+            onClose={() => setShowResumeAnalyzer(false)}
+            onSynced={() => qc.invalidateQueries({ queryKey: ['roadmaps', 'me'] })}
           />
         )}
       </AnimatePresence>
