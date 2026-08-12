@@ -8,26 +8,49 @@ import {
   Shield, Cloud, Palette, Link, Gamepad2, FlaskConical, Cpu,
   Database, TrendingUp, Plus, X, Loader2, ExternalLink,
   BookOpen, Code2, Clock, Trash2, Sparkles, CheckCircle2,
-  ChevronLeft, ChevronRight, ArrowRight, Map,
+  ChevronLeft, ChevronRight, ArrowRight, Map, Search, Eye, Filter,
+  ShieldCheck, PieChart, Network, UserCheck, Glasses, MessageSquare,
+  FileText, Wifi, HardDrive, Rocket, Atom, Target, Package,
+  Landmark, Users, Handshake, Flame, Layers3, Check, Sparkle
 } from 'lucide-react';
 
 // ── Domain icon mapping (lucide) ────────────────────────────
 const DOMAIN_ICONS = {
-  frontend:   Globe,
-  backend:    Server,
-  fullstack:  Layers,
-  aiml:       Brain,
-  android:    Smartphone,
-  datasci:    BarChart2,
-  devops:     RefreshCw,
-  cybersec:   Shield,
-  cloud:      Cloud,
-  uiux:       Palette,
-  blockchain: Link,
-  gamedev:    Gamepad2,
-  qa:         FlaskConical,
-  embedded:   Cpu,
-  dataeng:    Database,
+  frontend:      Globe,
+  backend:       Server,
+  fullstack:     Layers,
+  aiml:          Brain,
+  android:       Smartphone,
+  ios:           Smartphone,
+  datasci:       BarChart2,
+  dataanalytics: PieChart,
+  devops:        RefreshCw,
+  cybersec:      Shield,
+  cloudsec:      ShieldCheck,
+  cloud:         Cloud,
+  uiux:          Palette,
+  blockchain:    Link,
+  gamedev:       Gamepad2,
+  qa:            FlaskConical,
+  embedded:      Cpu,
+  dataeng:       Database,
+  marketing:     TrendingUp,
+  product:       Package,
+  finance:       Landmark,
+  hr:            Users,
+  sales:         Handshake,
+  sre:           Flame,
+  prompteng:     Sparkles,
+  sysarch:       Network,
+  engmgmt:       UserCheck,
+  arvr:          Glasses,
+  devrel:        MessageSquare,
+  bizanalyst:    FileText,
+  neteng:        Wifi,
+  dba:           HardDrive,
+  growth:        Rocket,
+  quantum:       Atom,
+  gamedesign:    Target,
 };
 
 // ── Stage node colors (cycles) ───────────────────────────────
@@ -39,80 +62,402 @@ const STAGE_COLORS = [
   { bg: 'bg-brand-500',  border: 'border-brand-500',  text: 'text-brand-600',  light: 'bg-brand-50',  hex: '#8b5cf6' },
 ];
 
-// ── Domain picker modal ──────────────────────────────────────
+const CATEGORIES = [
+  'All Roles',
+  'Software Engineering',
+  'Mobile Development',
+  'AI & Data Science',
+  'Cloud & Security',
+  'Product & Design',
+  'Management & Business',
+  'Emerging & Hardware',
+];
+
+// ── Domain picker modal (Redesigned with categories, search, difficulty filter & roadmap preview) ──
 function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling }) {
   const [search, setSearch] = useState('');
-  const filtered = domains.filter((d) =>
-    d.title.toLowerCase().includes(search.toLowerCase()) ||
-    d.description.toLowerCase().includes(search.toLowerCase())
-  );
+  const [selectedCategory, setSelectedCategory] = useState('All Roles');
+  const [difficultyFilter, setDifficultyFilter] = useState('All');
+  const [previewDomain, setPreviewDomain] = useState(null);
+
+  // Compute category counts
+  const categoryCounts = useMemo(() => {
+    const counts = { 'All Roles': domains.length };
+    domains.forEach((d) => {
+      const cat = d.category || 'Software Engineering';
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    return counts;
+  }, [domains]);
+
+  // Filtered domains
+  const filtered = useMemo(() => {
+    return domains.filter((d) => {
+      const matchesSearch =
+        d.title.toLowerCase().includes(search.toLowerCase()) ||
+        d.description.toLowerCase().includes(search.toLowerCase()) ||
+        (d.category && d.category.toLowerCase().includes(search.toLowerCase()));
+
+      const matchesCat =
+        selectedCategory === 'All Roles' || (d.category || 'Software Engineering') === selectedCategory;
+
+      const matchesDifficulty =
+        difficultyFilter === 'All' ||
+        (d.stages && d.stages.some((s) => s.difficulty === difficultyFilter));
+
+      return matchesSearch && matchesCat && matchesDifficulty;
+    });
+  }, [domains, search, selectedCategory, difficultyFilter]);
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
     >
-      <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={onClose} />
       <motion.div
-        className="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden"
-        initial={{ scale: 0.92, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.92, y: 20 }}
+        className="relative w-full max-w-4xl max-h-[90vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100"
+        initial={{ scale: 0.94, y: 16 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.94, y: 16 }}
         transition={{ type: 'spring', stiffness: 320, damping: 26 }}
       >
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
-          <div>
-            <h2 className="text-xl font-bold text-brand-900">Choose a Career Path</h2>
-            <p className="text-sm text-brand-500 mt-0.5">{domains.length} domains available</p>
+        {/* Modal Header */}
+        <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-brand-950 to-slate-900 text-white flex flex-col gap-4 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-brand-500/20 border border-brand-400/30 flex items-center justify-center text-brand-300">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Explore Career Paths</h2>
+                <p className="text-xs sm:text-sm text-slate-300">
+                  {domains.length} structured, stage-by-stage learning roadmaps with resources & projects
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="h-9 w-9 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button onClick={onClose} className="h-8 w-8 rounded-xl bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
-            <X className="h-4 w-4 text-brand-500" />
-          </button>
+
+          {/* Category Pill Navigation */}
+          {!previewDomain && (
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar pt-1 scroll-smooth">
+              {CATEGORIES.map((cat) => {
+                const isActive = selectedCategory === cat;
+                const count = categoryCounts[cat] || 0;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+                      isActive
+                        ? 'bg-brand-500 text-white shadow-md shadow-brand-500/30'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/15 hover:text-white'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                        isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
-        <div className="px-6 py-3 border-b border-slate-100 flex-shrink-0">
-          <input className="input" placeholder="Search career paths..." value={search} onChange={(e) => setSearch(e.target.value)} autoFocus />
-        </div>
-        <div className="overflow-y-auto flex-1 p-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {filtered.map((domain) => {
-              const DIcon = DOMAIN_ICONS[domain.id] ?? Globe;
-              const isEnrolled = enrolledIds.has(domain.id);
-              return (
-                <motion.button
-                  key={domain.id}
-                  whileHover={!isEnrolled ? { scale: 1.02 } : {}}
-                  whileTap={!isEnrolled ? { scale: 0.98 } : {}}
-                  disabled={isEnrolled || enrolling === domain.id}
-                  onClick={() => !isEnrolled && onEnroll(domain.id)}
-                  className={`text-left p-4 rounded-2xl ring-1 transition-all duration-200 ${
-                    isEnrolled
-                      ? 'bg-emerald-50 ring-emerald-200 cursor-default'
-                      : 'bg-white ring-brand-200 hover:ring-brand-300 hover:shadow-md cursor-pointer'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className={`h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      isEnrolled ? 'bg-emerald-100' : 'bg-brand-50'
-                    }`}>
-                      {enrolling === domain.id
-                        ? <Loader2 className={`h-4 w-4 animate-spin ${isEnrolled ? 'text-emerald-600' : 'text-brand-500'}`} />
-                        : <DIcon className={`h-4 w-4 ${isEnrolled ? 'text-emerald-600' : 'text-brand-600'}`} />}
+
+        {/* Modal Body: Search & Filters or Stage Preview */}
+        {previewDomain ? (
+          /* Roadmap Stage Preview Drawer */
+          <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
+            <div className="p-4 bg-white border-b border-slate-200 flex items-center justify-between flex-shrink-0">
+              <button
+                onClick={() => setPreviewDomain(null)}
+                className="flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:text-brand-800 bg-brand-50 px-3 py-1.5 rounded-xl transition-colors"
+              >
+                <ChevronLeft className="h-4 w-4" /> Back to All Roles
+              </button>
+              <span className="text-xs font-medium text-slate-500 flex items-center gap-1">
+                <BookOpen className="h-3.5 w-3.5" /> Previewing Roadmap
+              </span>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+              {/* Preview Header Banner */}
+              <div
+                className="rounded-3xl p-6 text-white shadow-lg relative overflow-hidden"
+                style={{ background: `linear-gradient(135deg, ${previewDomain.color || '#4f46e5'}, #0f172a)` }}
+              >
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-start gap-4">
+                    <div className="h-14 w-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0">
+                      {previewDomain.icon || '🌐'}
                     </div>
-                    <div className="min-w-0">
+                    <div>
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-brand-900 text-sm">{domain.title}</span>
-                        {isEnrolled && <span className="badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 text-xs">Enrolled</span>}
+                        <span className="text-xs font-bold bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                          {previewDomain.category || 'Software Engineering'}
+                        </span>
+                        <span className="text-xs text-white/80 font-medium flex items-center gap-1">
+                          <Clock className="h-3.5 w-3.5" /> ~{previewDomain.estimatedMonths} months
+                        </span>
                       </div>
-                      <p className="text-xs text-brand-500 mt-0.5 line-clamp-2">{domain.description}</p>
-                      <div className="flex items-center gap-3 mt-1.5 text-xs text-brand-400">
-                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{domain.estimatedMonths}mo</span>
-                        <span className="flex items-center gap-1"><BookOpen className="h-3 w-3" />{domain.stageCount} stages</span>
-                      </div>
+                      <h3 className="text-2xl font-bold mt-1">{previewDomain.title}</h3>
+                      <p className="text-sm text-white/90 mt-1 max-w-xl">{previewDomain.description}</p>
                     </div>
                   </div>
-                </motion.button>
-              );
-            })}
+                  <button
+                    disabled={enrolledIds.has(previewDomain.id) || enrolling === previewDomain.id}
+                    onClick={() => onEnroll(previewDomain.id)}
+                    className="btn-primary bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg border-none px-6 py-3 self-start sm:self-center shrink-0"
+                  >
+                    {enrolling === previewDomain.id ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : enrolledIds.has(previewDomain.id) ? (
+                      'Already Enrolled'
+                    ) : (
+                      'Enroll in this Path'
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* Stages List */}
+              <div className="space-y-4">
+                <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <Layers3 className="h-5 w-5 text-brand-600" />
+                  Roadmap Stages ({previewDomain.stages?.length || 0} Stages)
+                </h4>
+
+                {previewDomain.stages?.map((stage, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="h-6 w-6 rounded-full bg-brand-100 text-brand-700 text-xs font-bold flex items-center justify-center">
+                            {idx + 1}
+                          </span>
+                          <h5 className="font-bold text-slate-900 text-base">{stage.title}</h5>
+                          {stage.difficulty && (
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">
+                              {stage.difficulty}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-slate-500 mt-1">{stage.description}</p>
+                      </div>
+                      <span className="text-xs font-medium text-slate-400 shrink-0 flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" /> {stage.durationWeeks} wks
+                      </span>
+                    </div>
+
+                    {/* Topics */}
+                    <div className="mb-3">
+                      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                        Key Learning Topics
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {stage.topics?.map((topic, ti) => (
+                          <span key={ti} className="text-xs bg-slate-100 text-slate-700 font-medium px-2.5 py-1 rounded-lg">
+                            {topic}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Stage Project */}
+                    {stage.project && (
+                      <div className="bg-brand-50/60 rounded-xl p-3 border border-brand-100 text-xs mt-3">
+                        <span className="font-bold text-brand-900 flex items-center gap-1.5">
+                          <Code2 className="h-3.5 w-3.5 text-brand-600" /> Stage Hands-on Project: {stage.project.title}
+                        </span>
+                        <p className="text-brand-700 mt-0.5">{stage.project.description}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Normal Search & Browse View */
+          <div className="flex-1 flex flex-col overflow-hidden">
+            {/* Search & Difficulty Filter Bar */}
+            <div className="p-4 border-b border-slate-100 bg-slate-50/70 flex flex-col sm:flex-row items-center gap-3 flex-shrink-0">
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  className="input pl-10 pr-8 py-2 text-sm bg-white"
+                  placeholder="Search role by name, skill, or keyword (e.g. React, Cyber, Quantum)..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  autoFocus
+                />
+                {search && (
+                  <button
+                    onClick={() => setSearch('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2 w-full sm:w-auto">
+                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1 shrink-0">
+                  <Filter className="h-3.5 w-3.5" /> Difficulty:
+                </span>
+                <select
+                  value={difficultyFilter}
+                  onChange={(e) => setDifficultyFilter(e.target.value)}
+                  className="input py-2 text-xs bg-white shrink-0 cursor-pointer"
+                >
+                  <option value="All">All Levels</option>
+                  <option value="Beginner">Beginner Friendly</option>
+                  <option value="Intermediate">Intermediate</option>
+                  <option value="Advanced">Advanced</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Roles Grid */}
+            <div className="overflow-y-auto flex-1 p-5">
+              {filtered.length === 0 ? (
+                <div className="text-center py-12 space-y-3">
+                  <div className="h-12 w-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
+                    <Search className="h-6 w-6" />
+                  </div>
+                  <p className="text-base font-bold text-slate-700">No career paths match your criteria</p>
+                  <p className="text-xs text-slate-400">Try adjusting your search terms or clearing category filters</p>
+                  <button
+                    onClick={() => {
+                      setSearch('');
+                      setSelectedCategory('All Roles');
+                      setDifficultyFilter('All');
+                    }}
+                    className="text-xs font-bold text-brand-600 hover:underline pt-2 inline-block"
+                  >
+                    Reset all filters
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  {filtered.map((domain) => {
+                    const DIcon = DOMAIN_ICONS[domain.id] ?? Globe;
+                    const isEnrolled = enrolledIds.has(domain.id);
+                    return (
+                      <motion.div
+                        key={domain.id}
+                        whileHover={{ y: -2 }}
+                        className={`p-4.5 rounded-2xl ring-1 transition-all duration-200 flex flex-col justify-between ${
+                          isEnrolled
+                            ? 'bg-emerald-50/50 ring-emerald-200'
+                            : 'bg-white ring-slate-200 hover:ring-brand-400 hover:shadow-md'
+                        }`}
+                      >
+                        <div>
+                          {/* Top Row: Icon + Title + Enrolled Badge */}
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={`h-11 w-11 rounded-2xl flex items-center justify-center shrink-0 shadow-sm ${
+                                  isEnrolled
+                                    ? 'bg-emerald-100 text-emerald-600'
+                                    : 'bg-brand-50 text-brand-600'
+                                }`}
+                              >
+                                <DIcon className="h-5 w-5" />
+                              </div>
+                              <div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-500">
+                                  {domain.category || 'Software Engineering'}
+                                </span>
+                                <h3 className="font-bold text-slate-900 text-base leading-tight">
+                                  {domain.title}
+                                </h3>
+                              </div>
+                            </div>
+
+                            {isEnrolled && (
+                              <span className="badge bg-emerald-100 text-emerald-800 ring-1 ring-emerald-300 text-xs font-semibold flex items-center gap-1 shrink-0">
+                                <Check className="h-3 w-3" /> Enrolled
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Description */}
+                          <p className="text-xs text-slate-600 line-clamp-2 mb-3 leading-relaxed">
+                            {domain.description}
+                          </p>
+                        </div>
+
+                        {/* Footer stats & Actions */}
+                        <div className="pt-2 border-t border-slate-100 flex items-center justify-between mt-1">
+                          <div className="flex items-center gap-3 text-xs text-slate-400 font-medium">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3.5 w-3.5 text-slate-400" />
+                              {domain.estimatedMonths}m
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <BookOpen className="h-3.5 w-3.5 text-slate-400" />
+                              {domain.stageCount} stages
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5">
+                            {/* Preview Button */}
+                            <button
+                              onClick={() => setPreviewDomain(domain)}
+                              className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold flex items-center gap-1 transition-colors"
+                              title="Preview Roadmap Stages"
+                            >
+                              <Eye className="h-3.5 w-3.5 text-slate-500" /> Preview
+                            </button>
+
+                            {/* Enroll Button */}
+                            <button
+                              disabled={isEnrolled || enrolling === domain.id}
+                              onClick={() => !isEnrolled && onEnroll(domain.id)}
+                              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1 ${
+                                isEnrolled
+                                  ? 'bg-emerald-100 text-emerald-700 cursor-default'
+                                  : 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm hover:shadow-brand-500/20'
+                              }`}
+                            >
+                              {enrolling === domain.id ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : isEnrolled ? (
+                                'Enrolled'
+                              ) : (
+                                <>
+                                  <Plus className="h-3.5 w-3.5" /> Select
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -578,7 +923,7 @@ export default function CareerAIslePage() {
             Pick a career domain and get a structured stage-by-stage roadmap with topics, projects, and curated resources.
           </p>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
-            {domains.slice(0, 5).map((d) => {
+            {domains.slice(0, 6).map((d) => {
               const DIcon = DOMAIN_ICONS[d.id] ?? Globe;
               return (
                 <button
@@ -597,7 +942,7 @@ export default function CareerAIslePage() {
             onClick={() => setShowPicker(true)}
             className="btn-primary mt-2 inline-flex items-center gap-2"
           >
-            <Sparkles className="h-4 w-4" /> Browse Career Paths
+            <Sparkles className="h-4 w-4" /> Browse 35 Career Paths
           </motion.button>
         </motion.div>
       )}

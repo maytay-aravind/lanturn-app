@@ -4,7 +4,7 @@ import { AppError } from '#utils/httpErrors.js';
 
 /** List all available career domains (static) */
 export function listDomains() {
-  return CAREER_DOMAINS.map(({ id, title, icon, color, gradient, description, estimatedMonths, stages }) => ({
+  return CAREER_DOMAINS.map(({ id, title, icon, color, gradient, description, estimatedMonths, category, stages }) => ({
     id,
     title,
     icon,
@@ -12,8 +12,20 @@ export function listDomains() {
     gradient,
     description,
     estimatedMonths,
+    category: category || 'Software Engineering',
     stageCount: stages.length,
     totalTopics: stages.reduce((sum, s) => sum + s.topics.length, 0),
+    stages: stages.map((s) => ({
+      title: s.title,
+      description: s.description,
+      durationWeeks: s.durationWeeks,
+      difficulty: s.difficulty,
+      badge: s.badge,
+      topicCount: s.topics.length,
+      topics: s.topics,
+      project: s.project,
+      resources: s.resources,
+    })),
   }));
 }
 
