@@ -64,6 +64,10 @@ const envSchema = z.object({
   // Limits
   UPLOAD_MAX_BYTES: z.coerce.number().int().positive().default(5242880),
   AI_RATE_LIMIT_PER_DAY: z.coerce.number().int().positive().default(20),
+
+  // Admin portal secret credentials
+  ADMIN_EMAIL: z.string().optional().default(''),
+  ADMIN_PASSWORD: z.string().optional().default(''),
 });
 
 const parsed = envSchema.safeParse(process.env);

@@ -5,7 +5,7 @@ import { notificationService } from '../services/notification.service.js';
 import {
   LayoutDashboard, Briefcase, FileText, User, Sparkles,
   Search, Bell, LogOut, ChevronDown, Menu, X, Settings,
-  Building2, Map, Bot, Moon, Sun
+  Building2, Map, Bot, Moon, Sun, Shield, Users
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -25,6 +25,13 @@ const EMPLOYER_LINKS = [
   { to: '/employer/ai-assistant', icon: Bot, label: 'AI Assistant' },
   { to: '/employer/profile', icon: Building2, label: 'Company Profile' },
   { to: '/employer/notifications', icon: Bell, label: 'Notifications' },
+];
+
+const ADMIN_LINKS = [
+  { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/admin', icon: Briefcase, label: 'Job Management', hash: 'jobs' },
+  { to: '/admin', icon: Users, label: 'User Management', hash: 'users' },
+  { to: '/admin', icon: Settings, label: 'Settings', hash: 'settings' },
 ];
 
 export default function Navbar() {
@@ -57,7 +64,7 @@ export default function Navbar() {
   });
 
   const unread = notifs?.items?.filter((n) => !n.read).length ?? 0;
-  const links = role === 'employer' ? EMPLOYER_LINKS : STUDENT_LINKS;
+  const links = role === 'admin' ? ADMIN_LINKS : role === 'employer' ? EMPLOYER_LINKS : STUDENT_LINKS;
   const displayName = session?.profile?.personal?.name || session?.email?.split('@')[0] || 'User';
 
   const handleLogout = async () => {

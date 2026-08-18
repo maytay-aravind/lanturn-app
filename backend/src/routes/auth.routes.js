@@ -8,5 +8,6 @@ const router = Router();
 router.get('/session', authenticate, authCtrl.session);
 router.post('/onboarding', authenticate, authLimiter, validate({ body: onboardingSchema }), authCtrl.onboard);
 router.post('/logout', authenticate, authCtrl.logout);
+router.post('/admin-login', authenticate, authCtrl.adminLogin);
 
 export default router;

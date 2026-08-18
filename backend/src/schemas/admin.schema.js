@@ -20,7 +20,7 @@ export const userRoleSchema = z
   .strict();
 
 export const adminJobStatusSchema = z
-  .object({ status: z.enum([JOB_STATUS.ACTIVE, JOB_STATUS.CLOSED, JOB_STATUS.REMOVED]) })
+  .object({ status: z.enum([JOB_STATUS.ACTIVE, JOB_STATUS.VERIFIED, JOB_STATUS.CLOSED, JOB_STATUS.REMOVED]) })
   .strict();
 
 export const analyticsSeriesQuerySchema = z

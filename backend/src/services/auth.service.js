@@ -3,6 +3,7 @@ import { studentsRepo } from '#repositories/students.repository.js';
 import { employersRepo } from '#repositories/employers.repository.js';
 import { AppError } from '#utils/httpErrors.js';
 import { ROLES } from '#config';
+import { env } from '#config';
 import { logger_for } from '#utils/logger.js';
 
 const log = logger_for('auth.service');
@@ -69,3 +70,23 @@ export async function onboard(uid, { role, profile: profileData }) {
 
   return getSession(uid);
 }
+
+/**
+ * Admin login — validate the authenticated user's email matches the
+ * secret ADMIN_EMAIL env var, then promote to admin role.
+ */
+export async function adminLogin(uid, email) {
+  if (!env.ADMIN_EMAIL) {
+    throw AppError.forbidden('Admin login is not configured');
+  }
+  if (email.toLowerCase() !== env.ADMIN_EMAIL.toLowerCase()) {
+    throw AppError.forbidden('Not authorised as admin');
+  }
+
+  // Promote user to admin role
+  await usersRepo.update(uid, { role: ROLES.ADMIN, profileComplete: true });
+  log.info({ uid, email }, 'Admin login successful');
+
+  return getSession(uid);
+}
+

@@ -15,3 +15,8 @@ export const logout = asyncHandler(async (req, res) => {
   // Stateless: client just discards the token. Optionally revoke server-side.
   res.json({ data: { ok: true }, meta: { requestId: req.id } });
 });
+
+export const adminLogin = asyncHandler(async (req, res) => {
+  const data = await authService.adminLogin(req.user.uid, req.user.email);
+  res.json({ data, meta: { requestId: req.id } });
+});

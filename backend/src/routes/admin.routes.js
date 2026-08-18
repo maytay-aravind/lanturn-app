@@ -20,6 +20,7 @@ router.patch('/admin/users/:uid/role', ...adminGuard, validate({ body: userRoleS
 
 router.get('/admin/jobs', ...adminGuard, adminCtrl.listJobs);
 router.patch('/admin/jobs/:jobId/status', ...adminGuard, validate({ body: adminJobStatusSchema }), adminCtrl.moderateJob);
+router.patch('/admin/jobs/:jobId/verify', ...adminGuard, adminCtrl.verifyJob);
 
 router.get('/admin/analytics/summary', ...adminGuard, adminCtrl.analyticsSummary);
 router.get('/admin/analytics/series', ...adminGuard, validate({ query: analyticsSeriesQuerySchema }), adminCtrl.analyticsSeries);

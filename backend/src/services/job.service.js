@@ -80,10 +80,28 @@ export async function listAllJobs() {
 }
 
 /** Admin: moderate a job */
-export async function moderateJob(jobId, status) {
+export async function moderateJob(jobId, status, adminUid) {
   const job = await jobsRepo.getById(jobId);
   if (!job) throw AppError.notFound('Job not found');
-  return jobsRepo.update(jobId, { status });
+  const update = { status };
+  // If setting to active/verified, auto-verify
+  if (status === JOB_STATUS.ACTIVE || status === JOB_STATUS.VERIFIED) {
+    update.verifiedByAdmin = true;
+    update.verifiedAt = new Date().toISOString();
+    update.verifiedBy = adminUid;
+  }
+  return jobsRepo.update(jobId, update);
+}
+
+/** Admin: explicitly verify a job (marks as verified without changing status) */
+export async function verifyJob(jobId, adminUid) {
+  const job = await jobsRepo.getById(jobId);
+  if (!job) throw AppError.notFound('Job not found');
+  return jobsRepo.update(jobId, {
+    verifiedByAdmin: true,
+    verifiedAt: new Date().toISOString(),
+    verifiedBy: adminUid,
+  });
 }
 
 /** Increment application count (called inside a transaction by application service) */

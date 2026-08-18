@@ -14,7 +14,7 @@ import {
   Building2, ChevronRight, CheckCircle2, ChevronDown,
   X, Users, GraduationCap, Globe, Star, Loader2,
   ExternalLink, Heart, Cpu, Calendar, Crown, Phone, Mail, Linkedin,
-  Sparkles, AlertCircle
+  Sparkles, AlertCircle, ShieldCheck
 } from 'lucide-react';
 
 const STATUS_COLORS = {
@@ -173,6 +173,11 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                 {j.workMode && <span className="badge badge-default">{j.workMode}</span>}
                 {j.experienceLevel && <span className="badge badge-default">{j.experienceLevel}</span>}
                 {j.status && <span className={`badge ${STATUS_COLORS[j.status] || 'badge-default'}`}>{j.status}</span>}
+                {j.verifiedByAdmin && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <ShieldCheck className="h-3.5 w-3.5" /> Verified by LanTURN
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -572,6 +577,11 @@ function InternalJobCard({ job, studentProfile, onClick }) {
             <div className="flex flex-wrap items-center gap-2 mb-1">
               <h3 className="font-bold text-brand-900 text-lg truncate group-hover:text-brand-700 transition-colors">{job.title}</h3>
               {job.status && <span className={`badge ${STATUS_COLORS[job.status] || 'badge-default'}`}>{job.status}</span>}
+              {job.verifiedByAdmin && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <ShieldCheck className="h-3 w-3" /> Verified
+                </span>
+              )}
               
               {/* Match Score Badge */}
               {matchInfo.score > 0 && (

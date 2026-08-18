@@ -33,6 +33,9 @@ function rowToJob(row) {
     educationRequirement: row.education_requirement || '',
     benefits:            row.benefits            || [],
     stipend:             row.stipend             || {},
+    verifiedByAdmin:     row.verified_by_admin   ?? false,
+    verifiedAt:          row.verified_at          || null,
+    verifiedBy:          row.verified_by          || null,
     createdAt:           row.created_at,
     updatedAt:           row.updated_at,
   };
@@ -64,6 +67,9 @@ function toDbPayload(data) {
   if (data.educationRequirement !== undefined) p.education_requirement = data.educationRequirement;
   if (data.benefits             !== undefined) p.benefits             = data.benefits;
   if (data.stipend              !== undefined) p.stipend              = data.stipend;
+  if (data.verifiedByAdmin      !== undefined) p.verified_by_admin    = data.verifiedByAdmin;
+  if (data.verifiedAt           !== undefined) p.verified_at          = data.verifiedAt;
+  if (data.verifiedBy           !== undefined) p.verified_by          = data.verifiedBy;
   return p;
 }
 
@@ -111,7 +117,7 @@ export const jobsRepo = {
     let query = supabase
       .from('jobs')
       .select('*')
-      .eq('status', JOB_STATUS.ACTIVE);
+      .in('status', [JOB_STATUS.ACTIVE, JOB_STATUS.VERIFIED]);
 
     // Apply SQL filters
     if (jobType)         query = query.eq('job_type', jobType);

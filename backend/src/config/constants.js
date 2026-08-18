@@ -14,6 +14,7 @@ export const USER_STATUS = Object.freeze({
 export const JOB_STATUS = Object.freeze({
   DRAFT: 'draft',
   ACTIVE: 'active',
+  VERIFIED: 'verified',
   PAUSED: 'paused',
   CLOSED: 'closed',
   REMOVED: 'removed',

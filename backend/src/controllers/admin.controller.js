@@ -23,7 +23,12 @@ export const listJobs = asyncHandler(async (req, res) => {
 });
 
 export const moderateJob = asyncHandler(async (req, res) => {
-  const data = await jobService.moderateJob(req.params.jobId, req.body.status);
+  const data = await jobService.moderateJob(req.params.jobId, req.body.status, req.user.uid);
+  res.json({ data, meta: { requestId: req.id } });
+});
+
+export const verifyJob = asyncHandler(async (req, res) => {
+  const data = await jobService.verifyJob(req.params.jobId, req.user.uid);
   res.json({ data, meta: { requestId: req.id } });
 });
 
