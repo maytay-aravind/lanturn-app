@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { Loader2, Shield, Eye, EyeOff, ArrowRight, Lock } from 'lucide-react';
 
 export default function AdminLoginPage() {
-  const { loginWithEmail, firebaseUser, role, loading, refreshSession } = useAuth();
+  const { firebaseUser, role, loading, refreshSession } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -30,14 +30,16 @@ export default function AdminLoginPage() {
 
     setSigningIn(true);
     try {
-      // Step 1: Authenticate via Firebase email/password
-      await loginWithEmail(email, password);
+      // Step 1: Firebase auth (skip the extra session() call by using raw Firebase)
+      const { signInWithEmailAndPassword } = await import('firebase/auth');
+      const { auth } = await import('../../firebase/client.js');
+      await signInWithEmailAndPassword(auth, email, password);
 
-      // Step 2: Validate admin credentials on backend
+      // Step 2: Validate + promote to admin (returns full session — no extra refreshSession needed)
       const data = await apiClient.post('/auth/admin-login').then(unwrap);
 
       if (data?.role === 'admin') {
-        // Refresh the session so the AuthContext picks up the new role
+        // Single session refresh to sync AuthContext with the new admin role
         await refreshSession();
         toast.success('Welcome, Admin!');
         navigate('/admin', { replace: true });
@@ -46,9 +48,10 @@ export default function AdminLoginPage() {
       }
     } catch (err) {
       const code = err.code || '';
+      const status = err.response?.status || err.status;
       if (code === 'auth/user-not-found' || code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
         toast.error('Invalid admin credentials.');
-      } else if (err.status === 403) {
+      } else if (status === 403) {
         toast.error('This account is not authorised as admin.');
       } else {
         toast.error(err.message || 'Admin login failed. Please try again.');
