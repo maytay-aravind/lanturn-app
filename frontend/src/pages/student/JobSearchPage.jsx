@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { joobleService } from '../../services/job.service.js';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { SkeletonList } from '../../components/ui/Skeleton.jsx';
 import toast from 'react-hot-toast';
@@ -63,7 +64,7 @@ function JobCard({ job }) {
           rel="noreferrer"
           className="btn-secondary btn-sm flex items-center gap-1 flex-shrink-0"
         >
-          Apply <ChevronRight className="h-3 w-3" />
+          {t('jobSearch.apply')} <ChevronRight className="h-3 w-3" />
         </a>
       </div>
     </div>
@@ -71,6 +72,7 @@ function JobCard({ job }) {
 }
 
 export default function JobSearchPage() {
+  const { t } = useLanguage();
   const [keywords, setKeywords] = useState('');
   const [location, setLocation] = useState('');
   const [page, setPage] = useState(1);
@@ -80,11 +82,11 @@ export default function JobSearchPage() {
   const searchMutation = useMutation({
     mutationFn: ({ keywords, location, page }) => joobleService.search({ keywords, location, page }),
     onSuccess: (data) => setResults(data),
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'Search failed'),
+    onError: (err) => toast.error(err.response?.data?.error?.message || t('jobSearch.searchFailed')),
   });
 
   const handleSearch = (p = 1) => {
-    if (!keywords.trim()) { toast.error('Enter a keyword to search'); return; }
+    if (!keywords.trim()) { toast.error(t('jobSearch.enterKeyword')); return; }
     setPage(p);
     setLastQuery({ keywords, location });
     searchMutation.mutate({ keywords, location, page: p });
@@ -99,8 +101,8 @@ export default function JobSearchPage() {
     <div className="space-y-5">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-brand-900">External Job Search</h1>
-        <p className="text-sm text-brand-500 mt-0.5">Search millions of jobs worldwide via Jooble</p>
+        <h1 className="text-2xl font-bold text-brand-900">{t('jobSearch.title')}</h1>
+        <p className="text-sm text-brand-500 mt-0.5">{t('jobSearch.subtitle')}</p>
       </div>
 
       {/* Search bar */}
@@ -110,7 +112,7 @@ export default function JobSearchPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
             <input
               className="input pl-9"
-              placeholder="Job title, keywords, or company..."
+              placeholder={t('jobSearch.searchPlaceholder')}
               value={keywords}
               onChange={(e) => setKeywords(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(1)}
@@ -120,7 +122,7 @@ export default function JobSearchPage() {
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
             <input
               className="input pl-9"
-              placeholder="Location"
+              placeholder={t('jobSearch.locationPlaceholder')}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(1)}
@@ -132,13 +134,13 @@ export default function JobSearchPage() {
             className="btn-primary px-6 flex items-center gap-2"
           >
             <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">Search</span>
+            <span className="hidden sm:inline">{t('jobSearch.search')}</span>
           </button>
         </div>
 
         {/* Popular searches */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-brand-400">Popular:</span>
+          <span className="text-xs text-brand-400">{t('jobSearch.popular')}</span>
           {POPULAR.map((p) => (
             <button
               key={p}
@@ -159,14 +161,14 @@ export default function JobSearchPage() {
           <div className="flex items-center justify-between">
             <p className="text-sm text-brand-500">
               {results.totalCount > 0
-                ? `Found ~${results.totalCount.toLocaleString()} jobs for "${lastQuery?.keywords}"`
-                : 'No jobs found'}
+                ? `${t('jobSearch.found')} ~${results.totalCount.toLocaleString()} ${t('jobSearch.jobsFor')} "${lastQuery?.keywords}"`
+                : t('jobSearch.noJobsFound')}
             </p>
-            <span className="badge-default">Page {page}</span>
+            <span className="badge-default">{t('jobSearch.page')} {page}</span>
           </div>
 
           {results.jobs?.length === 0
-            ? <EmptyState icon="search" title="No jobs found" description="Try different keywords or a broader location" />
+            ? <EmptyState icon="search" title={t('jobSearch.noJobsFound')} description={t('jobSearch.noJobsDesc')} />
             : (
               <div className="space-y-3">
                 {results.jobs.map((job, i) => <JobCard key={job.id || i} job={job} />)}
@@ -182,14 +184,14 @@ export default function JobSearchPage() {
                 disabled={page <= 1 || searchMutation.isPending}
                 className="btn-secondary btn-sm"
               >
-                ← Previous
+                {t('jobSearch.previous')}
               </button>
               <button
                 onClick={handleNext}
                 disabled={searchMutation.isPending || results.jobs.length < 20}
                 className="btn-secondary btn-sm"
               >
-                Next →
+                {t('jobSearch.next')}
               </button>
             </div>
           )}
@@ -199,8 +201,8 @@ export default function JobSearchPage() {
       {!searchMutation.isPending && !results && (
         <EmptyState
           icon="search"
-          title="Search for your next opportunity"
-          description="Enter a job title, skill, or keyword to search millions of jobs from Jooble"
+          title={t('jobSearch.searchTitle')}
+          description={t('jobSearch.searchDesc')}
         />
       )}
     </div>

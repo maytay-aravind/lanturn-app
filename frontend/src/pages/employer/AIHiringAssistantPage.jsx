@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { employerService } from '../../services/employer.service.js';
 import {
   Bot, Send, Plus, MessageSquare, Sparkles, Search,

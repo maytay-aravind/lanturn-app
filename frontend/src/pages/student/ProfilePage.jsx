@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { studentService } from '../../services/student.service.js';
 import { uploadService } from '../../services/upload.service.js';
 import { aiService } from '../../services/ai.service.js';
@@ -94,6 +95,7 @@ export default function ProfilePage() {
   const [viewingCert, setViewingCert] = useState(null);
   const [extracting, setExtracting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const { data: profile, isLoading } = useQuery({
@@ -117,7 +119,7 @@ export default function ProfilePage() {
   const saveMutation = useMutation({
     mutationFn: (body) => studentService.updateMe(body),
     onSuccess: () => {
-      toast.success('Profile saved!');
+      toast.success(t('profile.saveSuccess'));
       qc.invalidateQueries({ queryKey: ['student', 'me'] });
       setIsEditing(false);
     },

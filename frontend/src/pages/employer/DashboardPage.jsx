@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employerService } from '../../services/employer.service.js';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { Link } from 'react-router-dom';
 import { timeAgo } from '../../lib/utils.js';
 import {
@@ -172,6 +173,7 @@ const STATUS_CONFIG = {
 };
 
 export default function EmployerDashboard() {
+  const { t } = useLanguage();
   const { data: profile } = useQuery({
     queryKey: ['employer', 'me'],
     queryFn: employerService.getMe,
@@ -238,28 +240,28 @@ export default function EmployerDashboard() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-brand-900">
-            Welcome, {profile?.companyName || 'Employer'}
+            {t('empDash.welcomeBack', { name: profile?.companyName || 'Employer' })}
           </h1>
           <p className="text-sm text-brand-500 mt-0.5">
             {profile?.industry && `${profile.industry} · `}
-            Here's your recruitment overview
+            {t('empDash.overview')}
           </p>
         </div>
         <Link to="/employer/jobs" className="btn-primary btn-sm flex items-center gap-1.5 self-start">
-          <Briefcase className="h-3.5 w-3.5" /> Post New Job
+          <Briefcase className="h-3.5 w-3.5" /> {t('empDash.postJob')}
         </Link>
       </div>
 
       {/* ── Stat Cards Row ──────────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          icon={Briefcase} label="Active Jobs" value={a.activeJobs ?? 0}
+          icon={Briefcase} label={t('empDash.activeJobs')} value={a.activeJobs ?? 0}
           color="bg-blue-50 text-blue-600"
           sub={a.pausedJobs ? `${a.pausedJobs} paused` : undefined}
           link="/employer/jobs"
         />
         <StatCard
-          icon={Users} label="Total Applicants" value={a.totalApplicants ?? 0}
+          icon={Users} label={t('empDash.totalApplicants')} value={a.totalApplicants ?? 0}
           color="bg-brand-50 text-brand-600"
         />
         <StatCard

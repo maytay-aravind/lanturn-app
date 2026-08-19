@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { roadmapService } from '../../services/roadmap.service.js';
 import ResumeGapAnalyzerModal from '../../components/ai/ResumeGapAnalyzerModal.jsx';
 import toast from 'react-hot-toast';

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { useLanguage } from '../contexts/LanguageContext.jsx';
 import toast from 'react-hot-toast';
 import { Sparkles, Loader2, Mail, Phone, Eye, EyeOff, ArrowRight } from 'lucide-react';
 
@@ -11,6 +12,7 @@ export default function LoginPage() {
     logout, firebaseUser, role, isOnboarded, loading,
   } = useAuth();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const [signingIn, setSigningIn] = useState(false);
   const [mode, setMode] = useState('signin');           // 'signin' | 'signup'
@@ -74,15 +76,15 @@ export default function LoginPage() {
     try {
       const { session } = await loginWithGoogle();
       if (!session?.role) {
-        toast.error('No account found. Please sign up first.');
+        toast.error(t('login.noAccountFound'));
         await logout();
         return;
       }
-      toast.success('Welcome back!');
+      toast.success(t('login.welcomeBackToast'));
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'Something went wrong. Please try again.');
+      toast.error(msg || t('login.somethingWentWrong'));
       console.error('Sign-in error:', err);
     } finally {
       setSigningIn(false);
@@ -94,14 +96,14 @@ export default function LoginPage() {
     try {
       const { session } = await loginWithGoogle();
       if (session?.role) {
-        toast.success('You already have an account! Taking you to your dashboard.');
+        toast.success(t('login.alreadyHaveAccount'));
         return;
       }
       navigate('/onboarding', { replace: true });
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'Something went wrong. Please try again.');
+      toast.error(msg || t('login.somethingWentWrong'));
       console.error('Sign-up error:', err);
     } finally {
       setSigningIn(false);
@@ -111,17 +113,17 @@ export default function LoginPage() {
   // ── Forgot Password handler ───────────────────────────────────────────
   const handleForgotPassword = async () => {
     if (!email) {
-      toast.error('Please enter your email address to reset password.');
+      toast.error(t('login.enterEmailToReset'));
       return;
     }
     setSigningIn(true);
     try {
       await resetPassword(email);
-      toast.success('Password reset link sent to your email!');
+      toast.success(t('login.resetLinkSent'));
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'Failed to send password reset email. Please try again.');
+      toast.error(msg || t('login.resetFailed'));
       console.error('Password reset error:', err);
     } finally {
       setSigningIn(false);
@@ -131,20 +133,20 @@ export default function LoginPage() {
   // ── Email handlers ────────────────────────────────────────────────────
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
-    if (!email || !password) return toast.error('Please enter both email and password.');
+    if (!email || !password) return toast.error(t('login.enterBothFields'));
     setSigningIn(true);
     try {
       const { session } = await loginWithEmail(email, password);
       if (!session?.role) {
-        toast.error('No account found. Please sign up first.');
+        toast.error(t('login.noAccountFound'));
         await logout();
         return;
       }
-      toast.success('Welcome back!');
+      toast.success(t('login.welcomeBackToast'));
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'Sign-in failed. Please try again.');
+      toast.error(msg || t('login.signInFailed'));
       console.error('Email sign-in error:', err);
     } finally {
       setSigningIn(false);
@@ -153,20 +155,20 @@ export default function LoginPage() {
 
   const handleEmailSignUp = async (e) => {
     e.preventDefault();
-    if (!email || !password) return toast.error('Please enter both email and password.');
-    if (password.length < 6) return toast.error('Password must be at least 6 characters.');
+    if (!email || !password) return toast.error(t('login.enterBothFields'));
+    if (password.length < 6) return toast.error(t('login.passwordMinLength'));
     setSigningIn(true);
     try {
       const { session } = await registerWithEmail(email, password);
       if (session?.role) {
-        toast.success('You already have an account! Taking you to your dashboard.');
+        toast.success(t('login.alreadyHaveAccount'));
         return;
       }
       navigate('/onboarding', { replace: true });
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'Sign-up failed. Please try again.');
+      toast.error(msg || t('login.signUpFailed'));
       console.error('Email sign-up error:', err);
     } finally {
       setSigningIn(false);
@@ -176,9 +178,9 @@ export default function LoginPage() {
   // ── Phone handlers ────────────────────────────────────────────────────
   const handleSendOtp = async (e) => {
     e.preventDefault();
-    if (!phoneNumber) return toast.error('Please enter your phone number.');
+    if (!phoneNumber) return toast.error(t('login.enterPhoneNumber'));
     if (!/^\+\d{10,15}$/.test(phoneNumber.replace(/\s/g, ''))) {
-      return toast.error('Enter a valid phone number with country code (e.g. +91XXXXXXXXXX).');
+      return toast.error(t('login.validPhoneNumber'));
     }
     setSigningIn(true);
     try {
@@ -186,11 +188,11 @@ export default function LoginPage() {
       const confirmation = await requestPhoneOtp(phoneNumber, appVerifier);
       confirmationRef.current = confirmation;
       setOtpSent(true);
-      toast.success('OTP sent! Check your phone.');
+      toast.success(t('login.otpSent'));
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'Failed to send OTP. Please try again.');
+      toast.error(msg || t('login.otpSendFailed'));
       console.error('OTP send error:', err);
     } finally {
       setSigningIn(false);
@@ -199,22 +201,22 @@ export default function LoginPage() {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
-    if (!otp) return toast.error('Please enter the OTP code.');
+    if (!otp) return toast.error(t('login.enterOtpCode'));
     setSigningIn(true);
     try {
       const { session } = await verifyPhoneOtp(confirmationRef.current, otp);
 
       if (mode === 'signin') {
         if (!session?.role) {
-          toast.error('No account found. Please sign up first.');
+          toast.error(t('login.noAccountFound'));
           await logout();
           return;
         }
-        toast.success('Welcome back!');
+        toast.success(t('login.welcomeBackToast'));
       } else {
         // signup
         if (session?.role) {
-          toast.success('You already have an account! Taking you to your dashboard.');
+          toast.success(t('login.alreadyHaveAccount'));
           return;
         }
         navigate('/onboarding', { replace: true });
@@ -222,7 +224,7 @@ export default function LoginPage() {
     } catch (err) {
       const msg = mapFirebaseError(err);
       if (msg === null) return;
-      toast.error(msg || 'OTP verification failed. Please try again.');
+      toast.error(msg || t('login.otpVerifyFailed'));
       console.error('OTP verify error:', err);
     } finally {
       setSigningIn(false);
@@ -248,7 +250,7 @@ export default function LoginPage() {
           <img src="/logo.jpeg" alt="LanTURN Logo" className="logo-light mx-auto h-32 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
           <img src="/logo-dark.jpeg" alt="LanTURN Logo" className="logo-dark mx-auto h-32 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
           <h1 className="text-3xl font-extrabold gradient-text mt-4 mb-2 tracking-tight">LanTURN</h1>
-          <p className="text-slate-500 text-sm">AI-powered career platform for students &amp; recruiters</p>
+          <p className="text-slate-500 text-sm">{t('login.brandTagline')}</p>
         </div>
 
         {/* Card */}
@@ -265,7 +267,7 @@ export default function LoginPage() {
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
-              Sign In
+              {t('login.signIn')}
             </button>
             <button
               id="tab-signup"
@@ -276,18 +278,18 @@ export default function LoginPage() {
                   : 'text-slate-500 hover:text-slate-700'
               }`}
             >
-              Sign Up
+              {t('login.signUp')}
             </button>
           </div>
 
           {/* Heading */}
           <h2 className="text-xl font-bold text-slate-900 mb-1 text-center">
-            {mode === 'signin' ? 'Welcome back' : 'Create your account'}
+            {mode === 'signin' ? t('login.welcomeBack') : t('login.createAccount')}
           </h2>
           <p className="text-sm text-slate-500 mb-6 text-center">
             {mode === 'signin'
-              ? 'Sign in to continue to your dashboard'
-              : 'Join lanTURN to kick-start your career journey'}
+              ? t('login.signInSubtitle')
+              : t('login.signUpSubtitle')}
           </p>
 
           {/* Google button */}
@@ -305,13 +307,13 @@ export default function LoginPage() {
             {signingIn && authMethod === 'email' ? null : (
               signingIn ? <Loader2 className="h-5 w-5 animate-spin" /> : <GoogleLogo white={mode === 'signup'} />
             )}
-            {mode === 'signin' ? 'Continue with Google' : 'Sign up with Google'}
+            {mode === 'signin' ? t('login.continueWithGoogle') : t('login.signUpWithGoogle')}
           </button>
 
           {/* OR divider */}
           <div className="flex items-center gap-3 my-6">
             <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">or</span>
+            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">{t('login.or')}</span>
             <div className="flex-1 h-px bg-slate-200" />
           </div>
 
@@ -327,7 +329,7 @@ export default function LoginPage() {
               }`}
             >
               <Mail className="h-3.5 w-3.5" />
-              Email
+              {t('login.email')}
             </button>
             <button
               id="toggle-phone"
@@ -339,7 +341,7 @@ export default function LoginPage() {
               }`}
             >
               <Phone className="h-3.5 w-3.5" />
-              Phone
+              {t('login.phone')}
             </button>
           </div>
 

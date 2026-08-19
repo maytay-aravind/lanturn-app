@@ -1,4 +1,5 @@
 import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { studentService } from '../../services/student.service.js';
 import { applicationService } from '../../services/application.service.js';
@@ -10,6 +11,7 @@ import { timeAgo } from '../../lib/utils.js';
 
 export default function StudentDashboard() {
   const { session } = useAuth();
+  const { t } = useLanguage();
 
   const { data: profile, isLoading: isProfileLoading } = useQuery({
     queryKey: ['student', 'me'],
@@ -44,13 +46,13 @@ export default function StudentDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-brand-900">
-            Welcome back, {displayName} 👋
+            {t('studentDash.welcomeBack', { name: displayName })}
           </h1>
-          <p className="text-brand-500 mt-1">Here is your career placement overview</p>
+          <p className="text-brand-500 mt-1">{t('studentDash.overview')}</p>
         </div>
         <Link to="/job-search" className="btn-primary flex items-center gap-2">
           <Target className="h-4 w-4" />
-          Find Jobs
+          {t('studentDash.findJobs')}
         </Link>
       </div>
 
@@ -64,12 +66,12 @@ export default function StudentDashboard() {
                 <Briefcase className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-brand-500">Applications</p>
+                <p className="text-sm font-medium text-brand-500">{t('studentDash.applications')}</p>
                 <p className="text-2xl font-bold text-brand-900">{totalApps}</p>
               </div>
             </div>
             <Link to="/applications" className="text-sm font-medium text-brand-600 hover:text-brand-700 mt-4 flex items-center gap-1">
-              View applications <ChevronRight className="h-4 w-4" />
+              {t('studentDash.viewApplications')} <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -79,11 +81,11 @@ export default function StudentDashboard() {
                 <Trophy className="h-5 w-5 text-emerald-600" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-brand-500">Profile Strength</p>
+                <p className="text-sm font-medium text-brand-500">{t('studentDash.profileStrength')}</p>
                 <div className="flex items-center justify-between mt-0.5">
                   <p className="text-lg font-bold text-brand-900">{completion}%</p>
                   <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${completion === 100 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
-                    {completion === 100 ? 'Complete' : 'Needs info'}
+                    {completion === 100 ? t('studentDash.complete') : t('studentDash.needsInfo')}
                   </span>
                 </div>
               </div>
@@ -99,7 +101,7 @@ export default function StudentDashboard() {
                 <Star className="h-5 w-5 text-brand-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-brand-500">Top Skills</p>
+                <p className="text-sm font-medium text-brand-500">{t('studentDash.topSkills')}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5">
@@ -108,7 +110,7 @@ export default function StudentDashboard() {
                   <span key={s} className="badge-default bg-slate-100">{s}</span>
                 )))
               ) : (
-                <span className="text-sm text-brand-400">No skills added yet</span>
+                <span className="text-sm text-brand-400">{t('studentDash.noSkillsYet')}</span>
               )}
               {(profile?.professional?.skills?.length || 0) > 5 && (
                 <span className="badge-default bg-slate-100">+{profile.professional.skills.length - 5}</span>
@@ -121,9 +123,9 @@ export default function StudentDashboard() {
       <div className="card p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-brand-900 flex items-center gap-2">
-            <Clock className="h-5 w-5 text-brand-400" /> Recent Applications
+            <Clock className="h-5 w-5 text-brand-400" /> {t('studentDash.recentApplications')}
           </h2>
-          <Link to="/applications" className="text-sm font-medium text-brand-600 hover:text-brand-700">View all</Link>
+          <Link to="/applications" className="text-sm font-medium text-brand-600 hover:text-brand-700">{t('studentDash.viewAll')}</Link>
         </div>
 
         {isAppsLoading ? (
@@ -131,9 +133,9 @@ export default function StudentDashboard() {
         ) : applications.length === 0 ? (
           <EmptyState
             icon="document"
-            title="No applications yet"
-            description="Start exploring jobs and send out your first application"
-            action={{ label: 'Browse Jobs', onClick: () => window.location.href = '/jobs' }}
+            title={t('studentDash.noAppsYet')}
+            description={t('studentDash.noAppsDesc')}
+            action={{ label: t('studentDash.browseJobs'), onClick: () => window.location.href = '/jobs' }}
           />
         ) : (
           <div className="space-y-3">

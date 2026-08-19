@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { notificationService } from '../../services/notification.service.js';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import { SkeletonList } from '../../components/ui/Skeleton.jsx';
 import { timeAgo } from '../../lib/utils.js';
@@ -14,7 +15,7 @@ const TYPE_ICONS = {
   system:                <Bell className="h-4 w-4 text-brand-500" />,
 };
 
-function NotifCard({ notif, onMarkRead }) {
+function NotifCard({ notif, onMarkRead, t }) {
   const icon = TYPE_ICONS[notif.type] || TYPE_ICONS.system;
   return (
     <div
@@ -33,7 +34,7 @@ function NotifCard({ notif, onMarkRead }) {
         <button
           onClick={() => onMarkRead(notif.id || notif.notificationId)}
           className="flex-shrink-0 h-7 w-7 rounded-lg flex items-center justify-center text-brand-500 hover:bg-brand-50 transition-colors"
-          title="Mark as read"
+          title={t('notifs.markAsRead')}
         >
           <Check className="h-3.5 w-3.5" />
         </button>
@@ -44,6 +45,7 @@ function NotifCard({ notif, onMarkRead }) {
 
 export default function NotificationsPage() {
   const qc = useQueryClient();
+  const { t } = useLanguage();
 
   const { data, isLoading } = useQuery({
     queryKey: ['notifications'],
@@ -53,16 +55,16 @@ export default function NotificationsPage() {
   const markReadMutation = useMutation({
     mutationFn: (id) => notificationService.markRead(id),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['notifications'] }),
-    onError: () => toast.error('Failed to mark as read'),
+    onError: () => toast.error(t('notifs.markReadFailed')),
   });
 
   const markAllMutation = useMutation({
     mutationFn: notificationService.markAllRead,
     onSuccess: () => {
-      toast.success('All notifications marked as read');
+      toast.success(t('notifs.allMarkedRead'));
       qc.invalidateQueries({ queryKey: ['notifications'] });
     },
-    onError: () => toast.error('Failed to mark all as read'),
+    onError: () => toast.error(t('notifs.markReadFailed')),
   });
 
   const notifs = data?.items ?? [];
@@ -72,9 +74,9 @@ export default function NotificationsPage() {
     <div className="space-y-5">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-brand-900">Notifications</h1>
+          <h1 className="text-2xl font-bold text-brand-900">{t('notifs.title')}</h1>
           {unread > 0 && (
-            <p className="text-sm text-brand-600 mt-0.5 font-medium">{unread} unread</p>
+            <p className="text-sm text-brand-600 mt-0.5 font-medium">{unread} {t('notifs.unread')}</p>
           )}
         </div>
         {unread > 0 && (
@@ -84,7 +86,7 @@ export default function NotificationsPage() {
             className="btn-secondary btn-sm flex items-center gap-1.5"
           >
             <CheckCheck className="h-3.5 w-3.5" />
-            Mark all read
+            {t('notifs.markAllRead')}
           </button>
         )}
       </div>
@@ -94,8 +96,8 @@ export default function NotificationsPage() {
       {!isLoading && notifs.length === 0 && (
         <EmptyState
           icon="inbox"
-          title="No notifications yet"
-          description="You'll see application updates and alerts here"
+          title={t('notifs.noNotifs')}
+          description={t('notifs.noNotifsDesc')}
         />
       )}
 
@@ -106,6 +108,7 @@ export default function NotificationsPage() {
               key={n.id || n.notificationId}
               notif={n}
               onMarkRead={(id) => markReadMutation.mutate(id)}
+              t={t}
             />
           ))}
         </div>

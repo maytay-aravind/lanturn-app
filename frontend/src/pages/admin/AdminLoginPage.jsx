@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { apiClient, unwrap } from '../../lib/apiClient.js';
 import toast from 'react-hot-toast';
 import { Loader2, Shield, Eye, EyeOff, ArrowRight, Lock } from 'lucide-react';

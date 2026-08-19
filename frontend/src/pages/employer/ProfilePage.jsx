@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { employerService } from '../../services/employer.service.js';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { uploadService } from '../../services/upload.service.js';
 import { CompanyDNAPanel } from '../../components/ai/CompanyDNAPanel.jsx';
 import toast from 'react-hot-toast';

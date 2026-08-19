@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { jobService } from '../../services/job.service.js';
 import { employerService } from '../../services/employer.service.js';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import toast from 'react-hot-toast';
 import { formatSalary, timeAgo } from '../../lib/utils.js';
 import { Link } from 'react-router-dom';

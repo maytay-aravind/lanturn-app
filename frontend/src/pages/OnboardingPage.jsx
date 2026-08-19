@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { useLanguage, LANGUAGES } from '../contexts/LanguageContext.jsx';
 import { authService } from '../services/auth.service.js';
 import toast from 'react-hot-toast';
 import {
@@ -9,12 +10,12 @@ import {
 } from 'lucide-react';
 
 // ── Field wrapper ─────────────────────────────────────────────
-function Field({ label, hint, children }) {
+function Field({ label, hint, children, t }) {
   return (
     <div>
       <label className="label">
         {label}
-        <span className="ml-1 text-brand-400 text-xs font-normal">(optional)</span>
+        <span className="ml-1 text-brand-400 text-xs font-normal">{t('onboarding.optional')}</span>
       </label>
       {children}
       {hint && <p className="form-hint">{hint}</p>}
@@ -24,6 +25,44 @@ function Field({ label, hint, children }) {
 
 function Grid2({ children }) {
   return <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div>;
+}
+
+// ── Language card ─────────────────────────────────────────────
+function LanguageCard({ lang, selected, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(lang.code)}
+      className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
+        selected
+          ? 'border-brand-500 bg-brand-50 shadow-sm'
+          : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-slate-50'
+      }`}
+    >
+      <div className="flex items-center gap-4">
+        <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl transition-colors ${
+          selected ? 'bg-brand-100' : 'bg-slate-100 group-hover:bg-slate-200'
+        }`}>
+          {lang.flag}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className={`font-semibold text-sm ${selected ? 'text-brand-700' : 'text-brand-800'}`}>
+            {lang.nativeName}
+          </p>
+          <p className="text-xs text-brand-500 mt-0.5">{lang.name}</p>
+        </div>
+        <div className={`h-5 w-5 rounded-full border-2 flex-shrink-0 mt-0.5 transition-colors ${
+          selected ? 'border-brand-500 bg-brand-500' : 'border-brand-300'
+        }`}>
+          {selected && (
+            <svg className="w-full h-full text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          )}
+        </div>
+      </div>
+    </button>
+  );
 }
 
 // ── Role card ─────────────────────────────────────────────────
@@ -66,10 +105,12 @@ function RoleCard({ role, selected, onClick, icon: Icon, title, description }) {
 
 export default function OnboardingPage() {
   const { firebaseUser, refreshSession } = useAuth();
+  const { t, language, setLanguage } = useLanguage();
   const navigate = useNavigate();
 
-  // step: 'role' | 'profile'
-  const [step, setStep] = useState('role');
+  // step: 'language' | 'role' | 'profile'
+  const [step, setStep] = useState('language');
+  const [selectedLang, setSelectedLang] = useState(language);
   const [role, setRole] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -149,7 +190,7 @@ export default function OnboardingPage() {
   const handleSubmit = async (e) => {
     e?.preventDefault();
     if (!role) {
-      toast.error('Please select a role');
+      toast.error(t('onboarding.selectRole'));
       return;
     }
     setSubmitting(true);
@@ -157,10 +198,10 @@ export default function OnboardingPage() {
       const profile = role === 'student' ? buildStudentProfile() : buildEmployerProfile();
       await authService.onboard({ role, profile });
       await refreshSession();
-      toast.success('Profile created!');
+      toast.success(t('onboarding.profileCreated'));
       navigate(role === 'student' ? '/dashboard' : '/employer/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.error?.message || err.message || 'Onboarding failed');
+      toast.error(err.response?.data?.error?.message || err.message || t('onboarding.onboardingFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -173,10 +214,10 @@ export default function OnboardingPage() {
     try {
       await authService.onboard({ role, profile: {} });
       await refreshSession();
-      toast.success('Profile created! You can complete it later.');
+      toast.success(t('onboarding.profileCreatedSkip'));
       navigate(role === 'student' ? '/dashboard' : '/employer/dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.error?.message || err.message || 'Onboarding failed');
+      toast.error(err.response?.data?.error?.message || err.message || t('onboarding.onboardingFailed'));
     } finally {
       setSubmitting(false);
     }
@@ -184,15 +225,57 @@ export default function OnboardingPage() {
 
   if (!firebaseUser) return null;
 
+  // ── Step 0: Language selection ─────────────────────────────
+  if (step === 'language') {
+    return (
+      <div className="flex items-center justify-center min-h-[80vh] px-4">
+        <div className="card p-8 w-full max-w-md animate-fade-in">
+          <div className="mb-6 text-center">
+            <div className="h-14 w-14 rounded-2xl bg-brand-50 flex items-center justify-center mx-auto mb-4">
+              <Globe className="h-7 w-7 text-brand-600" />
+            </div>
+            <h1 className="text-2xl font-bold text-brand-900">{t('lang.selectTitle')}</h1>
+            <p className="text-brand-500 mt-1 text-sm">
+              {t('lang.selectSubtitle')}
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {LANGUAGES.map((lang) => (
+              <LanguageCard
+                key={lang.code}
+                lang={lang}
+                selected={selectedLang === lang.code}
+                onClick={(code) => {
+                  setSelectedLang(code);
+                  setLanguage(code);
+                }}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setStep('role')}
+            className="btn-primary w-full mt-6 flex items-center justify-center gap-2"
+          >
+            {t('lang.continue')}
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // ── Step 1: Role selection ─────────────────────────────────
   if (step === 'role') {
     return (
       <div className="flex items-center justify-center min-h-[80vh] px-4">
         <div className="card p-8 w-full max-w-md animate-fade-in">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-brand-900">Welcome! 👋</h1>
+            <h1 className="text-2xl font-bold text-brand-900">{t('onboarding.welcome')}</h1>
             <p className="text-brand-500 mt-1 text-sm">
-              First, tell us who you are. This can't be changed later.
+              {t('onboarding.rolePrompt')}
             </p>
           </div>
 
@@ -202,16 +285,16 @@ export default function OnboardingPage() {
               selected={role === 'student'}
               onClick={setRole}
               icon={GraduationCap}
-              title="I'm a Student"
-              description="Looking for jobs, internships, and career opportunities."
+              title={t('onboarding.student')}
+              description={t('onboarding.studentDesc')}
             />
             <RoleCard
               role="employer"
               selected={role === 'employer'}
               onClick={setRole}
               icon={Briefcase}
-              title="I'm an Employer"
-              description="Hiring students and early-career professionals."
+              title={t('onboarding.employer')}
+              description={t('onboarding.employerDesc')}
             />
           </div>
 
@@ -221,7 +304,7 @@ export default function OnboardingPage() {
             onClick={() => setStep('profile')}
             className="btn-primary w-full mt-6 flex items-center justify-center gap-2"
           >
-            Continue
+            {t('onboarding.continue')}
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
@@ -245,10 +328,10 @@ export default function OnboardingPage() {
           </button>
           <div>
             <h1 className="text-xl font-bold text-brand-900">
-              {role === 'student' ? 'Your Profile' : 'Company Details'}
+              {role === 'student' ? t('onboarding.yourProfile') : t('onboarding.companyDetails')}
             </h1>
             <p className="text-xs text-brand-500 mt-0.5">
-              All fields are optional — you can fill these in later.
+              {t('onboarding.allOptional')}
             </p>
           </div>
         </div>
@@ -260,14 +343,14 @@ export default function OnboardingPage() {
             <>
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
                 <User className="h-4 w-4 text-brand-400" />
-                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Personal</span>
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.personal')}</span>
               </div>
               <Grid2>
-                <Field label="Full Name">
+                <Field label={t('onboarding.fullName')} t={t}>
                   <input name="name" type="text" placeholder="Asha Kumar"
                     value={studentForm.name} onChange={handleStudentChange} className="input" />
                 </Field>
-                <Field label="Phone">
+                <Field label={t('onboarding.phoneLabel')} t={t}>
                   <input name="phone" type="tel" placeholder="+91 98765 43210"
                     value={studentForm.phone} onChange={handleStudentChange} className="input" />
                 </Field>
@@ -275,32 +358,32 @@ export default function OnboardingPage() {
 
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100 mt-2">
                 <GraduationCap className="h-4 w-4 text-brand-400" />
-                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Academic</span>
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.academic')}</span>
               </div>
               <Grid2>
-                <Field label="College / University">
+                <Field label={t('onboarding.college')} t={t}>
                   <input name="college" type="text" placeholder="IIT Madras"
                     value={studentForm.college} onChange={handleStudentChange} className="input" />
                 </Field>
-                <Field label="Degree">
+                <Field label={t('onboarding.degree')} t={t}>
                   <input name="degree" type="text" placeholder="B.Tech"
                     value={studentForm.degree} onChange={handleStudentChange} className="input" />
                 </Field>
-                <Field label="Branch / Major">
+                <Field label={t('onboarding.branch')} t={t}>
                   <input name="branch" type="text" placeholder="Computer Science"
                     value={studentForm.branch} onChange={handleStudentChange} className="input" />
                 </Field>
-                <Field label="Graduation Year">
+                <Field label={t('onboarding.graduationYear')} t={t}>
                   <input name="graduationYear" type="number" placeholder="2026"
                     min={2000} max={2035}
                     value={studentForm.graduationYear} onChange={handleStudentChange} className="input" />
                 </Field>
-                <Field label="CGPA" hint="Out of 10">
+                <Field label={t('onboarding.cgpa')} hint={t('onboarding.cgpaHint')} t={t}>
                   <input name="cgpa" type="number" step="0.01" min={0} max={10}
                     placeholder="8.5"
                     value={studentForm.cgpa} onChange={handleStudentChange} className="input" />
                 </Field>
-                <Field label="City">
+                <Field label={t('onboarding.city')} t={t}>
                   <input name="city" type="text" placeholder="Bangalore"
                     value={studentForm.city} onChange={handleStudentChange} className="input" />
                 </Field>
@@ -308,14 +391,14 @@ export default function OnboardingPage() {
 
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100 mt-2">
                 <Code2 className="h-4 w-4 text-brand-400" />
-                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Skills &amp; Links</span>
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.skillsAndLinks')}</span>
               </div>
-              <Field label="Skills" hint="Comma-separated, e.g. React, Node.js, Python">
+              <Field label={t('onboarding.skills')} hint={t('onboarding.skillsHint')} t={t}>
                 <input name="skills" type="text" placeholder="React, Node.js, Python"
                   value={studentForm.skills} onChange={handleStudentChange} className="input" />
               </Field>
               <Grid2>
-                <Field label="LinkedIn">
+                <Field label={t('onboarding.linkedin')} t={t}>
                   <div className="relative">
                     <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="linkedin" type="url" placeholder="https://linkedin.com/in/..."
@@ -323,7 +406,7 @@ export default function OnboardingPage() {
                       className="input pl-9" />
                   </div>
                 </Field>
-                <Field label="GitHub">
+                <Field label={t('onboarding.github')} t={t}>
                   <div className="relative">
                     <Github className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="github" type="url" placeholder="https://github.com/..."
@@ -331,7 +414,7 @@ export default function OnboardingPage() {
                       className="input pl-9" />
                   </div>
                 </Field>
-                <Field label="Portfolio">
+                <Field label={t('onboarding.portfolio')} t={t}>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="portfolio" type="url" placeholder="https://mysite.dev"
@@ -348,22 +431,22 @@ export default function OnboardingPage() {
             <>
               <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
                 <Building2 className="h-4 w-4 text-brand-400" />
-                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">Company</span>
+                <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.company')}</span>
               </div>
               <Grid2>
-                <Field label="Company Name">
+                <Field label={t('onboarding.companyName')} t={t}>
                   <input name="companyName" type="text" placeholder="Acme Inc."
                     value={employerForm.companyName} onChange={handleEmployerChange} className="input" />
                 </Field>
-                <Field label="Industry">
+                <Field label={t('onboarding.industry')} t={t}>
                   <input name="industry" type="text" placeholder="Technology"
                     value={employerForm.industry} onChange={handleEmployerChange} className="input" />
                 </Field>
-                <Field label="Company Size">
+                <Field label={t('onboarding.companySize')} t={t}>
                   <input name="companySize" type="text" placeholder="50–200"
                     value={employerForm.companySize} onChange={handleEmployerChange} className="input" />
                 </Field>
-                <Field label="Website">
+                <Field label={t('onboarding.website')} t={t}>
                   <div className="relative">
                     <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="website" type="url" placeholder="https://acme.com"
@@ -371,7 +454,7 @@ export default function OnboardingPage() {
                       className="input pl-9" />
                   </div>
                 </Field>
-                <Field label="City">
+                <Field label={t('onboarding.city')} t={t}>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-brand-400" />
                     <input name="city" type="text" placeholder="Bangalore"
@@ -380,11 +463,11 @@ export default function OnboardingPage() {
                   </div>
                 </Field>
               </Grid2>
-              <Field label="Company Description">
+              <Field label={t('onboarding.companyDescription')} t={t}>
                 <textarea
                   name="description"
                   rows={3}
-                  placeholder="Tell candidates about your company..."
+                  placeholder={t('onboarding.companyDescPlaceholder')}
                   value={employerForm.description}
                   onChange={handleEmployerChange}
                   className="textarea"
@@ -401,14 +484,14 @@ export default function OnboardingPage() {
               disabled={submitting}
               className="btn-secondary flex-1"
             >
-              Skip for now
+              {t('onboarding.skipForNow')}
             </button>
             <button
               type="submit"
               disabled={submitting}
               className="btn-primary flex-1"
             >
-              {submitting ? 'Creating...' : 'Complete Setup'}
+              {submitting ? t('onboarding.creating') : t('onboarding.completeSetup')}
             </button>
           </div>
         </form>

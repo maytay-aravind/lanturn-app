@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { jobService } from '../../services/job.service.js';
 import { applicationService } from '../../services/application.service.js';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { employerService } from '../../services/employer.service.js';
 import { studentService } from '../../services/student.service.js';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
@@ -658,6 +659,7 @@ function InternalJobCard({ job, studentProfile, onClick }) {
 }
 
 export default function JobsPage() {
+  const { t } = useLanguage();
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('');
   const [page, setPage] = useState({ limit: 50, cursor: null });
@@ -693,18 +695,18 @@ export default function JobsPage() {
   const applyMutation = useMutation({
     mutationFn: (jobId) => applicationService.apply(jobId),
     onSuccess: () => {
-      toast.success('Application submitted successfully!');
+      toast.success(t('studentJobs.applicationSuccess'));
       setSelectedJob(null);
       refetch();
     },
-    onError: (err) => toast.error(err.response?.data?.error?.message || 'Failed to apply'),
+    onError: (err) => toast.error(err.response?.data?.error?.message || t('studentJobs.applicationFailed')),
   });
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-brand-900">Internal Job Board</h1>
-        <p className="text-brand-500 mt-1">Exclusive opportunities for lanTURN students</p>
+        <h1 className="text-2xl font-bold text-brand-900">{t('studentJobs.title')}</h1>
+        <p className="text-brand-500 mt-1">{t('studentJobs.subtitle')}</p>
       </div>
 
       <div className="card p-4 flex flex-col sm:flex-row gap-3">
@@ -712,7 +714,7 @@ export default function JobsPage() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
           <input
             type="text"
-            placeholder="Search roles or companies..."
+            placeholder={t('studentJobs.searchPlaceholder')}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && refetch()}

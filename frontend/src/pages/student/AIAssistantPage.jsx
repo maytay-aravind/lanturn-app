@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
+import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { aiService } from '../../services/ai.service.js';
 import { jobService } from '../../services/job.service.js';
 import { studentService } from '../../services/student.service.js';
