@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import {
   Plus, X, Pencil, Trash2, Users, Play, Pause, Eye,
   MapPin, Clock, Briefcase, GraduationCap, DollarSign, Sparkles, Loader2,
+  ShieldCheck,
 } from 'lucide-react';
 
 const JOB_TYPES = ['full-time', 'part-time', 'internship', 'contract'];
@@ -470,6 +471,11 @@ export default function EmployerJobsPage() {
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <h3 className="font-semibold text-brand-900">{job.title}</h3>
                     <StatusBadge status={job.status} />
+                    {job.verifiedByAdmin && (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <ShieldCheck className="h-3 w-3" /> Verified
+                      </span>
+                    )}
                     {job.workMode && <span className="badge-default">{job.workMode}</span>}
                     {job.jobType && <span className="badge-brand">{job.jobType}</span>}
                   </div>
