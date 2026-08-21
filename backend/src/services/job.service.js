@@ -93,7 +93,7 @@ export async function moderateJob(jobId, status, adminUid) {
   return jobsRepo.update(jobId, update);
 }
 
-/** Admin: explicitly verify a job (marks as verified without changing status) */
+/** Admin: explicitly verify a job */
 export async function verifyJob(jobId, adminUid) {
   const job = await jobsRepo.getById(jobId);
   if (!job) throw AppError.notFound('Job not found');
@@ -101,6 +101,7 @@ export async function verifyJob(jobId, adminUid) {
     verifiedByAdmin: true,
     verifiedAt: new Date().toISOString(),
     verifiedBy: adminUid,
+    status: JOB_STATUS.VERIFIED,
   });
 }
 
