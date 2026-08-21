@@ -56,12 +56,14 @@ export const analyticsRepo = {
 
   async summary() {
     // Run all counts in parallel for performance
-    const [users, students, employers, activeJobs, apps] = await Promise.all([
+    const [users, students, employers, activeJobs, apps, verifiedJobs, hiredApps] = await Promise.all([
       supabase.from('users').select('*', { count: 'exact', head: true }),
       supabase.from('students').select('*', { count: 'exact', head: true }),
       supabase.from('employers').select('*', { count: 'exact', head: true }),
       supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('status', 'active'),
       supabase.from('applications').select('*', { count: 'exact', head: true }),
+      supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('verified_by_admin', true),
+      supabase.from('applications').select('*', { count: 'exact', head: true }).eq('status', 'accepted'),
     ]);
 
     if (users.error)     throw users.error;
@@ -69,6 +71,8 @@ export const analyticsRepo = {
     if (employers.error) throw employers.error;
     if (activeJobs.error) throw activeJobs.error;
     if (apps.error)      throw apps.error;
+    if (verifiedJobs.error) throw verifiedJobs.error;
+    if (hiredApps.error) throw hiredApps.error;
 
     return {
       users:        users.count        ?? 0,
@@ -76,6 +80,8 @@ export const analyticsRepo = {
       employers:    employers.count    ?? 0,
       activeJobs:   activeJobs.count   ?? 0,
       applications: apps.count         ?? 0,
+      verifiedJobs: verifiedJobs.count ?? 0,
+      hired:        hiredApps.count    ?? 0,
     };
   },
 };

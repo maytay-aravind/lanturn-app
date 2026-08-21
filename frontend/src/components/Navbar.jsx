@@ -7,7 +7,7 @@ import {
   LayoutDashboard, Briefcase, FileText, User, Sparkles,
   Search, Bell, LogOut, ChevronDown, Menu, X, Settings,
   Building2, Map, Bot, Moon, Sun, Shield, Users, Globe,
-  ShieldCheck,
+  ShieldCheck, BarChart3,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
@@ -54,6 +54,7 @@ export default function Navbar() {
   ];
 
   const ADMIN_LINKS = [
+    { to: '/admin', icon: BarChart3, label: 'Dashboard' },
     { to: '/admin', icon: ShieldCheck, label: 'Post Verification', hash: 'verification' },
     { to: '/admin', icon: Briefcase, label: t('nav.jobManagement'), hash: 'jobs' },
     { to: '/admin', icon: Users, label: t('nav.userManagement'), hash: 'users' },

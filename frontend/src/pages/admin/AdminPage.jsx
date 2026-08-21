@@ -1,17 +1,17 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminService } from '../../services/admin.service.js';
-import { useLanguage } from '../../contexts/LanguageContext.jsx';
 import { timeAgo } from '../../lib/utils.js';
 import toast from 'react-hot-toast';
 import {
-  Users, Briefcase, Building2, ShieldCheck,
-  Search, CheckCircle2,
-  XCircle, Loader2,
-  Shield, UserCheck, UserX,
+  Users, Briefcase, Building2, ShieldCheck, BarChart3,
+  Search, CheckCircle2, XCircle, Loader2, TrendingUp,
+  Shield, UserCheck, UserX, BriefcaseBusiness, GraduationCap,
+  FileCheck, Clock,
 } from 'lucide-react';
 
 const TABS = [
+  { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
   { id: 'verification', label: 'Post Verification', icon: ShieldCheck },
   { id: 'jobs', label: 'Job Management', icon: Briefcase },
   { id: 'users', label: 'User Management', icon: Users },
@@ -42,6 +42,187 @@ const ROLE_COLORS = {
   admin: 'bg-amber-50 text-amber-700 border-amber-200',
 };
 
+/* ── Skeleton Loader ───────────────────────────────────────── */
+function StatSkeleton() {
+  return (
+    <div className="card p-5 animate-pulse">
+      <div className="h-4 w-20 bg-slate-200 rounded-md mb-3" />
+      <div className="h-7 w-14 bg-slate-200 rounded-md" />
+    </div>
+  );
+}
+
+function ListSkeleton({ count = 3, height = 'h-20' }) {
+  return (
+    <div className="space-y-3">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className={`${height} skeleton rounded-2xl`} />
+      ))}
+    </div>
+  );
+}
+
+/* ── Tab 0: Dashboard ──────────────────────────────────────── */
+function DashboardTab() {
+  const { data: analytics, isLoading: analyticsLoading } = useQuery({
+    queryKey: ['admin', 'analytics'],
+    queryFn: adminService.getAnalyticsSummary,
+  });
+
+  const { data: jobsData, isLoading: jobsLoading } = useQuery({
+    queryKey: ['admin', 'jobs'],
+    queryFn: adminService.listJobs,
+  });
+
+  const { data: usersData, isLoading: usersLoading } = useQuery({
+    queryKey: ['admin', 'users'],
+    queryFn: () => adminService.listUsers({ limit: 10 }),
+  });
+
+  const statCards = useMemo(() => {
+    if (!analytics) return [];
+    return [
+      { label: 'Total Users', value: analytics.users ?? 0, icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+      { label: 'Students', value: analytics.students ?? 0, icon: GraduationCap, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+      { label: 'Employers', value: analytics.employers ?? 0, icon: Building2, color: 'text-purple-600', bg: 'bg-purple-50' },
+      { label: 'Active Jobs', value: analytics.activeJobs ?? 0, icon: BriefcaseBusiness, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+      { label: 'Applications', value: analytics.applications ?? 0, icon: FileCheck, color: 'text-cyan-600', bg: 'bg-cyan-50' },
+      { label: 'Verified Jobs', value: analytics.verifiedJobs ?? 0, icon: ShieldCheck, color: 'text-blue-600', bg: 'bg-blue-50' },
+      { label: 'Students Hired', value: analytics.hired ?? 0, icon: UserCheck, color: 'text-amber-600', bg: 'bg-amber-50' },
+      { label: 'Pending Verification', value: Math.max(0, (analytics.activeJobs ?? 0) - (analytics.verifiedJobs ?? 0)), icon: Clock, color: 'text-orange-600', bg: 'bg-orange-50' },
+    ];
+  }, [analytics]);
+
+  const recentJobs = useMemo(() => {
+    let items = jobsData?.items || jobsData || [];
+    if (!Array.isArray(items)) items = [];
+    return items.slice(0, 5);
+  }, [jobsData]);
+
+  const recentUsers = useMemo(() => {
+    let items = usersData?.items || usersData || [];
+    if (!Array.isArray(items)) items = [];
+    return items.slice(0, 8);
+  }, [usersData]);
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      {analyticsLoading ? (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => <StatSkeleton key={i} />)}
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {statCards.map(card => {
+            const Icon = card.icon;
+            return (
+              <div key={card.label} className="card p-5 hover:shadow-md transition-all">
+                <div className="flex items-center justify-between mb-3">
+                  <div className={`h-9 w-9 rounded-xl ${card.bg} flex items-center justify-center`}>
+                    <Icon className={`h-4.5 w-4.5 ${card.color}`} />
+                  </div>
+                  <TrendingUp className="h-3.5 w-3.5 text-brand-300" />
+                </div>
+                <p className="text-2xl font-bold text-brand-900">{card.value.toLocaleString()}</p>
+                <p className="text-xs text-brand-500 mt-1">{card.label}</p>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Posts */}
+        <div className="card">
+          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4 text-brand-500" />
+              <h3 className="font-semibold text-brand-900">Recent Posts</h3>
+            </div>
+            <span className="text-xs text-brand-400">{recentJobs.length} of {jobsData?.items?.length || jobsData?.length || 0}</span>
+          </div>
+          <div className="p-5">
+            {jobsLoading ? (
+              <ListSkeleton count={4} height="h-14" />
+            ) : recentJobs.length === 0 ? (
+              <div className="text-center py-8">
+                <Briefcase className="h-7 w-7 text-brand-300 mx-auto mb-2" />
+                <p className="text-sm text-brand-400">No posts yet</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {recentJobs.map(job => {
+                  const jobId = job.jobId || job.id;
+                  const statusCls = JOB_STATUS_COLORS[job.status] || JOB_STATUS_COLORS.draft;
+                  return (
+                    <div key={jobId} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                      <div className="h-9 w-9 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
+                        {job.companyLogoURL ? (
+                          <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
+                        ) : (
+                          <Building2 className="h-4 w-4 text-brand-600" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-brand-900 truncate">{job.title}</p>
+                        <p className="text-xs text-brand-400">{job.companyName || 'Unknown'}</p>
+                      </div>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border flex-shrink-0 ${statusCls}`}>
+                        {job.status}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Recent Users */}
+        <div className="card">
+          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Users className="h-4 w-4 text-brand-500" />
+              <h3 className="font-semibold text-brand-900">Recent Users</h3>
+            </div>
+            <span className="text-xs text-brand-400">{recentUsers.length} of {usersData?.items?.length || usersData?.length || 0}</span>
+          </div>
+          <div className="p-5">
+            {usersLoading ? (
+              <ListSkeleton count={5} height="h-12" />
+            ) : recentUsers.length === 0 ? (
+              <div className="text-center py-8">
+                <Users className="h-7 w-7 text-brand-300 mx-auto mb-2" />
+                <p className="text-sm text-brand-400">No users yet</p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {recentUsers.map(user => {
+                  const roleCls = ROLE_COLORS[user.role] || 'bg-slate-100 text-slate-600 border-slate-200';
+                  return (
+                    <div key={user.uid} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                      <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0 border border-brand-100">
+                        {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-brand-900 truncate">{user.displayName || '—'}</p>
+                        <p className="text-xs text-brand-400 truncate">{user.email}</p>
+                      </div>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border capitalize flex-shrink-0 ${roleCls}`}>
+                        {user.role || 'none'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ── Tab 1: Post Verification ──────────────────────────────── */
 function PostVerificationTab() {
   const queryClient = useQueryClient();
@@ -56,7 +237,7 @@ function PostVerificationTab() {
   const verifyMutation = useMutation({
     mutationFn: (jobId) => adminService.verifyJob(jobId),
     onSuccess: () => {
-      toast.success('Job verified successfully!');
+      toast.success('Job verified successfully');
       queryClient.invalidateQueries({ queryKey: ['admin', 'jobs'] });
     },
     onError: (err) => toast.error(err.message || 'Failed to verify job'),
@@ -65,7 +246,7 @@ function PostVerificationTab() {
   const moderateMutation = useMutation({
     mutationFn: ({ jobId, status }) => adminService.moderateJob(jobId, status),
     onSuccess: () => {
-      toast.success('Job status updated!');
+      toast.success('Job status updated');
       queryClient.invalidateQueries({ queryKey: ['admin', 'jobs'] });
     },
     onError: (err) => toast.error(err.message || 'Failed to update job'),
@@ -85,14 +266,22 @@ function PostVerificationTab() {
     return items;
   }, [data, statusFilter, search]);
 
-  const totalJobs = (data?.items || data || []).length;
-  const verifiedCount = (data?.items || data || []).filter(j => j.verifiedByAdmin).length;
-  const pendingCount = totalJobs - verifiedCount;
+  const allJobs = useMemo(() => {
+    let items = data?.items || data || [];
+    if (!Array.isArray(items)) items = [];
+    return items;
+  }, [data]);
+
+  const verifiedCount = allJobs.filter(j => j.verifiedByAdmin).length;
+  const pendingCount = allJobs.length - verifiedCount;
 
   if (isLoading) {
     return (
       <div className="space-y-4 animate-fade-in">
-        {[1, 2, 3].map(i => <div key={i} className="h-20 skeleton rounded-2xl" />)}
+        <div className="grid grid-cols-3 gap-3">
+          {Array.from({ length: 3 }).map((_, i) => <StatSkeleton key={i} />)}
+        </div>
+        <ListSkeleton count={4} />
       </div>
     );
   }
@@ -102,7 +291,7 @@ function PostVerificationTab() {
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-3">
         <div className="card p-4 text-center">
-          <p className="text-2xl font-bold text-brand-900">{totalJobs}</p>
+          <p className="text-2xl font-bold text-brand-900">{allJobs.length}</p>
           <p className="text-xs text-brand-500 mt-1">Total Posts</p>
         </div>
         <div className="card p-4 text-center">
@@ -134,12 +323,9 @@ function PostVerificationTab() {
             onChange={e => setStatusFilter(e.target.value)}
             className="input w-36"
           >
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="verified">Verified</option>
-            <option value="draft">Draft</option>
-            <option value="paused">Paused</option>
-            <option value="closed">Closed</option>
+            {JOB_STATUS_OPTIONS.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -194,7 +380,7 @@ function PostVerificationTab() {
                         disabled={verifyMutation.isPending}
                         className="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-1.5"
                       >
-                        <ShieldCheck className="h-3.5 w-3.5" /> Verify
+                        {verifyMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ShieldCheck className="h-3.5 w-3.5" />} Verify
                       </button>
                     ) : (
                       <span className="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 flex items-center gap-1.5">
@@ -239,7 +425,7 @@ function JobsTab() {
   const verifyMutation = useMutation({
     mutationFn: (jobId) => adminService.verifyJob(jobId),
     onSuccess: () => {
-      toast.success('Job verified successfully!');
+      toast.success('Job verified successfully');
       queryClient.invalidateQueries({ queryKey: ['admin', 'jobs'] });
     },
     onError: (err) => toast.error(err.message || 'Failed to verify job'),
@@ -248,7 +434,7 @@ function JobsTab() {
   const moderateMutation = useMutation({
     mutationFn: ({ jobId, status }) => adminService.moderateJob(jobId, status),
     onSuccess: () => {
-      toast.success('Job status updated!');
+      toast.success('Job status updated');
       queryClient.invalidateQueries({ queryKey: ['admin', 'jobs'] });
     },
     onError: (err) => toast.error(err.message || 'Failed to update job'),
@@ -274,7 +460,7 @@ function JobsTab() {
   if (isLoading) {
     return (
       <div className="space-y-4 animate-fade-in">
-        {[1, 2, 3].map(i => <div key={i} className="h-20 skeleton rounded-2xl" />)}
+        <ListSkeleton count={5} />
       </div>
     );
   }
@@ -367,7 +553,7 @@ function JobsTab() {
                         disabled={verifyMutation.isPending}
                         className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-1"
                       >
-                        <ShieldCheck className="h-3 w-3" /> Verify
+                        {verifyMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <ShieldCheck className="h-3 w-3" />} Verify
                       </button>
                     )}
                     <select
@@ -408,7 +594,7 @@ function JobsTab() {
                         disabled={verifyMutation.isPending}
                         className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 hover:bg-emerald-100 transition-colors flex items-center gap-1"
                       >
-                        <ShieldCheck className="h-3 w-3" /> Verify
+                        {verifyMutation.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <ShieldCheck className="h-3 w-3" />} Verify
                       </button>
                     )}
                     <span className="text-xs text-brand-400">{job.applicationCount ?? 0} applicants</span>
@@ -421,7 +607,7 @@ function JobsTab() {
                     }}
                     className="input w-full text-sm"
                   >
-                    <option value="">Change Status…</option>
+                    <option value="">Change Status</option>
                     <option value="active">Set Active</option>
                     <option value="paused">Pause</option>
                     <option value="closed">Close</option>
@@ -443,6 +629,7 @@ function UsersTab() {
   const [roleFilter, setRoleFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [search, setSearch] = useState('');
+  const [openMenu, setOpenMenu] = useState(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ['admin', 'users', roleFilter, statusFilter],
@@ -456,7 +643,7 @@ function UsersTab() {
   const statusMutation = useMutation({
     mutationFn: ({ uid, status }) => adminService.updateUserStatus(uid, status),
     onSuccess: () => {
-      toast.success('User status updated!');
+      toast.success('User status updated');
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
     },
     onError: (err) => toast.error(err.message || 'Failed to update user'),
@@ -465,14 +652,15 @@ function UsersTab() {
   const roleMutation = useMutation({
     mutationFn: ({ uid, role }) => adminService.updateUserRole(uid, role),
     onSuccess: () => {
-      toast.success('User role updated!');
+      toast.success('User role updated');
       queryClient.invalidateQueries({ queryKey: ['admin', 'users'] });
     },
     onError: (err) => toast.error(err.message || 'Failed to update role'),
   });
 
   const users = useMemo(() => {
-    let items = data?.items || [];
+    let items = data?.items || data || [];
+    if (!Array.isArray(items)) items = [];
     if (search) {
       const q = search.toLowerCase();
       items = items.filter(u =>
@@ -483,10 +671,18 @@ function UsersTab() {
     return items;
   }, [data, search]);
 
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (!e.target.closest('[data-menu]')) setOpenMenu(null);
+    }
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   if (isLoading) {
     return (
       <div className="space-y-4 animate-fade-in">
-        {[1, 2, 3, 4].map(i => <div key={i} className="h-16 skeleton rounded-2xl" />)}
+        <ListSkeleton count={6} height="h-20" />
       </div>
     );
   }
@@ -521,142 +717,100 @@ function UsersTab() {
         </div>
       </div>
 
-      {/* User List */}
+      {/* User Cards */}
       {users.length === 0 ? (
         <div className="card p-12 text-center">
           <Users className="h-8 w-8 text-brand-300 mx-auto mb-3" />
           <p className="text-brand-500 font-medium">No users found</p>
         </div>
       ) : (
-        <div className="space-y-2">
-          {/* Desktop header */}
-          <div className="hidden md:grid grid-cols-12 gap-4 px-5 py-2 text-xs font-semibold text-brand-400 uppercase tracking-wider">
-            <div className="col-span-4">User</div>
-            <div className="col-span-2">Role</div>
-            <div className="col-span-2">Status</div>
-            <div className="col-span-2">Joined</div>
-            <div className="col-span-2 text-right">Actions</div>
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {users.map(user => {
             const roleCls = ROLE_COLORS[user.role] || 'bg-slate-100 text-slate-600 border-slate-200';
             const isActive = user.status === 'active';
             return (
-              <div key={user.uid} className="card p-4 sm:p-5 hover:shadow-md transition-all">
-                {/* Desktop */}
-                <div className="hidden md:grid grid-cols-12 gap-4 items-center">
-                  <div className="col-span-4 flex items-center gap-3 min-w-0">
-                    <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0 border border-brand-100">
-                      {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-semibold text-brand-900 truncate">{user.displayName || '—'}</p>
-                      <p className="text-xs text-brand-400 truncate">{user.email}</p>
-                    </div>
+              <div key={user.uid} className="card p-5 hover:shadow-md transition-all relative">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-base font-bold flex-shrink-0 border border-brand-100">
+                    {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
                   </div>
-                  <div className="col-span-2">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border capitalize ${roleCls}`}>
-                      {user.role || 'none'}
-                    </span>
-                  </div>
-                  <div className="col-span-2">
-                    {isActive ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <CheckCircle2 className="h-3 w-3" /> Active
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
-                        <XCircle className="h-3 w-3" /> Disabled
-                      </span>
-                    )}
-                  </div>
-                  <div className="col-span-2">
-                    <span className="text-sm text-brand-500">{user.createdAt ? timeAgo(user.createdAt) : '—'}</span>
-                  </div>
-                  <div className="col-span-2 flex items-center justify-end gap-2">
-                    <button
-                      onClick={() => statusMutation.mutate({
-                        uid: user.uid,
-                        status: isActive ? 'disabled' : 'active',
-                      })}
-                      disabled={statusMutation.isPending}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors flex items-center gap-1 ${
-                        isActive
-                          ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                      }`}
-                    >
-                      {isActive ? <><UserX className="h-3 w-3" /> Disable</> : <><UserCheck className="h-3 w-3" /> Enable</>}
-                    </button>
-                    <select
-                      value=""
-                      onChange={e => {
-                        if (e.target.value) roleMutation.mutate({ uid: user.uid, role: e.target.value });
-                      }}
-                      className="px-2 py-1.5 rounded-lg bg-slate-50 text-brand-600 text-xs font-medium border border-slate-200 hover:bg-slate-100 cursor-pointer"
-                    >
-                      <option value="">Change Role</option>
-                      <option value="student">Student</option>
-                      <option value="employer">Employer</option>
-                      <option value="admin">Admin</option>
-                    </select>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-brand-900 truncate">{user.displayName || '—'}</p>
+                    <p className="text-xs text-brand-400 truncate">{user.email}</p>
                   </div>
                 </div>
 
-                {/* Mobile */}
-                <div className="md:hidden space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold flex-shrink-0 border border-brand-100">
-                      {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-brand-900 truncate">{user.displayName || '—'}</p>
-                      <p className="text-xs text-brand-400 truncate">{user.email}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border capitalize ${roleCls}`}>
-                      {user.role || 'none'}
+                <div className="flex items-center gap-2 flex-wrap mb-3">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-semibold border capitalize ${roleCls}`}>
+                    {user.role || 'none'}
+                  </span>
+                  {isActive ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <CheckCircle2 className="h-3 w-3" /> Active
                     </span>
-                    {isActive ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        Active
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
-                        Disabled
-                      </span>
-                    )}
-                    <span className="text-xs text-brand-400">{user.createdAt ? timeAgo(user.createdAt) : ''}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => statusMutation.mutate({
-                        uid: user.uid,
-                        status: isActive ? 'disabled' : 'active',
-                      })}
-                      disabled={statusMutation.isPending}
-                      className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold border transition-colors flex items-center justify-center gap-1 ${
-                        isActive
-                          ? 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                      }`}
-                    >
-                      {isActive ? <><UserX className="h-3 w-3" /> Disable</> : <><UserCheck className="h-3 w-3" /> Enable</>}
-                    </button>
-                    <select
-                      value=""
-                      onChange={e => {
-                        if (e.target.value) roleMutation.mutate({ uid: user.uid, role: e.target.value });
-                      }}
-                      className="flex-1 input text-sm"
-                    >
-                      <option value="">Change Role…</option>
-                      <option value="student">Student</option>
-                      <option value="employer">Employer</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-semibold bg-red-50 text-red-700 border border-red-200">
+                      <XCircle className="h-3 w-3" /> Disabled
+                    </span>
+                  )}
+                </div>
+
+                {user.createdAt && (
+                  <p className="text-xs text-brand-400 mb-3">Joined {timeAgo(user.createdAt)}</p>
+                )}
+
+                {/* Single Actions Dropdown */}
+                <div className="relative" data-menu>
+                  <button
+                    onClick={() => setOpenMenu(openMenu === user.uid ? null : user.uid)}
+                    className="w-full px-3 py-2 rounded-lg bg-slate-50 text-brand-600 text-xs font-medium border border-slate-200 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2"
+                  >
+                    Actions
+                    <svg className={`h-3 w-3 transition-transform ${openMenu === user.uid ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {openMenu === user.uid && (
+                    <div className="absolute bottom-full left-0 right-0 mb-1 card p-2 shadow-lg z-20 border border-slate-100">
+                      <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider px-2 py-1">Change Role</p>
+                      {['student', 'employer', 'admin'].map(role => (
+                        <button
+                          key={role}
+                          onClick={() => {
+                            roleMutation.mutate({ uid: user.uid, role });
+                            setOpenMenu(null);
+                          }}
+                          disabled={user.role === role}
+                          className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${
+                            user.role === role
+                              ? 'text-brand-300 cursor-not-allowed'
+                              : 'text-brand-600 hover:bg-slate-50'
+                          }`}
+                        >
+                          {role}
+                        </button>
+                      ))}
+                      <div className="border-t border-slate-100 my-1" />
+                      <button
+                        onClick={() => {
+                          statusMutation.mutate({
+                            uid: user.uid,
+                            status: isActive ? 'disabled' : 'active',
+                          });
+                          setOpenMenu(null);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors flex items-center gap-2 ${
+                          isActive
+                            ? 'text-red-600 hover:bg-red-50'
+                            : 'text-emerald-600 hover:bg-emerald-50'
+                        }`}
+                      >
+                        {isActive ? <UserX className="h-3 w-3" /> : <UserCheck className="h-3 w-3" />}
+                        {isActive ? 'Disable User' : 'Enable User'}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -670,13 +824,22 @@ function UsersTab() {
 /* ── Main Admin Page ───────────────────────────────────────── */
 export default function AdminPage() {
   const hash = window.location.hash.replace('#', '');
-  const initialTab = TABS.find(t => t.id === hash) ? hash : 'verification';
+  const initialTab = TABS.find(t => t.id === hash) ? hash : 'dashboard';
   const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
-    const h = window.location.hash.replace('#', '');
-    if (TABS.find(t => t.id === h)) setActiveTab(h);
+    function handleHashChange() {
+      const h = window.location.hash.replace('#', '');
+      if (TABS.find(t => t.id === h)) setActiveTab(h);
+    }
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  const switchTab = (tabId) => {
+    setActiveTab(tabId);
+    window.location.hash = tabId;
+  };
 
   return (
     <div className="space-y-6">
@@ -701,7 +864,7 @@ export default function AdminPage() {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
+              onClick={() => switchTab(tab.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-medium transition-all whitespace-nowrap relative ${
                 isActive
                   ? 'text-brand-700 bg-brand-50'
@@ -720,6 +883,7 @@ export default function AdminPage() {
 
       {/* Tab Content */}
       <div>
+        {activeTab === 'dashboard' && <DashboardTab />}
         {activeTab === 'verification' && <PostVerificationTab />}
         {activeTab === 'jobs' && <JobsTab />}
         {activeTab === 'users' && <UsersTab />}
