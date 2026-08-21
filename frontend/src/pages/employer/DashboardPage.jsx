@@ -449,9 +449,13 @@ export default function EmployerDashboard() {
               const cfg = STATUS_CONFIG[app.status] || STATUS_CONFIG.submitted;
               return (
                 <div key={app.applicationId} className="py-3 flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0">
-                    {(app.studentName || '?').charAt(0).toUpperCase()}
-                  </div>
+                  {app.studentPhotoURL ? (
+                    <img src={app.studentPhotoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                  ) : (
+                    <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0">
+                      {(app.studentName || '?').charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-brand-900 truncate">{app.studentName}</p>
                     <p className="text-xs text-brand-400 truncate">Applied to {app.jobTitle}</p>

@@ -71,9 +71,13 @@ function ProfileModal({ studentId, onClose }) {
           <div className="p-6 space-y-5">
             {/* Personal */}
             <div className="flex items-center gap-4">
-              <div className="h-14 w-14 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xl font-bold flex-shrink-0">
-                {(personal.name || '?').charAt(0).toUpperCase()}
-              </div>
+              {p.profilePhotoURL ? (
+                <img src={p.profilePhotoURL} alt="" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+              ) : (
+                <div className="h-14 w-14 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xl font-bold flex-shrink-0">
+                  {(personal.name || '?').charAt(0).toUpperCase()}
+                </div>
+              )}
               <div>
                 <h3 className="text-lg font-semibold text-brand-900">{personal.name || 'Student'}</h3>
                 <p className="text-sm text-brand-500">{personal.headline || ''}</p>
@@ -350,9 +354,13 @@ export default function JobApplicantsPage() {
             return (
               <div className="bg-white rounded-xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-2.5 mb-2">
-                  <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm flex-shrink-0">
-                    {(app.studentName || '?').charAt(0).toUpperCase()}
-                  </div>
+                  {app.studentPhotoURL ? (
+                    <img src={app.studentPhotoURL} alt="" className="h-8 w-8 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm flex-shrink-0">
+                      {(app.studentName || '?').charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-slate-800 truncate">{app.studentName || 'Student'}</p>
                     <p className="text-[10px] text-slate-400">{timeAgo(app.createdAt)}</p>
@@ -408,9 +416,13 @@ export default function JobApplicantsPage() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Left: Student info */}
                   <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold flex-shrink-0">
-                      {(app.studentName || '?').charAt(0).toUpperCase()}
-                    </div>
+                    {app.studentPhotoURL ? (
+                      <img src={app.studentPhotoURL} alt="" className="h-11 w-11 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                    ) : (
+                      <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold flex-shrink-0">
+                        {(app.studentName || '?').charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-semibold text-brand-900">{app.studentName || 'Student'}</h3>

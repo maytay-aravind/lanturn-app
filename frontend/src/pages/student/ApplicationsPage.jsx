@@ -7,7 +7,7 @@ import { SkeletonList } from '../../components/ui/Skeleton.jsx';
 import { timeAgo } from '../../lib/utils.js';
 import toast from 'react-hot-toast';
 import {
-  Briefcase, Building2, ChevronRight, AlertCircle, FileText,
+  Briefcase, ChevronRight, AlertCircle, FileText,
   LayoutGrid, List, Clock, CheckCircle2, XCircle, Eye, UserCheck,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -74,8 +74,8 @@ function KanbanColumn({ column, items, onWithdraw, withdrawPending, t }) {
             className="bg-white rounded-xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow animate-slide-up"
           >
             <div className="flex items-start gap-2.5 mb-2">
-              <div className="h-8 w-8 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 border border-slate-100">
-                <Building2 className="h-4 w-4 text-brand-400" />
+              <div className="h-8 w-8 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 text-brand-700 font-bold text-sm">
+                {(app.companyName || '?').charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-slate-800 truncate">{app.jobTitle || 'Job'}</p>
@@ -233,8 +233,8 @@ export default function ApplicationsPage() {
                 
                 {/* Left col */}
                 <div className="flex items-start gap-4">
-                  <div className="h-10 w-10 rounded-xl bg-slate-50 flex items-center justify-center flex-shrink-0 border border-slate-100">
-                    <Building2 className="h-5 w-5 text-brand-400" />
+                  <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 text-brand-700 font-bold text-sm">
+                    {(app.companyName || '?').charAt(0).toUpperCase()}
                   </div>
                   <div>
                     <h3 className="font-semibold text-brand-900">{app.jobTitle || 'Job'}</h3>
