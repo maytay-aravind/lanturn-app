@@ -20,6 +20,7 @@ import {
 
 const STATUS_COLORS = {
   active: 'badge-green',
+  verified: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
   closed: 'badge-default bg-slate-100 text-brand-600',
   paused: 'badge-yellow',
 };
@@ -149,7 +150,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md animate-fade-in" />
 
       {/* Dialog */}
       <div
@@ -522,8 +523,8 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
         {!showCompanyProfile && (
           <div className="sticky bottom-0 bg-white/90 backdrop-blur-md border-t border-slate-100 px-6 py-4 flex items-center justify-between gap-3">
             <div className="text-xs text-brand-400">
-              {j.createdAt && <>Posted {timeAgo(j.createdAt)}</>}
-              {j.applicationCount != null && <> • {j.applicationCount} applicant{j.applicationCount !== 1 ? 's' : ''}</>}
+              {j.createdAt && <>Posted{' '}{timeAgo(j.createdAt)}</>}
+              {j.applicationCount != null && <>{' \u2022 '}{j.applicationCount} applicant{j.applicationCount !== 1 ? 's' : ''}</>}
             </div>
             {j.status === 'active' && (
               isApplied ? (
