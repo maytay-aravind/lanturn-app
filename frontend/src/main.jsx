@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <LanguageProvider>
           <AuthProvider>
             <App />
-            <Toaster position="top-right" />
+            <Toaster position="bottom-center" />
           </AuthProvider>
         </LanguageProvider>
       </BrowserRouter>
