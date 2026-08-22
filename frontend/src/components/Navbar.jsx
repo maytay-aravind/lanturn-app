@@ -5,10 +5,25 @@ import { useQuery } from '@tanstack/react-query';
 import { notificationService } from '../services/notification.service.js';
 import {
   ArrowLeft, Bell, LogOut, ChevronDown, Moon, Sun, Globe, User,
+  LayoutDashboard, Briefcase, FileText, Sparkles, Map,
 } from 'lucide-react';
 import { useState } from 'react';
 
 const DASHBOARD_PATHS = ['/dashboard', '/employer/dashboard', '/admin'];
+
+const STUDENT_NAV = [
+  { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/jobs', icon: Briefcase, label: 'Jobs' },
+  { to: '/applications', icon: FileText, label: 'Applications' },
+  { to: '/ai', icon: Sparkles, label: 'AI Assistant' },
+  { to: '/career-aisle', icon: Map, label: 'Career' },
+];
+
+const EMPLOYER_NAV = [
+  { to: '/employer/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+  { to: '/employer/jobs', icon: Briefcase, label: 'Jobs' },
+  { to: '/employer/ai-assistant', icon: Sparkles, label: 'AI Assistant' },
+];
 
 export default function Navbar() {
   const { session, role, logout } = useAuth();
@@ -23,6 +38,8 @@ export default function Navbar() {
   });
 
   const isOnDashboard = DASHBOARD_PATHS.includes(location.pathname);
+  const navLinks = role === 'employer' ? EMPLOYER_NAV : role === 'student' ? STUDENT_NAV : [];
+  const dashboardPath = role === 'employer' ? '/employer/dashboard' : role === 'admin' ? '/admin' : '/dashboard';
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -35,8 +52,6 @@ export default function Navbar() {
       localStorage.setItem('theme', 'light');
     }
   };
-
-  const dashboardPath = role === 'employer' ? '/employer/dashboard' : role === 'admin' ? '/admin' : '/dashboard';
 
   const { data: notifs } = useQuery({
     queryKey: ['notifications'],
@@ -56,10 +71,10 @@ export default function Navbar() {
   const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center px-4 gap-3">
-      {/* Back button (on non-dashboard pages) or Logo (on dashboard) */}
+    <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center px-4 gap-2">
+      {/* Logo / Back */}
       {isOnDashboard ? (
-        <NavLink to={dashboardPath} className="flex items-center gap-2 mr-4 flex-shrink-0">
+        <NavLink to={dashboardPath} className="flex items-center gap-2 mr-2 flex-shrink-0">
           <img src="/logo.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
           <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-dark h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
           <span className="text-lg font-extrabold gradient-text hidden sm:block tracking-tight">LanTURN</span>
@@ -75,10 +90,35 @@ export default function Navbar() {
         </button>
       )}
 
+      {/* Nav icons — expand on hover to show label */}
+      {navLinks.length > 0 && (
+        <nav className="hidden sm:flex items-center gap-1 ml-2">
+          {navLinks.map(({ to, icon: Icon, label }) => {
+            const isActive = location.pathname === to || (to !== dashboardPath && location.pathname.startsWith(to));
+            return (
+              <NavLink
+                key={to}
+                to={to}
+                className={`group flex items-center gap-0 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden ${
+                  isActive
+                    ? 'bg-brand-50 text-brand-700 px-3 py-1.5 gap-2'
+                    : 'text-brand-500 hover:bg-slate-100 hover:text-brand-700 px-2 py-1.5 hover:px-3 hover:gap-2'
+                }`}
+              >
+                <Icon className="h-4 w-4 flex-shrink-0" />
+                <span className={`whitespace-nowrap text-xs ${isActive ? 'opacity-100 w-auto' : 'opacity-0 w-0 group-hover:opacity-100 group-hover:w-auto'} transition-all duration-200`}>
+                  {label}
+                </span>
+              </NavLink>
+            );
+          })}
+        </nav>
+      )}
+
       <div className="flex-1" />
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
         {/* Notifications */}
         <NavLink
           to={role === 'employer' ? '/employer/notifications' : '/notifications'}
@@ -94,16 +134,20 @@ export default function Navbar() {
 
         {/* User menu */}
         <div className="relative group">
-          <button className="flex items-center gap-2 rounded-xl px-2.5 py-1.5 text-sm font-medium text-brand-700 hover:bg-slate-100 transition-colors">
-            <div className="h-6 w-6 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xs font-bold flex-shrink-0">
+          <button className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-sm font-medium text-brand-700 hover:bg-slate-100 transition-colors">
+            <div className="h-7 w-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xs font-bold flex-shrink-0">
               {displayName.charAt(0).toUpperCase()}
             </div>
-            <span className="hidden sm:block max-w-[100px] truncate">{displayName}</span>
-            <ChevronDown className="h-3.5 w-3.5 text-brand-400" />
+            <ChevronDown className="h-3 w-3 text-brand-400" />
           </button>
 
           {/* Dropdown */}
           <div className="absolute right-0 top-full mt-1 w-52 rounded-xl bg-white shadow-lg ring-1 ring-brand-200 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 animate-scale-in">
+            <div className="px-3 py-2 border-b border-slate-100">
+              <p className="text-sm font-semibold text-brand-900 truncate">{displayName}</p>
+              <p className="text-xs text-brand-400 truncate">{session?.email}</p>
+            </div>
+
             <NavLink
               to={role === 'employer' ? '/employer/profile' : '/profile'}
               className="flex items-center gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-slate-50 w-full"
