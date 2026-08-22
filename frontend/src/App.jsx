@@ -11,7 +11,6 @@ const OnboardingPage = lazy(() => import('./pages/OnboardingPage.jsx'));
 
 const StudentDashboard = lazy(() => import('./pages/student/DashboardPage.jsx'));
 const JobsPage = lazy(() => import('./pages/student/JobsPage.jsx'));
-const JobSearchPage = lazy(() => import('./pages/student/JobSearchPage.jsx'));
 const ApplicationsPage = lazy(() => import('./pages/student/ApplicationsPage.jsx'));
 const StudentProfilePage = lazy(() => import('./pages/student/ProfilePage.jsx'));
 const AIAssistantPage = lazy(() => import('./pages/student/AIAssistantPage.jsx'));
@@ -99,7 +98,7 @@ export default function App() {
               </RequireRole>}>
                 <Route path="/dashboard" element={<StudentDashboard />} />
                 <Route path="/jobs" element={<JobsPage />} />
-                <Route path="/job-search" element={<JobSearchPage />} />
+                <Route path="/job-search" element={<Navigate to="/jobs" replace />} />
                 <Route path="/applications" element={<ApplicationsPage />} />
                 <Route path="/profile" element={<StudentProfilePage />} />
                 <Route path="/ai" element={<AIAssistantPage />} />
