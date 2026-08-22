@@ -201,9 +201,13 @@ function DashboardTab() {
                   const roleCls = ROLE_COLORS[user.role] || 'bg-slate-100 text-slate-600 border-slate-200';
                   return (
                     <div key={user.uid} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
-                      <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0 border border-brand-100">
-                        {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
-                      </div>
+                      {user.photoURL ? (
+                        <img src={user.photoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                      ) : (
+                        <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0 border border-brand-100">
+                          {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
+                        </div>
+                      )}
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold text-brand-900 truncate">{user.displayName || '—'}</p>
                         <p className="text-xs text-brand-400 truncate">{user.email}</p>
@@ -731,9 +735,13 @@ function UsersTab() {
             return (
               <div key={user.uid} className="card p-5 hover:shadow-md transition-all relative">
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-base font-bold flex-shrink-0 border border-brand-100">
-                    {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
-                  </div>
+                  {user.photoURL ? (
+                    <img src={user.photoURL} alt="" className="h-11 w-11 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                  ) : (
+                    <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-base font-bold flex-shrink-0 border border-brand-100">
+                      {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold text-brand-900 truncate">{user.displayName || '—'}</p>
                     <p className="text-xs text-brand-400 truncate">{user.email}</p>
