@@ -16,6 +16,75 @@ import {
 import { CareerDNAPanel } from '../../components/ai/CareerDNAPanel.jsx';
 import { SkillTestArena } from '../../components/ai/SkillTestArena.jsx';
 
+/* ── Simple markdown renderer (bold, bullets, headers) ────── */
+function renderMarkdown(text) {
+  if (!text) return null;
+
+  const lines = text.split('\n');
+  const elements = [];
+  let listBuffer = [];
+
+  const flushList = () => {
+    if (listBuffer.length > 0) {
+      elements.push(
+        <ul key={`ul-${elements.length}`} className="space-y-1 pl-4 my-2">
+          {listBuffer.map((item, i) => (
+            <li key={i} className="list-disc text-slate-700 text-sm leading-relaxed">
+              {formatInline(item)}
+            </li>
+          ))}
+        </ul>
+      );
+      listBuffer = [];
+    }
+  };
+
+  function formatInline(str) {
+    const parts = str.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-semibold text-slate-900">{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (trimmed.startsWith('### ')) {
+      flushList();
+      elements.push(<h4 key={i} className="text-sm font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(4))}</h4>);
+    } else if (trimmed.startsWith('## ')) {
+      flushList();
+      elements.push(<h3 key={i} className="text-base font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(3))}</h3>);
+    } else if (trimmed.startsWith('# ')) {
+      flushList();
+      elements.push(<h2 key={i} className="text-lg font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(2))}</h2>);
+    } else if (/^\d+\.\s/.test(trimmed)) {
+      flushList();
+      const content = trimmed.replace(/^\d+\.\s/, '');
+      elements.push(
+        <div key={i} className="flex gap-2 my-1">
+          <span className="text-brand-600 font-bold text-sm flex-shrink-0">{trimmed.match(/^\d+/)[0]}.</span>
+          <span className="text-sm text-slate-700 leading-relaxed">{formatInline(content)}</span>
+        </div>
+      );
+    } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      listBuffer.push(trimmed.slice(2));
+    } else if (trimmed === '') {
+      flushList();
+    } else {
+      flushList();
+      elements.push(<p key={i} className="text-sm text-slate-700 leading-relaxed my-1">{formatInline(trimmed)}</p>);
+    }
+  }
+
+  flushList();
+  return elements;
+}
+
 // ─── Tab bar ─────────────────────────────────────────────────
 const TABS = [
   { id: 'chat',     icon: MessageSquare, label: 'Career Chat' },
@@ -54,7 +123,7 @@ function ScoreRing({ score, size = 80, label = 'Score' }) {
 // ─── Career Chat tab ──────────────────────────────────────────
 function ChatTab() {
   const [messages, setMessages] = useState([
-    { role: 'assistant', content: "Hi! I'm your AI Career Assistant 👋 Ask me anything — interview tips, resume advice, career planning, or job market insights." }
+    { role: 'assistant', content: "Hi! I'm your AI Career Assistant. Ask me anything — interview tips, resume advice, career planning, or job market insights." }
   ]);
   const [input, setInput] = useState('');
   const [threadId, setThreadId] = useState(null);
@@ -106,7 +175,11 @@ function ChatTab() {
               }
             </div>
             <div className={m.role === 'user' ? 'chat-bubble-user' : 'chat-bubble-ai'}>
-              {m.content}
+              {m.role === 'assistant' ? (
+                <div className="prose-sm">{renderMarkdown(m.content)}</div>
+              ) : (
+                m.content
+              )}
             </div>
           </div>
         ))}
