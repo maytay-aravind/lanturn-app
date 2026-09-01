@@ -1,27 +1,62 @@
-import DotMatrixFlower from './DotMatrixFlower.jsx';
+import { TileFlower, TileShape, ShapeSVG } from './DotMatrixFlower.jsx';
 
 /**
- * Global ambient flower pattern for authenticated app pages.
- * Renders fixed, low-opacity yellow dot-matrix flowers in whitespace gaps.
- * Does not block interactions; purely decorative.
+ * Global decorative pattern for authenticated app pages.
+ * Filled tiles (orange/pink/green/yellow with white dot-matrix) + basic dot-matrix
+ * shapes in the gaps — directly mirrors reference's tile side-panels.
+ * Pointer-events none; never obstructs UI.
  */
 export default function FlowerBackground() {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-      {/* Large ghost flowers — like the big yellow flower behind the subject in reference */}
-      <DotMatrixFlower size={380} color="#EAB308" variant="lotus" rotate={12} className="absolute -top-24 -right-24" style={{ opacity: 0.07 }} />
-      <DotMatrixFlower size={320} color="#EAB308" variant="lotus" rotate={-18} className="absolute top-[42%] -left-28" style={{ opacity: 0.06 }} />
-      <DotMatrixFlower size={260} color="#EAB308" variant="lotus" rotate={28} className="absolute bottom-12 right-[8%]" style={{ opacity: 0.065 }} />
+      {/* ── Top cluster ── */}
+      <div className="absolute top-16 right-6 hidden lg:flex items-center gap-2">
+        <TileFlower tile="orange" variant="lotus" size={82} />
+        <ShapeSVG shape="star" size={20} color="#1A1A1A" />
+        <TileShape tile="pink" shape="square" size={60} />
+      </div>
 
-      {/* Medium accent flowers in whitespace */}
-      <DotMatrixFlower size={140} color="#EAB308" variant="lotus" rotate={0} className="absolute top-[18%] right-[22%]" style={{ opacity: 0.10 }} />
-      <DotMatrixFlower size={110} color="#EAB308" variant="small" rotate={22} className="absolute top-[68%] left-[18%]" style={{ opacity: 0.09 }} />
-      <DotMatrixFlower size={90} color="#EAB308" variant="diamond" rotate={0} className="absolute top-[28%] left-[6%]" style={{ opacity: 0.08 }} />
-      <DotMatrixFlower size={90} color="#EAB308" variant="diamond" rotate={0} className="absolute bottom-[22%] right-[16%]" style={{ opacity: 0.07 }} />
+      {/* ── Left mid ── */}
+      <div className="absolute top-[32%] left-3 hidden lg:flex flex-col items-center gap-2">
+        <TileFlower tile="green" variant="diamond" size={72} />
+        <ShapeSVG shape="circle" size={18} color="#1A1A1A" />
+        <TileShape tile="yellow" shape="circle" size={52} dotColor="#880E4F" />
+        <ShapeSVG shape="cross" size={16} color="#E91E63" />
+      </div>
 
-      {/* Tiny scattered dots — rangoli dust */}
-      <DotMatrixFlower size={64} color="#EAB308" variant="small" rotate={45} className="absolute top-[8%] left-[38%]" style={{ opacity: 0.08 }} />
-      <DotMatrixFlower size={72} color="#EAB308" variant="small" rotate={-30} className="absolute bottom-[30%] left-[42%]" style={{ opacity: 0.06 }} />
+      {/* ── Right mid ── */}
+      <div className="absolute top-[48%] right-3 hidden lg:flex flex-col items-center gap-2">
+        <TileShape tile="orange" shape="star" size={52} />
+        <ShapeSVG shape="triangle" size={16} color="#1A1A1A" />
+        <TileFlower tile="pink" variant="small" size={64} />
+      </div>
+
+      {/* ── Bottom clusters ── */}
+      <div className="absolute bottom-20 left-8 hidden md:flex items-center gap-2">
+        <TileFlower tile="yellow" variant="small" size={62} dotColor="#880E4F" />
+        <ShapeSVG shape="star" size={18} color="#1A1A1A" />
+        <TileShape tile="green" shape="square" size={50} />
+      </div>
+
+      <div className="absolute bottom-10 right-12 hidden md:flex items-center gap-2">
+        <TileShape tile="orange" shape="diamond" size={56} />
+        <ShapeSVG shape="circle" size={16} color="#1A1A1A" />
+        <TileFlower tile="pink" variant="lotus" size={68} />
+      </div>
+
+      {/* ── Scattered single basic shapes in open whitespace ── */}
+      <div className="absolute top-[18%] left-[28%] hidden xl:block">
+        <ShapeSVG shape="diamond" size={18} color="#1A1A1A" />
+      </div>
+      <div className="absolute top-[62%] left-[42%] hidden xl:block">
+        <ShapeSVG shape="cross" size={20} color="#E91E63" />
+      </div>
+      <div className="absolute bottom-[36%] right-[28%] hidden xl:block">
+        <ShapeSVG shape="circle" size={16} color="#0F5E2E" />
+      </div>
+      <div className="absolute top-[74%] right-[18%] hidden xl:block">
+        <ShapeSVG shape="triangle" size={18} color="#1A1A1A" />
+      </div>
     </div>
   );
 }
