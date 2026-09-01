@@ -108,4 +108,54 @@ export const employersRepo = {
     if (error) throw error;
     return rowToEmployer(updated);
   },
+
+  async listTopRanked(limit = 10) {
+    const { data: employers, error: empErr } = await supabase
+      .from('employers')
+      .select('uid, company_name, logo_url, industry, company_size, verified, employee_count, location')
+      .order('created_at', { ascending: false })
+      .limit(100);
+    if (empErr) throw empErr;
+
+    const { data: jobs, error: jobErr } = await supabase
+      .from('jobs')
+      .select('employer_id, status');
+    if (jobErr) throw jobErr;
+
+    const { data: apps, error: appErr } = await supabase
+      .from('applications')
+      .select('employer_id, status');
+    if (appErr) throw appErr;
+
+    const jobCounts = {};
+    const appCounts = {};
+    const hiredCounts = {};
+    for (const j of (jobs || [])) {
+      jobCounts[j.employer_id] = (jobCounts[j.employer_id] || 0) + 1;
+    }
+    for (const a of (apps || [])) {
+      appCounts[a.employer_id] = (appCounts[a.employer_id] || 0) + 1;
+      if (a.status === 'accepted') {
+        hiredCounts[a.employer_id] = (hiredCounts[a.employer_id] || 0) + 1;
+      }
+    }
+
+    const ranked = (employers || []).map(e => ({
+      uid: e.uid,
+      companyName: e.company_name || '',
+      logoURL: e.logo_url || '',
+      industry: e.industry || '',
+      companySize: e.company_size || '',
+      verified: e.verified ?? false,
+      employeeCount: e.employee_count ?? null,
+      location: e.location || {},
+      totalJobs: jobCounts[e.uid] || 0,
+      totalApplications: appCounts[e.uid] || 0,
+      hired: hiredCounts[e.uid] || 0,
+    }));
+
+    ranked.sort((a, b) => (b.totalJobs + b.totalApplications) - (a.totalJobs + a.totalApplications));
+
+    return ranked.slice(0, limit);
+  },
 };

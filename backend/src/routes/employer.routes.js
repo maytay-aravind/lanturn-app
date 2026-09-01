@@ -32,6 +32,7 @@ router.post('/company-dna/generate', authenticate, requireRole('employer'), requ
 router.get('/me/company-dna', authenticate, requireRole('employer'), requireProfileComplete, ...companyDnaCtrl.getPreview);
 router.get('/:uid/company-dna', ...companyDnaCtrl.getPublic);
 
+router.get('/top-companies', employerCtrl.getTopCompanies);
 router.get('/:uid', employerCtrl.getPublic);
 
 export default router;

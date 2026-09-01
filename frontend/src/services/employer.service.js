@@ -21,4 +21,6 @@ export const employerService = {
   generateCompanyDna: () => apiClient.post('/employers/company-dna/generate').then(unwrap),
   getCompanyDna: () => apiClient.get('/employers/me/company-dna').then(unwrap),
   getPublicCompanyDna: (uid) => apiClient.get(`/employers/${uid}/company-dna`).then(unwrap),
+
+  getTopCompanies: (limit = 10) => apiClient.get('/employers/top-companies', { params: { limit } }).then(unwrap),
 };

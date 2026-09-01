@@ -1,6 +1,7 @@
 import * as profileService from '#services/profile.service.js';
 import { jobsRepo } from '#repositories/jobs.repository.js';
 import { applicationsRepo } from '#repositories/applications.repository.js';
+import { employersRepo } from '#repositories/employers.repository.js';
 import { asyncHandler } from '#utils/asyncHandler.js';
 
 export const getMe = asyncHandler(async (req, res) => {
@@ -15,6 +16,12 @@ export const updateMe = asyncHandler(async (req, res) => {
 
 export const getPublic = asyncHandler(async (req, res) => {
   const data = await profileService.getEmployerPublic(req.params.uid);
+  res.json({ data, meta: { requestId: req.id } });
+});
+
+export const getTopCompanies = asyncHandler(async (req, res) => {
+  const limit = Math.min(parseInt(req.query.limit) || 10, 20);
+  const data = await employersRepo.listTopRanked(limit);
   res.json({ data, meta: { requestId: req.id } });
 });
 
