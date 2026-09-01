@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3 } from 'lucide-react';
+import DotMatrixFlower from '../components/DotMatrixFlower.jsx';
 
 const STATS = [
   { value: '500+', label: 'Placements' },
@@ -45,6 +46,11 @@ export default function LandingPage() {
 
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative px-6 md:px-12 pt-32 pb-20 md:pt-40 md:pb-32 max-w-7xl mx-auto overflow-hidden">
+        {/* Yellow dot-matrix flowers in whitespace — Nothing OS / reference rangoli */}
+        <DotMatrixFlower size={300} color="#EAB308" variant="lotus" rotate={14} className="absolute -top-10 -right-16 hidden md:flex" style={{ opacity: 0.11 }} />
+        <DotMatrixFlower size={180} color="#EAB308" variant="lotus" rotate={-22} className="absolute top-24 left-1/2 -translate-x-1/2 hidden lg:flex" style={{ opacity: 0.07 }} />
+        <DotMatrixFlower size={120} color="#EAB308" variant="diamond" rotate={0} className="absolute bottom-8 left-8 hidden md:flex" style={{ opacity: 0.10 }} />
+        <DotMatrixFlower size={88} color="#EAB308" variant="small" rotate={30} className="absolute bottom-20 right-[42%] hidden md:flex" style={{ opacity: 0.12 }} />
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="z-10 animate-fade-in">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-100 bg-white mb-8">
@@ -143,7 +149,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── Trusted By ───────────────────────────────────── */}
-      <section className="border-y border-brand-100 bg-white py-12">
+      <section className="relative border-y border-brand-100 bg-white py-12 overflow-hidden">
+        <DotMatrixFlower size={96} color="#EAB308" variant="small" rotate={18} className="absolute -top-6 right-12 hidden md:flex" style={{ opacity: 0.09 }} />
+        <DotMatrixFlower size={72} color="#EAB308" variant="diamond" rotate={0} className="absolute -bottom-4 left-10 hidden md:flex" style={{ opacity: 0.08 }} />
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-8 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-500">
           <p className="text-sm font-semibold uppercase tracking-wider text-brand-400 whitespace-nowrap">Trusted by students from</p>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
@@ -155,7 +163,9 @@ export default function LandingPage() {
       </section>
 
       {/* ── Stats ────────────────────────────────────────── */}
-      <section className="py-20 bg-surface-muted border-b border-brand-100" id="stats">
+      <section className="relative py-20 bg-surface-muted border-b border-brand-100 overflow-hidden" id="stats">
+        <DotMatrixFlower size={220} color="#EAB308" variant="lotus" rotate={-12} className="absolute -left-16 top-6 hidden md:flex" style={{ opacity: 0.08 }} />
+        <DotMatrixFlower size={160} color="#EAB308" variant="lotus" rotate={25} className="absolute -right-10 bottom-0 hidden md:flex" style={{ opacity: 0.07 }} />
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-brand-100">
             {STATS.map(s => (
@@ -172,6 +182,11 @@ export default function LandingPage() {
 
       {/* ── How It Works ─────────────────────────────────── */}
       <section className="py-24 bg-white relative overflow-hidden" id="how-it-works">
+        {/* Large faint flowers like the reference's backdrop mandala */}
+        <DotMatrixFlower size={420} color="#EAB308" variant="lotus" rotate={10} className="absolute -top-28 -left-28 hidden lg:flex" style={{ opacity: 0.065 }} />
+        <DotMatrixFlower size={360} color="#EAB308" variant="lotus" rotate={-16} className="absolute -bottom-24 -right-20 hidden lg:flex" style={{ opacity: 0.055 }} />
+        <DotMatrixFlower size={110} color="#EAB308" variant="diamond" rotate={0} className="absolute top-12 right-[18%] hidden md:flex" style={{ opacity: 0.09 }} />
+        <DotMatrixFlower size={86} color="#EAB308" variant="small" rotate={-28} className="absolute bottom-10 left-[30%] hidden md:flex" style={{ opacity: 0.10 }} />
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
           <div className="text-center mb-16">
             <h2 className="font-headline text-4xl font-bold text-brand-900 mb-4">How It Works</h2>
@@ -201,7 +216,10 @@ export default function LandingPage() {
       </section>
 
       {/* ── Features Grid ────────────────────────────────── */}
-      <section className="py-24 bg-surface-muted border-t border-brand-100" id="features">
+      <section className="relative py-24 bg-surface-muted border-t border-brand-100 overflow-hidden" id="features">
+        <DotMatrixFlower size={260} color="#EAB308" variant="lotus" rotate={18} className="absolute -top-10 right-0 hidden md:flex" style={{ opacity: 0.07 }} />
+        <DotMatrixFlower size={180} color="#EAB308" variant="lotus" rotate={-10} className="absolute bottom-6 -left-12 hidden md:flex" style={{ opacity: 0.08 }} />
+        <DotMatrixFlower size={96} color="#EAB308" variant="diamond" rotate={0} className="absolute top-1/2 left-1/2 -translate-x-1/2 hidden lg:flex" style={{ opacity: 0.06 }} />
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="mb-16">
             <h2 className="font-headline text-4xl font-bold text-brand-900 mb-4">Platform Features</h2>
@@ -224,6 +242,10 @@ export default function LandingPage() {
 
       {/* ── CTA Section ──────────────────────────────────── */}
       <section className="py-24 bg-brand-900 text-white relative overflow-hidden">
+        {/* Yellow dot-matrix flowers on dark — pop like reference's yellow on burnt orange */}
+        <DotMatrixFlower size={340} color="#EAB308" variant="lotus" rotate={22} className="absolute -top-16 -right-16 hidden md:flex" style={{ opacity: 0.22 }} />
+        <DotMatrixFlower size={280} color="#EAB308" variant="lotus" rotate={-14} className="absolute -bottom-20 -left-16 hidden md:flex" style={{ opacity: 0.18 }} />
+        <DotMatrixFlower size={110} color="#EAB308" variant="diamond" rotate={0} className="absolute top-10 left-[18%] hidden lg:flex" style={{ opacity: 0.16 }} />
         <div className="max-w-2xl mx-auto px-6 text-center relative z-10">
           <h2 className="font-headline text-4xl md:text-5xl font-bold mb-6">Ready to start?</h2>
           <p className="text-white/70 mb-10">Join thousands of students who have already illuminated their career path with LanTURN.</p>
@@ -245,7 +267,8 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ───────────────────────────────────────── */}
-      <footer className="bg-white border-t border-brand-100 w-full py-12 px-6 md:px-12">
+      <footer className="relative bg-white border-t border-brand-100 w-full py-12 px-6 md:px-12 overflow-hidden">
+        <DotMatrixFlower size={120} color="#EAB308" variant="small" rotate={12} className="absolute -top-8 right-20 hidden md:flex" style={{ opacity: 0.08 }} />
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 max-w-7xl mx-auto">
           <div className="flex items-center gap-2">
             <span className="font-headline text-xl font-bold text-brand-900">LanTURN</span>
