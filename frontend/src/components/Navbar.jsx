@@ -4,7 +4,7 @@ import { useLanguage, LANGUAGES } from '../contexts/LanguageContext.jsx';
 import { useQuery } from '@tanstack/react-query';
 import { notificationService } from '../services/notification.service.js';
 import {
-  ArrowLeft, Bell, LogOut, ChevronDown, Moon, Sun, Globe, User,
+  ArrowLeft, ArrowRight, Bell, LogOut, ChevronDown, Moon, Sun, Globe, User,
   LayoutDashboard, Briefcase, FileText, Sparkles, Map,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -71,18 +71,27 @@ export default function Navbar() {
   const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white flex items-center px-4 gap-2" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)' }}>
+    <header
+      className="fixed top-0 left-0 right-0 z-50 h-14 bg-brand-900 flex items-center px-4 gap-2 border-b-2 border-brand-900"
+      style={{
+        backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.12) 0.8px, transparent 1px)',
+        backgroundSize: '8px 8px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.2)',
+      }}
+    >
       {/* Logo / Back */}
       {isOnDashboard ? (
         <NavLink to={dashboardPath} className="flex items-center gap-2 mr-2 flex-shrink-0">
-          <img src="/logo.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
+          <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
           <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-dark h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
-          <span className="text-lg font-extrabold text-brand-900 hidden sm:block tracking-tight">LanTURN</span>
+          <span className="text-lg font-extrabold text-white hidden sm:flex items-center tracking-tight">
+            lan<span className="relative">TURN<ArrowRight className="absolute inset-0 text-accent opacity-60 w-full h-full -z-10" strokeWidth={4} style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} /></span>
+          </span>
         </NavLink>
       ) : (
         <button
           onClick={() => navigate(dashboardPath)}
-          className="flex items-center gap-2 h-9 px-3 rounded-lg text-brand-700 hover:bg-brand-50 hover:text-brand-900 transition-colors flex-shrink-0"
+          className="flex items-center gap-2 h-9 px-3 rounded-md text-white/80 hover:bg-white/10 hover:text-white transition-colors flex-shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
           <img src="/logo.jpeg" alt="lanTURN" className="logo-light h-7 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -8px' }} />
@@ -99,10 +108,10 @@ export default function Navbar() {
               <NavLink
                 key={to}
                 to={to}
-                className={`group flex items-center gap-0 rounded-lg text-sm font-medium transition-all duration-200 overflow-hidden ${
+                className={`group flex items-center gap-0 rounded-md text-sm font-medium transition-all duration-200 overflow-hidden ${
                   isActive
-                    ? 'bg-brand-900 text-white px-3 py-1.5 gap-2'
-                    : 'text-brand-500 hover:bg-brand-50 hover:text-brand-900 px-2 py-1.5 hover:px-3 hover:gap-2'
+                    ? 'bg-accent text-brand-900 px-3 py-1.5 gap-2 border-2 border-brand-900 shadow-soft-sm'
+                    : 'text-white/80 hover:bg-white/10 hover:text-white px-2 py-1.5 hover:px-3 hover:gap-2'
                 }`}
               >
                 <Icon className="h-4 w-4 flex-shrink-0" />
@@ -122,7 +131,7 @@ export default function Navbar() {
         {/* Notifications */}
         <NavLink
           to={role === 'employer' ? '/employer/notifications' : '/notifications'}
-          className="relative h-9 w-9 rounded-lg flex items-center justify-center text-brand-500 hover:bg-brand-50 hover:text-brand-900 transition-colors"
+          className="relative h-9 w-9 rounded-md flex items-center justify-center text-white/80 hover:bg-white/10 hover:text-white transition-colors"
         >
           <Bell className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
           {unread > 0 && (
@@ -134,11 +143,11 @@ export default function Navbar() {
 
         {/* User menu */}
         <div className="relative group">
-          <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 transition-colors">
-            <div className="h-7 w-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-800 text-xs font-bold flex-shrink-0">
+          <button className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm font-medium text-white/80 hover:bg-white/10 transition-colors">
+            <div className="h-7 w-7 rounded-full bg-accent flex items-center justify-center text-brand-900 text-xs font-extrabold flex-shrink-0 border-2 border-brand-900">
               {displayName.charAt(0).toUpperCase()}
             </div>
-            <ChevronDown className="h-3 w-3 text-brand-400" />
+            <ChevronDown className="h-3 w-3 text-white/60" />
           </button>
 
           {/* Dropdown */}
@@ -196,7 +205,6 @@ export default function Navbar() {
                           : 'text-brand-600 hover:bg-brand-50'
                       }`}
                     >
-                      <span>{lang.flag}</span>
                       <span>{lang.nativeName}</span>
                       {language === lang.code && (
                         <span className="ml-auto text-white">✓</span>

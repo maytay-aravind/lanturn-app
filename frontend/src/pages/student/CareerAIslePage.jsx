@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext.jsx';
@@ -312,7 +313,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="flex items-start gap-4">
                     <div className="h-16 w-16 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-lg">
-                      {previewDomain.icon || '🌐'}
+                      {previewDomain.icon || '�'}
                     </div>
                     <div>
                       <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -996,10 +997,11 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 // ── Main page ────────────────────────────────────────────────
 export default function CareerAIslePage() {
   const qc = useQueryClient();
+  const location = useLocation();
   const [showPicker, setShowPicker] = useState(false);
   const [showResumeAnalyzer, setShowResumeAnalyzer] = useState(false);
   const [enrolling, setEnrolling] = useState(null);
-  const [activeTab, setActiveTab] = useState(null);
+  const [activeTab, setActiveTab] = useState(location.state?.roadmapId || null);
 
   const { data: domains = [] } = useQuery({
     queryKey: ['roadmaps', 'domains'],
@@ -1022,7 +1024,7 @@ export default function CareerAIslePage() {
       const result = await roadmapService.enroll(domainId);
       await qc.invalidateQueries({ queryKey: ['roadmaps', 'me'] });
       setActiveTab(result.roadmap_id);
-      toast.success('Career path added! Let\'s go 🚀');
+      toast.success('Career path added! Let\'s go ');
       setShowPicker(false);
     } catch (err) {
       toast.error(err.message || 'Failed to enroll');

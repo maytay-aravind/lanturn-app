@@ -31,16 +31,16 @@ const AdminLoginPage = lazy(() => import('./pages/admin/AdminLoginPage.jsx'));
 // Skeleton shell shown while lazy page chunks load
 function PageLoader() {
   return (
-    <div className="space-y-6 animate-pulse">
+    <div className="space-y-6 animate-pulse" style={{ minHeight: '60vh' }}>
       {/* Heading skeleton */}
       <div className="space-y-2">
-        <div className="h-7 w-56 bg-brand-100 rounded-lg" />
-        <div className="h-4 w-80 bg-brand-50 rounded-lg" />
+        <div className="h-7 w-56 bg-white/80 rounded-lg" />
+        <div className="h-4 w-80 bg-white/60 rounded-lg" />
       </div>
       {/* Stat cards skeleton */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className="bg-white rounded-lg p-5 space-y-3 shadow-soft-md">
+          <div key={i} className="bg-white rounded-lg p-5 space-y-3 shadow-soft-md border border-brand-100">
             <div className="h-10 w-10 bg-brand-50 rounded-lg" />
             <div className="h-3 w-20 bg-brand-50 rounded" />
             <div className="h-6 w-16 bg-brand-100 rounded" />
@@ -49,30 +49,14 @@ function PageLoader() {
       </div>
       {/* Content cards skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-lg p-6 space-y-4 shadow-soft-md">
+        <div className="bg-white rounded-lg p-6 space-y-4 shadow-soft-md border border-brand-100">
           <div className="h-4 w-40 bg-brand-100 rounded" />
           <div className="h-28 w-full bg-brand-50 rounded-lg" />
         </div>
-        <div className="bg-white rounded-lg p-6 space-y-4 shadow-soft-md">
+        <div className="bg-white rounded-lg p-6 space-y-4 shadow-soft-md border border-brand-100">
           <div className="h-4 w-36 bg-brand-100 rounded" />
           <div className="h-28 w-full bg-brand-50 rounded-lg" />
         </div>
-      </div>
-      {/* List skeleton */}
-      <div className="space-y-3">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="bg-white rounded-lg p-5 flex items-center gap-4 shadow-soft-sm">
-            <div className="h-12 w-12 bg-brand-50 rounded-lg flex-shrink-0" />
-            <div className="flex-1 space-y-2">
-              <div className="h-4 w-48 bg-brand-100 rounded" />
-              <div className="h-3 w-32 bg-brand-50 rounded" />
-              <div className="flex gap-2">
-                <div className="h-5 w-16 bg-brand-50 rounded-full" />
-                <div className="h-5 w-20 bg-brand-50 rounded-full" />
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
@@ -80,59 +64,57 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
-        {/* Public */}
-        <Route element={<Layout />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin-login" element={<AdminLoginPage />} />
+    <Routes>
+      {/* Public */}
+      <Route element={<Layout />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin-login" element={<AdminLoginPage />} />
 
-          {/* Auth required */}
-          <Route element={<RequireAuth />}>
-            <Route path="/onboarding" element={<OnboardingPage />} />
+        {/* Auth required */}
+        <Route element={<RequireAuth />}>
+          <Route path="/onboarding" element={<Suspense fallback={<PageLoader />}><OnboardingPage /></Suspense>} />
 
-            {/* Onboarded users only */}
-            <Route element={<RequireOnboarded />}>
-              {/* Student routes */}
-              <Route element={<RequireRole roles={['student']}>
-                <Outlet />
-              </RequireRole>}>
-                <Route path="/dashboard" element={<StudentDashboard />} />
-                <Route path="/jobs" element={<JobsPage />} />
-                <Route path="/job-search" element={<Navigate to="/jobs" replace />} />
-                <Route path="/applications" element={<ApplicationsPage />} />
-                <Route path="/profile" element={<StudentProfilePage />} />
-                <Route path="/ai" element={<AIAssistantPage />} />
-                <Route path="/career-aisle" element={<CareerAIslePage />} />
-                <Route path="/notifications" element={<NotificationsPage />} />
-              </Route>
+          {/* Onboarded users only */}
+          <Route element={<RequireOnboarded />}>
+            {/* Student routes */}
+            <Route element={<RequireRole roles={['student']}>
+              <Outlet />
+            </RequireRole>}>
+              <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}><StudentDashboard /></Suspense>} />
+              <Route path="/jobs" element={<Suspense fallback={<PageLoader />}><JobsPage /></Suspense>} />
+              <Route path="/job-search" element={<Navigate to="/jobs" replace />} />
+              <Route path="/applications" element={<Suspense fallback={<PageLoader />}><ApplicationsPage /></Suspense>} />
+              <Route path="/profile" element={<Suspense fallback={<PageLoader />}><StudentProfilePage /></Suspense>} />
+              <Route path="/ai" element={<Suspense fallback={<PageLoader />}><AIAssistantPage /></Suspense>} />
+              <Route path="/career-aisle" element={<Suspense fallback={<PageLoader />}><CareerAIslePage /></Suspense>} />
+              <Route path="/notifications" element={<Suspense fallback={<PageLoader />}><NotificationsPage /></Suspense>} />
+            </Route>
 
-              {/* Employer routes */}
-              <Route element={<RequireRole roles={['employer']}>
-                <Outlet />
-              </RequireRole>}>
-                <Route path="/employer/dashboard" element={<EmployerDashboard />} />
-                <Route path="/employer/jobs" element={<EmployerJobsPage />} />
-                <Route path="/employer/jobs/:jobId/applicants" element={<JobApplicantsPage />} />
-                <Route path="/employer/ai-assistant" element={<AIHiringAssistantPage />} />
-                <Route path="/employer/profile" element={<EmployerProfilePage />} />
-                <Route path="/employer/notifications" element={<EmployerNotificationsPage />} />
-              </Route>
+            {/* Employer routes */}
+            <Route element={<RequireRole roles={['employer']}>
+              <Outlet />
+            </RequireRole>}>
+              <Route path="/employer/dashboard" element={<Suspense fallback={<PageLoader />}><EmployerDashboard /></Suspense>} />
+              <Route path="/employer/jobs" element={<Suspense fallback={<PageLoader />}><EmployerJobsPage /></Suspense>} />
+              <Route path="/employer/jobs/:jobId/applicants" element={<Suspense fallback={<PageLoader />}><JobApplicantsPage /></Suspense>} />
+              <Route path="/employer/ai-assistant" element={<Suspense fallback={<PageLoader />}><AIHiringAssistantPage /></Suspense>} />
+              <Route path="/employer/profile" element={<Suspense fallback={<PageLoader />}><EmployerProfilePage /></Suspense>} />
+              <Route path="/employer/notifications" element={<Suspense fallback={<PageLoader />}><EmployerNotificationsPage /></Suspense>} />
+            </Route>
 
-              {/* Admin routes */}
-              <Route element={<RequireRole roles={['admin']}>
-                <Outlet />
-              </RequireRole>}>
-                <Route path="/admin" element={<AdminPage />} />
-              </Route>
+            {/* Admin routes */}
+            <Route element={<RequireRole roles={['admin']}>
+              <Outlet />
+            </RequireRole>}>
+              <Route path="/admin" element={<Suspense fallback={<PageLoader />}><AdminPage /></Suspense>} />
             </Route>
           </Route>
         </Route>
+      </Route>
 
-        {/* Landing page (outside Layout — has its own nav/footer) */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Suspense>
+      {/* Landing page (outside Layout — has its own nav/footer) */}
+      <Route path="/" element={<Suspense fallback={<PageLoader />}><LandingPage /></Suspense>} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }

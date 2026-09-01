@@ -88,7 +88,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
     try {
       await roadmapService.syncResumeProgress(enrollment.roadmapId, results.matchedTopicKeys);
       setSyncDone(true);
-      toast.success(`${results.matchedTopicKeys.length} topics synced to your roadmap! 🎉`);
+      toast.success(`${results.matchedTopicKeys.length} topics synced to your roadmap! `);
       if (onSynced) onSynced();
     } catch (err) {
       toast.error(err.message || 'Failed to sync progress');

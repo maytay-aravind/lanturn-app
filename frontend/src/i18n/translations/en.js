@@ -88,7 +88,7 @@ const en = {
 
   // ── Onboarding ─────────────────────────────────────────────
   onboarding: {
-    welcome: 'Welcome! 👋',
+    welcome: 'Welcome! ',
     rolePrompt: "First, tell us who you are. This can't be changed later.",
     student: "I'm a Student",
     studentDesc: 'Looking for jobs, internships, and career opportunities.',
@@ -134,7 +134,7 @@ const en = {
 
   // ── Student Dashboard ──────────────────────────────────────
   studentDash: {
-    welcomeBack: 'Welcome back, {name} 👋',
+    welcomeBack: 'Welcome back, {name} ',
     overview: 'Here is your career placement overview',
     findJobs: 'Find Jobs',
     applications: 'Applications',
@@ -233,7 +233,7 @@ const en = {
     applied: 'Applied',
     reviewing: 'Reviewing',
     shortlisted: 'Shortlisted',
-    hired: 'Hired 🎉',
+    hired: 'Hired ',
     rejected: 'Rejected',
     withdrawn: 'Withdrawn',
     withdraw: 'Withdraw',
@@ -266,7 +266,7 @@ const en = {
     resumeReview: 'Resume Review',
     jobMatch: 'Job Match',
     skillArena: 'Skill Arena',
-    chatGreeting: "Hi! I'm your AI Career Assistant 👋 Ask me anything — interview tips, resume advice, career planning, or job market insights.",
+    chatGreeting: "Hi! I'm your AI Career Assistant  Ask me anything — interview tips, resume advice, career planning, or job market insights.",
     typeMessage: 'Type your message…',
     suggestion1: 'How do I prepare for a system design interview?',
     suggestion2: 'Review my elevator pitch for a software engineering role',
@@ -326,7 +326,7 @@ const en = {
 
   // ── Employer Dashboard ─────────────────────────────────────
   empDash: {
-    welcomeBack: 'Welcome back, {name} 👋',
+    welcomeBack: 'Welcome back, {name} ',
     overview: 'Here is your hiring overview',
     postJob: 'Post a Job',
     activeJobs: 'Active Jobs',
@@ -434,7 +434,7 @@ const en = {
   empAI: {
     title: 'AI Hiring Assistant',
     subtitle: 'Get AI-powered insights for your hiring process',
-    chatGreeting: "Hi! I'm your AI Hiring Assistant 👋 Ask me about candidate screening, job description writing, interview strategies, or hiring best practices.",
+    chatGreeting: "Hi! I'm your AI Hiring Assistant  Ask me about candidate screening, job description writing, interview strategies, or hiring best practices.",
     typeMessage: 'Ask about hiring, candidates, interviews...',
   },
 

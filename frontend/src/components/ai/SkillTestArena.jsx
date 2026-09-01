@@ -20,10 +20,10 @@ const POPULAR_SKILLS = [
 
 /* ── Tier config ─────────────────────────────────────────────── */
 function getTierInfo(rating) {
-  if (rating >= 90) return { tier: 'gold', label: 'Expert', medal: '🥇 Gold Medal', color: '#f59e0b' };
-  if (rating >= 80) return { tier: 'silver', label: 'Advanced', medal: '🥈 Silver Medal', color: '#8A8A8A' };
-  if (rating >= 70) return { tier: 'bronze', label: 'Intermediate', medal: '🥉 Bronze Medal', color: '#f97316' };
-  return { tier: 'basic', label: 'Beginner', medal: '🏅 Basic Medal', color: '#60a5fa' };
+  if (rating >= 90) return { tier: 'gold', label: 'Expert', medal: '� Gold Medal', color: '#f59e0b' };
+  if (rating >= 80) return { tier: 'silver', label: 'Advanced', medal: '� Silver Medal', color: '#8A8A8A' };
+  if (rating >= 70) return { tier: 'bronze', label: 'Intermediate', medal: '� Bronze Medal', color: '#f97316' };
+  return { tier: 'basic', label: 'Beginner', medal: '� Basic Medal', color: '#60a5fa' };
 }
 
 /* ── Step 1: Skill Selection ─────────────────────────────────── */
@@ -267,7 +267,7 @@ function ResultView({ skill, result, onRetry, onNewSkill }) {
         {passed ? (
           <>
             <div className="text-6xl mb-3" style={{ animation: 'pulse 1s ease-in-out' }}>
-              {MEDAL_CONFIG[medal]?.emoji || '🏅'}
+              {MEDAL_CONFIG[medal]?.emoji || '�'}
             </div>
             <h3 className="text-xl font-bold text-brand-900">Congratulations!</h3>
             <p className="text-sm text-brand-600 mt-1">
@@ -279,7 +279,7 @@ function ResultView({ skill, result, onRetry, onNewSkill }) {
           </>
         ) : (
           <>
-            <div className="text-5xl mb-3">📝</div>
+            <div className="text-5xl mb-3"></div>
             <h3 className="text-xl font-bold text-brand-900">Not Quite!</h3>
             <p className="text-sm text-brand-600 mt-1">
               You scored <strong>{score}</strong>. Study the feedback below and try again!

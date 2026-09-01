@@ -194,7 +194,7 @@ export default function ApplicationsPage() {
                 }}
               >
                 <span className="h-2 w-2 rounded-full" style={{ backgroundColor: col.color }} />
-                {col.title.replace(' 🎉', '')} ({cnt})
+                {col.title.replace(' ', '')} ({cnt})
               </span>
             );
           })}

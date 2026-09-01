@@ -6,20 +6,20 @@
 
 /* ── CSS Custom Properties ─────────────────────────────────── */
 :root {
-  --brand-50:  #F5F5F5;
-  --brand-100: #E8E8E8;
-  --brand-400: #8A8A8A;
-  --brand-500: #6B6B6B;
-  --brand-600: #4A4A4A;
-  --brand-700: #333333;
+  --brand-50:  #FCE4EC;
+  --brand-100: #F8BBD0;
+  --brand-400: #EC407A;
+  --brand-500: #E91E63;
+  --brand-600: #D81B60;
+  --brand-700: #C2185B;
   --sidebar-w: 240px;
 
-  /* Nothing OS shadows — soft, multi-layered, floating */
-  --shadow-sm:    0 1px 2px rgba(0,0,0,0.04), 0 1px 3px rgba(0,0,0,0.03);
-  --shadow-md:    0 4px 6px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.03), 0 10px 15px rgba(0,0,0,0.02);
-  --shadow-lg:    0 10px 25px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.03), 0 20px 40px rgba(0,0,0,0.02);
-  --shadow-xl:    0 15px 35px rgba(0,0,0,0.06), 0 5px 15px rgba(0,0,0,0.04), 0 25px 50px rgba(0,0,0,0.03);
-  --shadow-float: 0 20px 60px rgba(0,0,0,0.07), 0 8px 20px rgba(0,0,0,0.04);
+  /* Harsher, brutalist shadows for maximalist vibe */
+  --shadow-sm:    2px 2px 0px rgba(0,0,0,0.15);
+  --shadow-md:    4px 4px 0px rgba(0,0,0,0.2);
+  --shadow-lg:    6px 6px 0px rgba(0,0,0,0.25);
+  --shadow-xl:    8px 8px 0px rgba(0,0,0,0.3);
+  --shadow-float: 4px 4px 0px rgba(0,0,0,0.2), 0 0 0 2px rgba(0,0,0,1);
 }
 
 /* ── Base ───────────────────────────────────────────────────── */
@@ -36,10 +36,13 @@
   }
 
   body {
-    @apply bg-surface-muted text-brand-900 antialiased;
+    @apply text-brand-900 antialiased;
     min-height: 100dvh;
-    background-image: radial-gradient(circle at center, #E8E8E8 1px, transparent 1px);
-    background-size: 24px 24px;
+    background-color: #FFC107;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='40' cy='32' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='40' cy='48' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='32' cy='40' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='48' cy='40' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='34' cy='34' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='46' cy='34' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='34' cy='46' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='46' cy='46' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='40' cy='24' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='36' cy='20' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='44' cy='20' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='40' cy='56' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='36' cy='60' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='44' cy='60' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='24' cy='40' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='20' cy='36' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='20' cy='44' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='56' cy='40' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='60' cy='36' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='60' cy='44' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='0' cy='0' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='80' cy='0' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='0' cy='80' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='80' cy='80' r='1.5' fill='rgba(136,14,79,0.2)' /%3E%3Ccircle cx='10' cy='40' r='1.2' fill='rgba(136,14,79,0.1)' /%3E%3Ccircle cx='70' cy='40' r='1.2' fill='rgba(136,14,79,0.1)' /%3E%3Ccircle cx='40' cy='10' r='1.2' fill='rgba(136,14,79,0.1)' /%3E%3Ccircle cx='40' cy='70' r='1.2' fill='rgba(136,14,79,0.1)' /%3E%3C/svg%3E"),
+      radial-gradient(circle at center, rgba(136,14,79,0.18) 1px, transparent 1.5px);
+    background-size: 80px 80px, 10px 10px;
   }
 
   h1,h2,h3,h4 { @apply font-semibold tracking-tight; }
@@ -50,19 +53,19 @@
 
   /* Buttons */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 select-none;
+    @apply inline-flex items-center justify-center gap-2 rounded px-4 py-2.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 select-none;
   }
   .btn-primary {
-    @apply btn bg-brand-900 text-white shadow-soft-sm hover:bg-brand-800 active:scale-[0.98] focus:ring-brand-400;
+    @apply btn bg-brand-900 text-white border-2 border-brand-900 shadow-soft-sm hover:bg-brand-800 active:scale-[0.98] focus:ring-brand-400;
   }
   .btn-primary:hover {
-    @apply shadow-soft-md;
+    @apply shadow-soft-md transform -translate-y-0.5;
   }
   .btn-secondary {
-    @apply btn bg-white text-brand-700 ring-1 ring-inset ring-brand-200 hover:bg-brand-50 hover:ring-brand-300 active:scale-[0.98] focus:ring-brand-400;
+    @apply btn bg-white text-brand-900 border-2 border-brand-900 shadow-soft-sm hover:bg-brand-50 hover:shadow-soft-md active:scale-[0.98] focus:ring-brand-400;
   }
   .btn-danger {
-    @apply btn bg-accent text-white hover:bg-accent-dark active:scale-[0.98] focus:ring-accent;
+    @apply btn bg-indian-orange text-white border-2 border-brand-900 shadow-soft-sm hover:opacity-90 active:scale-[0.98] focus:ring-indian-orange;
   }
   .btn-ghost {
     @apply btn text-brand-600 hover:bg-brand-50 hover:text-brand-900 focus:ring-brand-400;
@@ -92,9 +95,9 @@
   .form-error { @apply text-xs text-accent mt-1; }
   .form-hint  { @apply text-xs text-brand-400 mt-1; }
 
-  /* Cards — premium floating shadow, border accent */
+  /* Cards — solid background with sharp bold border for maximalist style */
   .card {
-    @apply rounded-xl bg-white border border-brand-100 transition-all duration-200;
+    @apply rounded bg-white border-2 border-brand-900 transition-all duration-200;
     box-shadow: var(--shadow-md);
   }
   .card-hover {
@@ -102,10 +105,10 @@
   }
   .card-hover:hover {
     box-shadow: var(--shadow-lg);
-    transform: translateY(-1px);
+    transform: translate(-2px, -2px);
   }
   .card-glass {
-    @apply rounded-xl backdrop-blur-xl bg-white/80 shadow-soft-xl;
+    @apply rounded bg-white/95 border-2 border-brand-900 shadow-soft-xl;
   }
 
   /* Badges */
@@ -144,7 +147,7 @@
 
   /* Skeleton shimmer */
   .skeleton {
-    @apply rounded-lg bg-brand-100 animate-pulse;
+    @apply rounded-lg bg-white/60 animate-pulse;
   }
   .skeleton-text  { @apply h-4 skeleton; }
   .skeleton-title { @apply h-6 skeleton; }
@@ -152,12 +155,12 @@
 
   /* Sidebar */
   .sidebar {
-    @apply fixed inset-y-0 left-0 z-40 flex flex-col bg-white;
+    @apply fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r-2 border-brand-900;
     width: var(--sidebar-w);
     box-shadow: var(--shadow-md);
   }
   .sidebar-link {
-    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-brand-500 hover:bg-brand-50 hover:text-brand-900 transition-colors;
+    @apply flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-brand-700 hover:bg-brand-50 hover:text-brand-900 transition-colors;
   }
   .sidebar-link.active {
     @apply bg-brand-900 text-white;

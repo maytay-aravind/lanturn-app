@@ -6,7 +6,7 @@ import { studentService } from '../../services/student.service.js';
 import { applicationService } from '../../services/application.service.js';
 import { roadmapService } from '../../services/roadmap.service.js';
 import { employerService } from '../../services/employer.service.js';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SkeletonList, SkeletonProfile } from '../../components/ui/Skeleton.jsx';
 import { EmptyState } from '../../components/ui/EmptyState.jsx';
 import {
@@ -353,6 +353,7 @@ function TopCompaniesWidget({ companies, isLoading }) {
 export default function StudentDashboard() {
   const { session } = useAuth();
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   const { data: profile, isLoading: isProfileLoading } = useQuery({
     queryKey: ['student', 'me'],
@@ -597,6 +598,7 @@ export default function StudentDashboard() {
               return (
                 <div
                   key={rm.roadmapId}
+                  onClick={() => navigate('/career-aisle', { state: { roadmapId: rm.roadmapId } })}
                   className="border border-brand-100 rounded-xl p-4 flex items-center gap-4 bg-white hover:border-brand-300 hover:shadow-soft-sm transition-all cursor-pointer group"
                 >
                   <SVGDonut percent={pct} color={color} size={54} />

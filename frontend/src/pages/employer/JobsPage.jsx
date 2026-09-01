@@ -155,7 +155,7 @@ export default function EmployerJobsPage() {
           description: prev.description + '\n\nNice to have: ' + data.niceToHave.join(', '),
         }));
       }
-      toast.success('AI generated description! Review and edit before posting.', { icon: '✨' });
+      toast.success('AI generated description! Review and edit before posting.', { icon: '' });
     },
     onError: (err) => toast.error(err.message || 'AI generation failed'),
   });
