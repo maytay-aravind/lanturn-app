@@ -319,7 +319,7 @@ export default function ProfilePage() {
       {/* ── Profile Display Card (always visible) ─────────── */}
       <div className="card overflow-hidden animate-slide-up">
         {/* Gradient banner with Edit button */}
-        <div className="h-28 relative" style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%)' }}>
+        <div className="h-28 relative" style={{ background: 'linear-gradient(135deg, #333333 0%, #4A4A4A 50%, #8A8A8A 100%)' }}>
           <button
             id="profile-edit-toggle-btn"
             onClick={() => setIsEditing(!isEditing)}
@@ -393,7 +393,7 @@ export default function ProfilePage() {
               className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors ${
                 githubUrl
                   ? 'bg-slate-900 text-white hover:bg-slate-700'
-                  : 'bg-slate-100 text-brand-400 cursor-not-allowed'
+                  : 'bg-brand-100 text-brand-400 cursor-not-allowed'
               }`}
             >
               <GitHubIcon className="h-3 w-3" />
@@ -410,7 +410,7 @@ export default function ProfilePage() {
               className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium transition-colors ${
                 linkedinUrl
                   ? 'bg-[#0A66C2] text-white hover:bg-[#004182]'
-                  : 'bg-slate-100 text-brand-400 cursor-not-allowed'
+                  : 'bg-brand-100 text-brand-400 cursor-not-allowed'
               }`}
             >
               <LinkedInIcon className="h-3 w-3" />
@@ -487,7 +487,7 @@ export default function ProfilePage() {
                     </a>
                   )}
                   {portfolioUrl && (
-                    <a href={portfolioUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-brand-600 text-white hover:bg-brand-700 transition-colors">
+                    <a href={portfolioUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium bg-brand-900 text-white hover:bg-brand-800 transition-colors">
                       <ExternalLink className="h-3 w-3" /> Portfolio
                     </a>
                   )}
@@ -556,7 +556,7 @@ export default function ProfilePage() {
               </div>
             </div>
             {resumePct !== null && (
-              <div className="mt-2 p-3 rounded-xl bg-slate-50 ring-1 ring-brand-200">
+              <div className="mt-2 p-3 rounded-xl bg-brand-50 ring-1 ring-brand-200">
                 <div className="flex justify-between text-xs text-brand-500 mb-1">
                   <span className="font-medium">Uploading...</span>
                   <span>{resumePct}%</span>
@@ -585,7 +585,7 @@ export default function ProfilePage() {
             </div>
             
             {certPct !== null && (
-              <div className="mb-3 p-3 rounded-xl bg-slate-50 ring-1 ring-brand-200">
+              <div className="mb-3 p-3 rounded-xl bg-brand-50 ring-1 ring-brand-200">
                 <div className="flex justify-between text-xs text-brand-500 mb-1">
                   <span className="font-medium">Uploading...</span>
                   <span>{certPct}%</span>
@@ -599,7 +599,7 @@ export default function ProfilePage() {
             {p.certificates?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {p.certificates.map(cert => (
-                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-xl bg-slate-50 border border-brand-200">
+                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-xl bg-brand-50 border border-brand-200">
                     <div className="flex items-start gap-3">
                       <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                         <FileText className="h-4 w-4 text-blue-600" />
@@ -682,7 +682,7 @@ export default function ProfilePage() {
 
             {/* Upload progress */}
             {resumePct !== null && (
-              <div className="p-4 rounded-xl bg-slate-50 ring-1 ring-brand-200">
+              <div className="p-4 rounded-xl bg-brand-50 ring-1 ring-brand-200">
                 <div className="flex justify-between text-xs text-brand-500 mb-2">
                   <span className="font-medium">Uploading resume...</span>
                   <span>{resumePct}%</span>

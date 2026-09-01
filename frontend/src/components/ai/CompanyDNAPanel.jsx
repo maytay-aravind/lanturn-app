@@ -65,7 +65,7 @@ function AnimatedBar({ score, name, delay = 0, onClick }) {
   const gradient = score >= 80
     ? 'linear-gradient(90deg, #10b981, #059669)'
     : score >= 60
-      ? 'linear-gradient(90deg, #6366f1, #4f46e5)'
+      ? 'linear-gradient(90deg, #1A1A1A, #333333)'
       : score >= 40
         ? 'linear-gradient(90deg, #f59e0b, #d97706)'
         : 'linear-gradient(90deg, #ef4444, #dc2626)';
@@ -74,7 +74,7 @@ function AnimatedBar({ score, name, delay = 0, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full text-left group p-3 rounded-xl hover:bg-slate-50/80 transition-colors"
+      className="w-full text-left group p-3 rounded-xl hover:bg-brand-50/80 transition-colors"
     >
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-brand-700 group-hover:text-brand-700 transition-colors">
@@ -85,7 +85,7 @@ function AnimatedBar({ score, name, delay = 0, onClick }) {
           <ChevronRight className="h-3.5 w-3.5 text-brand-300 group-hover:text-brand-500 transition-colors" />
         </div>
       </div>
-      <div className="h-2.5 rounded-full bg-slate-100 overflow-hidden" ref={barRef}>
+      <div className="h-2.5 rounded-full bg-brand-100 overflow-hidden" ref={barRef}>
         <div
           className="h-full rounded-full"
           style={{
@@ -114,7 +114,7 @@ export function CompanyDNAPanel({
   if (isLoading) {
     return (
       <div className="card p-8 flex flex-col items-center gap-4 animate-pulse">
-        <div className="h-48 w-48 rounded-full bg-slate-100" />
+        <div className="h-48 w-48 rounded-full bg-brand-100" />
         <p className="text-sm text-brand-500">Loading Company DNA…</p>
       </div>
     );
@@ -127,7 +127,7 @@ export function CompanyDNAPanel({
           <div className="flex items-start gap-4">
             <div
               className="h-12 w-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-              style={{ background: 'linear-gradient(135deg,#4f46e5,#7c3aed)' }}
+              style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}
             >
               <Building2 className="h-6 w-6 text-white" />
             </div>
@@ -185,7 +185,7 @@ export function CompanyDNAPanel({
         {/* Decorative glow */}
         <div
           className="absolute -top-12 -right-12 w-32 h-32 rounded-full opacity-30 pointer-events-none"
-          style={{ background: 'radial-gradient(circle, #818cf8, transparent 70%)' }}
+          style={{ background: 'radial-gradient(circle, #6B6B6B, transparent 70%)' }}
         />
 
         <div className="flex flex-col sm:flex-row items-center gap-5 relative z-10">
@@ -205,7 +205,7 @@ export function CompanyDNAPanel({
       </div>
 
       {/* View toggle */}
-      <div className="flex items-center justify-center gap-1 p-1 bg-slate-100 rounded-xl w-fit mx-auto">
+      <div className="flex items-center justify-center gap-1 p-1 bg-brand-100 rounded-xl w-fit mx-auto">
         <button
           type="button"
           onClick={() => setShowRadar(true)}
@@ -248,8 +248,8 @@ export function CompanyDNAPanel({
                 onClick={() => setSelectedIndex(i)}
                 className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
                   selectedIndex === i
-                    ? 'bg-brand-600 text-white'
-                    : 'bg-slate-100 text-brand-600 hover:bg-slate-200'
+                    ? 'bg-brand-900 text-white'
+                    : 'bg-brand-100 text-brand-600 hover:bg-brand-200'
                 }`}
               >
                 {dim.label} · {dim.score}
@@ -278,7 +278,7 @@ export function CompanyDNAPanel({
           <button
             onClick={onRegenerate}
             disabled={isRegenerating}
-            className="px-4 py-2 bg-slate-100 text-brand-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-brand-100 text-brand-600 font-medium rounded-xl hover:bg-brand-200 transition-colors flex items-center gap-2"
           >
             {isRegenerating ? (
               <>

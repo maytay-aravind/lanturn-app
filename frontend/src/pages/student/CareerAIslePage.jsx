@@ -139,7 +139,7 @@ const getDomainCategory = (domain) => {
 
 // ── Stage node colors (cycles) ───────────────────────────────
 const STAGE_COLORS = [
-  { bg: 'bg-brand-600',  border: 'border-brand-600',  text: 'text-brand-600',  light: 'bg-brand-50',  hex: '#4f46e5' },
+  { bg: 'bg-brand-600',  border: 'border-brand-600',  text: 'text-brand-600',  light: 'bg-brand-50',  hex: '#333333' },
   { bg: 'bg-amber-400',   border: 'border-amber-400',   text: 'text-amber-500',   light: 'bg-amber-50',   hex: '#f59e0b' },
   { bg: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-600', light: 'bg-emerald-50', hex: '#10b981' },
   { bg: 'bg-rose-500',    border: 'border-rose-500',    text: 'text-rose-600',    light: 'bg-rose-50',    hex: '#f43f5e' },
@@ -207,7 +207,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
       <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-xl transition-all" onClick={onClose} />
 
       <motion.div
-        className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-200/80"
+        className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-brand-200/80"
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
@@ -220,7 +220,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 border border-brand-400/30 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+              <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 border border-brand-400/30 flex items-center justify-center text-white shadow-soft-lg shadow-brand-500/30">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
@@ -230,7 +230,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                     {domains.length} Paths
                   </span>
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+                <p className="text-xs sm:text-sm text-brand-400 mt-0.5">
                   Select a career domain to unlock structured, stage-by-stage learning roadmaps
                 </p>
               </div>
@@ -238,7 +238,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
             <button
               onClick={onClose}
-              className="h-10 w-10 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-300 hover:text-white transition-all transform hover:rotate-90 duration-300"
+              className="h-10 w-10 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-brand-300 hover:text-white transition-all transform hover:rotate-90 duration-300"
             >
               <X className="h-5 w-5" />
             </button>
@@ -259,13 +259,13 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                     {isActive && (
                       <motion.div
                         layoutId="activeCategoryTab"
-                        className="absolute inset-0 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-xl shadow-lg shadow-brand-500/30"
+                        className="absolute inset-0 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-xl shadow-soft-lg shadow-brand-500/30"
                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                       />
                     )}
-                    <span className={`relative z-10 flex items-center gap-1.5 ${isActive ? 'text-white' : 'text-slate-400 hover:text-slate-200'}`}>
+                    <span className={`relative z-10 flex items-center gap-1.5 ${isActive ? 'text-white' : 'text-brand-400 hover:text-brand-200'}`}>
                       {cat}
-                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-400'}`}>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-extrabold ${isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-brand-400'}`}>
                         {count}
                       </span>
                     </span>
@@ -283,18 +283,18 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="flex-1 flex flex-col overflow-hidden bg-slate-50/80"
+            className="flex-1 flex flex-col overflow-hidden bg-brand-50/80"
           >
             {/* Top Navigation Bar */}
-            <div className="p-4 bg-white/90 backdrop-blur-md border-b border-slate-200/80 flex items-center justify-between flex-shrink-0 z-10">
+            <div className="p-4 bg-white/90 backdrop-blur-md border-b border-brand-200/80 flex items-center justify-between flex-shrink-0 z-10">
               <button
                 onClick={() => setPreviewDomain(null)}
-                className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-brand-600 bg-slate-100 hover:bg-brand-50 px-3.5 py-2 rounded-xl transition-all"
+                className="flex items-center gap-2 text-xs font-bold text-brand-700 hover:text-brand-600 bg-brand-100 hover:bg-brand-50 px-3.5 py-2 rounded-xl transition-all"
               >
                 <ChevronLeft className="h-4 w-4" /> Back to Career Catalog
               </button>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-brand-500 flex items-center gap-1.5">
                   <BookOpen className="h-4 w-4 text-brand-500" /> Interactive Roadmap Preview
                 </span>
               </div>
@@ -305,7 +305,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
               {/* Hero Banner Card */}
               <div
                 className="rounded-3xl p-6 text-white shadow-xl relative overflow-hidden border border-white/10"
-                style={{ background: `linear-gradient(135deg, ${previewDomain.color || '#4f46e5'}, #0f172a)` }}
+                style={{ background: `linear-gradient(135deg, ${previewDomain.color || '#333333'}, #0f172a)` }}
               >
                 <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -351,11 +351,11 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
               {/* Stages List */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <h4 className="text-base font-bold text-brand-900 flex items-center gap-2">
                     <Layers3 className="h-5 w-5 text-brand-600" />
                     Stage-by-Stage Curriculum ({previewDomain.stages?.length || 0} Stages)
                   </h4>
-                  <span className="text-xs font-semibold text-slate-400">
+                  <span className="text-xs font-semibold text-brand-400">
                     {previewDomain.stages?.reduce((sum, s) => sum + (s.topics?.length || 0), 0)} Total Skill Topics
                   </span>
                 </div>
@@ -367,16 +367,16 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all"
+                      className="bg-white rounded-2xl p-5 border border-brand-200/80 shadow-sm hover:shadow-md transition-all"
                     >
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-start gap-3">
-                          <span className="h-7 w-7 rounded-xl bg-brand-600 text-white text-xs font-extrabold flex items-center justify-center shrink-0 shadow-md shadow-brand-500/20">
+                          <span className="h-7 w-7 rounded-xl bg-brand-900 text-white text-xs font-extrabold flex items-center justify-center shrink-0 shadow-soft-md shadow-brand-500/20">
                             {idx + 1}
                           </span>
                           <div>
                             <div className="flex items-center gap-2 flex-wrap">
-                              <h5 className="font-bold text-slate-900 text-base">{stage.title}</h5>
+                              <h5 className="font-bold text-brand-900 text-base">{stage.title}</h5>
                               {stage.difficulty && (
                                 <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                                   stage.difficulty === 'Beginner'
@@ -389,22 +389,22 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-slate-500 mt-1">{stage.description}</p>
+                            <p className="text-xs text-brand-500 mt-1">{stage.description}</p>
                           </div>
                         </div>
-                        <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-xl shrink-0 flex items-center gap-1">
+                        <span className="text-xs font-bold bg-brand-100 text-brand-600 px-3 py-1 rounded-xl shrink-0 flex items-center gap-1">
                           <Clock className="h-3.5 w-3.5" /> {stage.durationWeeks} weeks
                         </span>
                       </div>
 
                       {/* Topics */}
                       <div className="mb-3.5">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">
+                        <p className="text-[10px] font-bold text-brand-400 uppercase tracking-widest mb-1.5">
                           Core Topics Covered
                         </p>
                         <div className="flex flex-wrap gap-1.5">
                           {stage.topics?.map((topic, ti) => (
-                            <span key={ti} className="text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-700 font-medium px-3 py-1 rounded-lg transition-colors">
+                            <span key={ti} className="text-xs bg-brand-50 hover:bg-brand-100 border border-brand-200/60 text-brand-700 font-medium px-3 py-1 rounded-lg transition-colors">
                               {topic}
                             </span>
                           ))}
@@ -423,8 +423,8 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
                       {/* Study Resources */}
                       {stage.resources?.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-slate-100 flex items-center gap-3 flex-wrap text-xs">
-                          <span className="font-bold text-slate-400 text-[10px] uppercase tracking-wider">Resources:</span>
+                        <div className="mt-3 pt-3 border-t border-brand-100 flex items-center gap-3 flex-wrap text-xs">
+                          <span className="font-bold text-brand-400 text-[10px] uppercase tracking-wider">Resources:</span>
                           {stage.resources.map((res, ri) => (
                             <a
                               key={ri}
@@ -445,17 +445,17 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
             </div>
 
             {/* Sticky Bottom Action Bar */}
-            <div className="p-4 bg-white/90 backdrop-blur-md border-t border-slate-200/80 flex items-center justify-between shrink-0">
+            <div className="p-4 bg-white/90 backdrop-blur-md border-t border-brand-200/80 flex items-center justify-between shrink-0">
               <button
                 onClick={() => setPreviewDomain(null)}
-                className="text-xs font-bold text-slate-600 hover:text-slate-900 px-4 py-2 rounded-xl hover:bg-slate-100 transition-colors"
+                className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-xl hover:bg-brand-100 transition-colors"
               >
                 ← Return to Catalog
               </button>
               <button
                 disabled={enrolledIds.has(previewDomain.id) || enrolling === previewDomain.id}
                 onClick={() => onEnroll(previewDomain.id)}
-                className="btn-primary bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-lg shadow-brand-500/20 flex items-center gap-2"
+                className="btn-primary bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-soft-lg shadow-brand-500/20 flex items-center gap-2"
               >
                 {enrolling === previewDomain.id ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -469,14 +469,14 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
           </motion.div>
         ) : (
           /* Normal Search & Catalog View */
-          <div className="flex-1 flex flex-col overflow-hidden bg-slate-50/50">
+          <div className="flex-1 flex flex-col overflow-hidden bg-brand-50/50">
             {/* Search & Difficulty Filter Bar */}
-            <div className="p-4 border-b border-slate-200/70 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 flex-shrink-0">
+            <div className="p-4 border-b border-brand-200/70 bg-white flex flex-col sm:flex-row items-center justify-between gap-3 flex-shrink-0">
               {/* Search Box */}
               <div className="relative flex-1 w-full">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-brand-400" />
                 <input
-                  className="input pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-slate-50 border-slate-200/80 focus:bg-white focus:ring-2 focus:ring-brand-500/20 transition-all"
+                  className="input pl-10 pr-8 py-2.5 text-xs sm:text-sm bg-brand-50 border-brand-200/80 focus:bg-white focus:ring-2 focus:ring-brand-400/20 transition-all"
                   placeholder="Search 57 roles by title, skill, or topic (e.g. Flutter, Quantum, AWS, Pentesting)..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -485,7 +485,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                 {search && (
                   <button
                     onClick={() => setSearch('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-400 hover:text-brand-600 p-1"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -494,7 +494,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
               {/* Difficulty Filter Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto shrink-0 pb-1 sm:pb-0">
-                <span className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mr-1 shrink-0">Level:</span>
+                <span className="text-[11px] font-extrabold text-brand-400 uppercase tracking-wider mr-1 shrink-0">Level:</span>
                 {DIFFICULTIES.map((diff) => {
                   const isActive = difficultyFilter === diff;
                   return (
@@ -504,7 +504,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                       className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
                         isActive
                           ? 'bg-slate-900 text-white shadow-sm'
-                          : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                          : 'bg-brand-100 hover:bg-brand-200 text-brand-600'
                       }`}
                     >
                       {diff}
@@ -518,11 +518,11 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
             <div className="overflow-y-auto flex-1 p-5 sm:p-6">
               {filtered.length === 0 ? (
                 <div className="text-center py-16 space-y-3">
-                  <div className="h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
-                    <Search className="h-7 w-7 text-slate-400" />
+                  <div className="h-14 w-14 rounded-full bg-brand-100 flex items-center justify-center mx-auto text-brand-400">
+                    <Search className="h-7 w-7 text-brand-400" />
                   </div>
-                  <p className="text-lg font-bold text-slate-800">No career paths match your criteria</p>
-                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                  <p className="text-lg font-bold text-brand-800">No career paths match your criteria</p>
+                  <p className="text-xs text-brand-500 max-w-sm mx-auto">
                     Try searching for another keyword or reset category and difficulty filters to browse all 57 paths.
                   </p>
                   <button
@@ -551,7 +551,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                         className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between group ${
                           isEnrolled
                             ? 'bg-emerald-50/40 border-emerald-200/80 shadow-sm'
-                            : 'bg-white border-slate-200/80 hover:border-brand-400/60 shadow-sm hover:shadow-xl hover:shadow-brand-500/5'
+                            : 'bg-white border-brand-200/80 hover:border-brand-400/60 shadow-sm hover:shadow-xl hover:shadow-brand-500/5'
                         }`}
                       >
                         <div>
@@ -571,7 +571,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                                 <span className="text-[10px] font-extrabold uppercase tracking-widest text-brand-600">
                                   {domainCat}
                                 </span>
-                                <h3 className="font-extrabold text-slate-900 text-base leading-tight group-hover:text-brand-600 transition-colors">
+                                <h3 className="font-extrabold text-brand-900 text-base leading-tight group-hover:text-brand-600 transition-colors">
                                   {domain.title}
                                 </h3>
                               </div>
@@ -585,20 +585,20 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                           </div>
 
                           {/* Description */}
-                          <p className="text-xs text-slate-600 line-clamp-2 mb-4 leading-relaxed font-normal">
+                          <p className="text-xs text-brand-600 line-clamp-2 mb-4 leading-relaxed font-normal">
                             {domain.description}
                           </p>
                         </div>
 
                         {/* Footer stats & Action Buttons */}
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                          <div className="flex items-center gap-3 text-xs text-slate-400 font-semibold">
+                        <div className="pt-3 border-t border-brand-100 flex items-center justify-between">
+                          <div className="flex items-center gap-3 text-xs text-brand-400 font-semibold">
                             <span className="flex items-center gap-1">
-                              <Clock className="h-3.5 w-3.5 text-slate-400" />
+                              <Clock className="h-3.5 w-3.5 text-brand-400" />
                               {domain.estimatedMonths}m
                             </span>
                             <span className="flex items-center gap-1">
-                              <BookOpen className="h-3.5 w-3.5 text-slate-400" />
+                              <BookOpen className="h-3.5 w-3.5 text-brand-400" />
                               {domain.stageCount || domain.stages?.length || 0} stages
                             </span>
                           </div>
@@ -607,10 +607,10 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                             {/* Quick Preview Button */}
                             <button
                               onClick={() => setPreviewDomain(domain)}
-                              className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                              className="px-3 py-1.5 rounded-xl bg-brand-100 hover:bg-brand-200 text-brand-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
                               title="Preview Full Roadmap Stages"
                             >
-                              <Eye className="h-3.5 w-3.5 text-slate-500" /> Preview
+                              <Eye className="h-3.5 w-3.5 text-brand-500" /> Preview
                             </button>
 
                             {/* Select / Enroll Button */}
@@ -620,7 +620,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                               className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
                                 isEnrolled
                                   ? 'bg-emerald-100 text-emerald-700 cursor-default'
-                                  : 'bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 hover:shadow-brand-500/30'
+                                  : 'bg-brand-600 hover:bg-brand-800 text-white shadow-soft-md shadow-brand-500/20 hover:shadow-brand-500/30'
                               }`}
                             >
                               {enrolling === domain.id ? (
@@ -662,8 +662,8 @@ function TopicRow({ topic, checked, onToggle, isLoading, accentColor, stageCompl
         checked
           ? 'bg-emerald-50 ring-1 ring-emerald-200'
           : stageCompleted
-          ? 'bg-slate-50 ring-1 ring-brand-200'
-          : 'bg-slate-50/50 hover:bg-slate-100 ring-1 ring-transparent hover:ring-brand-200'
+          ? 'bg-brand-50 ring-1 ring-brand-200'
+          : 'bg-brand-50/50 hover:bg-brand-100 ring-1 ring-transparent hover:ring-brand-200'
       }`}
     >
       <span className={`text-sm pr-3 font-medium transition-all duration-300 ${
@@ -734,7 +734,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-              className="h-9 w-9 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-md shadow-emerald-200 flex-shrink-0 keep-color"
+              className="h-9 w-9 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-soft-md shadow-emerald-200 flex-shrink-0 keep-color"
             >
               <CheckCircle2 className="h-5 w-5 text-white" />
             </motion.div>
@@ -743,7 +743,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
 
         {/* Progress bar */}
         <div className="flex items-center gap-3 mb-5">
-          <div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden">
+          <div className="flex-1 h-2 rounded-full bg-brand-200 overflow-hidden">
             <motion.div
               className="h-full rounded-full keep-color"
               animate={{
@@ -756,7 +756,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
             />
           </div>
           <motion.span
-            animate={{ color: stageCompleted ? '#059669' : '#94a3b8' }}
+            animate={{ color: stageCompleted ? '#059669' : '#8A8A8A' }}
             className="text-xs font-semibold flex-shrink-0 w-10 text-right"
           >
             {pct}%
@@ -786,7 +786,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
           animate={{
             background: stageCompleted
               ? 'linear-gradient(135deg, #ecfdf5, #d1fae5)'
-              : 'linear-gradient(135deg, #f8fafc, #f1f5f9)',
+              : 'linear-gradient(135deg, #f8fafc, #E8E8E8)',
           }}
           transition={{ duration: 0.5 }}
           className="rounded-2xl p-4 mb-4 ring-1 ring-brand-200"
@@ -870,7 +870,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between px-2 bg-slate-50/50 py-3 rounded-2xl ring-1 ring-brand-200/60"
+        className="flex items-center justify-between px-2 bg-brand-50/50 py-3 rounded-2xl ring-1 ring-brand-200/60"
       >
         <div className="flex gap-6 text-sm text-brand-600 font-medium px-4 flex-wrap">
           <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-brand-400" /> {roadmap.percentComplete}% Complete</span>
@@ -891,7 +891,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
       {/* Center alternating timeline */}
       <div className="relative py-8">
         {/* Vertical center line (Background + Progress) */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-1.5 bg-slate-200 -translate-x-1/2 z-0 rounded-full overflow-hidden">
+        <div className="absolute left-1/2 top-0 bottom-0 w-1.5 bg-brand-200 -translate-x-1/2 z-0 rounded-full overflow-hidden">
           <motion.div
             initial={{ height: 0 }}
             animate={{ height: `${roadmap.percentComplete}%` }}
@@ -1059,7 +1059,7 @@ export default function CareerAIslePage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowResumeAnalyzer(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-soft-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
           >
             <FileText className="h-4 w-4" />
             Scan Resume with AI
@@ -1126,7 +1126,7 @@ export default function CareerAIslePage() {
                 <button
                   key={d.id}
                   onClick={() => setShowPicker(true)}
-                  className="flex items-center gap-1.5 rounded-full bg-slate-100 text-brand-700 text-xs font-medium px-3 py-1.5 hover:bg-brand-50 hover:text-brand-700 transition-colors"
+                  className="flex items-center gap-1.5 rounded-full bg-brand-100 text-brand-700 text-xs font-medium px-3 py-1.5 hover:bg-brand-50 hover:text-brand-700 transition-colors"
                 >
                   <DIcon className="h-3.5 w-3.5" /> {d.title}
                 </button>

@@ -20,7 +20,7 @@ function DonutChart({ segments, size = 160 }) {
 
   return (
     <svg width={size} height={size} viewBox="0 0 160 160" className="mx-auto">
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#f1f5f9" strokeWidth="18" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#E8E8E8" strokeWidth="18" />
       {segments.map((seg, i) => {
         const pct = seg.value / total;
         const dash = pct * circumference;
@@ -42,8 +42,8 @@ function DonutChart({ segments, size = 160 }) {
         offset += dash;
         return el;
       })}
-      <text x={cx} y={cy - 6} textAnchor="middle" className="fill-slate-900 text-2xl font-bold">{total}</text>
-      <text x={cx} y={cy + 14} textAnchor="middle" className="fill-slate-400 text-xs">Total</text>
+      <text x={cx} y={cy - 6} textAnchor="middle" className="fill-brand-900 text-2xl font-bold">{total}</text>
+      <text x={cx} y={cy + 14} textAnchor="middle" className="fill-brand-400 text-xs">Total</text>
     </svg>
   );
 }
@@ -89,8 +89,8 @@ function MiniAreaChart({ data }) {
       <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-full preserve-3d" preserveAspectRatio="none">
         <defs>
           <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#818cf8" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#818cf8" stopOpacity="0.0" />
+            <stop offset="0%" stopColor="#1A1A1A" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#1A1A1A" stopOpacity="0.0" />
           </linearGradient>
         </defs>
         
@@ -98,7 +98,7 @@ function MiniAreaChart({ data }) {
         <path d={areaPath} fill="url(#areaGradient)" className="transition-all duration-500" />
         
         {/* Line */}
-        <path d={path} fill="none" stroke="#6366f1" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="transition-all duration-500" />
+        <path d={path} fill="none" stroke="#1A1A1A" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" className="transition-all duration-500" />
         
         {/* Data points on hover */}
         {entries.map(([, count], i) => {
@@ -106,7 +106,7 @@ function MiniAreaChart({ data }) {
           const x = (i / (entries.length - 1)) * width;
           const y = height - (count / max) * height;
           return (
-            <circle key={i} cx={x} cy={y} r="8" fill="#fff" stroke="#6366f1" strokeWidth="4" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <circle key={i} cx={x} cy={y} r="8" fill="#fff" stroke="#1A1A1A" strokeWidth="4" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           );
         })}
       </svg>
@@ -117,7 +117,7 @@ function MiniAreaChart({ data }) {
           <div key={date} className="flex-1 h-full flex flex-col justify-end" title={`${date}: ${count} applications`}>
             {count > 0 && (
               <div className="w-full h-full flex items-center justify-center relative">
-                <span className="absolute bottom-2 text-[10px] font-bold text-brand-700 bg-white/90 px-1 rounded shadow-sm">{count}</span>
+                <span className="absolute bottom-2 text-[10px] font-bold text-brand-900 bg-white/90 px-1 rounded shadow-soft-sm">{count}</span>
               </div>
             )}
           </div>
@@ -132,22 +132,22 @@ function StatCard({ icon: Icon, label, value, color, sub, link }) {
   const Wrapper = link ? Link : 'div';
   const props = link ? { to: link } : {};
   return (
-    <Wrapper {...props} className="stat-card group hover:shadow-md transition-all animate-slide-up">
+    <Wrapper {...props} className="stat-card group transition-all animate-slide-up">
       <div className={`stat-icon ${color}`}>
         <Icon className="h-5 w-5" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-brand-500">{label}</p>
+        <p className="text-sm text-brand-400">{label}</p>
         <p className="text-2xl font-bold text-brand-900 mt-0.5">{value ?? '—'}</p>
         {sub && <p className="text-xs text-brand-400 mt-0.5">{sub}</p>}
       </div>
-      {link && <ArrowUpRight className="h-4 w-4 text-brand-300 group-hover:text-brand-500 transition-colors" />}
+      {link && <ArrowUpRight className="h-4 w-4 text-brand-300 group-hover:text-brand-700 transition-colors" />}
     </Wrapper>
   );
 }
 
 /* ── Progress metric ──────────────────────────────────────── */
-function MetricBar({ label, value, max, color = '#6366f1' }) {
+function MetricBar({ label, value, max, color = '#1A1A1A' }) {
   const pct = max > 0 ? Math.round((value / max) * 100) : 0;
   return (
     <div>
@@ -212,11 +212,11 @@ export default function EmployerDashboard() {
   const sb = a.statusBreakdown || {};
 
   const donutSegments = [
-    { value: sb.submitted || 0,   color: '#3b82f6' },
-    { value: sb.reviewed || 0,    color: '#f59e0b' },
-    { value: sb.shortlisted || 0, color: '#10b981' },
-    { value: sb.accepted || 0,    color: '#8b5cf6' },
-    { value: sb.rejected || 0,    color: '#ef4444' },
+    { value: sb.submitted || 0,   color: '#6B6B6B' },
+    { value: sb.reviewed || 0,    color: '#B0B0B0' },
+    { value: sb.shortlisted || 0, color: '#333333' },
+    { value: sb.accepted || 0,    color: '#1A1A1A' },
+    { value: sb.rejected || 0,    color: '#D62828' },
   ];
 
   if (isLoading) {
@@ -242,7 +242,7 @@ export default function EmployerDashboard() {
           <h1 className="text-2xl font-bold text-brand-900">
             {t('empDash.welcomeBack', { name: profile?.companyName || 'Employer' })}
           </h1>
-          <p className="text-sm text-brand-500 mt-0.5">
+          <p className="text-sm text-brand-400 mt-0.5">
             {profile?.industry && `${profile.industry} · `}
             {t('empDash.overview')}
           </p>
@@ -256,21 +256,21 @@ export default function EmployerDashboard() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           icon={Briefcase} label={t('empDash.activeJobs')} value={a.activeJobs ?? 0}
-          color="bg-blue-50 text-blue-600"
+          color="bg-brand-50 text-brand-700"
           sub={a.pausedJobs ? `${a.pausedJobs} paused` : undefined}
           link="/employer/jobs"
         />
         <StatCard
           icon={Users} label={t('empDash.totalApplicants')} value={a.totalApplicants ?? 0}
-          color="bg-brand-50 text-brand-600"
+          color="bg-brand-50 text-brand-700"
         />
         <StatCard
           icon={UserCheck} label="Shortlisted" value={sb.shortlisted ?? 0}
-          color="bg-emerald-50 text-emerald-600"
+          color="bg-brand-50 text-brand-700"
         />
         <StatCard
           icon={Award} label="Hired" value={sb.accepted ?? 0}
-          color="bg-amber-50 text-amber-600"
+          color="bg-brand-50 text-brand-700"
           sub={`${a.conversionRate ?? 0}% conversion`}
         />
       </div>
@@ -280,18 +280,18 @@ export default function EmployerDashboard() {
         {/* Recruitment Pipeline (Donut) */}
         <div className="card p-6 animate-slide-up">
           <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="h-4 w-4 text-brand-600" />
+            <BarChart3 className="h-4 w-4 text-brand-700" />
             <h2 className="section-title">Recruitment Pipeline</h2>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <DonutChart segments={donutSegments} />
             <div className="space-y-2 flex-1 w-full">
               {[
-                { label: 'Applied',     value: sb.submitted,   color: '#3b82f6' },
-                { label: 'Reviewing',   value: sb.reviewed,    color: '#f59e0b' },
-                { label: 'Shortlisted', value: sb.shortlisted, color: '#10b981' },
-                { label: 'Hired',       value: sb.accepted,    color: '#8b5cf6' },
-                { label: 'Rejected',    value: sb.rejected,    color: '#ef4444' },
+                { label: 'Applied',     value: sb.submitted,   color: '#6B6B6B' },
+                { label: 'Reviewing',   value: sb.reviewed,    color: '#B0B0B0' },
+                { label: 'Shortlisted', value: sb.shortlisted, color: '#333333' },
+                { label: 'Hired',       value: sb.accepted,    color: '#1A1A1A' },
+                { label: 'Rejected',    value: sb.rejected,    color: '#D62828' },
               ].map(item => (
                 <div key={item.label} className="flex items-center gap-2.5">
                   <div className="h-3 w-3 rounded-full flex-shrink-0" style={{ background: item.color }} />
@@ -306,7 +306,7 @@ export default function EmployerDashboard() {
         {/* Applications Over Time */}
         <div className="card p-6 animate-slide-up">
           <div className="flex items-center gap-2 mb-4">
-            <Activity className="h-4 w-4 text-brand-600" />
+            <Activity className="h-4 w-4 text-brand-700" />
             <h2 className="section-title">Applications (Last 30 Days)</h2>
           </div>
           <MiniAreaChart data={a.applicationsPerDay} />
@@ -322,18 +322,18 @@ export default function EmployerDashboard() {
         {/* Hiring Metrics */}
         <div className="card p-6 animate-slide-up">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="h-4 w-4 text-brand-600" />
+            <TrendingUp className="h-4 w-4 text-brand-700" />
             <h2 className="section-title">Hiring Metrics</h2>
           </div>
           <div className="space-y-4">
-            <MetricBar label="Shortlisted" value={sb.shortlisted || 0} max={a.totalApplicants || 0} color="#10b981" />
-            <MetricBar label="Hired" value={sb.accepted || 0} max={a.totalApplicants || 0} color="#8b5cf6" />
-            <MetricBar label="Rejected" value={sb.rejected || 0} max={a.totalApplicants || 0} color="#ef4444" />
+            <MetricBar label="Shortlisted" value={sb.shortlisted || 0} max={a.totalApplicants || 0} color="#333333" />
+            <MetricBar label="Hired" value={sb.accepted || 0} max={a.totalApplicants || 0} color="#1A1A1A" />
+            <MetricBar label="Rejected" value={sb.rejected || 0} max={a.totalApplicants || 0} color="#D62828" />
           </div>
-          <div className="mt-4 p-3 rounded-xl bg-gradient-to-r from-brand-50 to-brand-50 border border-brand-100">
+          <div className="mt-4 p-3 rounded-xl bg-brand-50 border border-brand-100">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-brand-700">Hiring Conversion Rate</span>
-              <span className="text-xl font-bold text-brand-700">{a.conversionRate ?? 0}%</span>
+              <span className="text-xl font-bold text-brand-900">{a.conversionRate ?? 0}%</span>
             </div>
           </div>
         </div>
@@ -341,37 +341,36 @@ export default function EmployerDashboard() {
         {/* Job Overview */}
         <div className="card p-6 animate-slide-up">
           <div className="flex items-center gap-2 mb-4">
-            <Briefcase className="h-4 w-4 text-brand-600" />
+            <Briefcase className="h-4 w-4 text-brand-700" />
             <h2 className="section-title">Job Overview</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-blue-50 border border-blue-100">
-              <p className="text-2xl font-bold text-blue-700">{a.activeJobs ?? 0}</p>
-              <p className="text-xs text-blue-600 mt-0.5">Active</p>
+            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+              <p className="text-2xl font-bold text-brand-900">{a.activeJobs ?? 0}</p>
+              <p className="text-xs text-brand-500 mt-0.5">Active</p>
             </div>
-            <div className="p-3 rounded-xl bg-amber-50 border border-amber-100">
-              <p className="text-2xl font-bold text-amber-700">{a.pausedJobs ?? 0}</p>
-              <p className="text-xs text-amber-600 mt-0.5">Paused</p>
+            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+              <p className="text-2xl font-bold text-brand-900">{a.pausedJobs ?? 0}</p>
+              <p className="text-xs text-brand-500 mt-0.5">Paused</p>
             </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-brand-200">
-              <p className="text-2xl font-bold text-brand-700">{a.closedJobs ?? 0}</p>
+            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+              <p className="text-2xl font-bold text-brand-900">{a.closedJobs ?? 0}</p>
               <p className="text-xs text-brand-500 mt-0.5">Closed</p>
             </div>
             <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
-              <p className="text-2xl font-bold text-brand-700">{a.totalJobs ?? 0}</p>
-              <p className="text-xs text-brand-600 mt-0.5">Total Posted</p>
+              <p className="text-2xl font-bold text-brand-900">{a.totalJobs ?? 0}</p>
+              <p className="text-xs text-brand-500 mt-0.5">Total Posted</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* ── AI Recommended Candidates ───────────────────── */}
-      <div className="card p-6 border-brand-200 shadow-md animate-slide-up relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-10 bg-brand-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+      <div className="card p-6 animate-slide-up relative overflow-hidden">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-brand-100 flex items-center justify-center">
-              <Sparkles className="h-4 w-4 text-brand-600" />
+            <div className="h-8 w-8 rounded-lg bg-brand-900 flex items-center justify-center">
+              <Sparkles className="h-4 w-4 text-white" />
             </div>
             <h2 className="section-title text-brand-900 font-extrabold text-xl">AI Recommended Candidates</h2>
           </div>
@@ -382,7 +381,7 @@ export default function EmployerDashboard() {
             {aiRecommendations.slice(0, 4).map((match, i) => (
               <div key={match.id} className="relative group">
                 {/* Ranking Medals */}
-                <div className="absolute -top-3 -left-3 z-10 h-8 w-8 rounded-full bg-white shadow-md border border-slate-100 flex items-center justify-center text-lg font-bold">
+                <div className="absolute -top-3 -left-3 z-10 h-8 w-8 rounded-full bg-white shadow-soft-md border border-brand-100 flex items-center justify-center text-lg font-bold">
                   {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : <span className="text-sm text-brand-400">#{i + 1}</span>}
                 </div>
                 <div className="h-full transform transition-all duration-300 hover:-translate-y-1">
@@ -394,8 +393,8 @@ export default function EmployerDashboard() {
                     }}
                     matchData={match}
                   />
-                  <div className="mt-2 text-center text-xs font-medium text-brand-500 bg-slate-50 py-1.5 rounded-lg border border-slate-100">
-                    Applying for: <span className="text-brand-700 font-bold">{match.jobTitle}</span>
+                  <div className="mt-2 text-center text-xs font-medium text-brand-500 bg-brand-50 py-1.5 rounded-lg border border-brand-100">
+                    Applying for: <span className="text-brand-900 font-bold">{match.jobTitle}</span>
                   </div>
                 </div>
               </div>
@@ -403,7 +402,7 @@ export default function EmployerDashboard() {
           </div>
         ) : (
           <div className="text-center py-8">
-            <div className="inline-flex h-12 w-12 rounded-full bg-slate-50 items-center justify-center mb-3">
+            <div className="inline-flex h-12 w-12 rounded-full bg-brand-50 items-center justify-center mb-3">
               <Star className="h-5 w-5 text-brand-300" />
             </div>
             <p className="text-brand-500 font-medium">No top candidates found yet</p>
@@ -415,12 +414,12 @@ export default function EmployerDashboard() {
       {/* ── Company DNA Preview ──────────────────────────── */}
       <div className="card p-6 animate-slide-up">
         <div className="flex items-center gap-2 mb-4">
-          <div className="h-8 w-8 rounded-lg bg-brand-100 flex items-center justify-center">
-            <Sparkles className="h-4 w-4 text-brand-600" />
+          <div className="h-8 w-8 rounded-lg bg-brand-900 flex items-center justify-center">
+            <Sparkles className="h-4 w-4 text-white" />
           </div>
           <h2 className="section-title text-lg font-bold">Company DNA Preview</h2>
         </div>
-        <p className="text-sm text-brand-500 mb-4">
+        <p className="text-sm text-brand-400 mb-4">
           This is how students see your company when browsing jobs. AI analyzes your profile to generate a workplace personality card.
         </p>
         <CompanyDNAPanel
@@ -437,22 +436,22 @@ export default function EmployerDashboard() {
       <div className="card p-6 animate-slide-up">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <Eye className="h-4 w-4 text-brand-600" />
+            <Eye className="h-4 w-4 text-brand-700" />
             <h2 className="section-title">Recent Applications</h2>
           </div>
         </div>
         {(a.recentApplications || []).length === 0 ? (
           <p className="text-sm text-brand-400 text-center py-6">No applications yet. Post a job to get started!</p>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-brand-100">
             {(a.recentApplications || []).map(app => {
               const cfg = STATUS_CONFIG[app.status] || STATUS_CONFIG.submitted;
               return (
                 <div key={app.applicationId} className="py-3 flex items-center gap-3">
                   {app.studentPhotoURL ? (
-                    <img src={app.studentPhotoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                    <img src={app.studentPhotoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-brand-100" />
                   ) : (
-                    <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0">
+                    <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-800 text-sm font-bold flex-shrink-0">
                       {(app.studentName || '?').charAt(0).toUpperCase()}
                     </div>
                   )}

@@ -15,21 +15,21 @@
 
     <!-- Inline critical loading styles so skeleton shows INSTANTLY -->
     <style>
-      body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #f8fafc; }
+      body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #FAFAFA; }
       #root-loader {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         min-height: 100vh; gap: 16px; padding: 24px;
       }
-      .rl-bar { height: 4px; width: 200px; background: #e2e8f0; border-radius: 999px; overflow: hidden; }
-      .rl-fill { height: 100%; width: 40%; background: linear-gradient(90deg, #4f46e5, #7c3aed); border-radius: 999px;
+      .rl-bar { height: 3px; width: 200px; background: #E8E8E8; border-radius: 999px; overflow: hidden; }
+      .rl-fill { height: 100%; width: 40%; background: #1A1A1A; border-radius: 999px;
         animation: rl-slide 1.2s ease-in-out infinite; }
       @keyframes rl-slide { 0%{transform:translateX(-100%)} 50%{transform:translateX(150%)} 100%{transform:translateX(-100%)} }
-      .rl-text { font-size: 13px; color: #94a3b8; font-weight: 500; letter-spacing: 0.02em; }
+      .rl-text { font-size: 13px; color: #8A8A8A; font-weight: 500; letter-spacing: 0.02em; }
       /* Skeleton shell (visible before React mounts) */
       .skel-shell { max-width: 1024px; margin: 0 auto; padding: 80px 24px 24px; width: 100%; }
       .skel-row { display: flex; gap: 16px; margin-bottom: 16px; }
-      .skel-box { background: #e2e8f0; border-radius: 16px; animation: skel-pulse 1.5s ease-in-out infinite; }
-      .skel-nav { height: 56px; background: #fff; border-bottom: 1px solid #e2e8f0; position: fixed; top: 0; left: 0; right: 0; z-index: 50; }
+      .skel-box { background: #E8E8E8; border-radius: 16px; animation: skel-pulse 1.5s ease-in-out infinite; }
+      .skel-nav { height: 56px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.04); position: fixed; top: 0; left: 0; right: 0; z-index: 50; }
       @keyframes skel-pulse { 0%,100%{opacity:0.6} 50%{opacity:0.3} }
     </style>
   </head>

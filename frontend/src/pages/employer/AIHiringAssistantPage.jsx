@@ -122,7 +122,7 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="p-4 border-b border-slate-100">
+      <div className="p-4 border-b border-brand-100">
         <button
           id="new-conversation-btn"
           onClick={onNewThread}
@@ -169,14 +169,14 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
                 className={`w-full text-left p-3 rounded-xl transition-all duration-150 group ${
                   activeThreadId === thread.threadId
                     ? 'bg-brand-50 ring-1 ring-brand-200'
-                    : 'hover:bg-slate-50'
+                    : 'hover:bg-brand-50'
                 }`}
               >
                 <div className="flex items-start gap-2.5">
                   <div className={`h-7 w-7 rounded-lg flex items-center justify-center flex-shrink-0 ${
                     activeThreadId === thread.threadId
                       ? 'bg-brand-100 text-brand-700'
-                      : 'bg-slate-100 text-brand-500 group-hover:bg-slate-200'
+                      : 'bg-brand-100 text-brand-500 group-hover:bg-brand-200'
                   }`}>
                     <MessageSquare className="h-3.5 w-3.5" />
                   </div>
@@ -364,7 +364,7 @@ export default function AIHiringAssistantPage() {
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <div className="absolute left-0 top-0 bottom-0 w-80 bg-white shadow-2xl animate-slide-right">
-            <div className="flex items-center justify-between p-4 border-b border-slate-100">
+            <div className="flex items-center justify-between p-4 border-b border-brand-100">
               <h3 className="font-semibold text-brand-900">Conversations</h3>
               <button onClick={() => setSidebarOpen(false)} className="btn-ghost p-1.5 rounded-lg">
                 <X className="h-4 w-4" />
@@ -383,7 +383,7 @@ export default function AIHiringAssistantPage() {
 
       {/* ── Desktop sidebar ──────────────────────────────── */}
       <div 
-        className={`hidden lg:flex flex-shrink-0 bg-white border-slate-100 transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`hidden lg:flex flex-shrink-0 bg-white border-brand-100 transition-all duration-300 ease-in-out overflow-hidden ${
           desktopSidebarOpen ? 'w-72 xl:w-80 border-r opacity-100' : 'w-0 border-r-0 opacity-0'
         }`}
       >
@@ -400,9 +400,9 @@ export default function AIHiringAssistantPage() {
       </div>
 
       {/* ── Main chat area ───────────────────────────────── */}
-      <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
+      <div className="flex-1 flex flex-col min-w-0 bg-brand-50">
         {/* Chat header */}
-        <div className="flex items-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md border-b border-slate-100 flex-shrink-0">
+        <div className="flex items-center gap-3 px-4 py-3 bg-white/80 backdrop-blur-md border-b border-brand-100 flex-shrink-0">
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden btn-ghost p-1.5 rounded-lg"
@@ -423,7 +423,7 @@ export default function AIHiringAssistantPage() {
             )}
           </button>
 
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-md shadow-brand-500/20">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-soft-md shadow-brand-500/20">
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
@@ -498,7 +498,7 @@ export default function AIHiringAssistantPage() {
                 >
                   {/* Avatar */}
                   {msg.role === 'assistant' && (
-                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-md shadow-brand-500/15 mt-0.5">
+                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-soft-md shadow-brand-500/15 mt-0.5">
                       <Bot className="h-4 w-4 text-white" />
                     </div>
                   )}
@@ -530,7 +530,7 @@ export default function AIHiringAssistantPage() {
         </div>
 
         {/* ── Input area ─────────────────────────────────── */}
-        <div className="flex-shrink-0 border-t border-slate-100 bg-white/80 backdrop-blur-md p-4">
+        <div className="flex-shrink-0 border-t border-brand-100 bg-white/80 backdrop-blur-md p-4">
           <div className="max-w-3xl mx-auto">
             {chatMutation.isError && (
               <div className="mb-3 px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 animate-slide-up">

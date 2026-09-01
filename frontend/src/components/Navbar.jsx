@@ -71,18 +71,18 @@ export default function Navbar() {
   const currentLang = LANGUAGES.find(l => l.code === language) || LANGUAGES[0];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center px-4 gap-2">
+    <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white flex items-center px-4 gap-2" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)' }}>
       {/* Logo / Back */}
       {isOnDashboard ? (
         <NavLink to={dashboardPath} className="flex items-center gap-2 mr-2 flex-shrink-0">
           <img src="/logo.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
           <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-dark h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
-          <span className="text-lg font-extrabold gradient-text hidden sm:block tracking-tight">LanTURN</span>
+          <span className="text-lg font-extrabold text-brand-900 hidden sm:block tracking-tight">LanTURN</span>
         </NavLink>
       ) : (
         <button
           onClick={() => navigate(dashboardPath)}
-          className="flex items-center gap-2 h-9 px-3 rounded-xl text-brand-600 hover:bg-slate-100 hover:text-brand-900 transition-colors flex-shrink-0"
+          className="flex items-center gap-2 h-9 px-3 rounded-xl text-brand-700 hover:bg-brand-50 hover:text-brand-900 transition-colors flex-shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
           <img src="/logo.jpeg" alt="lanTURN" className="logo-light h-7 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -8px' }} />
@@ -101,8 +101,8 @@ export default function Navbar() {
                 to={to}
                 className={`group flex items-center gap-0 rounded-xl text-sm font-medium transition-all duration-200 overflow-hidden ${
                   isActive
-                    ? 'bg-brand-50 text-brand-700 px-3 py-1.5 gap-2'
-                    : 'text-brand-500 hover:bg-slate-100 hover:text-brand-700 px-2 py-1.5 hover:px-3 hover:gap-2'
+                    ? 'bg-brand-900 text-white px-3 py-1.5 gap-2'
+                    : 'text-brand-500 hover:bg-brand-50 hover:text-brand-900 px-2 py-1.5 hover:px-3 hover:gap-2'
                 }`}
               >
                 <Icon className="h-4 w-4 flex-shrink-0" />
@@ -122,11 +122,11 @@ export default function Navbar() {
         {/* Notifications */}
         <NavLink
           to={role === 'employer' ? '/employer/notifications' : '/notifications'}
-          className="relative h-9 w-9 rounded-xl flex items-center justify-center text-brand-500 hover:bg-slate-100 hover:text-brand-900 transition-colors"
+          className="relative h-9 w-9 rounded-xl flex items-center justify-center text-brand-500 hover:bg-brand-50 hover:text-brand-900 transition-colors"
         >
           <Bell className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
           {unread > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] flex items-center justify-center font-bold ring-2 ring-white">
+            <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-accent text-white text-[10px] flex items-center justify-center font-bold ring-2 ring-white">
               {unread > 9 ? '9+' : unread}
             </span>
           )}
@@ -134,23 +134,23 @@ export default function Navbar() {
 
         {/* User menu */}
         <div className="relative group">
-          <button className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-sm font-medium text-brand-700 hover:bg-slate-100 transition-colors">
-            <div className="h-7 w-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xs font-bold flex-shrink-0">
+          <button className="flex items-center gap-2 rounded-xl px-2 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 transition-colors">
+            <div className="h-7 w-7 rounded-full bg-brand-100 flex items-center justify-center text-brand-800 text-xs font-bold flex-shrink-0">
               {displayName.charAt(0).toUpperCase()}
             </div>
             <ChevronDown className="h-3 w-3 text-brand-400" />
           </button>
 
           {/* Dropdown */}
-          <div className="absolute right-0 top-full mt-1 w-52 rounded-xl bg-white shadow-lg ring-1 ring-brand-200 py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 animate-scale-in">
-            <div className="px-3 py-2 border-b border-slate-100">
+          <div className="absolute right-0 top-full mt-1 w-52 rounded-xl bg-white py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-150 z-50 animate-scale-in" style={{ boxShadow: '0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04)' }}>
+            <div className="px-3 py-2 border-b border-brand-100">
               <p className="text-sm font-semibold text-brand-900 truncate">{displayName}</p>
               <p className="text-xs text-brand-400 truncate">{session?.email}</p>
             </div>
 
             <NavLink
               to={role === 'employer' ? '/employer/profile' : '/profile'}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-slate-50 w-full"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-brand-50 w-full"
             >
               <User className="h-3.5 w-3.5" /> {t('nav.profile')}
             </NavLink>
@@ -159,7 +159,7 @@ export default function Navbar() {
 
             <button
               onClick={toggleTheme}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-slate-50 w-full"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-brand-50 w-full"
             >
               {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
               {isDark ? t('nav.lightMode') : t('nav.darkMode')}
@@ -171,7 +171,7 @@ export default function Navbar() {
                   e.stopPropagation();
                   setLangMenuOpen(!langMenuOpen);
                 }}
-                className="flex items-center justify-between gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-slate-50 w-full"
+                className="flex items-center justify-between gap-2 px-3 py-2 text-sm text-brand-700 hover:bg-brand-50 w-full"
               >
                 <span className="flex items-center gap-2">
                   <Globe className="h-3.5 w-3.5" />
@@ -181,7 +181,7 @@ export default function Navbar() {
               </button>
 
               {langMenuOpen && (
-                <div className="absolute right-full top-0 mr-1 w-40 rounded-xl bg-white shadow-lg ring-1 ring-brand-200 py-1 z-50 animate-scale-in">
+                <div className="absolute right-full top-0 mr-1 w-40 rounded-xl bg-white py-1 z-50 animate-scale-in" style={{ boxShadow: '0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04)' }}>
                   {LANGUAGES.map((lang) => (
                     <button
                       key={lang.code}
@@ -192,14 +192,14 @@ export default function Navbar() {
                       }}
                       className={`flex items-center gap-2 px-3 py-2 text-sm w-full transition-colors ${
                         language === lang.code
-                          ? 'bg-brand-50 text-brand-700 font-semibold'
-                          : 'text-brand-600 hover:bg-slate-50'
+                          ? 'bg-brand-900 text-white font-semibold'
+                          : 'text-brand-600 hover:bg-brand-50'
                       }`}
                     >
                       <span>{lang.flag}</span>
                       <span>{lang.nativeName}</span>
                       {language === lang.code && (
-                        <span className="ml-auto text-brand-500">✓</span>
+                        <span className="ml-auto text-white">✓</span>
                       )}
                     </button>
                   ))}
@@ -211,7 +211,7 @@ export default function Navbar() {
 
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 w-full"
+              className="flex items-center gap-2 px-3 py-2 text-sm text-accent hover:bg-accent-light w-full"
             >
               <LogOut className="h-3.5 w-3.5" /> {t('nav.signOut')}
             </button>

@@ -235,7 +235,7 @@ export default function LoginPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[80vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-brand-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand-900" />
       </div>
     );
   }
@@ -249,22 +249,22 @@ export default function LoginPage() {
         <div className="text-center mb-8 animate-fade-in">
           <img src="/logo.jpeg" alt="LanTURN Logo" className="logo-light mx-auto h-32 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
           <img src="/logo-dark.jpeg" alt="LanTURN Logo" className="logo-dark mx-auto h-32 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
-          <h1 className="text-3xl font-extrabold gradient-text mt-4 mb-2 tracking-tight">LanTURN</h1>
-          <p className="text-slate-500 text-sm">{t('login.brandTagline')}</p>
+          <h1 className="text-3xl font-extrabold text-brand-900 mt-4 mb-2 tracking-tight">LanTURN</h1>
+          <p className="text-brand-400 text-sm">{t('login.brandTagline')}</p>
         </div>
 
         {/* Card */}
         <div className="card p-8 animate-slide-up">
 
           {/* Sign In / Sign Up tab toggle */}
-          <div className="flex rounded-xl overflow-hidden border border-slate-200 mb-6 p-1 bg-slate-50 gap-1">
+          <div className="flex rounded-xl overflow-hidden mb-6 p-1 bg-brand-50 gap-1">
             <button
               id="tab-signin"
               onClick={() => setMode('signin')}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 mode === 'signin'
-                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-brand-900 text-white shadow-soft-sm'
+                  : 'text-brand-500 hover:text-brand-700'
               }`}
             >
               {t('login.signIn')}
@@ -274,8 +274,8 @@ export default function LoginPage() {
               onClick={() => setMode('signup')}
               className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all duration-200 ${
                 mode === 'signup'
-                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-brand-900 text-white shadow-soft-sm'
+                  : 'text-brand-500 hover:text-brand-700'
               }`}
             >
               {t('login.signUp')}
@@ -283,10 +283,10 @@ export default function LoginPage() {
           </div>
 
           {/* Heading */}
-          <h2 className="text-xl font-bold text-slate-900 mb-1 text-center">
+          <h2 className="text-xl font-bold text-brand-900 mb-1 text-center">
             {mode === 'signin' ? t('login.welcomeBack') : t('login.createAccount')}
           </h2>
-          <p className="text-sm text-slate-500 mb-6 text-center">
+          <p className="text-sm text-brand-400 mb-6 text-center">
             {mode === 'signin'
               ? t('login.signInSubtitle')
               : t('login.signUpSubtitle')}
@@ -298,10 +298,10 @@ export default function LoginPage() {
             onClick={mode === 'signin' ? handleGoogleSignIn : handleGoogleSignUp}
             disabled={signingIn}
             className={`w-full flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold
-                       transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${
+                       transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${
               mode === 'signin'
-                ? 'bg-white text-slate-700 ring-1 ring-inset ring-slate-200 hover:bg-slate-50 hover:ring-slate-300'
-                : 'bg-brand-600 text-white hover:bg-brand-700'
+                ? 'bg-white text-brand-700 ring-1 ring-inset ring-brand-200 hover:bg-brand-50 hover:ring-brand-300 hover:shadow-soft-sm'
+                : 'bg-brand-900 text-white hover:bg-brand-800 shadow-soft-sm hover:shadow-soft-md'
             }`}
           >
             {signingIn && authMethod === 'email' ? null : (
@@ -312,20 +312,20 @@ export default function LoginPage() {
 
           {/* OR divider */}
           <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-slate-200" />
-            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">{t('login.or')}</span>
-            <div className="flex-1 h-px bg-slate-200" />
+            <div className="flex-1 h-px bg-brand-100" />
+            <span className="text-xs text-brand-400 font-medium uppercase tracking-wider">{t('login.or')}</span>
+            <div className="flex-1 h-px bg-brand-100" />
           </div>
 
           {/* Email / Phone toggle */}
-          <div className="flex rounded-lg overflow-hidden border border-slate-200 mb-5 p-0.5 bg-slate-50 gap-0.5">
+          <div className="flex rounded-lg overflow-hidden mb-5 p-0.5 bg-brand-50 gap-0.5">
             <button
               id="toggle-email"
               onClick={() => setAuthMethod('email')}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${
                 authMethod === 'email'
-                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-white text-brand-900 shadow-soft-sm'
+                  : 'text-brand-500 hover:text-brand-700'
               }`}
             >
               <Mail className="h-3.5 w-3.5" />
@@ -336,8 +336,8 @@ export default function LoginPage() {
               onClick={() => setAuthMethod('phone')}
               className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-semibold rounded-md transition-all duration-200 ${
                 authMethod === 'phone'
-                  ? 'bg-white text-brand-700 shadow-sm ring-1 ring-slate-200'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'bg-white text-brand-900 shadow-soft-sm'
+                  : 'text-brand-500 hover:text-brand-700'
               }`}
             >
               <Phone className="h-3.5 w-3.5" />
@@ -349,7 +349,7 @@ export default function LoginPage() {
           {authMethod === 'email' && (
             <form onSubmit={mode === 'signin' ? handleEmailSignIn : handleEmailSignUp} className="space-y-4">
               <div>
-                <label htmlFor="email-input" className="block text-sm font-medium text-slate-700 mb-1">
+                <label htmlFor="email-input" className="block text-sm font-medium text-brand-700 mb-1">
                   Email address
                 </label>
                 <input
@@ -360,22 +360,22 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
-                             placeholder:text-slate-400 outline-none
-                             focus:border-brand-400 focus:ring-2 focus:ring-brand-100
+                  className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                             placeholder:text-brand-400 outline-none
+                             focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                              transition-all duration-200"
                 />
               </div>
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label htmlFor="password-input" className="block text-sm font-medium text-slate-700">
+                  <label htmlFor="password-input" className="block text-sm font-medium text-brand-700">
                     Password
                   </label>
                   {mode === 'signin' && (
                     <button
                       type="button"
                       onClick={handleForgotPassword}
-                      className="text-xs font-semibold text-brand-600 hover:text-brand-800 transition-colors"
+                      className="text-xs font-semibold text-brand-900 hover:text-brand-700 transition-colors underline underline-offset-2"
                     >
                       Forgot password?
                     </button>
@@ -391,15 +391,15 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={mode === 'signin' ? 'Enter your password' : 'Create a password (min. 6 chars)'}
-                    className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-11 text-sm text-slate-900
-                               placeholder:text-slate-400 outline-none
-                               focus:border-brand-400 focus:ring-2 focus:ring-brand-100
+                    className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 pr-11 text-sm text-brand-900
+                               placeholder:text-brand-400 outline-none
+                               focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                                transition-all duration-200"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-400 hover:text-brand-700 transition-colors"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
@@ -411,8 +411,8 @@ export default function LoginPage() {
                 type="submit"
                 disabled={signingIn}
                 className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
-                           bg-brand-600 text-white hover:bg-brand-700 active:scale-[0.98]
-                           transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                           bg-brand-900 text-white hover:bg-brand-800 active:scale-[0.98] shadow-soft-sm hover:shadow-soft-md
+                           transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {signingIn ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -432,7 +432,7 @@ export default function LoginPage() {
               {!otpSent ? (
                 <form onSubmit={handleSendOtp} className="space-y-4">
                   <div>
-                    <label htmlFor="phone-input" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label htmlFor="phone-input" className="block text-sm font-medium text-brand-700 mb-1">
                       Phone number
                     </label>
                     <input
@@ -443,20 +443,20 @@ export default function LoginPage() {
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       placeholder="+91 98765 43210"
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
-                                 placeholder:text-slate-400 outline-none
-                                 focus:border-brand-400 focus:ring-2 focus:ring-brand-100
+                      className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                                 placeholder:text-brand-400 outline-none
+                                 focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                                  transition-all duration-200"
                     />
-                    <p className="text-xs text-slate-400 mt-1.5">Include country code (e.g. +91 for India)</p>
+                    <p className="text-xs text-brand-400 mt-1.5">Include country code (e.g. +91 for India)</p>
                   </div>
                   <button
                     id="btn-send-otp"
                     type="submit"
                     disabled={signingIn}
                     className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
-                               bg-brand-600 text-white hover:bg-brand-700 active:scale-[0.98]
-                               transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                               bg-brand-900 text-white hover:bg-brand-800 active:scale-[0.98] shadow-soft-sm hover:shadow-soft-md
+                               transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {signingIn ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -471,7 +471,7 @@ export default function LoginPage() {
               ) : (
                 <form onSubmit={handleVerifyOtp} className="space-y-4">
                   <div>
-                    <label htmlFor="otp-input" className="block text-sm font-medium text-slate-700 mb-1">
+                    <label htmlFor="otp-input" className="block text-sm font-medium text-brand-700 mb-1">
                       Enter OTP
                     </label>
                     <input
@@ -484,18 +484,18 @@ export default function LoginPage() {
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                       placeholder="123456"
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
-                                 placeholder:text-slate-400 outline-none text-center tracking-[0.3em] font-mono text-lg
-                                 focus:border-brand-400 focus:ring-2 focus:ring-brand-100
+                      className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                                 placeholder:text-brand-400 outline-none text-center tracking-[0.3em] font-mono text-lg
+                                 focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                                  transition-all duration-200"
                     />
-                    <p className="text-xs text-slate-400 mt-1.5">
-                      Code sent to <span className="font-medium text-slate-600">{phoneNumber}</span>
+                    <p className="text-xs text-brand-400 mt-1.5">
+                      Code sent to <span className="font-medium text-brand-700">{phoneNumber}</span>
                       {' · '}
                       <button
                         type="button"
                         onClick={() => { setOtpSent(false); setOtp(''); confirmationRef.current = null; }}
-                        className="text-brand-600 hover:text-brand-800 underline underline-offset-2"
+                        className="text-brand-900 hover:text-brand-700 underline underline-offset-2"
                       >
                         Change number
                       </button>
@@ -506,8 +506,8 @@ export default function LoginPage() {
                     type="submit"
                     disabled={signingIn}
                     className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
-                               bg-brand-600 text-white hover:bg-brand-700 active:scale-[0.98]
-                               transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+                               bg-brand-900 text-white hover:bg-brand-800 active:scale-[0.98] shadow-soft-sm hover:shadow-soft-md
+                               transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {signingIn ? (
                       <Loader2 className="h-5 w-5 animate-spin" />
@@ -528,7 +528,7 @@ export default function LoginPage() {
 
           <div className="divider my-6" />
 
-          <p className="text-xs text-center text-slate-400 leading-relaxed">
+          <p className="text-xs text-center text-brand-400 leading-relaxed">
             By continuing, you agree to lanTURN's Terms of Service and Privacy Policy.
             {mode === 'signup' && (
               <><br />New users will be guided through a short onboarding after sign-up.</>
@@ -537,7 +537,7 @@ export default function LoginPage() {
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-xs text-brand-400 mt-6">
           &copy; {new Date().getFullYear()} lanTURN &middot; Built for placement excellence
         </p>
       </div>

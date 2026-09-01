@@ -21,7 +21,7 @@ function NotifCard({ notif, onMarkRead, t }) {
     <div
       className={`card p-4 flex items-start gap-3 transition-all ${!notif.read ? 'ring-2 ring-brand-200 bg-brand-50/30' : ''}`}
     >
-      <div className={`h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0 ${!notif.read ? 'bg-brand-100' : 'bg-slate-100'}`}>
+      <div className={`h-9 w-9 rounded-xl flex items-center justify-center flex-shrink-0 ${!notif.read ? 'bg-brand-100' : 'bg-brand-100'}`}>
         {icon}
       </div>
       <div className="flex-1 min-w-0">

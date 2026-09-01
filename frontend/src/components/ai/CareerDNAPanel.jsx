@@ -99,7 +99,7 @@ export function CareerDNAPanel() {
         <div className="flex items-start gap-4">
           <div
             className="h-12 w-12 rounded-2xl flex items-center justify-center flex-shrink-0"
-            style={{ background: 'linear-gradient(135deg,#4f46e5,#7c3aed)' }}
+            style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}
           >
             <Dna className="h-6 w-6 text-white" />
           </div>
@@ -133,7 +133,7 @@ export function CareerDNAPanel() {
       {/* Loading skeleton */}
       {(dnaMutation.isPending || isFetchingSaved) && (
         <div className="card p-8 flex flex-col items-center gap-4 animate-pulse">
-          <div className="h-64 w-64 rounded-full bg-slate-100" />
+          <div className="h-64 w-64 rounded-full bg-brand-100" />
           <p className="text-sm text-brand-500">Mapping your unique career dimensions…</p>
         </div>
       )}
@@ -175,8 +175,8 @@ export function CareerDNAPanel() {
                   onClick={() => setSelectedIndex(i)}
                   className={`text-xs px-3 py-1.5 rounded-full transition-colors ${
                     selectedIndex === i
-                      ? 'bg-brand-600 text-white'
-                      : 'bg-slate-100 text-brand-600 hover:bg-slate-200'
+                      ? 'bg-brand-900 text-white'
+                      : 'bg-brand-100 text-brand-600 hover:bg-brand-200'
                   }`}
                 >
                   {dim.label} · {dim.score}
@@ -211,7 +211,7 @@ export function CareerDNAPanel() {
             <button
               onClick={() => dnaMutation.mutate()}
               disabled={dnaMutation.isPending}
-              className="px-4 py-2 bg-slate-100 text-brand-600 font-medium rounded-xl hover:bg-slate-200 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-brand-100 text-brand-600 font-medium rounded-xl hover:bg-brand-200 transition-colors flex items-center gap-2"
             >
               <RefreshCw className="h-4 w-4" />
               Re-analyze Resume
@@ -266,7 +266,7 @@ export function CareerDNAPanel() {
                   {selected.suggestions.map((tip, i) => (
                     <li
                       key={i}
-                      className="text-sm text-brand-700 flex gap-2 p-3 rounded-xl bg-slate-50"
+                      className="text-sm text-brand-700 flex gap-2 p-3 rounded-xl bg-brand-50"
                     >
                       <span className="text-brand-500 font-bold flex-shrink-0">{i + 1}.</span>
                       {tip}

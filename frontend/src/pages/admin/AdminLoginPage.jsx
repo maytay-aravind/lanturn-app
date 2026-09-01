@@ -77,13 +77,13 @@ export default function AdminLoginPage() {
 
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-lg mb-4">
+          <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-soft-lg mb-4">
             <Shield className="h-8 w-8 text-emerald-400" />
           </div>
-          <h1 className="text-3xl font-extrabold text-slate-900 mt-2 mb-1 tracking-tight">
+          <h1 className="text-3xl font-extrabold text-brand-900 mt-2 mb-1 tracking-tight">
             Admin Portal
           </h1>
-          <p className="text-slate-500 text-sm">LanTURN Platform Administration</p>
+          <p className="text-brand-500 text-sm">LanTURN Platform Administration</p>
         </div>
 
         {/* Card */}
@@ -98,7 +98,7 @@ export default function AdminLoginPage() {
 
           <form onSubmit={handleAdminLogin} className="space-y-4">
             <div>
-              <label htmlFor="admin-email" className="block text-sm font-medium text-slate-700 mb-1">
+              <label htmlFor="admin-email" className="block text-sm font-medium text-brand-700 mb-1">
                 Admin Email
               </label>
               <input
@@ -109,15 +109,15 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@lanturn.in"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900
-                           placeholder:text-slate-400 outline-none
-                           focus:border-brand-400 focus:ring-2 focus:ring-brand-100
+                className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                           placeholder:text-brand-400 outline-none
+                           focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                            transition-all duration-200"
               />
             </div>
 
             <div>
-              <label htmlFor="admin-password" className="block text-sm font-medium text-slate-700 mb-1">
+              <label htmlFor="admin-password" className="block text-sm font-medium text-brand-700 mb-1">
                 Password
               </label>
               <div className="relative">
@@ -129,15 +129,15 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password"
-                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 pr-11 text-sm text-slate-900
-                             placeholder:text-slate-400 outline-none
-                             focus:border-brand-400 focus:ring-2 focus:ring-brand-100
+                  className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 pr-11 text-sm text-brand-900
+                             placeholder:text-brand-400 outline-none
+                             focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                              transition-all duration-200"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-brand-400 hover:text-brand-600 transition-colors"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff className="h-4.5 w-4.5" /> : <Eye className="h-4.5 w-4.5" />}
@@ -167,14 +167,14 @@ export default function AdminLoginPage() {
 
           <div className="divider my-6" />
 
-          <p className="text-xs text-center text-slate-400 leading-relaxed">
+          <p className="text-xs text-center text-brand-400 leading-relaxed">
             This portal is for authorised administrators only.
             <br />Unauthorised access attempts are logged.
           </p>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-400 mt-6">
+        <p className="text-center text-xs text-brand-400 mt-6">
           &copy; {new Date().getFullYear()} lanTURN &middot; Admin Portal
         </p>
       </div>

@@ -88,7 +88,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
         {/* Left Column: Candidate Info & Breakdown */}
         <div className="flex-1 space-y-5">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden flex-shrink-0 border border-brand-200">
+            <div className="h-16 w-16 rounded-2xl bg-brand-100 overflow-hidden flex-shrink-0 border border-brand-200">
               {candidate?.studentPhotoURL ? (
                 <img src={candidate.studentPhotoURL} alt={candidate.studentName} className="h-full w-full object-cover" />
               ) : (
@@ -108,7 +108,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 py-3 border-y border-slate-100">
+          <div className="flex flex-wrap items-center justify-between gap-4 py-3 border-y border-brand-100">
             <CircularProgress value={matchData.skillMatchScore || 0} label="Skills" colorClass="text-blue-500" />
             <CircularProgress value={matchData.projectScore || 0} label="Projects" colorClass="text-brand-500" />
             <CircularProgress value={matchData.experienceScore || 0} label="Experience" colorClass="text-amber-500" />
@@ -117,7 +117,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
         </div>
 
         {/* Right Column: Strengths & Weaknesses */}
-        <div className="flex-1 flex flex-col justify-between space-y-4 md:border-l md:border-slate-100 md:pl-6">
+        <div className="flex-1 flex flex-col justify-between space-y-4 md:border-l md:border-brand-100 md:pl-6">
           <div className="space-y-4">
             <div>
               <h4 className="text-xs font-bold text-brand-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -155,7 +155,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
 
           <Link
             to={`/employer/applicants/${candidate?.applicationId}`}
-            className="flex items-center justify-center gap-1.5 w-full py-2 bg-slate-50 hover:bg-brand-50 text-brand-700 hover:text-brand-700 text-sm font-semibold rounded-xl border border-brand-200 hover:border-brand-200 transition-colors"
+            className="flex items-center justify-center gap-1.5 w-full py-2 bg-brand-50 hover:bg-brand-50 text-brand-700 hover:text-brand-700 text-sm font-semibold rounded-xl border border-brand-200 hover:border-brand-200 transition-colors"
           >
             View Full Profile <ChevronRight className="h-4 w-4" />
           </Link>

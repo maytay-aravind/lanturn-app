@@ -51,20 +51,20 @@ function DroppableColumn({ column, items, renderCard, totalItems }) {
       ref={setNodeRef}
       className={`flex-1 min-w-[260px] max-w-[340px] flex flex-col rounded-2xl border-2 transition-all duration-200 ${
         isOver
-          ? 'border-indigo-400 bg-indigo-50/50 shadow-lg shadow-indigo-100'
-          : 'border-slate-200 bg-slate-50/80'
+          ? 'border-indigo-400 bg-indigo-50/50 shadow-soft-lg shadow-indigo-100'
+          : 'border-brand-200 bg-brand-50/80'
       }`}
     >
       {/* Column header */}
-      <div className="px-4 py-3 border-b border-slate-200 flex items-center gap-2 flex-shrink-0">
+      <div className="px-4 py-3 border-b border-brand-200 flex items-center gap-2 flex-shrink-0">
         <div
           className="h-3 w-3 rounded-full flex-shrink-0"
           style={{ backgroundColor: column.color }}
         />
-        <h3 className="text-sm font-bold text-slate-800 flex-1 truncate">
+        <h3 className="text-sm font-bold text-brand-800 flex-1 truncate">
           {column.title}
         </h3>
-        <span className="text-xs font-semibold text-slate-400 bg-white rounded-full px-2 py-0.5 border border-slate-200">
+        <span className="text-xs font-semibold text-brand-400 bg-white rounded-full px-2 py-0.5 border border-brand-200">
           {items.length}
         </span>
       </div>
@@ -80,7 +80,7 @@ function DroppableColumn({ column, items, renderCard, totalItems }) {
         </SortableContext>
 
         {items.length === 0 && (
-          <div className="flex items-center justify-center h-20 text-xs text-slate-400 italic">
+          <div className="flex items-center justify-center h-20 text-xs text-brand-400 italic">
             Drop items here
           </div>
         )}

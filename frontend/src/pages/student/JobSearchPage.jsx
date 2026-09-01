@@ -145,7 +145,7 @@ export default function JobSearchPage() {
             <button
               key={p}
               onClick={() => { setKeywords(p); }}
-              className="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-brand-600 hover:bg-brand-50 hover:text-brand-700 transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full bg-brand-100 text-brand-600 hover:bg-brand-50 hover:text-brand-700 transition-colors"
             >
               {p}
             </button>

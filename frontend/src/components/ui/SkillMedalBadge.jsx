@@ -1,6 +1,6 @@
 const MEDAL_CONFIG = {
   gold:   { emoji: '🥇', label: 'Gold',   gradient: 'linear-gradient(135deg, #fef3c7, #fde68a)', border: '#f59e0b', text: '#92400e' },
-  silver: { emoji: '🥈', label: 'Silver', gradient: 'linear-gradient(135deg, #f1f5f9, #e2e8f0)', border: '#94a3b8', text: '#475569' },
+  silver: { emoji: '🥈', label: 'Silver', gradient: 'linear-gradient(135deg, #E8E8E8, #D4D4D4)', border: '#8A8A8A', text: '#475569' },
   bronze: { emoji: '🥉', label: 'Bronze', gradient: 'linear-gradient(135deg, #fed7aa, #fdba74)', border: '#f97316', text: '#9a3412' },
   basic:  { emoji: '🏅', label: 'Basic',  gradient: 'linear-gradient(135deg, #dbeafe, #bfdbfe)', border: '#60a5fa', text: '#1e40af' },
 };

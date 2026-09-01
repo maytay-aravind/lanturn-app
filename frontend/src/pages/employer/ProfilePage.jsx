@@ -89,13 +89,13 @@ function TagsInput({ value = [], onChange, placeholder = 'Add item...' }) {
       </div>
       <div className="flex gap-2">
         <input
-          className="input flex-1 bg-slate-50 border-brand-200 focus:bg-white"
+          className="input flex-1 bg-brand-50 border-brand-200 focus:bg-white"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
           placeholder={placeholder}
         />
-        <button type="button" onClick={addTag} className="btn-secondary whitespace-nowrap bg-white hover:bg-slate-50">
+        <button type="button" onClick={addTag} className="btn-secondary whitespace-nowrap bg-white hover:bg-brand-50">
           <Plus className="h-4 w-4" /> Add
         </button>
       </div>
@@ -201,8 +201,8 @@ export default function EmployerProfilePage() {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto space-y-6 pb-12">
-        <div className="h-48 rounded-2xl bg-slate-200 animate-pulse" />
-        <div className="h-64 rounded-2xl bg-slate-200 animate-pulse" />
+        <div className="h-48 rounded-2xl bg-brand-200 animate-pulse" />
+        <div className="h-64 rounded-2xl bg-brand-200 animate-pulse" />
       </div>
     );
   }
@@ -219,7 +219,7 @@ export default function EmployerProfilePage() {
         <h1 className="text-2xl font-bold text-brand-900 tracking-tight">Company Profile</h1>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className={`btn ${isEditing ? 'bg-slate-100 text-brand-700 hover:bg-slate-200' : 'btn-primary shadow-sm'}`}
+          className={`btn ${isEditing ? 'bg-brand-100 text-brand-700 hover:bg-brand-200' : 'btn-primary shadow-sm'}`}
         >
           {isEditing ? (
             <>Cancel Edit</>
@@ -250,7 +250,7 @@ export default function EmployerProfilePage() {
               <button
                 onClick={() => fileRef.current?.click()}
                 disabled={uploadPct !== null}
-                className="absolute bottom-2 right-2 z-20 h-8 w-8 rounded-full bg-brand-600 text-white shadow-lg flex items-center justify-center hover:bg-brand-500 hover:scale-110 transition-all cursor-pointer disabled:opacity-50"
+                className="absolute bottom-2 right-2 z-20 h-8 w-8 rounded-full bg-brand-900 text-white shadow-soft-lg flex items-center justify-center hover:bg-brand-500 hover:scale-110 transition-all cursor-pointer disabled:opacity-50"
                 title="Change Photo"
               >
                 {uploadPct !== null ? (
@@ -355,7 +355,7 @@ export default function EmployerProfilePage() {
                     <h3 className="text-sm font-medium text-brand-500 mb-2 flex items-center gap-1.5"><Cpu className="h-4 w-4"/> Technologies</h3>
                     <div className="flex flex-wrap gap-1.5">
                       {p.technologies.map((tech, i) => (
-                        <span key={i} className="px-2.5 py-1 rounded-md bg-slate-100 text-brand-600 text-xs font-medium border border-brand-200">
+                        <span key={i} className="px-2.5 py-1 rounded-md bg-brand-100 text-brand-600 text-xs font-medium border border-brand-200">
                           {tech}
                         </span>
                       ))}
@@ -381,7 +381,7 @@ export default function EmployerProfilePage() {
                   <h3 className="text-sm font-medium text-brand-500 mb-2 flex items-center gap-1.5"><Star className="h-4 w-4"/> Achievements</h3>
                   <ul className="space-y-2">
                     {p.achievements.map((ach, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-brand-700 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                      <li key={i} className="flex items-start gap-2 text-sm text-brand-700 bg-brand-50 p-3 rounded-lg border border-brand-100">
                         <Star className="h-4 w-4 text-brand-500 flex-shrink-0 mt-0.5" />
                         <span>{ach}</span>
                       </li>
@@ -391,7 +391,7 @@ export default function EmployerProfilePage() {
               )}
 
               {p.linkedin && (
-                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-slate-100">
+                <div className="flex items-center gap-2 mt-4 pt-4 border-t border-brand-100">
                   <LinkedInIcon className="h-5 w-5 text-blue-600" />
                   <a href={p.linkedin} target="_blank" rel="noreferrer" className="text-sm font-medium text-brand-600 hover:underline">
                     View LinkedIn Profile
@@ -496,7 +496,7 @@ export default function EmployerProfilePage() {
                 />
               </Field>
             </Grid2>
-            <div className="pt-4 border-t border-slate-100 mt-4">
+            <div className="pt-4 border-t border-brand-100 mt-4">
               <h3 className="text-sm font-semibold text-brand-700 mb-3">HR Contact Person</h3>
               <Grid2>
                 <Field label="HR Name">
@@ -608,7 +608,7 @@ export default function EmployerProfilePage() {
               <button
                 onClick={handleSaveAll}
                 disabled={saveMutation.isPending}
-                className="btn-primary shadow-lg hover:shadow-brand-500/25 px-8"
+                className="btn-primary shadow-soft-lg hover:shadow-brand-500/25 px-8"
               >
                 {saveMutation.isPending ? (
                   <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Saving...</>

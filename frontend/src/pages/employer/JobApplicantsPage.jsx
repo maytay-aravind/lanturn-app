@@ -56,9 +56,9 @@ function ProfileModal({ studentId, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-slate-100 px-6 py-4 flex items-center justify-between z-10">
+        <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-brand-100 px-6 py-4 flex items-center justify-between z-10">
           <h2 className="text-lg font-bold text-brand-900">Student Profile</h2>
-          <button onClick={onClose} className="h-8 w-8 rounded-xl flex items-center justify-center text-brand-400 hover:bg-slate-100 hover:text-brand-900 transition-colors">
+          <button onClick={onClose} className="h-8 w-8 rounded-xl flex items-center justify-center text-brand-400 hover:bg-brand-100 hover:text-brand-900 transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -72,7 +72,7 @@ function ProfileModal({ studentId, onClose }) {
             {/* Personal */}
             <div className="flex items-center gap-4">
               {p.profilePhotoURL ? (
-                <img src={p.profilePhotoURL} alt="" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                <img src={p.profilePhotoURL} alt="" className="h-14 w-14 rounded-full object-cover flex-shrink-0 border border-brand-100" />
               ) : (
                 <div className="h-14 w-14 rounded-full bg-brand-100 flex items-center justify-center text-brand-700 text-xl font-bold flex-shrink-0">
                   {(personal.name || '?').charAt(0).toUpperCase()}
@@ -111,7 +111,7 @@ function ProfileModal({ studentId, onClose }) {
               <h4 className="text-sm font-semibold text-brand-900 flex items-center gap-1.5 mb-2">
                 <GraduationCap className="h-4 w-4 text-brand-500" /> Education
               </h4>
-              <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+              <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
                 <p className="font-medium text-brand-900">{academic.college || 'N/A'}</p>
                 <p className="text-sm text-brand-500">{academic.degree || ''}{academic.branch ? ` — ${academic.branch}` : ''}</p>
                 <p className="text-xs text-brand-400">{academic.graduationYear ? `Class of ${academic.graduationYear}` : ''}{academic.cgpa ? ` · CGPA: ${academic.cgpa}` : ''}</p>
@@ -140,7 +140,7 @@ function ProfileModal({ studentId, onClose }) {
                 </h4>
                 <div className="space-y-2">
                   {professional.projects.map((proj, i) => (
-                    <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div key={i} className="p-3 rounded-xl bg-brand-50 border border-brand-100">
                       <div className="flex items-center gap-2">
                         <p className="font-medium text-brand-900 text-sm">{proj.name || proj.title || 'Project'}</p>
                         {proj.link && (
@@ -171,7 +171,7 @@ function ProfileModal({ studentId, onClose }) {
                 </h4>
                 <div className="space-y-2">
                   {professional.experience.map((exp, i) => (
-                    <div key={i} className="p-3 rounded-xl bg-slate-50 border border-slate-100">
+                    <div key={i} className="p-3 rounded-xl bg-brand-50 border border-brand-100">
                       <p className="font-medium text-brand-900 text-sm">{exp.role || exp.title || 'Role'}</p>
                       <p className="text-xs text-brand-500">{exp.company || ''}{exp.duration ? ` · ${exp.duration}` : ''}</p>
                       {exp.description && <p className="text-xs text-brand-400 mt-1">{exp.description}</p>}
@@ -189,7 +189,7 @@ function ProfileModal({ studentId, onClose }) {
                 </h4>
                 <div className="space-y-1.5">
                   {professional.certifications.map((cert, i) => (
-                    <div key={i} className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-2">
+                    <div key={i} className="p-2.5 rounded-xl bg-brand-50 border border-brand-100 flex items-center gap-2">
                       <FileText className="h-3.5 w-3.5 text-brand-400" />
                       <span className="text-sm text-brand-700">{cert.name || cert.title || cert}</span>
                       {cert.issuer && <span className="text-xs text-brand-400">— {cert.issuer}</span>}
@@ -290,7 +290,7 @@ export default function JobApplicantsPage() {
         </div>
 
         {/* View toggle */}
-        <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-brand-100 rounded-xl p-1">
           <button
             onClick={() => setViewMode('kanban')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'kanban' ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'}`}
@@ -310,7 +310,7 @@ export default function JobApplicantsPage() {
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => setStatusFilter('')}
-          className={`badge cursor-pointer transition-all ${!statusFilter ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300' : 'bg-slate-100 text-brand-600 hover:bg-slate-200'}`}
+          className={`badge cursor-pointer transition-all ${!statusFilter ? 'bg-brand-100 text-brand-700 ring-1 ring-brand-300' : 'bg-brand-100 text-brand-600 hover:bg-brand-200'}`}
         >
           All ({allApplicants.length})
         </button>
@@ -321,7 +321,7 @@ export default function JobApplicantsPage() {
             <button
               key={key}
               onClick={() => setStatusFilter(statusFilter === key ? '' : key)}
-              className={`badge cursor-pointer transition-all ${statusFilter === key ? `${cfg.cls} ring-1` : 'bg-slate-100 text-brand-600 hover:bg-slate-200'}`}
+              className={`badge cursor-pointer transition-all ${statusFilter === key ? `${cfg.cls} ring-1` : 'bg-brand-100 text-brand-600 hover:bg-brand-200'}`}
             >
               {cfg.label} ({cnt})
             </button>
@@ -352,18 +352,18 @@ export default function JobApplicantsPage() {
           renderCard={(app) => {
             const match = matchesMap[app.studentId];
             return (
-              <div className="bg-white rounded-xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-xl p-3.5 shadow-sm border border-brand-100 hover:shadow-md transition-shadow">
                 <div className="flex items-center gap-2.5 mb-2">
                   {app.studentPhotoURL ? (
-                    <img src={app.studentPhotoURL} alt="" className="h-8 w-8 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                    <img src={app.studentPhotoURL} alt="" className="h-8 w-8 rounded-full object-cover flex-shrink-0 border border-brand-100" />
                   ) : (
                     <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold text-sm flex-shrink-0">
                       {(app.studentName || '?').charAt(0).toUpperCase()}
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-slate-800 truncate">{app.studentName || 'Student'}</p>
-                    <p className="text-[10px] text-slate-400">{timeAgo(app.createdAt)}</p>
+                    <p className="text-sm font-semibold text-brand-800 truncate">{app.studentName || 'Student'}</p>
+                    <p className="text-[10px] text-brand-400">{timeAgo(app.createdAt)}</p>
                   </div>
                   {match && (
                     <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 rounded-full px-2 py-0.5">
@@ -374,9 +374,9 @@ export default function JobApplicantsPage() {
                 {app.skillsSnapshot?.length > 0 && (
                   <div className="flex flex-wrap gap-1 mb-2">
                     {app.skillsSnapshot.slice(0, 4).map((s, i) => (
-                      <span key={i} className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">{s}</span>
+                      <span key={i} className="text-[9px] px-1.5 py-0.5 rounded bg-brand-100 text-brand-600 font-medium">{s}</span>
                     ))}
-                    {app.skillsSnapshot.length > 4 && <span className="text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">+{app.skillsSnapshot.length - 4}</span>}
+                    {app.skillsSnapshot.length > 4 && <span className="text-[9px] px-1.5 py-0.5 rounded bg-brand-100 text-brand-500">+{app.skillsSnapshot.length - 4}</span>}
                   </div>
                 )}
                 <div className="flex gap-1.5">
@@ -389,7 +389,7 @@ export default function JobApplicantsPage() {
                   {app.resumeUrl && (
                     <button
                       onClick={(e) => { e.stopPropagation(); handleViewResume(app.applicationId); }}
-                      className="text-[10px] font-medium text-slate-500 hover:text-slate-700 transition-colors"
+                      className="text-[10px] font-medium text-brand-500 hover:text-brand-700 transition-colors"
                     >
                       Resume
                     </button>
@@ -417,7 +417,7 @@ export default function JobApplicantsPage() {
                   {/* Left: Student info */}
                   <div className="flex items-start gap-3 flex-1 min-w-0">
                     {app.studentPhotoURL ? (
-                      <img src={app.studentPhotoURL} alt="" className="h-11 w-11 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                      <img src={app.studentPhotoURL} alt="" className="h-11 w-11 rounded-full object-cover flex-shrink-0 border border-brand-100" />
                     ) : (
                       <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 font-bold flex-shrink-0">
                         {(app.studentName || '?').charAt(0).toUpperCase()}
@@ -487,7 +487,7 @@ export default function JobApplicantsPage() {
 
                 {/* AI Match Score Card (Full Width) */}
                 {matchesMap[app.studentId] && (
-                  <div className="mt-5 border-t border-slate-100 pt-5">
+                  <div className="mt-5 border-t border-brand-100 pt-5">
                     <CandidateMatchCard candidate={app} matchData={matchesMap[app.studentId]} />
                   </div>
                 )}

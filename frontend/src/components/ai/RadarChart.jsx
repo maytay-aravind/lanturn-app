@@ -100,7 +100,7 @@ export function RadarChart({
             })
             .join(' ')}
           fill="none"
-          stroke="#e2e8f0"
+          stroke="#D4D4D4"
           strokeWidth={level === 1 ? 1.5 : 1}
         />
       ))}
@@ -113,7 +113,7 @@ export function RadarChart({
           y1={cy}
           x2={x}
           y2={y}
-          stroke="#e2e8f0"
+          stroke="#D4D4D4"
           strokeWidth={1}
         />
       ))}
@@ -122,7 +122,7 @@ export function RadarChart({
       <polygon
         points={polygon}
         fill="rgba(99,102,241,0.18)"
-        stroke="#6366f1"
+        stroke="#1A1A1A"
         strokeWidth={2}
         strokeLinejoin="round"
         style={{ transition: animated ? 'none' : 'all 0.3s ease' }}
@@ -142,7 +142,7 @@ export function RadarChart({
               x={lx}
               y={ly + dy}
               textAnchor={anchor}
-              className={`text-[11px] font-medium fill-slate-700 ${isActive ? 'fill-brand-700 font-bold' : ''}`}
+              className={`text-[11px] font-medium fill-brand-700 ${isActive ? 'fill-brand-700 font-bold' : ''}`}
             >
               {(() => {
                 const words = dim.label.split(' ');
@@ -164,7 +164,7 @@ export function RadarChart({
               cx={point.x}
               cy={point.y}
               r={isActive ? 8 : 6}
-              fill={isActive ? '#4f46e5' : '#6366f1'}
+              fill={isActive ? '#333333' : '#1A1A1A'}
               stroke="#fff"
               strokeWidth={2}
               className={onPointClick ? 'cursor-pointer' : ''}

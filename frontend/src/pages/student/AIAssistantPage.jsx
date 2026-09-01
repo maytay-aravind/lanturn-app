@@ -29,7 +29,7 @@ function renderMarkdown(text) {
       elements.push(
         <ul key={`ul-${elements.length}`} className="space-y-1 pl-4 my-2">
           {listBuffer.map((item, i) => (
-            <li key={i} className="list-disc text-slate-700 text-sm leading-relaxed">
+            <li key={i} className="list-disc text-brand-700 text-sm leading-relaxed">
               {formatInline(item)}
             </li>
           ))}
@@ -43,7 +43,7 @@ function renderMarkdown(text) {
     const parts = str.split(/(\*\*[^*]+\*\*)/g);
     return parts.map((part, i) => {
       if (part.startsWith('**') && part.endsWith('**')) {
-        return <strong key={i} className="font-semibold text-slate-900">{part.slice(2, -2)}</strong>;
+        return <strong key={i} className="font-semibold text-brand-900">{part.slice(2, -2)}</strong>;
       }
       return part;
     });
@@ -55,20 +55,20 @@ function renderMarkdown(text) {
 
     if (trimmed.startsWith('### ')) {
       flushList();
-      elements.push(<h4 key={i} className="text-sm font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(4))}</h4>);
+      elements.push(<h4 key={i} className="text-sm font-bold text-brand-900 mt-3 mb-1">{formatInline(trimmed.slice(4))}</h4>);
     } else if (trimmed.startsWith('## ')) {
       flushList();
-      elements.push(<h3 key={i} className="text-base font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(3))}</h3>);
+      elements.push(<h3 key={i} className="text-base font-bold text-brand-900 mt-3 mb-1">{formatInline(trimmed.slice(3))}</h3>);
     } else if (trimmed.startsWith('# ')) {
       flushList();
-      elements.push(<h2 key={i} className="text-lg font-bold text-slate-900 mt-3 mb-1">{formatInline(trimmed.slice(2))}</h2>);
+      elements.push(<h2 key={i} className="text-lg font-bold text-brand-900 mt-3 mb-1">{formatInline(trimmed.slice(2))}</h2>);
     } else if (/^\d+\.\s/.test(trimmed)) {
       flushList();
       const content = trimmed.replace(/^\d+\.\s/, '');
       elements.push(
         <div key={i} className="flex gap-2 my-1">
           <span className="text-brand-600 font-bold text-sm flex-shrink-0">{trimmed.match(/^\d+/)[0]}.</span>
-          <span className="text-sm text-slate-700 leading-relaxed">{formatInline(content)}</span>
+          <span className="text-sm text-brand-700 leading-relaxed">{formatInline(content)}</span>
         </div>
       );
     } else if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
@@ -77,7 +77,7 @@ function renderMarkdown(text) {
       flushList();
     } else {
       flushList();
-      elements.push(<p key={i} className="text-sm text-slate-700 leading-relaxed my-1">{formatInline(trimmed)}</p>);
+      elements.push(<p key={i} className="text-sm text-brand-700 leading-relaxed my-1">{formatInline(trimmed)}</p>);
     }
   }
 
@@ -163,11 +163,11 @@ function ChatTab() {
   return (
     <div className="flex flex-col h-[520px]">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-3 p-4 bg-slate-50 rounded-2xl mb-3">
+      <div className="flex-1 overflow-y-auto space-y-3 p-4 bg-brand-50 rounded-2xl mb-3">
         {messages.map((m, i) => (
           <div key={i} className={`flex gap-2 items-end ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
             <div className={`h-7 w-7 rounded-full flex items-center justify-center flex-shrink-0 ${
-              m.role === 'assistant' ? 'bg-brand-100' : 'bg-slate-200'
+              m.role === 'assistant' ? 'bg-brand-100' : 'bg-brand-200'
             }`}>
               {m.role === 'assistant'
                 ? <Bot className="h-3.5 w-3.5 text-brand-600" />
@@ -255,7 +255,7 @@ function ResumeReviewTab() {
 
   return (
     <div className="space-y-5">
-      <div className="p-4 rounded-2xl bg-slate-50 space-y-3">
+      <div className="p-4 rounded-2xl bg-brand-50 space-y-3">
         <div>
           <label className="label">Target Role <span className="text-brand-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
           <input className="input" placeholder="Will be predicted from your resume…" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
@@ -360,7 +360,7 @@ function JobMatchTab() {
 
   return (
     <div className="space-y-5">
-      <div className="p-4 rounded-2xl bg-slate-50 space-y-3">
+      <div className="p-4 rounded-2xl bg-brand-50 space-y-3">
         <div>
           <label className="label">Select a Job</label>
           <select className="select" value={jobId} onChange={(e) => setJobId(e.target.value)}>
@@ -444,7 +444,7 @@ export default function AIAssistantPage() {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#4f46e5,#7c3aed)' }}>
+        <div className="h-10 w-10 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}>
           <Sparkles className="h-5 w-5 text-white" />
         </div>
         <div>
@@ -454,7 +454,7 @@ export default function AIAssistantPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-1 p-1 rounded-2xl bg-slate-100">
+      <div className="flex gap-1 p-1 rounded-2xl bg-brand-100">
         {TABS.map(({ id, icon: Icon, label }) => (
           <button
             key={id}

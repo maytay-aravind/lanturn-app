@@ -31,7 +31,7 @@ const STATUS_COLORS = {
   interviewing: 'badge-purple',
   accepted:     'badge-green',
   rejected:     'badge-red',
-  withdrawn:    'badge-default bg-slate-100 text-brand-600',
+  withdrawn:    'badge-default bg-brand-100 text-brand-600',
 };
 
 function StatusLabel({ status, t }) {
@@ -51,17 +51,17 @@ function KanbanColumn({ column, items, onWithdraw, withdrawPending, t }) {
   const Icon = column.icon;
 
   return (
-    <div className="flex-1 min-w-[240px] max-w-[320px] flex flex-col rounded-2xl border-2 border-slate-200 bg-slate-50/80">
+    <div className="flex-1 min-w-[240px] max-w-[320px] flex flex-col rounded-2xl border-2 border-brand-200 bg-brand-50/80">
       {/* Column header */}
-      <div className="px-4 py-3 border-b border-slate-200 flex items-center gap-2 flex-shrink-0">
+      <div className="px-4 py-3 border-b border-brand-200 flex items-center gap-2 flex-shrink-0">
         <div
           className="h-3 w-3 rounded-full flex-shrink-0"
           style={{ backgroundColor: column.color }}
         />
-        <h3 className="text-sm font-bold text-slate-800 flex-1 truncate">
+        <h3 className="text-sm font-bold text-brand-800 flex-1 truncate">
           {column.title}
         </h3>
-        <span className="text-xs font-semibold text-slate-400 bg-white rounded-full px-2 py-0.5 border border-slate-200">
+        <span className="text-xs font-semibold text-brand-400 bg-white rounded-full px-2 py-0.5 border border-brand-200">
           {items.length}
         </span>
       </div>
@@ -71,20 +71,20 @@ function KanbanColumn({ column, items, onWithdraw, withdrawPending, t }) {
         {items.map((app) => (
           <div
             key={app.applicationId || app.id}
-            className="bg-white rounded-xl p-3.5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow animate-slide-up"
+            className="bg-white rounded-xl p-3.5 shadow-sm border border-brand-100 hover:shadow-md transition-shadow animate-slide-up"
           >
             <div className="flex items-start gap-2.5 mb-2">
               <div className="h-8 w-8 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 text-brand-700 font-bold text-sm">
                 {(app.companyName || '?').charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-slate-800 truncate">{app.jobTitle || 'Job'}</p>
-                <p className="text-[10px] text-slate-400 mt-0.5">{timeAgo(app.createdAt || app.appliedAt)}</p>
+                <p className="text-sm font-semibold text-brand-800 truncate">{app.jobTitle || 'Job'}</p>
+                <p className="text-[10px] text-brand-400 mt-0.5">{timeAgo(app.createdAt || app.appliedAt)}</p>
               </div>
             </div>
 
             {app.coverLetter && (
-              <p className="text-[11px] text-slate-500 line-clamp-2 mb-2 pl-[42px]">{app.coverLetter}</p>
+              <p className="text-[11px] text-brand-500 line-clamp-2 mb-2 pl-[42px]">{app.coverLetter}</p>
             )}
 
             {/* Withdraw button for submitted status */}
@@ -107,7 +107,7 @@ function KanbanColumn({ column, items, onWithdraw, withdrawPending, t }) {
         ))}
 
         {items.length === 0 && (
-          <div className="flex items-center justify-center h-16 text-xs text-slate-400 italic">
+          <div className="flex items-center justify-center h-16 text-xs text-brand-400 italic">
             {t('apps.noApplications')}
           </div>
         )}
@@ -160,7 +160,7 @@ export default function ApplicationsPage() {
 
         {/* View toggle */}
         {applications.length > 0 && (
-          <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1">
+          <div className="flex items-center gap-1 bg-brand-100 rounded-xl p-1">
             <button
               onClick={() => setViewMode('kanban')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${viewMode === 'kanban' ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'}`}
@@ -244,7 +244,7 @@ export default function ApplicationsPage() {
                     </p>
                     
                     {app.coverLetter && (
-                      <div className="mt-3 p-3 rounded-lg bg-slate-50 text-sm text-brand-600 border border-slate-100">
+                      <div className="mt-3 p-3 rounded-lg bg-brand-50 text-sm text-brand-600 border border-brand-100">
                         <p className="font-medium text-xs text-brand-400 mb-1 uppercase tracking-wider">{t('apps.coverLetter')}</p>
                         <p className="line-clamp-2">{app.coverLetter}</p>
                       </div>

@@ -30,9 +30,9 @@ const JOB_STATUS_OPTIONS = [
 const JOB_STATUS_COLORS = {
   active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
   verified: 'bg-blue-50 text-blue-700 border-blue-200',
-  draft: 'bg-slate-100 text-slate-600 border-slate-200',
+  draft: 'bg-brand-100 text-brand-600 border-brand-200',
   paused: 'bg-amber-50 text-amber-700 border-amber-200',
-  closed: 'bg-slate-100 text-slate-600 border-slate-200',
+  closed: 'bg-brand-100 text-brand-600 border-brand-200',
   removed: 'bg-red-50 text-red-700 border-red-200',
 };
 
@@ -46,8 +46,8 @@ const ROLE_COLORS = {
 function StatSkeleton() {
   return (
     <div className="card p-5 animate-pulse">
-      <div className="h-4 w-20 bg-slate-200 rounded-md mb-3" />
-      <div className="h-7 w-14 bg-slate-200 rounded-md" />
+      <div className="h-4 w-20 bg-brand-200 rounded-md mb-3" />
+      <div className="h-7 w-14 bg-brand-200 rounded-md" />
     </div>
   );
 }
@@ -134,7 +134,7 @@ function DashboardTab() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Posts */}
         <div className="card">
-          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="px-5 py-4 border-b border-brand-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Briefcase className="h-4 w-4 text-brand-500" />
               <h3 className="font-semibold text-brand-900">Recent Posts</h3>
@@ -155,7 +155,7 @@ function DashboardTab() {
                   const jobId = job.jobId || job.id;
                   const statusCls = JOB_STATUS_COLORS[job.status] || JOB_STATUS_COLORS.draft;
                   return (
-                    <div key={jobId} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div key={jobId} className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-50 transition-colors">
                       <div className="h-9 w-9 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
                         {job.companyLogoURL ? (
                           <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
@@ -180,7 +180,7 @@ function DashboardTab() {
 
         {/* Recent Users */}
         <div className="card">
-          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="px-5 py-4 border-b border-brand-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-brand-500" />
               <h3 className="font-semibold text-brand-900">Recent Users</h3>
@@ -198,11 +198,11 @@ function DashboardTab() {
             ) : (
               <div className="space-y-3">
                 {recentUsers.map(user => {
-                  const roleCls = ROLE_COLORS[user.role] || 'bg-slate-100 text-slate-600 border-slate-200';
+                  const roleCls = ROLE_COLORS[user.role] || 'bg-brand-100 text-brand-600 border-brand-200';
                   return (
-                    <div key={user.uid} className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div key={user.uid} className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-50 transition-colors">
                       {user.photoURL ? (
-                        <img src={user.photoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                        <img src={user.photoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-brand-100" />
                       ) : (
                         <div className="h-9 w-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-sm font-bold flex-shrink-0 border border-brand-100">
                           {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
@@ -396,7 +396,7 @@ function PostVerificationTab() {
                       onChange={e => {
                         if (e.target.value) moderateMutation.mutate({ jobId, status: e.target.value });
                       }}
-                      className="px-3 py-2 rounded-lg bg-slate-50 text-brand-600 text-xs font-medium border border-slate-200 hover:bg-slate-100 cursor-pointer"
+                      className="px-3 py-2 rounded-lg bg-brand-50 text-brand-600 text-xs font-medium border border-brand-200 hover:bg-brand-100 cursor-pointer"
                     >
                       <option value="">Change Status</option>
                       <option value="active">Set Active</option>
@@ -565,7 +565,7 @@ function JobsTab() {
                       onChange={e => {
                         if (e.target.value) moderateMutation.mutate({ jobId, status: e.target.value });
                       }}
-                      className="px-2 py-1.5 rounded-lg bg-slate-50 text-brand-600 text-xs font-medium border border-slate-200 hover:bg-slate-100 cursor-pointer"
+                      className="px-2 py-1.5 rounded-lg bg-brand-50 text-brand-600 text-xs font-medium border border-brand-200 hover:bg-brand-100 cursor-pointer"
                     >
                       <option value="">Change Status</option>
                       <option value="active">Set Active</option>
@@ -730,13 +730,13 @@ function UsersTab() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {users.map(user => {
-            const roleCls = ROLE_COLORS[user.role] || 'bg-slate-100 text-slate-600 border-slate-200';
+            const roleCls = ROLE_COLORS[user.role] || 'bg-brand-100 text-brand-600 border-brand-200';
             const isActive = user.status === 'active';
             return (
               <div key={user.uid} className="card p-5 hover:shadow-md transition-all relative">
                 <div className="flex items-start gap-3 mb-3">
                   {user.photoURL ? (
-                    <img src={user.photoURL} alt="" className="h-11 w-11 rounded-full object-cover flex-shrink-0 border border-slate-100" />
+                    <img src={user.photoURL} alt="" className="h-11 w-11 rounded-full object-cover flex-shrink-0 border border-brand-100" />
                   ) : (
                     <div className="h-11 w-11 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 text-base font-bold flex-shrink-0 border border-brand-100">
                       {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
@@ -771,7 +771,7 @@ function UsersTab() {
                 <div className="relative" data-menu>
                   <button
                     onClick={() => setOpenMenu(openMenu === user.uid ? null : user.uid)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-50 text-brand-600 text-xs font-medium border border-slate-200 hover:bg-slate-100 transition-colors flex items-center justify-center gap-2"
+                    className="w-full px-3 py-2 rounded-lg bg-brand-50 text-brand-600 text-xs font-medium border border-brand-200 hover:bg-brand-100 transition-colors flex items-center justify-center gap-2"
                   >
                     Actions
                     <svg className={`h-3 w-3 transition-transform ${openMenu === user.uid ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -780,7 +780,7 @@ function UsersTab() {
                   </button>
 
                   {openMenu === user.uid && (
-                    <div className="absolute bottom-full left-0 right-0 mb-1 card p-2 shadow-lg z-20 border border-slate-100">
+                    <div className="absolute bottom-full left-0 right-0 mb-1 card p-2 shadow-soft-lg z-20 border border-brand-100">
                       <p className="text-xs text-brand-400 font-semibold uppercase tracking-wider px-2 py-1">Change Role</p>
                       {['student', 'employer', 'admin'].map(role => (
                         <button
@@ -793,13 +793,13 @@ function UsersTab() {
                           className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium capitalize transition-colors ${
                             user.role === role
                               ? 'text-brand-300 cursor-not-allowed'
-                              : 'text-brand-600 hover:bg-slate-50'
+                              : 'text-brand-600 hover:bg-brand-50'
                           }`}
                         >
                           {role}
                         </button>
                       ))}
-                      <div className="border-t border-slate-100 my-1" />
+                      <div className="border-t border-brand-100 my-1" />
                       <button
                         onClick={() => {
                           statusMutation.mutate({
@@ -865,7 +865,7 @@ export default function AdminPage() {
       </div>
 
       {/* Tab Bar */}
-      <div className="flex items-center gap-1 overflow-x-auto pb-1 border-b border-slate-100">
+      <div className="flex items-center gap-1 overflow-x-auto pb-1 border-b border-brand-100">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -876,7 +876,7 @@ export default function AdminPage() {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-medium transition-all whitespace-nowrap relative ${
                 isActive
                   ? 'text-brand-700 bg-brand-50'
-                  : 'text-brand-500 hover:text-brand-700 hover:bg-slate-50'
+                  : 'text-brand-500 hover:text-brand-700 hover:bg-brand-50'
               }`}
             >
               <Icon className="h-4 w-4" />

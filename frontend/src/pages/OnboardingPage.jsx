@@ -36,12 +36,12 @@ function LanguageCard({ lang, selected, onClick }) {
       className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
         selected
           ? 'border-brand-500 bg-brand-50 shadow-sm'
-          : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-slate-50'
+          : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-brand-50'
       }`}
     >
       <div className="flex items-center gap-4">
         <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl transition-colors ${
-          selected ? 'bg-brand-100' : 'bg-slate-100 group-hover:bg-slate-200'
+          selected ? 'bg-brand-100' : 'bg-brand-100 group-hover:bg-brand-200'
         }`}>
           {lang.flag}
         </div>
@@ -74,12 +74,12 @@ function RoleCard({ role, selected, onClick, icon: Icon, title, description }) {
       className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
         selected
           ? 'border-brand-500 bg-brand-50 shadow-sm'
-          : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-slate-50'
+          : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-brand-50'
       }`}
     >
       <div className="flex items-start gap-4">
         <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
-          selected ? 'bg-brand-100' : 'bg-slate-100 group-hover:bg-slate-200'
+          selected ? 'bg-brand-100' : 'bg-brand-100 group-hover:bg-brand-200'
         }`}>
           <Icon className={`h-5 w-5 ${selected ? 'text-brand-600' : 'text-brand-500'}`} />
         </div>
@@ -341,7 +341,7 @@ export default function OnboardingPage() {
           {/* ── Student fields ──────────────────────────── */}
           {role === 'student' && (
             <>
-              <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
+              <div className="flex items-center gap-2 pb-1 border-b border-brand-100">
                 <User className="h-4 w-4 text-brand-400" />
                 <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.personal')}</span>
               </div>
@@ -356,7 +356,7 @@ export default function OnboardingPage() {
                 </Field>
               </Grid2>
 
-              <div className="flex items-center gap-2 pb-1 border-b border-slate-100 mt-2">
+              <div className="flex items-center gap-2 pb-1 border-b border-brand-100 mt-2">
                 <GraduationCap className="h-4 w-4 text-brand-400" />
                 <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.academic')}</span>
               </div>
@@ -389,7 +389,7 @@ export default function OnboardingPage() {
                 </Field>
               </Grid2>
 
-              <div className="flex items-center gap-2 pb-1 border-b border-slate-100 mt-2">
+              <div className="flex items-center gap-2 pb-1 border-b border-brand-100 mt-2">
                 <Code2 className="h-4 w-4 text-brand-400" />
                 <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.skillsAndLinks')}</span>
               </div>
@@ -429,7 +429,7 @@ export default function OnboardingPage() {
           {/* ── Employer fields ─────────────────────────── */}
           {role === 'employer' && (
             <>
-              <div className="flex items-center gap-2 pb-1 border-b border-slate-100">
+              <div className="flex items-center gap-2 pb-1 border-b border-brand-100">
                 <Building2 className="h-4 w-4 text-brand-400" />
                 <span className="text-xs font-semibold text-brand-500 uppercase tracking-wide">{t('onboarding.company')}</span>
               </div>
