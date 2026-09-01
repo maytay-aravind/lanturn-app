@@ -74,7 +74,7 @@ function AnimatedBar({ score, name, delay = 0, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="w-full text-left group p-3 rounded-xl hover:bg-brand-50/80 transition-colors"
+      className="w-full text-left group p-3 rounded-lg hover:bg-brand-50/80 transition-colors"
     >
       <div className="flex items-center justify-between mb-2">
         <span className="text-sm font-medium text-brand-700 group-hover:text-brand-700 transition-colors">
@@ -123,10 +123,10 @@ export function CompanyDNAPanel({
   if (!data) {
     if (isEmployerView) {
       return (
-        <div className="p-5 rounded-2xl bg-gradient-to-br from-brand-50 via-brand-50 to-fuchsia-50 ring-1 ring-brand-100">
+        <div className="p-5 rounded-lg bg-gradient-to-br from-brand-50 via-brand-50 to-fuchsia-50 ring-1 ring-brand-100">
           <div className="flex items-start gap-4">
             <div
-              className="h-12 w-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+              className="h-12 w-12 rounded-lg flex items-center justify-center flex-shrink-0"
               style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}
             >
               <Building2 className="h-6 w-6 text-white" />
@@ -175,7 +175,7 @@ export function CompanyDNAPanel({
     <div className="space-y-4 animate-slide-up">
       {/* Glass-card header */}
       <div
-        className="relative overflow-hidden rounded-2xl p-5"
+        className="relative overflow-hidden rounded-lg p-5"
         style={{
           background: 'linear-gradient(135deg, rgba(79,70,229,0.06) 0%, rgba(124,58,237,0.08) 50%, rgba(217,70,239,0.06) 100%)',
           border: '1px solid rgba(99,102,241,0.15)',
@@ -205,7 +205,7 @@ export function CompanyDNAPanel({
       </div>
 
       {/* View toggle */}
-      <div className="flex items-center justify-center gap-1 p-1 bg-brand-100 rounded-xl w-fit mx-auto">
+      <div className="flex items-center justify-center gap-1 p-1 bg-brand-100 rounded-lg w-fit mx-auto">
         <button
           type="button"
           onClick={() => setShowRadar(true)}
@@ -278,7 +278,7 @@ export function CompanyDNAPanel({
           <button
             onClick={onRegenerate}
             disabled={isRegenerating}
-            className="px-4 py-2 bg-brand-100 text-brand-600 font-medium rounded-xl hover:bg-brand-200 transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-brand-100 text-brand-600 font-medium rounded-lg hover:bg-brand-200 transition-colors flex items-center gap-2"
           >
             {isRegenerating ? (
               <>
@@ -314,7 +314,7 @@ export function CompanyDNAPanel({
           <div className="space-y-5">
             <div className="flex items-center gap-4">
               <div
-                className="h-16 w-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white"
+                className="h-16 w-16 rounded-lg flex items-center justify-center text-2xl font-bold text-white"
                 style={{
                   background:
                     selected.score >= 70

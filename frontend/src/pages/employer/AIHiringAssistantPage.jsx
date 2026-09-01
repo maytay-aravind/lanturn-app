@@ -99,7 +99,7 @@ function renderMarkdown(text) {
 function TypingIndicator() {
   return (
     <div className="flex items-start gap-3 animate-fade-in">
-      <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-md">
+      <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-md">
         <Bot className="h-4 w-4 text-white" />
       </div>
       <div className="chat-bubble-ai flex items-center gap-1.5 py-4">
@@ -152,7 +152,7 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
       <div className="flex-1 overflow-y-auto px-2 pb-4 space-y-1">
         {isLoading ? (
           <div className="space-y-2 p-2">
-            {[1,2,3].map(i => <div key={i} className="h-14 skeleton rounded-xl" />)}
+            {[1,2,3].map(i => <div key={i} className="h-14 skeleton rounded-lg" />)}
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-8 px-4">
@@ -166,7 +166,7 @@ function ThreadSidebar({ threads, activeThreadId, onSelectThread, onNewThread, o
             <div key={thread.threadId} className="relative group/item">
               <button
                 onClick={() => onSelectThread(thread.threadId)}
-                className={`w-full text-left p-3 rounded-xl transition-all duration-150 group ${
+                className={`w-full text-left p-3 rounded-lg transition-all duration-150 group ${
                   activeThreadId === thread.threadId
                     ? 'bg-brand-50 ring-1 ring-brand-200'
                     : 'hover:bg-brand-50'
@@ -423,7 +423,7 @@ export default function AIHiringAssistantPage() {
             )}
           </button>
 
-          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-soft-md shadow-brand-500/20">
+          <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-soft-md shadow-brand-500/20">
             <Bot className="h-5 w-5 text-white" />
           </div>
           <div className="flex-1 min-w-0">
@@ -458,7 +458,7 @@ export default function AIHiringAssistantPage() {
               {/* Glowing AI avatar */}
               <div className="relative mb-6">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-brand-400 to-brand-500 blur-xl opacity-30 animate-pulse" />
-                <div className="relative h-20 w-20 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/25">
+                <div className="relative h-20 w-20 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center shadow-xl shadow-brand-500/25">
                   <Sparkles className="h-10 w-10 text-white" />
                 </div>
               </div>
@@ -476,7 +476,7 @@ export default function AIHiringAssistantPage() {
                     key={i}
                     onClick={() => handleSuggestedPrompt(prompt.text)}
                     disabled={chatMutation.isPending}
-                    className={`flex items-start gap-3 p-4 rounded-2xl ring-1 text-left transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 ${prompt.color}`}
+                    className={`flex items-start gap-3 p-4 rounded-lg ring-1 text-left transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 ${prompt.color}`}
                     id={`suggested-prompt-${i}`}
                   >
                     <prompt.icon className="h-5 w-5 flex-shrink-0 mt-0.5" />
@@ -498,7 +498,7 @@ export default function AIHiringAssistantPage() {
                 >
                   {/* Avatar */}
                   {msg.role === 'assistant' && (
-                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-soft-md shadow-brand-500/15 mt-0.5">
+                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center flex-shrink-0 shadow-soft-md shadow-brand-500/15 mt-0.5">
                       <Bot className="h-4 w-4 text-white" />
                     </div>
                   )}
@@ -514,7 +514,7 @@ export default function AIHiringAssistantPage() {
 
                   {/* User avatar placeholder */}
                   {msg.role === 'user' && (
-                    <div className="h-8 w-8 rounded-xl bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <div className="h-8 w-8 rounded-lg bg-brand-100 flex items-center justify-center flex-shrink-0 mt-0.5">
                       <span className="text-xs font-bold text-brand-700">You</span>
                     </div>
                   )}
@@ -533,7 +533,7 @@ export default function AIHiringAssistantPage() {
         <div className="flex-shrink-0 border-t border-brand-100 bg-white/80 backdrop-blur-md p-4">
           <div className="max-w-3xl mx-auto">
             {chatMutation.isError && (
-              <div className="mb-3 px-4 py-2.5 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 animate-slide-up">
+              <div className="mb-3 px-4 py-2.5 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 animate-slide-up">
                 <span className="font-medium">Error:</span> {chatMutation.error?.message || 'Something went wrong. Please try again.'}
               </div>
             )}
@@ -561,7 +561,7 @@ export default function AIHiringAssistantPage() {
               <button
                 onClick={handleSend}
                 disabled={!inputValue.trim() || chatMutation.isPending}
-                className="btn-primary h-12 w-12 p-0 rounded-xl flex items-center justify-center flex-shrink-0 disabled:opacity-40"
+                className="btn-primary h-12 w-12 p-0 rounded-lg flex items-center justify-center flex-shrink-0 disabled:opacity-40"
                 id="send-message-btn"
               >
                 {chatMutation.isPending ? (

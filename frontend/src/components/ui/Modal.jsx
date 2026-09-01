@@ -31,7 +31,7 @@ export function Modal({ open, onClose, title, children, size = 'md' }) {
       style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }}
       onClick={(e) => e.target === overlayRef.current && onClose()}
     >
-      <div className={`w-full ${sizeClass} bg-white rounded-2xl animate-scale-in`} style={{ boxShadow: 'var(--shadow-xl)' }}>
+      <div className={`w-full ${sizeClass} bg-white rounded-lg animate-scale-in`} style={{ boxShadow: 'var(--shadow-xl)' }}>
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-brand-100">
           <h2 className="text-base font-semibold text-brand-900">{title}</h2>

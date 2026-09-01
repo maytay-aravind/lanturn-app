@@ -95,10 +95,10 @@ export function CareerDNAPanel() {
   return (
     <div className="space-y-6">
       {/* Intro + action */}
-      <div className="p-5 rounded-2xl bg-gradient-to-br from-brand-50 via-brand-50 to-fuchsia-50 ring-1 ring-brand-100">
+      <div className="p-5 rounded-lg bg-gradient-to-br from-brand-50 via-brand-50 to-fuchsia-50 ring-1 ring-brand-100">
         <div className="flex items-start gap-4">
           <div
-            className="h-12 w-12 rounded-2xl flex items-center justify-center flex-shrink-0"
+            className="h-12 w-12 rounded-lg flex items-center justify-center flex-shrink-0"
             style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}
           >
             <Dna className="h-6 w-6 text-white" />
@@ -211,7 +211,7 @@ export function CareerDNAPanel() {
             <button
               onClick={() => dnaMutation.mutate()}
               disabled={dnaMutation.isPending}
-              className="px-4 py-2 bg-brand-100 text-brand-600 font-medium rounded-xl hover:bg-brand-200 transition-colors flex items-center gap-2"
+              className="px-4 py-2 bg-brand-100 text-brand-600 font-medium rounded-lg hover:bg-brand-200 transition-colors flex items-center gap-2"
             >
               <RefreshCw className="h-4 w-4" />
               Re-analyze Resume
@@ -231,7 +231,7 @@ export function CareerDNAPanel() {
           <div className="space-y-5">
             <div className="flex items-center gap-4">
               <div
-                className="h-16 w-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white"
+                className="h-16 w-16 rounded-lg flex items-center justify-center text-2xl font-bold text-white"
                 style={{
                   background:
                     selected.score >= 70
@@ -266,7 +266,7 @@ export function CareerDNAPanel() {
                   {selected.suggestions.map((tip, i) => (
                     <li
                       key={i}
-                      className="text-sm text-brand-700 flex gap-2 p-3 rounded-xl bg-brand-50"
+                      className="text-sm text-brand-700 flex gap-2 p-3 rounded-lg bg-brand-50"
                     >
                       <span className="text-brand-500 font-bold flex-shrink-0">{i + 1}.</span>
                       {tip}

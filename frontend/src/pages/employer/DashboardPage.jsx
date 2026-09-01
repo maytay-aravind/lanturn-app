@@ -224,11 +224,11 @@ export default function EmployerDashboard() {
       <div className="space-y-6 animate-fade-in">
         <div className="h-8 skeleton-title w-64" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => <div key={i} className="h-28 skeleton rounded-2xl" />)}
+          {[1,2,3,4].map(i => <div key={i} className="h-28 skeleton rounded-lg" />)}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="h-64 skeleton rounded-2xl" />
-          <div className="h-64 skeleton rounded-2xl" />
+          <div className="h-64 skeleton rounded-lg" />
+          <div className="h-64 skeleton rounded-lg" />
         </div>
       </div>
     );
@@ -330,7 +330,7 @@ export default function EmployerDashboard() {
             <MetricBar label="Hired" value={sb.accepted || 0} max={a.totalApplicants || 0} color="#1A1A1A" />
             <MetricBar label="Rejected" value={sb.rejected || 0} max={a.totalApplicants || 0} color="#D62828" />
           </div>
-          <div className="mt-4 p-3 rounded-xl bg-brand-50 border border-brand-100">
+          <div className="mt-4 p-3 rounded-lg bg-brand-50 border border-brand-100">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-brand-700">Hiring Conversion Rate</span>
               <span className="text-xl font-bold text-brand-900">{a.conversionRate ?? 0}%</span>
@@ -345,19 +345,19 @@ export default function EmployerDashboard() {
             <h2 className="section-title">Job Overview</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+            <div className="p-3 rounded-lg bg-brand-50 border border-brand-100">
               <p className="text-2xl font-bold text-brand-900">{a.activeJobs ?? 0}</p>
               <p className="text-xs text-brand-500 mt-0.5">Active</p>
             </div>
-            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+            <div className="p-3 rounded-lg bg-brand-50 border border-brand-100">
               <p className="text-2xl font-bold text-brand-900">{a.pausedJobs ?? 0}</p>
               <p className="text-xs text-brand-500 mt-0.5">Paused</p>
             </div>
-            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+            <div className="p-3 rounded-lg bg-brand-50 border border-brand-100">
               <p className="text-2xl font-bold text-brand-900">{a.closedJobs ?? 0}</p>
               <p className="text-xs text-brand-500 mt-0.5">Closed</p>
             </div>
-            <div className="p-3 rounded-xl bg-brand-50 border border-brand-100">
+            <div className="p-3 rounded-lg bg-brand-50 border border-brand-100">
               <p className="text-2xl font-bold text-brand-900">{a.totalJobs ?? 0}</p>
               <p className="text-xs text-brand-500 mt-0.5">Total Posted</p>
             </div>

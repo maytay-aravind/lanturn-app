@@ -49,7 +49,7 @@ function DroppableColumn({ column, items, renderCard, totalItems }) {
   return (
     <div
       ref={setNodeRef}
-      className={`flex-1 min-w-[260px] max-w-[340px] flex flex-col rounded-2xl border-2 transition-all duration-200 ${
+      className={`flex-1 min-w-[260px] max-w-[340px] flex flex-col rounded-lg border-2 transition-all duration-200 ${
         isOver
           ? 'border-indigo-400 bg-indigo-50/50 shadow-soft-lg shadow-indigo-100'
           : 'border-brand-200 bg-brand-50/80'

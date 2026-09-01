@@ -454,7 +454,7 @@ export default function EmployerJobsPage() {
       {/* ── Jobs List ─────────────────────────────────────── */}
       {isLoading ? (
         <div className="space-y-3">
-          {[1,2,3].map(i => <div key={i} className="h-24 skeleton rounded-2xl" />)}
+          {[1,2,3].map(i => <div key={i} className="h-24 skeleton rounded-lg" />)}
         </div>
       ) : jobs.length === 0 ? (
         <div className="card p-12 text-center">

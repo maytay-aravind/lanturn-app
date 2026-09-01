@@ -75,7 +75,7 @@ export default function EmployerNotificationsPage() {
       {/* Notification List */}
       {isLoading ? (
         <div className="space-y-3">
-          {[1,2,3,4,5].map(i => <div key={i} className="h-16 skeleton rounded-2xl" />)}
+          {[1,2,3,4,5].map(i => <div key={i} className="h-16 skeleton rounded-lg" />)}
         </div>
       ) : notifications.length === 0 ? (
         <div className="card p-12 text-center">
@@ -98,7 +98,7 @@ export default function EmployerNotificationsPage() {
                 }`}
               >
                 {/* Icon */}
-                <div className={`h-10 w-10 rounded-xl flex items-center justify-center flex-shrink-0 ${typeInfo.cls}`}>
+                <div className={`h-10 w-10 rounded-lg flex items-center justify-center flex-shrink-0 ${typeInfo.cls}`}>
                   <Icon className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
                 </div>
 

@@ -26,7 +26,7 @@ function Section({ icon: Icon, title, children }) {
   return (
     <div className="card p-6 space-y-4 animate-slide-up">
       <div className="flex items-center gap-2.5">
-        <div className="h-8 w-8 rounded-xl bg-brand-50 flex items-center justify-center">
+        <div className="h-8 w-8 rounded-lg bg-brand-50 flex items-center justify-center">
           <Icon className="h-4 w-4 text-brand-600" />
         </div>
         <h2 className="section-title">{title}</h2>
@@ -201,8 +201,8 @@ export default function EmployerProfilePage() {
   if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto space-y-6 pb-12">
-        <div className="h-48 rounded-2xl bg-brand-200 animate-pulse" />
-        <div className="h-64 rounded-2xl bg-brand-200 animate-pulse" />
+        <div className="h-48 rounded-lg bg-brand-200 animate-pulse" />
+        <div className="h-64 rounded-lg bg-brand-200 animate-pulse" />
       </div>
     );
   }
@@ -240,7 +240,7 @@ export default function EmployerProfilePage() {
           {/* Avatar / Logo upload */}
           <div className="relative -mt-16 mb-4 flex justify-between items-end">
             <div className="relative group inline-block">
-              <div className="h-32 w-32 rounded-2xl bg-white shadow-xl ring-4 ring-white flex items-center justify-center overflow-hidden z-10 transition-transform duration-300 group-hover:scale-105">
+              <div className="h-32 w-32 rounded-lg bg-white shadow-xl ring-4 ring-white flex items-center justify-center overflow-hidden z-10 transition-transform duration-300 group-hover:scale-105">
                 {p.logoURL ? (
                   <img src={p.logoURL} alt="Logo" className="h-full w-full object-cover" />
                 ) : (
@@ -287,7 +287,7 @@ export default function EmployerProfilePage() {
 
           {/* Verification Warning */}
           {!p.verified && (
-            <div className="mt-4 flex items-center gap-3 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">
+            <div className="mt-4 flex items-center gap-3 p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-800">
               <ShieldCheck className="h-5 w-5 flex-shrink-0" />
               <p className="text-sm font-medium">Your account is pending verification. Some features may be restricted.</p>
             </div>
@@ -603,7 +603,7 @@ export default function EmployerProfilePage() {
 
           {/* Global Save Button */}
           <div className="sticky bottom-6 z-30 flex justify-end">
-            <div className="bg-white/80 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-brand-100 animate-slide-up flex items-center gap-4">
+            <div className="bg-white/80 backdrop-blur-md p-4 rounded-lg shadow-xl border border-brand-100 animate-slide-up flex items-center gap-4">
               <span className="text-sm font-medium text-brand-500">Unsaved changes</span>
               <button
                 onClick={handleSaveAll}

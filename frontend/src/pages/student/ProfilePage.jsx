@@ -45,7 +45,7 @@ function Section({ icon: Icon, title, children }) {
   return (
     <div className="card p-6 space-y-4 animate-slide-up">
       <div className="flex items-center gap-2.5">
-        <div className="h-8 w-8 rounded-xl bg-brand-50 flex items-center justify-center">
+        <div className="h-8 w-8 rounded-lg bg-brand-50 flex items-center justify-center">
           <Icon className="h-4 w-4 text-brand-600" />
         </div>
         <h2 className="section-title">{title}</h2>
@@ -323,7 +323,7 @@ export default function ProfilePage() {
           <button
             id="profile-edit-toggle-btn"
             onClick={() => setIsEditing(!isEditing)}
-            className="absolute top-3 right-3 flex items-center gap-1.5 rounded-xl bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3.5 py-2 hover:bg-white/30 transition-all duration-200 active:scale-95"
+            className="absolute top-3 right-3 flex items-center gap-1.5 rounded-lg bg-white/20 backdrop-blur-sm text-white text-xs font-semibold px-3.5 py-2 hover:bg-white/30 transition-all duration-200 active:scale-95"
           >
             {isEditing ? (
               <>
@@ -556,7 +556,7 @@ export default function ProfilePage() {
               </div>
             </div>
             {resumePct !== null && (
-              <div className="mt-2 p-3 rounded-xl bg-brand-50 ring-1 ring-brand-200">
+              <div className="mt-2 p-3 rounded-lg bg-brand-50 ring-1 ring-brand-200">
                 <div className="flex justify-between text-xs text-brand-500 mb-1">
                   <span className="font-medium">Uploading...</span>
                   <span>{resumePct}%</span>
@@ -585,7 +585,7 @@ export default function ProfilePage() {
             </div>
             
             {certPct !== null && (
-              <div className="mb-3 p-3 rounded-xl bg-brand-50 ring-1 ring-brand-200">
+              <div className="mb-3 p-3 rounded-lg bg-brand-50 ring-1 ring-brand-200">
                 <div className="flex justify-between text-xs text-brand-500 mb-1">
                   <span className="font-medium">Uploading...</span>
                   <span>{certPct}%</span>
@@ -599,7 +599,7 @@ export default function ProfilePage() {
             {p.certificates?.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {p.certificates.map(cert => (
-                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-xl bg-brand-50 border border-brand-200">
+                  <div key={cert.id} className="flex flex-col gap-2 p-3 rounded-lg bg-brand-50 border border-brand-200">
                     <div className="flex items-start gap-3">
                       <div className="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                         <FileText className="h-4 w-4 text-blue-600" />
@@ -652,8 +652,8 @@ export default function ProfilePage() {
           <Section icon={FileText} title="Resume">
             {/* Uploaded state */}
             {p.resumeUrl && resumePct === null && (
-              <div className="flex items-center gap-4 p-4 rounded-xl bg-emerald-50 ring-1 ring-emerald-200">
-                <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-4 p-4 rounded-lg bg-emerald-50 ring-1 ring-emerald-200">
+                <div className="h-10 w-10 rounded-lg bg-emerald-100 flex items-center justify-center flex-shrink-0">
                   <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -682,7 +682,7 @@ export default function ProfilePage() {
 
             {/* Upload progress */}
             {resumePct !== null && (
-              <div className="p-4 rounded-xl bg-brand-50 ring-1 ring-brand-200">
+              <div className="p-4 rounded-lg bg-brand-50 ring-1 ring-brand-200">
                 <div className="flex justify-between text-xs text-brand-500 mb-2">
                   <span className="font-medium">Uploading resume...</span>
                   <span>{resumePct}%</span>

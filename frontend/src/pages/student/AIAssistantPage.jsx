@@ -163,7 +163,7 @@ function ChatTab() {
   return (
     <div className="flex flex-col h-[520px]">
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto space-y-3 p-4 bg-brand-50 rounded-2xl mb-3">
+      <div className="flex-1 overflow-y-auto space-y-3 p-4 bg-brand-50 rounded-lg mb-3">
         {messages.map((m, i) => (
           <div key={i} className={`flex gap-2 items-end ${m.role === 'user' ? 'flex-row-reverse' : ''}`}>
             <div className={`h-7 w-7 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -225,7 +225,7 @@ function ChatTab() {
         <button
           onClick={handleSend}
           disabled={chatMutation.isPending || !input.trim()}
-          className="btn-primary h-11 w-11 p-0 flex items-center justify-center flex-shrink-0 rounded-xl"
+          className="btn-primary h-11 w-11 p-0 flex items-center justify-center flex-shrink-0 rounded-lg"
         >
           {chatMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
         </button>
@@ -255,7 +255,7 @@ function ResumeReviewTab() {
 
   return (
     <div className="space-y-5">
-      <div className="p-4 rounded-2xl bg-brand-50 space-y-3">
+      <div className="p-4 rounded-lg bg-brand-50 space-y-3">
         <div>
           <label className="label">Target Role <span className="text-brand-400 font-normal">(auto-predicted from resume, edit if needed)</span></label>
           <input className="input" placeholder="Will be predicted from your resume…" value={targetRole} onChange={(e) => setTargetRole(e.target.value)} />
@@ -360,7 +360,7 @@ function JobMatchTab() {
 
   return (
     <div className="space-y-5">
-      <div className="p-4 rounded-2xl bg-brand-50 space-y-3">
+      <div className="p-4 rounded-lg bg-brand-50 space-y-3">
         <div>
           <label className="label">Select a Job</label>
           <select className="select" value={jobId} onChange={(e) => setJobId(e.target.value)}>
@@ -444,7 +444,7 @@ export default function AIAssistantPage() {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-2xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}>
+        <div className="h-10 w-10 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}>
           <Sparkles className="h-5 w-5 text-white" />
         </div>
         <div>
@@ -454,12 +454,12 @@ export default function AIAssistantPage() {
       </div>
 
       {/* Tab bar */}
-      <div className="flex gap-1 p-1 rounded-2xl bg-brand-100">
+      <div className="flex gap-1 p-1 rounded-lg bg-brand-100">
         {TABS.map(({ id, icon: Icon, label }) => (
           <button
             key={id}
             onClick={() => changeTab(id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all ${
               tab === id ? 'bg-white text-brand-900 shadow-sm' : 'text-brand-500 hover:text-brand-700'
             }`}
           >

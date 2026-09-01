@@ -62,7 +62,7 @@ export default function StudentDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="card p-5 flex flex-col justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center">
                 <Briefcase className="h-5 w-5 text-brand-700" />
               </div>
               <div>
@@ -77,7 +77,7 @@ export default function StudentDashboard() {
 
           <div className="card p-5 flex flex-col justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center">
                 <Trophy className="h-5 w-5 text-brand-700" />
               </div>
               <div className="flex-1">
@@ -97,7 +97,7 @@ export default function StudentDashboard() {
 
           <div className="card p-5 flex flex-col justify-between">
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center">
+              <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center">
                 <Star className="h-5 w-5 text-brand-700" />
               </div>
               <div>
@@ -140,7 +140,7 @@ export default function StudentDashboard() {
         ) : (
           <div className="space-y-3">
             {applications.map((app) => (
-              <div key={app.id} className="card-hover p-4 rounded-xl flex items-center justify-between">
+              <div key={app.id} className="card-hover p-4 rounded-lg flex items-center justify-between">
                 <div>
                   <p className="font-semibold text-brand-900">{app.jobTitle || 'Job'}</p>
                   <p className="text-sm text-brand-400">{app.companyName || 'Company'} · {timeAgo(app.createdAt)}</p>

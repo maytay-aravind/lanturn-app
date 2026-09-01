@@ -34,7 +34,7 @@ function SkillSelectStep({ onSelect }) {
     <div className="space-y-5 animate-fade-in">
       <div className="text-center">
         <div
-          className="h-14 w-14 rounded-2xl mx-auto flex items-center justify-center mb-3"
+          className="h-14 w-14 rounded-lg mx-auto flex items-center justify-center mb-3"
           style={{ background: 'linear-gradient(135deg,#333333,#4A4A4A)' }}
         >
           <Trophy className="h-7 w-7 text-white" />
@@ -49,7 +49,7 @@ function SkillSelectStep({ onSelect }) {
             key={skill}
             type="button"
             onClick={() => onSelect(skill)}
-            className="px-3.5 py-2 rounded-xl text-sm font-medium bg-white ring-1 ring-brand-200 text-brand-700 hover:ring-brand-300 hover:text-brand-700 hover:bg-brand-50 transition-all active:scale-95"
+            className="px-3.5 py-2 rounded-lg text-sm font-medium bg-white ring-1 ring-brand-200 text-brand-700 hover:ring-brand-300 hover:text-brand-700 hover:bg-brand-50 transition-all active:scale-95"
           >
             {skill}
           </button>
@@ -137,7 +137,7 @@ function RatingStep({ skill, onBack, onStart }) {
 
       {/* Tier indicator */}
       <div
-        className="rounded-2xl p-4 text-center"
+        className="rounded-lg p-4 text-center"
         style={{
           background: `linear-gradient(135deg, ${tierInfo.color}10, ${tierInfo.color}08)`,
           border: `1px solid ${tierInfo.color}30`,
@@ -206,7 +206,7 @@ function TestStep({ skill, rating, questions, tier, onBack, onSubmit, isSubmitti
 
       {/* Questions */}
       {questions.map((q, i) => (
-        <div key={q.id} className="rounded-2xl bg-brand-50 p-4 space-y-3">
+        <div key={q.id} className="rounded-lg bg-brand-50 p-4 space-y-3">
           <div className="flex items-start gap-3">
             <span
               className="flex-shrink-0 h-7 w-7 rounded-lg flex items-center justify-center text-xs font-bold text-white"
@@ -293,7 +293,7 @@ function ResultView({ skill, result, onRetry, onNewSkill }) {
         {results.map((r, i) => (
           <div
             key={r.questionId}
-            className="rounded-2xl p-4"
+            className="rounded-lg p-4"
             style={{
               background: r.correct
                 ? 'linear-gradient(135deg, rgba(16,185,129,0.06), rgba(16,185,129,0.02))'
@@ -348,7 +348,7 @@ function MedalsStrip() {
   if (!medals?.length) return null;
 
   return (
-    <div className="rounded-2xl bg-brand-50 p-4 space-y-2.5">
+    <div className="rounded-lg bg-brand-50 p-4 space-y-2.5">
       <p className="text-xs font-semibold text-brand-500 uppercase tracking-wider flex items-center gap-1.5">
         <Trophy className="h-3.5 w-3.5" />
         Your Medals

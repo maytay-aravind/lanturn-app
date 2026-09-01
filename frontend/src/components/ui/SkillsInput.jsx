@@ -27,7 +27,7 @@ export function SkillsInput({ value = [], onChange, placeholder = 'Add a skill..
 
   return (
     <div
-      className="min-h-[44px] w-full rounded-xl border-0 px-3 py-2 bg-white ring-1 ring-inset ring-brand-200 focus-within:ring-2 focus-within:ring-brand-500 flex flex-wrap gap-1.5 items-center cursor-text transition-shadow"
+      className="min-h-[44px] w-full rounded-lg border-0 px-3 py-2 bg-white ring-1 ring-inset ring-brand-200 focus-within:ring-2 focus-within:ring-brand-500 flex flex-wrap gap-1.5 items-center cursor-text transition-shadow"
       onClick={() => inputRef.current?.focus()}
     >
       {value.map((skill) => (

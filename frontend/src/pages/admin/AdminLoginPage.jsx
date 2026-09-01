@@ -77,7 +77,7 @@ export default function AdminLoginPage() {
 
         {/* Header */}
         <div className="text-center mb-8 animate-fade-in">
-          <div className="mx-auto h-16 w-16 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-soft-lg mb-4">
+          <div className="mx-auto h-16 w-16 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center shadow-soft-lg mb-4">
             <Shield className="h-8 w-8 text-emerald-400" />
           </div>
           <h1 className="text-3xl font-extrabold text-brand-900 mt-2 mb-1 tracking-tight">
@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@lanturn.in"
-                className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                className="w-full rounded-lg border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
                            placeholder:text-brand-400 outline-none
                            focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                            transition-all duration-200"
@@ -129,7 +129,7 @@ export default function AdminLoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password"
-                  className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 pr-11 text-sm text-brand-900
+                  className="w-full rounded-lg border border-brand-200 bg-white px-4 py-3 pr-11 text-sm text-brand-900
                              placeholder:text-brand-400 outline-none
                              focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                              transition-all duration-200"
@@ -149,7 +149,7 @@ export default function AdminLoginPage() {
               id="btn-admin-login"
               type="submit"
               disabled={signingIn}
-              className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+              className="w-full flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold
                          bg-slate-900 text-white hover:bg-slate-800 active:scale-[0.98]
                          transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
             >

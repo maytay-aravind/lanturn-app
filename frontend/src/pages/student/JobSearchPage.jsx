@@ -14,7 +14,7 @@ function JobCard({ job }) {
   return (
     <div className="card-hover p-5 animate-slide-up">
       <div className="flex items-start gap-4">
-        <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0">
+        <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0">
           <Building2 className="h-5 w-5 text-brand-600" />
         </div>
         <div className="flex-1 min-w-0">

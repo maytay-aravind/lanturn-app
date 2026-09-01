@@ -33,14 +33,14 @@ function LanguageCard({ lang, selected, onClick }) {
     <button
       type="button"
       onClick={() => onClick(lang.code)}
-      className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
+      className={`w-full text-left p-5 rounded-lg border-2 transition-all duration-150 group ${
         selected
           ? 'border-brand-500 bg-brand-50 shadow-sm'
           : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-brand-50'
       }`}
     >
       <div className="flex items-center gap-4">
-        <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 text-2xl transition-colors ${
+        <div className={`h-11 w-11 rounded-lg flex items-center justify-center flex-shrink-0 text-2xl transition-colors ${
           selected ? 'bg-brand-100' : 'bg-brand-100 group-hover:bg-brand-200'
         }`}>
           {lang.flag}
@@ -71,14 +71,14 @@ function RoleCard({ role, selected, onClick, icon: Icon, title, description }) {
     <button
       type="button"
       onClick={() => onClick(role)}
-      className={`w-full text-left p-5 rounded-2xl border-2 transition-all duration-150 group ${
+      className={`w-full text-left p-5 rounded-lg border-2 transition-all duration-150 group ${
         selected
           ? 'border-brand-500 bg-brand-50 shadow-sm'
           : 'border-brand-200 bg-white hover:border-brand-300 hover:bg-brand-50'
       }`}
     >
       <div className="flex items-start gap-4">
-        <div className={`h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+        <div className={`h-11 w-11 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
           selected ? 'bg-brand-100' : 'bg-brand-100 group-hover:bg-brand-200'
         }`}>
           <Icon className={`h-5 w-5 ${selected ? 'text-brand-600' : 'text-brand-500'}`} />
@@ -231,7 +231,7 @@ export default function OnboardingPage() {
       <div className="flex items-center justify-center min-h-[80vh] px-4">
         <div className="card p-8 w-full max-w-md animate-fade-in">
           <div className="mb-6 text-center">
-            <div className="h-14 w-14 rounded-2xl bg-brand-50 flex items-center justify-center mx-auto mb-4">
+            <div className="h-14 w-14 rounded-lg bg-brand-50 flex items-center justify-center mx-auto mb-4">
               <Globe className="h-7 w-7 text-brand-600" />
             </div>
             <h1 className="text-2xl font-bold text-brand-900">{t('lang.selectTitle')}</h1>

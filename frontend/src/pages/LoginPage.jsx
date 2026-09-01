@@ -242,7 +242,39 @@ export default function LoginPage() {
 
   // ── Render ────────────────────────────────────────────────────────────
   return (
-    <div className="flex items-center justify-center min-h-[85vh]">
+    <div className="flex min-h-screen -mt-14">
+      {/* Left panel — charcoal illustration */}
+      <div className="hidden lg:flex lg:w-1/2 bg-brand-900 relative overflow-hidden flex-col items-center justify-center px-12">
+        {/* Geometric shapes (Nothing OS aesthetic) */}
+        <div className="absolute top-20 left-16 w-32 h-32 border border-white/10 rounded-full" />
+        <div className="absolute bottom-32 right-20 w-24 h-24 border border-white/10 rotate-45" />
+        <div className="absolute top-1/3 right-16 w-16 h-16 border border-white/10 rounded-full" />
+        <div className="absolute bottom-1/4 left-24 w-40 h-[1px] bg-white/10" />
+        <div className="absolute top-1/2 right-1/3 w-3 h-3 rounded-full bg-accent" />
+        <div className="absolute top-16 right-24">
+          <div className="grid grid-cols-5 gap-2">
+            {Array.from({ length: 25 }).map((_, i) => (
+              <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/10" />
+            ))}
+          </div>
+        </div>
+
+        <div className="relative z-10 text-center max-w-md">
+          <h2 className="font-headline text-5xl font-bold text-white leading-tight mb-6">
+            Illuminate<br />Your Career<br />Path<span className="text-accent">.</span>
+          </h2>
+          <p className="text-white/50 text-sm leading-relaxed">
+            AI-powered placement platform connecting students with the right employers based on skills, potential, and cultural fit.
+          </p>
+          <div className="mt-8 flex items-center justify-center gap-2">
+            <span className="font-headline text-sm font-bold text-white/30 tracking-tighter">LanTURN</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+          </div>
+        </div>
+      </div>
+
+      {/* Right panel — auth form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-white">
       <div className="w-full max-w-md">
 
         {/* Logo + brand */}
@@ -257,7 +289,7 @@ export default function LoginPage() {
         <div className="card p-8 animate-slide-up">
 
           {/* Sign In / Sign Up tab toggle */}
-          <div className="flex rounded-xl overflow-hidden mb-6 p-1 bg-brand-50 gap-1">
+          <div className="flex rounded-lg overflow-hidden mb-6 p-1 bg-brand-50 gap-1">
             <button
               id="tab-signin"
               onClick={() => setMode('signin')}
@@ -297,7 +329,7 @@ export default function LoginPage() {
             id={mode === 'signin' ? 'btn-google-signin' : 'btn-google-signup'}
             onClick={mode === 'signin' ? handleGoogleSignIn : handleGoogleSignUp}
             disabled={signingIn}
-            className={`w-full flex items-center justify-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold
+            className={`w-full flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold
                        transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${
               mode === 'signin'
                 ? 'bg-white text-brand-700 ring-1 ring-inset ring-brand-200 hover:bg-brand-50 hover:ring-brand-300 hover:shadow-soft-sm'
@@ -360,7 +392,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                  className="w-full rounded-lg border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
                              placeholder:text-brand-400 outline-none
                              focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                              transition-all duration-200"
@@ -391,7 +423,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder={mode === 'signin' ? 'Enter your password' : 'Create a password (min. 6 chars)'}
-                    className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 pr-11 text-sm text-brand-900
+                    className="w-full rounded-lg border border-brand-200 bg-white px-4 py-3 pr-11 text-sm text-brand-900
                                placeholder:text-brand-400 outline-none
                                focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                                transition-all duration-200"
@@ -410,7 +442,7 @@ export default function LoginPage() {
                 id={mode === 'signin' ? 'btn-email-signin' : 'btn-email-signup'}
                 type="submit"
                 disabled={signingIn}
-                className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+                className="w-full flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold
                            bg-brand-900 text-white hover:bg-brand-800 active:scale-[0.98] shadow-soft-sm hover:shadow-soft-md
                            transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -443,7 +475,7 @@ export default function LoginPage() {
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       placeholder="+91 98765 43210"
-                      className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                      className="w-full rounded-lg border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
                                  placeholder:text-brand-400 outline-none
                                  focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                                  transition-all duration-200"
@@ -454,7 +486,7 @@ export default function LoginPage() {
                     id="btn-send-otp"
                     type="submit"
                     disabled={signingIn}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+                    className="w-full flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold
                                bg-brand-900 text-white hover:bg-brand-800 active:scale-[0.98] shadow-soft-sm hover:shadow-soft-md
                                transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -484,7 +516,7 @@ export default function LoginPage() {
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                       placeholder="123456"
-                      className="w-full rounded-xl border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
+                      className="w-full rounded-lg border border-brand-200 bg-white px-4 py-3 text-sm text-brand-900
                                  placeholder:text-brand-400 outline-none text-center tracking-[0.3em] font-mono text-lg
                                  focus:border-brand-900 focus:ring-2 focus:ring-brand-100
                                  transition-all duration-200"
@@ -505,7 +537,7 @@ export default function LoginPage() {
                     id="btn-verify-otp"
                     type="submit"
                     disabled={signingIn}
-                    className="w-full flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold
+                    className="w-full flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold
                                bg-brand-900 text-white hover:bg-brand-800 active:scale-[0.98] shadow-soft-sm hover:shadow-soft-md
                                transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -541,6 +573,7 @@ export default function LoginPage() {
           &copy; {new Date().getFullYear()} lanTURN &middot; Built for placement excellence
         </p>
       </div>
+    </div>
     </div>
   );
 }

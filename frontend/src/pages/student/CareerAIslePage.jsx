@@ -220,7 +220,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
           <div className="flex items-center justify-between relative z-10">
             <div className="flex items-center gap-3.5">
-              <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 border border-brand-400/30 flex items-center justify-center text-white shadow-soft-lg shadow-brand-500/30">
+              <div className="h-11 w-11 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-500 border border-brand-400/30 flex items-center justify-center text-white shadow-soft-lg shadow-brand-500/30">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
@@ -238,7 +238,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
             <button
               onClick={onClose}
-              className="h-10 w-10 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-brand-300 hover:text-white transition-all transform hover:rotate-90 duration-300"
+              className="h-10 w-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-brand-300 hover:text-white transition-all transform hover:rotate-90 duration-300"
             >
               <X className="h-5 w-5" />
             </button>
@@ -254,12 +254,12 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className="relative px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-colors"
+                    className="relative px-4 py-2 rounded-lg text-xs font-bold whitespace-nowrap transition-colors"
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activeCategoryTab"
-                        className="absolute inset-0 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-xl shadow-soft-lg shadow-brand-500/30"
+                        className="absolute inset-0 bg-gradient-to-r from-brand-600 to-indigo-600 rounded-lg shadow-soft-lg shadow-brand-500/30"
                         transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                       />
                     )}
@@ -289,7 +289,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
             <div className="p-4 bg-white/90 backdrop-blur-md border-b border-brand-200/80 flex items-center justify-between flex-shrink-0 z-10">
               <button
                 onClick={() => setPreviewDomain(null)}
-                className="flex items-center gap-2 text-xs font-bold text-brand-700 hover:text-brand-600 bg-brand-100 hover:bg-brand-50 px-3.5 py-2 rounded-xl transition-all"
+                className="flex items-center gap-2 text-xs font-bold text-brand-700 hover:text-brand-600 bg-brand-100 hover:bg-brand-50 px-3.5 py-2 rounded-lg transition-all"
               >
                 <ChevronLeft className="h-4 w-4" /> Back to Career Catalog
               </button>
@@ -311,7 +311,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                   <div className="flex items-start gap-4">
-                    <div className="h-16 w-16 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-lg">
+                    <div className="h-16 w-16 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shrink-0 shadow-lg">
                       {previewDomain.icon || '🌐'}
                     </div>
                     <div>
@@ -367,7 +367,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
-                      className="bg-white rounded-2xl p-5 border border-brand-200/80 shadow-sm hover:shadow-md transition-all"
+                      className="bg-white rounded-lg p-5 border border-brand-200/80 shadow-sm hover:shadow-md transition-all"
                     >
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <div className="flex items-start gap-3">
@@ -392,7 +392,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                             <p className="text-xs text-brand-500 mt-1">{stage.description}</p>
                           </div>
                         </div>
-                        <span className="text-xs font-bold bg-brand-100 text-brand-600 px-3 py-1 rounded-xl shrink-0 flex items-center gap-1">
+                        <span className="text-xs font-bold bg-brand-100 text-brand-600 px-3 py-1 rounded-lg shrink-0 flex items-center gap-1">
                           <Clock className="h-3.5 w-3.5" /> {stage.durationWeeks} weeks
                         </span>
                       </div>
@@ -413,7 +413,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
                       {/* Stage Project Card */}
                       {stage.project && (
-                        <div className="bg-gradient-to-r from-brand-50/80 to-indigo-50/50 rounded-xl p-3.5 border border-brand-100 text-xs">
+                        <div className="bg-gradient-to-r from-brand-50/80 to-indigo-50/50 rounded-lg p-3.5 border border-brand-100 text-xs">
                           <span className="font-bold text-brand-900 flex items-center gap-1.5">
                             <Code2 className="h-4 w-4 text-brand-600" /> Stage Capstone Project: {stage.project.title}
                           </span>
@@ -448,14 +448,14 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
             <div className="p-4 bg-white/90 backdrop-blur-md border-t border-brand-200/80 flex items-center justify-between shrink-0">
               <button
                 onClick={() => setPreviewDomain(null)}
-                className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-xl hover:bg-brand-100 transition-colors"
+                className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-lg hover:bg-brand-100 transition-colors"
               >
                 ← Return to Catalog
               </button>
               <button
                 disabled={enrolledIds.has(previewDomain.id) || enrolling === previewDomain.id}
                 onClick={() => onEnroll(previewDomain.id)}
-                className="btn-primary bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-soft-lg shadow-brand-500/20 flex items-center gap-2"
+                className="btn-primary bg-brand-600 hover:bg-brand-800 text-white font-bold text-xs px-6 py-2.5 rounded-lg shadow-soft-lg shadow-brand-500/20 flex items-center gap-2"
               >
                 {enrolling === previewDomain.id ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -501,7 +501,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                     <button
                       key={diff}
                       onClick={() => setDifficultyFilter(diff)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all shrink-0 ${
                         isActive
                           ? 'bg-slate-900 text-white shadow-sm'
                           : 'bg-brand-100 hover:bg-brand-200 text-brand-600'
@@ -548,7 +548,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                         key={domain.id}
                         whileHover={{ y: -3 }}
                         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                        className={`p-5 rounded-2xl border transition-all duration-300 flex flex-col justify-between group ${
+                        className={`p-5 rounded-lg border transition-all duration-300 flex flex-col justify-between group ${
                           isEnrolled
                             ? 'bg-emerald-50/40 border-emerald-200/80 shadow-sm'
                             : 'bg-white border-brand-200/80 hover:border-brand-400/60 shadow-sm hover:shadow-xl hover:shadow-brand-500/5'
@@ -559,7 +559,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                           <div className="flex items-start justify-between gap-3 mb-3">
                             <div className="flex items-center gap-3.5">
                               <div
-                                className={`h-12 w-12 rounded-2xl flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105 ${
+                                className={`h-12 w-12 rounded-lg flex items-center justify-center shrink-0 shadow-sm transition-transform group-hover:scale-105 ${
                                   isEnrolled
                                     ? 'bg-emerald-100 text-emerald-700 border border-emerald-200'
                                     : 'bg-gradient-to-br from-brand-50 to-indigo-50 text-brand-600 border border-brand-100'
@@ -607,7 +607,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                             {/* Quick Preview Button */}
                             <button
                               onClick={() => setPreviewDomain(domain)}
-                              className="px-3 py-1.5 rounded-xl bg-brand-100 hover:bg-brand-200 text-brand-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
+                              className="px-3 py-1.5 rounded-lg bg-brand-100 hover:bg-brand-200 text-brand-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
                               title="Preview Full Roadmap Stages"
                             >
                               <Eye className="h-3.5 w-3.5 text-brand-500" /> Preview
@@ -617,7 +617,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                             <button
                               disabled={isEnrolled || enrolling === domain.id}
                               onClick={() => !isEnrolled && onEnroll(domain.id)}
-                              className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all flex items-center gap-1.5 ${
+                              className={`px-3.5 py-1.5 rounded-lg text-xs font-extrabold transition-all flex items-center gap-1.5 ${
                                 isEnrolled
                                   ? 'bg-emerald-100 text-emerald-700 cursor-default'
                                   : 'bg-brand-600 hover:bg-brand-800 text-white shadow-soft-md shadow-brand-500/20 hover:shadow-brand-500/30'
@@ -658,7 +658,7 @@ function TopicRow({ topic, checked, onToggle, isLoading, accentColor, stageCompl
       whileHover={{ x: 4 }}
       whileTap={{ scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-      className={`flex items-center justify-between w-full text-left py-3 px-4 rounded-xl mb-1.5 group transition-colors ${
+      className={`flex items-center justify-between w-full text-left py-3 px-4 rounded-lg mb-1.5 group transition-colors ${
         checked
           ? 'bg-emerald-50 ring-1 ring-emerald-200'
           : stageCompleted
@@ -707,7 +707,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
       animate={{ opacity: 1, x: 0, y: 0, boxShadow: '6px 6px 0px #0f172a' }}
       transition={{ delay: stageIndex * 0.08, duration: 0.45, type: 'spring', stiffness: 200, damping: 24 }}
       whileHover={{ scale: 1.02, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
-      className={`${panelBg} border-[3px] border-slate-900 rounded-2xl overflow-hidden z-10`}
+      className={`${panelBg} border-[3px] border-slate-900 rounded-lg overflow-hidden z-10`}
       style={{ width: 380 }}
     >
       {/* Coloured top accent bar */}
@@ -734,7 +734,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
               initial={{ scale: 0, rotate: -180 }}
               animate={{ scale: 1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-              className="h-9 w-9 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-soft-md shadow-emerald-200 flex-shrink-0 keep-color"
+              className="h-9 w-9 rounded-lg bg-emerald-500 flex items-center justify-center shadow-soft-md shadow-emerald-200 flex-shrink-0 keep-color"
             >
               <CheckCircle2 className="h-5 w-5 text-white" />
             </motion.div>
@@ -789,7 +789,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
               : 'linear-gradient(135deg, #f8fafc, #E8E8E8)',
           }}
           transition={{ duration: 0.5 }}
-          className="rounded-2xl p-4 mb-4 ring-1 ring-brand-200"
+          className="rounded-lg p-4 mb-4 ring-1 ring-brand-200"
         >
           <p className="text-[10px] font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"
              style={{ color: accentHex }}>
@@ -870,7 +870,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between px-2 bg-brand-50/50 py-3 rounded-2xl ring-1 ring-brand-200/60"
+        className="flex items-center justify-between px-2 bg-brand-50/50 py-3 rounded-lg ring-1 ring-brand-200/60"
       >
         <div className="flex gap-6 text-sm text-brand-600 font-medium px-4 flex-wrap">
           <span className="flex items-center gap-2"><TrendingUp className="h-4 w-4 text-brand-400" /> {roadmap.percentComplete}% Complete</span>
@@ -881,7 +881,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
         <button
           onClick={handleRemove}
           disabled={removing}
-          className="text-red-500 hover:bg-red-50 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 transition-colors mr-1 flex-shrink-0"
+          className="text-red-500 hover:bg-red-50 px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 transition-colors mr-1 flex-shrink-0"
         >
           {removing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           Remove Path
@@ -944,7 +944,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                     }}
                     transition={{ duration: 0.5, type: 'spring', stiffness: 300, damping: 20 }}
                     whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
-                    className="rounded-2xl px-6 py-5 text-center cursor-default border-[3px] border-slate-900 z-10 keep-color"
+                    className="rounded-lg px-6 py-5 text-center cursor-default border-[3px] border-slate-900 z-10 keep-color"
                     style={{ minWidth: 170 }}
                   >
                     <motion.p
@@ -983,7 +983,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
         <div className="flex justify-center relative z-10 pb-4">
           <motion.div
             whileHover={{ scale: 1.05, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
-            className="flex items-center gap-2.5 rounded-2xl bg-[#10b981] text-white px-7 py-3.5 font-black uppercase tracking-wider border-[3px] border-slate-900 shadow-[6px_6px_0px_#0f172a] cursor-default"
+            className="flex items-center gap-2.5 rounded-lg bg-[#10b981] text-white px-7 py-3.5 font-black uppercase tracking-wider border-[3px] border-slate-900 shadow-[6px_6px_0px_#0f172a] cursor-default"
           >
             <CheckCircle2 className="h-5 w-5" /> Journey Complete!
           </motion.div>
@@ -1035,7 +1035,7 @@ export default function CareerAIslePage() {
     return (
       <div className="space-y-4">
         {[...Array(3)].map((_, i) => (
-          <div key={i} className="skeleton h-28 rounded-2xl" />
+          <div key={i} className="skeleton h-28 rounded-lg" />
         ))}
       </div>
     );
@@ -1047,7 +1047,7 @@ export default function CareerAIslePage() {
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-brand-600 flex items-center justify-center shadow-md">
+            <div className="h-9 w-9 rounded-lg bg-brand-600 flex items-center justify-center shadow-md">
               <Map className="h-5 w-5 text-white" />
             </div>
             <h1 className="text-2xl font-bold text-brand-900">CareerAIsle</h1>
@@ -1059,7 +1059,7 @@ export default function CareerAIslePage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setShowResumeAnalyzer(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-soft-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-soft-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
           >
             <FileText className="h-4 w-4" />
             Scan Resume with AI
@@ -1088,7 +1088,7 @@ export default function CareerAIslePage() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveTab(rm.roadmapId)}
-                className={`flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   isActive
                     ? 'bg-slate-900 text-white shadow-md'
                     : 'bg-white ring-1 ring-brand-200 text-brand-600 hover:ring-brand-300'

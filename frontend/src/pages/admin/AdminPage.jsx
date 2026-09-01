@@ -56,7 +56,7 @@ function ListSkeleton({ count = 3, height = 'h-20' }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className={`${height} skeleton rounded-2xl`} />
+        <div key={i} className={`${height} skeleton rounded-lg`} />
       ))}
     </div>
   );
@@ -118,7 +118,7 @@ function DashboardTab() {
             return (
               <div key={card.label} className="card p-5 hover:shadow-md transition-all">
                 <div className="flex items-center justify-between mb-3">
-                  <div className={`h-9 w-9 rounded-xl ${card.bg} flex items-center justify-center`}>
+                  <div className={`h-9 w-9 rounded-lg ${card.bg} flex items-center justify-center`}>
                     <Icon className={`h-4.5 w-4.5 ${card.color}`} />
                   </div>
                   <TrendingUp className="h-3.5 w-3.5 text-brand-300" />
@@ -155,7 +155,7 @@ function DashboardTab() {
                   const jobId = job.jobId || job.id;
                   const statusCls = JOB_STATUS_COLORS[job.status] || JOB_STATUS_COLORS.draft;
                   return (
-                    <div key={jobId} className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-50 transition-colors">
+                    <div key={jobId} className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 transition-colors">
                       <div className="h-9 w-9 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
                         {job.companyLogoURL ? (
                           <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
@@ -200,7 +200,7 @@ function DashboardTab() {
                 {recentUsers.map(user => {
                   const roleCls = ROLE_COLORS[user.role] || 'bg-brand-100 text-brand-600 border-brand-200';
                   return (
-                    <div key={user.uid} className="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-50 transition-colors">
+                    <div key={user.uid} className="flex items-center gap-3 p-3 rounded-lg hover:bg-brand-50 transition-colors">
                       {user.photoURL ? (
                         <img src={user.photoURL} alt="" className="h-9 w-9 rounded-full object-cover flex-shrink-0 border border-brand-100" />
                       ) : (
@@ -350,7 +350,7 @@ function PostVerificationTab() {
               <div key={jobId} className="card p-4 sm:p-5 hover:shadow-md transition-all">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-4">
                   <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <div className="h-11 w-11 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 overflow-hidden">
+                    <div className="h-11 w-11 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 overflow-hidden">
                       {job.companyLogoURL ? (
                         <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover" />
                       ) : (

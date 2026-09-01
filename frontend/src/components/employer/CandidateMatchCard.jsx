@@ -68,7 +68,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
   const overallColor = getScoreColor(matchData.matchScore);
 
   return (
-    <div className="bg-white border border-brand-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
+    <div className="bg-white border border-brand-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden group">
       {/* Top Banner (Score) */}
       <div className={`px-4 py-3 border-b flex items-center justify-between ${overallColor.split(' ')[2]} ${overallColor.split(' ')[3]}`}>
         <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
         {/* Left Column: Candidate Info & Breakdown */}
         <div className="flex-1 space-y-5">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-2xl bg-brand-100 overflow-hidden flex-shrink-0 border border-brand-200">
+            <div className="h-16 w-16 rounded-lg bg-brand-100 overflow-hidden flex-shrink-0 border border-brand-200">
               {candidate?.studentPhotoURL ? (
                 <img src={candidate.studentPhotoURL} alt={candidate.studentName} className="h-full w-full object-cover" />
               ) : (
@@ -155,7 +155,7 @@ export default function CandidateMatchCard({ candidate, matchData }) {
 
           <Link
             to={`/employer/applicants/${candidate?.applicationId}`}
-            className="flex items-center justify-center gap-1.5 w-full py-2 bg-brand-50 hover:bg-brand-50 text-brand-700 hover:text-brand-700 text-sm font-semibold rounded-xl border border-brand-200 hover:border-brand-200 transition-colors"
+            className="flex items-center justify-center gap-1.5 w-full py-2 bg-brand-50 hover:bg-brand-50 text-brand-700 hover:text-brand-700 text-sm font-semibold rounded-lg border border-brand-200 hover:border-brand-200 transition-colors"
           >
             View Full Profile <ChevronRight className="h-4 w-4" />
           </Link>

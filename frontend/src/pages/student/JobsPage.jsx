@@ -154,15 +154,15 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
 
       {/* Dialog */}
       <div
-        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up"
+        className="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
         <div className="sticky top-0 z-10 bg-white/90 backdrop-blur-md border-b border-brand-100 px-6 py-4 flex items-start justify-between gap-4">
           <div className="flex items-start gap-4 min-w-0">
-            <div className="h-14 w-14 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
+            <div className="h-14 w-14 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100">
               {j.companyLogoURL ? (
-                <img src={j.companyLogoURL} alt="" className="h-full w-full object-cover rounded-xl" />
+                <img src={j.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
               ) : (
                 <Building2 className="h-7 w-7 text-brand-600" />
               )}
@@ -211,7 +211,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                 <div className="space-y-5">
                   {/* Company header */}
                   <div className="flex items-center gap-4">
-                    <div className="h-16 w-16 rounded-xl bg-brand-50 flex items-center justify-center border border-brand-100 overflow-hidden">
+                    <div className="h-16 w-16 rounded-lg bg-brand-50 flex items-center justify-center border border-brand-100 overflow-hidden">
                       {company.logoURL ? (
                         <img src={company.logoURL} alt="" className="h-full w-full object-cover" />
                       ) : (
@@ -329,13 +329,13 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
                 const matchInfo = computeJobMatch(j, studentProfile);
                 if (!matchInfo || matchInfo.score === 0) return null;
                 return (
-                  <div className={`p-4 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
+                  <div className={`p-4 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 ${
                     matchInfo.matchColor === 'emerald' ? 'bg-emerald-50/70 border-emerald-200' :
                     matchInfo.matchColor === 'indigo' ? 'bg-brand-50/70 border-brand-200' :
                     matchInfo.matchColor === 'amber' ? 'bg-amber-50/70 border-amber-200' : 'bg-brand-50 border-brand-200'
                   }`}>
                     <div className="flex items-center gap-3">
-                      <div className={`h-12 w-12 rounded-xl flex items-center justify-center font-extrabold text-base border shadow-sm ${
+                      <div className={`h-12 w-12 rounded-lg flex items-center justify-center font-extrabold text-base border shadow-sm ${
                         matchInfo.matchColor === 'emerald' ? 'bg-emerald-100 text-emerald-800 border-emerald-300' :
                         matchInfo.matchColor === 'indigo' ? 'bg-brand-100 text-brand-800 border-brand-300' :
                         matchInfo.matchColor === 'amber' ? 'bg-amber-100 text-amber-800 border-amber-300' : 'bg-brand-200 text-brand-700 border-brand-300'
@@ -386,28 +386,28 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {/* Quick stats */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {loc && (
-                  <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
+                  <div className="bg-brand-50 rounded-lg p-3 text-center border border-brand-100">
                     <MapPin className="h-4 w-4 text-brand-400 mx-auto mb-1" />
                     <p className="text-xs text-brand-500">Location</p>
                     <p className="text-sm font-semibold text-brand-800 truncate">{loc}</p>
                   </div>
                 )}
                 {salaryText && (
-                  <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
+                  <div className="bg-brand-50 rounded-lg p-3 text-center border border-brand-100">
                     <DollarSign className="h-4 w-4 text-brand-400 mx-auto mb-1" />
                     <p className="text-xs text-brand-500">Salary</p>
                     <p className="text-sm font-semibold text-brand-800 truncate">{salaryText}</p>
                   </div>
                 )}
                 {j.openings && (
-                  <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
+                  <div className="bg-brand-50 rounded-lg p-3 text-center border border-brand-100">
                     <Users className="h-4 w-4 text-brand-400 mx-auto mb-1" />
                     <p className="text-xs text-brand-500">Openings</p>
                     <p className="text-sm font-semibold text-brand-800">{j.openings}</p>
                   </div>
                 )}
                 {j.deadline && (
-                  <div className="bg-brand-50 rounded-xl p-3 text-center border border-brand-100">
+                  <div className="bg-brand-50 rounded-lg p-3 text-center border border-brand-100">
                     <Calendar className="h-4 w-4 text-brand-400 mx-auto mb-1" />
                     <p className="text-xs text-brand-500">Deadline</p>
                     <p className="text-sm font-semibold text-brand-800">{new Date(j.deadline).toLocaleDateString()}</p>
@@ -487,7 +487,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
 
               {/* Stipend for internships */}
               {j.stipend?.amount && (
-                <div className="flex items-center gap-2 text-sm p-3 bg-amber-50 rounded-xl border border-amber-100">
+                <div className="flex items-center gap-2 text-sm p-3 bg-amber-50 rounded-lg border border-amber-100">
                   <DollarSign className="h-4 w-4 text-amber-600" />
                   <span className="font-semibold text-amber-800">Monthly Stipend: ₹{j.stipend.amount.toLocaleString()}</span>
                 </div>
@@ -497,7 +497,7 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
               {j.employerId && (
                 <button
                   onClick={() => setShowCompanyProfile(true)}
-                  className="w-full flex items-center justify-between p-4 rounded-xl bg-brand-50 hover:bg-brand-100 border border-brand-200 transition-colors group"
+                  className="w-full flex items-center justify-between p-4 rounded-lg bg-brand-50 hover:bg-brand-100 border border-brand-200 transition-colors group"
                 >
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center border border-brand-100">
@@ -568,9 +568,9 @@ function InternalJobCard({ job, studentProfile, onClick }) {
     >
       <div className="flex flex-col sm:flex-row gap-4 sm:items-start justify-between">
         <div className="flex items-start gap-4 flex-1 min-w-0">
-          <div className="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 group-hover:scale-105 transition-transform">
+          <div className="h-12 w-12 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 group-hover:scale-105 transition-transform">
             {job.companyLogoURL ? (
-              <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-xl" />
+              <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
             ) : (
               <Building2 className="h-6 w-6 text-brand-600" />
             )}
@@ -791,7 +791,7 @@ function ExternalJobCard({ job }) {
   return (
     <div className="card-hover p-5 animate-slide-up">
       <div className="flex items-start gap-4">
-        <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0">
+        <div className="h-10 w-10 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0">
           <Building2 className="h-5 w-5 text-brand-600" />
         </div>
         <div className="flex-1 min-w-0">

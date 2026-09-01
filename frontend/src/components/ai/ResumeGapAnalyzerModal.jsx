@@ -132,7 +132,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
           <div className="absolute top-0 right-1/3 w-80 h-80 bg-violet-500/15 blur-[100px] rounded-full pointer-events-none" />
 
           <div className="flex items-center gap-3.5 relative z-10">
-            <div className="h-11 w-11 rounded-2xl bg-gradient-to-tr from-violet-600 to-fuchsia-500 border border-violet-400/30 flex items-center justify-center text-white shadow-soft-lg shadow-violet-500/30">
+            <div className="h-11 w-11 rounded-lg bg-gradient-to-tr from-violet-600 to-fuchsia-500 border border-violet-400/30 flex items-center justify-center text-white shadow-soft-lg shadow-violet-500/30">
               <FileText className="h-5 w-5" />
             </div>
             <div>
@@ -150,7 +150,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
 
           <button
             onClick={onClose}
-            className="h-10 w-10 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-brand-300 hover:text-white transition-all transform hover:rotate-90 duration-300 relative z-10"
+            className="h-10 w-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-brand-300 hover:text-white transition-all transform hover:rotate-90 duration-300 relative z-10"
           >
             <X className="h-5 w-5" />
           </button>
@@ -190,7 +190,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                 className="space-y-5"
               >
                 {error && (
-                  <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
                     <AlertTriangle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
                     <div>
                       <p className="text-sm font-bold text-red-800">Analysis Failed</p>
@@ -207,7 +207,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`relative border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all ${
+                    className={`relative border-2 border-dashed rounded-lg p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all ${
                       dragging
                         ? 'border-violet-500 bg-violet-50/50 scale-[1.01]'
                         : file
@@ -225,7 +225,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
 
                     {file ? (
                       <>
-                        <div className="h-14 w-14 rounded-2xl bg-emerald-100 flex items-center justify-center">
+                        <div className="h-14 w-14 rounded-lg bg-emerald-100 flex items-center justify-center">
                           <CheckCircle2 className="h-7 w-7 text-emerald-600" />
                         </div>
                         <div className="text-center">
@@ -241,7 +241,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                       </>
                     ) : (
                       <>
-                        <div className="h-14 w-14 rounded-2xl bg-violet-100 flex items-center justify-center">
+                        <div className="h-14 w-14 rounded-lg bg-violet-100 flex items-center justify-center">
                           <Upload className="h-7 w-7 text-violet-600" />
                         </div>
                         <div className="text-center">
@@ -316,7 +316,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                 </div>
 
                 <motion.div
-                  className="flex items-center gap-2 text-xs font-bold text-violet-600 bg-violet-50 px-4 py-2 rounded-xl"
+                  className="flex items-center gap-2 text-xs font-bold text-violet-600 bg-violet-50 px-4 py-2 rounded-lg"
                   animate={{ opacity: [1, 0.5, 1] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
@@ -340,7 +340,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                   return (
                     <>
                       {/* Score Hero Card */}
-                      <div className="bg-gradient-to-r from-slate-900 via-violet-950 to-slate-900 rounded-2xl p-6 text-white relative overflow-hidden">
+                      <div className="bg-gradient-to-r from-slate-900 via-violet-950 to-slate-900 rounded-lg p-6 text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-60 h-60 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
 
                         <div className="relative z-10 flex items-center gap-6">
@@ -378,7 +378,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                       </div>
 
                       {/* Summary */}
-                      <div className="bg-violet-50/50 border border-violet-200/60 rounded-xl p-4">
+                      <div className="bg-violet-50/50 border border-violet-200/60 rounded-lg p-4">
                         <p className="text-xs font-bold text-violet-800 mb-1 flex items-center gap-1.5">
                           <Sparkles className="h-4 w-4 text-violet-600" /> AI Summary
                         </p>
@@ -413,7 +413,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                             {results.missingKeywords.map((item, i) => (
                               <div
                                 key={i}
-                                className="flex items-start gap-3 bg-white border border-brand-200/80 rounded-xl p-3"
+                                className="flex items-start gap-3 bg-white border border-brand-200/80 rounded-lg p-3"
                               >
                                 <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full shrink-0 mt-0.5 ${getImportanceStyle(item.importance)}`}>
                                   {item.importance}
@@ -429,8 +429,8 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                       )}
 
                       {/* Recommended Next Stage */}
-                      <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-200/60 rounded-xl p-4 flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-xl bg-violet-600 text-white flex items-center justify-center shrink-0 shadow-soft-md shadow-violet-500/20">
+                      <div className="bg-gradient-to-r from-violet-50 to-indigo-50 border border-violet-200/60 rounded-lg p-4 flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-lg bg-violet-600 text-white flex items-center justify-center shrink-0 shadow-soft-md shadow-violet-500/20">
                           <Target className="h-5 w-5" />
                         </div>
                         <div>
@@ -452,13 +452,13 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
         <div className="p-4 bg-white/90 backdrop-blur-md border-t border-brand-200/80 flex items-center justify-between flex-shrink-0">
           {step === 'upload' && (
             <>
-              <button onClick={onClose} className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-xl hover:bg-brand-100 transition-colors">
+              <button onClick={onClose} className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-lg hover:bg-brand-100 transition-colors">
                 Cancel
               </button>
               <button
                 disabled={!file || !selectedDomain || analyzing}
                 onClick={handleAnalyze}
-                className="btn-primary bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs px-6 py-2.5 rounded-xl shadow-soft-lg shadow-violet-500/20 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs px-6 py-2.5 rounded-lg shadow-soft-lg shadow-violet-500/20 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Sparkles className="h-4 w-4" /> Analyze with AI
               </button>
@@ -475,13 +475,13 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
             <>
               <button
                 onClick={() => { setStep('upload'); setResults(null); setFile(null); setSelectedDomain(''); setSyncDone(false); setError(null); }}
-                className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-xl hover:bg-brand-100 transition-colors flex items-center gap-1.5"
+                className="text-xs font-bold text-brand-600 hover:text-brand-900 px-4 py-2 rounded-lg hover:bg-brand-100 transition-colors flex items-center gap-1.5"
               >
                 <RefreshCw className="h-3.5 w-3.5" /> Analyze Another
               </button>
 
               <div className="flex items-center gap-3">
-                <button onClick={onClose} className="text-xs font-bold text-brand-500 hover:text-brand-700 px-3 py-2 rounded-xl hover:bg-brand-100 transition-colors">
+                <button onClick={onClose} className="text-xs font-bold text-brand-500 hover:text-brand-700 px-3 py-2 rounded-lg hover:bg-brand-100 transition-colors">
                   Close
                 </button>
 
@@ -489,7 +489,7 @@ export default function ResumeGapAnalyzerModal({ domains, enrolledRoadmaps, onCl
                   <button
                     disabled={syncing || syncDone}
                     onClick={handleSync}
-                    className={`btn-primary text-xs px-5 py-2.5 rounded-xl font-extrabold flex items-center gap-2 ${
+                    className={`btn-primary text-xs px-5 py-2.5 rounded-lg font-extrabold flex items-center gap-2 ${
                       syncDone
                         ? 'bg-emerald-500 hover:bg-emerald-600'
                         : 'bg-violet-600 hover:bg-violet-700 shadow-soft-lg shadow-violet-500/20'
