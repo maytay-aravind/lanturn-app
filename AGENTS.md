@@ -82,3 +82,8 @@ Every protected route expects `Authorization: Bearer <firebase-id-token>`. Backe
 - Backend uses ES modules (`"type": "module"`). No CommonJS `require()`.
 - Firebase emulator tokens expire. Re-auth via frontend or CLI as needed.
 - The `cors.json` at root is for Firebase Storage CORS configuration (apply with `gsutil`).
+
+## Git Workflow
+
+- **Always push changes to GitHub**: Whenever changes are made and committed, immediately push them to `origin <branch>` (e.g. `git push origin master`).
+
