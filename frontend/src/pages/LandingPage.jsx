@@ -41,24 +41,32 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-transparent">
       {/* ── Nav ──────────────────────────────────────────── */}
-      <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-brand-100" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
-        <div className="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
-          <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
-            <img src="/logo.jpeg" alt="LanTURN Logo" className="h-10 w-auto object-contain" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
-            <span className="font-headline text-2xl font-bold tracking-tighter text-brand-900 flex items-center gap-1">
-              LanTURN <span className="w-2 h-2 rounded-full bg-accent inline-block" />
-            </span>
-          </Link>
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#how-it-works" className="text-brand-400 hover:text-brand-900 transition-colors font-medium text-sm">How It Works</a>
-            <a href="#features" className="text-brand-400 hover:text-brand-900 transition-colors font-medium text-sm">Features</a>
-            <a href="#stats" className="text-brand-400 hover:text-brand-900 transition-colors font-medium text-sm">Stats</a>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link to="/login" className="text-sm font-semibold text-brand-900 hover:text-accent transition-colors">Sign In</Link>
-            <Link to="/login?mode=signup" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2">
-              Get Started
+      <nav 
+        className="fixed top-0 w-full z-50 border-b border-brand-100 shadow-sm" 
+        style={{ 
+          backgroundImage: 'url(/orange-pattern.jpg)', 
+          backgroundRepeat: 'repeat'
+        }}
+      >
+        <div className="w-full h-full bg-white/70 backdrop-blur-md">
+          <div className="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
+            <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
+              <img src="/logo.jpeg" alt="LanTURN Logo" className="h-10 w-auto object-contain mix-blend-multiply" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
+              <span className="font-headline text-2xl font-bold tracking-tighter text-brand-900 flex items-center gap-1">
+                LanTURN <span className="w-2 h-2 rounded-full bg-accent inline-block" />
+              </span>
             </Link>
+            <div className="hidden md:flex items-center gap-8">
+              <a href="#how-it-works" className="text-brand-800 hover:text-brand-900 transition-colors font-semibold text-sm drop-shadow-sm">How It Works</a>
+              <a href="#features" className="text-brand-800 hover:text-brand-900 transition-colors font-semibold text-sm drop-shadow-sm">Features</a>
+              <a href="#stats" className="text-brand-800 hover:text-brand-900 transition-colors font-semibold text-sm drop-shadow-sm">Stats</a>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link to="/login" className="text-sm font-bold text-brand-900 hover:text-accent transition-colors drop-shadow-sm">Sign In</Link>
+              <Link to="/login?mode=signup" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 shadow-md">
+                Get Started
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
@@ -168,12 +176,19 @@ export default function LandingPage() {
       </section>
 
       {/* ── Trusted By ───────────────────────────────────── */}
-      <section className="border-y border-brand-100 bg-white py-12">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-8 opacity-60 hover:opacity-100 grayscale hover:grayscale-0 transition-all duration-500">
-          <p className="text-sm font-semibold uppercase tracking-wider text-brand-400 whitespace-nowrap">Trusted by students from</p>
+      <section 
+        className="border-y border-brand-100 relative overflow-hidden"
+        style={{ 
+          backgroundImage: 'url(/orange-pattern.jpg)', 
+          backgroundRepeat: 'repeat'
+        }}
+      >
+        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-8 opacity-80 hover:opacity-100 transition-all duration-500 relative z-10">
+          <p className="text-sm font-bold uppercase tracking-wider text-brand-800 whitespace-nowrap drop-shadow-sm">Trusted by students from</p>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
             {['IIT BOMBAY', 'NIT TRICHY', 'VIT', 'SRM', 'BITS PILANI'].map(name => (
-              <div key={name} className="font-headline font-bold text-xl tracking-tighter text-brand-900">{name}</div>
+              <div key={name} className="font-headline font-black text-xl tracking-tighter text-brand-900 drop-shadow-sm">{name}</div>
             ))}
           </div>
         </div>
