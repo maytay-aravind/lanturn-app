@@ -68,7 +68,7 @@ export default function LandingPage() {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div className="z-10 animate-fade-in relative">
             {/* Semi-transparent backdrop for text readability over pattern */}
-            <div className="absolute -inset-8 bg-[#FFC107]/80 backdrop-blur-sm rounded-2xl -z-10" />
+            <div className="absolute -inset-8 bg-[#F5F0E8]/80 backdrop-blur-sm rounded-2xl -z-10" />
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-100 bg-white mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               <span className="text-xs font-semibold tracking-wide uppercase text-brand-500">AI Placement Platform</span>

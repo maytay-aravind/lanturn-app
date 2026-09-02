@@ -979,45 +979,50 @@ export default function JobsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-brand-900">Jobs</h1>
-        <p className="text-brand-500 mt-1">Browse campus postings and external opportunities</p>
+      {/* Header + tabs — frosted glass card */}
+      <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-5 shadow-sm ring-1 ring-white/40">
+        <div>
+          <h1 className="text-2xl font-bold text-brand-900">Jobs</h1>
+          <p className="text-brand-500 mt-1">Browse campus postings and external opportunities</p>
+        </div>
+
+        {/* Tab Bar */}
+        <div className="flex items-center gap-1 border-b border-brand-200/50 mt-4">
+          <button
+            onClick={() => setActiveTab('internal')}
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all relative ${
+              activeTab === 'internal'
+                ? 'text-brand-700'
+                : 'text-brand-500 hover:text-brand-700'
+            }`}
+          >
+            <Briefcase className="h-4 w-4" />
+            Internal Jobs
+            {activeTab === 'internal' && (
+              <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-600 rounded-full" />
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('external')}
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all relative ${
+              activeTab === 'external'
+                ? 'text-brand-700'
+                : 'text-brand-500 hover:text-brand-700'
+            }`}
+          >
+            <Globe className="h-4 w-4" />
+            External Jobs
+            {activeTab === 'external' && (
+              <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-600 rounded-full" />
+            )}
+          </button>
+        </div>
       </div>
 
-      {/* Tab Bar */}
-      <div className="flex items-center gap-1 border-b border-brand-100">
-        <button
-          onClick={() => setActiveTab('internal')}
-          className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all relative ${
-            activeTab === 'internal'
-              ? 'text-brand-700'
-              : 'text-brand-500 hover:text-brand-700'
-          }`}
-        >
-          <Briefcase className="h-4 w-4" />
-          Internal Jobs
-          {activeTab === 'internal' && (
-            <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-600 rounded-full" />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab('external')}
-          className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-all relative ${
-            activeTab === 'external'
-              ? 'text-brand-700'
-              : 'text-brand-500 hover:text-brand-700'
-          }`}
-        >
-          <Globe className="h-4 w-4" />
-          External Jobs
-          {activeTab === 'external' && (
-            <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-600 rounded-full" />
-          )}
-        </button>
+      {/* Tab Content — frosted glass card */}
+      <div className="bg-white/50 backdrop-blur-md rounded-2xl p-5 shadow-sm ring-1 ring-white/30">
+        {activeTab === 'internal' ? <InternalJobsTab /> : <ExternalJobsTab />}
       </div>
-
-      {/* Tab Content */}
-      {activeTab === 'internal' ? <InternalJobsTab /> : <ExternalJobsTab />}
     </div>
   );
 }

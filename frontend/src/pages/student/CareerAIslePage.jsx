@@ -1045,36 +1045,38 @@ export default function CareerAIslePage() {
 
   return (
     <div className="space-y-6">
-      {/* Page header */}
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-lg bg-brand-600 flex items-center justify-center shadow-md">
-              <Map className="h-5 w-5 text-white" />
+      {/* Page header — frosted glass card */}
+      <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-5 shadow-sm ring-1 ring-white/40">
+        <div className="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <div className="h-9 w-9 rounded-lg bg-brand-600 flex items-center justify-center shadow-md">
+                <Map className="h-5 w-5 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold text-brand-900">CareerAIsle</h1>
             </div>
-            <h1 className="text-2xl font-bold text-brand-900">CareerAIsle</h1>
+            <p className="text-sm text-brand-500 mt-1 ml-[44px]">Structured, stage-by-stage career learning paths</p>
           </div>
-          <p className="text-sm text-brand-500 mt-1 ml-[44px]">Structured, stage-by-stage career learning paths</p>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setShowResumeAnalyzer(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-soft-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
-          >
-            <FileText className="h-4 w-4" />
-            Scan Resume with AI
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => setShowPicker(true)}
-            className="btn-primary flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Add Career Path
-          </motion.button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowResumeAnalyzer(true)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white text-sm font-bold shadow-soft-lg shadow-violet-500/20 hover:shadow-violet-500/30 transition-all"
+            >
+              <FileText className="h-4 w-4" />
+              Scan Resume with AI
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setShowPicker(true)}
+              className="btn-primary flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Add Career Path
+            </motion.button>
+          </div>
         </div>
       </div>
 
