@@ -568,11 +568,11 @@ function InternalJobCard({ job, studentProfile, onClick }) {
 
   return (
     <div
-      className={`card p-5 animate-slide-up cursor-pointer hover:shadow-lg hover:border-brand-200 transition-all duration-200 group relative overflow-hidden ${isExpired ? 'opacity-80 grayscale-[0.3]' : ''}`}
-      onClick={onClick}
+      className={`card p-5 animate-slide-up transition-all duration-200 group relative overflow-hidden ${isExpired ? 'opacity-60 grayscale cursor-not-allowed' : 'cursor-pointer hover:shadow-lg hover:border-brand-200'}`}
+      onClick={isExpired ? undefined : onClick}
     >
       {isExpired && (
-        <div className="absolute top-0 right-0 bg-red-500/10 backdrop-blur-md border-b border-l border-red-500/20 px-4 py-1.5 rounded-bl-2xl text-xs font-bold text-red-600 shadow-sm z-10 flex items-center gap-1.5 ring-1 ring-red-500/30">
+        <div className="absolute bottom-0 right-0 bg-red-500/10 backdrop-blur-md border-t border-l border-red-500/20 px-4 py-1.5 rounded-tl-2xl text-xs font-bold text-red-600 shadow-sm z-10 flex items-center gap-1.5 ring-1 ring-red-500/30">
           <Clock className="h-3.5 w-3.5" /> Expired
         </div>
       )}
