@@ -1,9 +1,11 @@
 import { z } from 'zod';
 
+const looseUrl = z.string().max(1000).or(z.literal('')).optional();
+
 export const employerProfileSchema = z
   .object({
     companyName: z.string().max(160).optional(),
-    website: z.string().url().or(z.literal('')).optional(),
+    website: looseUrl,
     description: z.string().max(5000).optional(),
     companySize: z.string().max(60).optional(),
     location: z
@@ -33,10 +35,10 @@ export const employerProfileSchema = z
     benefits: z.array(z.string().max(200)).max(50).optional(),
     technologies: z.array(z.string().max(100)).max(100).optional(),
     companyCulture: z.string().max(5000).optional(),
-    officeImages: z.array(z.string().url().or(z.literal(''))).max(10).optional(),
-    logoURL: z.string().url().or(z.literal('')).optional(),
+    officeImages: z.array(looseUrl).max(10).optional(),
+    logoURL: looseUrl,
     employeeCount: z.coerce.number().int().min(0).optional().nullable(),
-    linkedin: z.string().url().or(z.literal('')).optional(),
+    linkedin: looseUrl,
     achievements: z.array(z.string().max(200)).max(50).optional(),
   })
   .strict();

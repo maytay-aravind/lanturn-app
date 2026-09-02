@@ -6,7 +6,7 @@ const isoYear = z
   .min(1980)
   .max(2100);
 
-const url = z.string().url().or(z.literal('')).optional();
+const url = z.string().max(1000).or(z.literal('')).optional();
 
 export const studentProfileSchema = z
   .object({
