@@ -562,15 +562,23 @@ function InternalJobCard({ job, studentProfile, onClick }) {
 
   const isApplied = job.hasApplied || false;
   const matchInfo = computeJobMatch(job, studentProfile);
+  
+  // A job is expired if it has a deadline and the deadline is in the past
+  const isExpired = job.deadline && new Date(job.deadline).getTime() < Date.now();
 
   return (
     <div
-      className="card p-5 animate-slide-up cursor-pointer hover:shadow-lg hover:border-brand-200 transition-all duration-200 group"
+      className={`card p-5 animate-slide-up cursor-pointer hover:shadow-lg hover:border-brand-200 transition-all duration-200 group relative overflow-hidden ${isExpired ? 'opacity-80 grayscale-[0.3]' : ''}`}
       onClick={onClick}
     >
+      {isExpired && (
+        <div className="absolute top-0 right-0 bg-red-500/10 backdrop-blur-md border-b border-l border-red-500/20 px-4 py-1.5 rounded-bl-2xl text-xs font-bold text-red-600 shadow-sm z-10 flex items-center gap-1.5 ring-1 ring-red-500/30">
+          <Clock className="h-3.5 w-3.5" /> Expired
+        </div>
+      )}
       <div className="flex flex-col sm:flex-row gap-4 sm:items-start justify-between">
         <div className="flex items-start gap-4 flex-1 min-w-0">
-          <div className="h-12 w-12 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 group-hover:scale-105 transition-transform">
+          <div className={`h-12 w-12 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 transition-transform ${!isExpired ? 'group-hover:scale-105' : ''}`}>
             {job.companyLogoURL ? (
               <img src={job.companyLogoURL} alt="" className="h-full w-full object-cover rounded-lg" />
             ) : (
@@ -579,7 +587,7 @@ function InternalJobCard({ job, studentProfile, onClick }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2 mb-1">
-              <h3 className="font-bold text-brand-900 text-lg truncate group-hover:text-brand-700 transition-colors">{job.title}</h3>
+              <h3 className={`font-bold text-lg truncate transition-colors ${isExpired ? 'text-brand-800' : 'text-brand-900 group-hover:text-brand-700'}`}>{job.title}</h3>
               {job.status && <span className={`badge ${STATUS_COLORS[job.status] || 'badge-default'}`}>{job.status}</span>}
               {job.verifiedByAdmin && (
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
