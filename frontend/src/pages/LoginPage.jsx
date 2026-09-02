@@ -280,8 +280,7 @@ export default function LoginPage() {
 
         {/* Logo + brand */}
         <div className="text-center mb-8 animate-fade-in">
-          <img src="/logo.jpeg" alt="LanTURN Logo" className="logo-light mx-auto h-32 w-auto object-contain mix-blend-multiply keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
-          <img src="/logo-dark.jpeg" alt="LanTURN Logo" className="logo-dark mx-auto h-32 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '-14px 0' }} />
+          <img src="/hero-logo.png" alt="LanTURN Logo" className="mx-auto h-28 w-auto object-contain keep-color drop-shadow-sm mb-4" />
           <h1 className="text-3xl font-extrabold text-brand-900 mt-4 mb-2 tracking-tight">LanTURN</h1>
           <p className="text-brand-400 text-sm">{t('login.brandTagline')}</p>
         </div>
