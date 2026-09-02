@@ -205,7 +205,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
       exit={{ opacity: 0 }}
     >
       {/* Backdrop with ultra-smooth blur */}
-      <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-xl transition-all" onClick={onClose} />
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-md transition-all" onClick={onClose} />
 
       <motion.div
         className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white rounded-3xl shadow-2xl overflow-hidden border border-brand-200/80"
@@ -215,7 +215,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
         transition={{ type: 'spring', stiffness: 350, damping: 28 }}
       >
         {/* Modal Header */}
-        <div className="p-6 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 text-white flex flex-col gap-5 flex-shrink-0 relative overflow-hidden">
+        <div className="p-6 bg-white border-b border-brand-100 flex flex-col gap-5 flex-shrink-0 relative overflow-hidden">
           {/* Ambient Glow Gradient */}
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-500/10 blur-[100px] rounded-full pointer-events-none" />
 
@@ -225,13 +225,13 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-brand-900 flex items-center gap-2">
                   Explore Career Paths
-                  <span className="text-xs font-extrabold bg-white/10 text-brand-300 px-2.5 py-0.5 rounded-full border border-white/10">
+                  <span className="text-xs font-extrabold bg-brand-50 text-brand-700 px-2.5 py-0.5 rounded-full border border-brand-200">
                     {domains.length} Paths
                   </span>
                 </h2>
-                <p className="text-xs sm:text-sm text-brand-400 mt-0.5">
+                <p className="text-xs sm:text-sm text-brand-500 mt-0.5">
                   Select a career domain to unlock structured, stage-by-stage learning roadmaps
                 </p>
               </div>
@@ -239,7 +239,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
             <button
               onClick={onClose}
-              className="h-10 w-10 rounded-lg bg-white/10 hover:bg-white/20 flex items-center justify-center text-brand-300 hover:text-white transition-all transform hover:rotate-90 duration-300"
+              className="h-10 w-10 rounded-lg bg-brand-50 hover:bg-brand-100 flex items-center justify-center text-brand-500 hover:text-brand-700 transition-all transform hover:rotate-90 duration-300"
             >
               <X className="h-5 w-5" />
             </button>
