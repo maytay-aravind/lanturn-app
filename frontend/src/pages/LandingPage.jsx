@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext.jsx';
 
 const STATS = [
   { value: '500+', label: 'Placements' },
@@ -22,6 +23,8 @@ const FEATURES = [
 ];
 
 export default function LandingPage() {
+  const { user } = useAuth();
+  
   // Parallax scroll driver for background flower pattern
   useEffect(() => {
     let ticking = false;
@@ -62,10 +65,18 @@ export default function LandingPage() {
               <a href="#stats" className="text-brand-800 hover:text-brand-900 transition-colors font-semibold text-sm drop-shadow-sm">Stats</a>
             </div>
             <div className="flex items-center gap-4">
-              <Link to="/login" className="text-sm font-bold text-brand-900 hover:text-accent transition-colors drop-shadow-sm">Sign In</Link>
-              <Link to="/login?mode=signup" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 shadow-md">
-                Get Started
-              </Link>
+              {user ? (
+                <Link to="/dashboard" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 shadow-md">
+                  Return to Dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link to="/login" className="text-sm font-bold text-brand-900 hover:text-accent transition-colors drop-shadow-sm">Sign In</Link>
+                  <Link to="/login?mode=signup" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 shadow-md">
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -88,20 +99,32 @@ export default function LandingPage() {
               AI-powered placement platform connecting students with the right employers based on skills, potential, and cultural fit.
             </p>
             <div className="flex flex-wrap items-center gap-4">
-              <Link
-                to="/login?mode=signup"
-                className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
-              >
-                Get Started Free
-                <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block group-hover:scale-150 transition-transform" />
-              </Link>
-              <Link
-                to="/login"
-                className="text-sm font-semibold text-brand-900 border border-brand-200 bg-white/80 px-6 py-3.5 rounded-lg hover:bg-white transition-colors flex items-center gap-2"
-              >
-                Already a user?
-                <ArrowRight className="h-4 w-4" />
-              </Link>
+              {user ? (
+                <Link
+                  to="/dashboard"
+                  className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
+                >
+                  Return to Dashboard
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/login?mode=signup"
+                    className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
+                  >
+                    Get Started Free
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block group-hover:scale-150 transition-transform" />
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="text-sm font-semibold text-brand-900 border border-brand-200 bg-white/80 px-6 py-3.5 rounded-lg hover:bg-white transition-colors flex items-center gap-2"
+                  >
+                    Already a user?
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
@@ -126,11 +149,9 @@ export default function LandingPage() {
       >
         <div className="absolute inset-0 bg-white/70 backdrop-blur-sm pointer-events-none" />
         <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-8 opacity-80 hover:opacity-100 transition-all duration-500 relative z-10">
-          <p className="text-sm font-bold uppercase tracking-wider text-brand-800 whitespace-nowrap drop-shadow-sm">Trusted by students from</p>
+          <p className="text-sm font-bold uppercase tracking-wider text-brand-800 whitespace-nowrap drop-shadow-sm">Powered by</p>
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
-            {['IIT BOMBAY', 'NIT TRICHY', 'VIT', 'SRM', 'BITS PILANI'].map(name => (
-              <div key={name} className="font-headline font-black text-xl tracking-tighter text-brand-900 drop-shadow-sm">{name}</div>
-            ))}
+            <div className="font-headline font-black text-2xl md:text-3xl tracking-tighter text-brand-900 drop-shadow-sm text-center">Siva Sivani Degree College</div>
           </div>
         </div>
       </section>
@@ -208,16 +229,22 @@ export default function LandingPage() {
         <div className="max-w-2xl mx-auto px-6 text-center relative z-10">
           <h2 className="font-headline text-4xl md:text-5xl font-bold mb-6">Ready to start?</h2>
           <p className="text-white/70 mb-10">Join thousands of students who have already illuminated their career path with LanTURN.</p>
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => { e.preventDefault(); window.location.href = '/login'; }}>
-            <input
-              className="flex-grow bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/50 focus:outline-none focus:border-white/50 text-sm"
-              placeholder="Enter your student email"
-              type="email"
-            />
-            <button className="bg-white text-brand-900 font-bold text-sm px-8 py-3 rounded-lg hover:bg-white/90 transition-colors whitespace-nowrap" type="submit">
-              Join Now
-            </button>
-          </form>
+          {user ? (
+            <Link to="/dashboard" className="inline-block bg-white text-brand-900 font-bold text-sm px-8 py-3 rounded-lg hover:bg-white/90 transition-colors shadow-soft-sm">
+              Return to your Dashboard
+            </Link>
+          ) : (
+            <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onSubmit={e => { e.preventDefault(); window.location.href = '/login'; }}>
+              <input
+                className="flex-grow bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/50 focus:outline-none focus:border-white/50 text-sm"
+                placeholder="Enter your student email"
+                type="email"
+              />
+              <button className="bg-white text-brand-900 font-bold text-sm px-8 py-3 rounded-lg hover:bg-white/90 transition-colors whitespace-nowrap" type="submit">
+                Join Now
+              </button>
+            </form>
+          )}
         </div>
         {/* Background elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
