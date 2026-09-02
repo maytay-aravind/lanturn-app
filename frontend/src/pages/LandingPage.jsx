@@ -105,72 +105,13 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Dashboard Preview Mockup */}
-          <div className="relative z-10 w-full bg-white rounded-lg border border-brand-100 shadow-soft-lg overflow-hidden p-6 flex flex-col gap-4 animate-slide-up">
-            {/* Mock header */}
-            <div className="flex justify-between items-center border-b border-brand-100 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center">
-                  <UserPlus className="h-4 w-4 text-brand-500" />
-                </div>
-                <div>
-                  <div className="h-3 w-24 bg-brand-100 rounded mb-2" />
-                  <div className="h-2 w-16 bg-brand-50 rounded" />
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <div className="w-8 h-8 rounded-lg border border-brand-100 flex items-center justify-center">
-                  <div className="w-3 h-3 rounded-full bg-brand-200" />
-                </div>
-              </div>
-            </div>
-            {/* Mock stat cards */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-surface-muted rounded-lg p-4 border border-brand-100">
-                <div className="h-2 w-16 bg-brand-100 rounded mb-4" />
-                <div className="flex items-end gap-2 mb-2">
-                  <div className="h-8 w-16 bg-brand-900 rounded" />
-                  <span className="text-xs text-accent font-semibold">+14%</span>
-                </div>
-                <div className="w-full h-12 flex items-end gap-1">
-                  {[40, 60, 30, 80, 50].map((h, i) => (
-                    <div key={i} className={`w-full rounded-t ${i === 3 ? 'bg-brand-900' : 'bg-brand-200'}`} style={{ height: `${h}%` }} />
-                  ))}
-                </div>
-              </div>
-              <div className="bg-surface-muted rounded-lg p-4 border border-brand-100 flex flex-col justify-between">
-                <div className="h-2 w-20 bg-brand-100 rounded mb-4" />
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center">
-                      <div className="w-3 h-3 rounded-full bg-accent" />
-                    </div>
-                    <div className="h-3 w-24 bg-brand-100 rounded" />
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center">
-                      <div className="w-3 h-3 rounded-full bg-brand-400" />
-                    </div>
-                    <div className="h-3 w-16 bg-brand-100 rounded" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            {/* Mock list */}
-            <div className="flex-grow bg-surface-muted rounded-lg p-4 border border-brand-100">
-              <div className="h-2 w-24 bg-brand-100 rounded mb-4" />
-              <div className="space-y-3">
-                {[32, 24].map((w, i) => (
-                  <div key={i} className="h-10 w-full bg-white border border-brand-100 rounded flex items-center px-4 justify-between">
-                    <div className={`h-2 bg-brand-100 rounded`} style={{ width: `${w * 4}px` }} />
-                    <div className="h-2 w-12 bg-brand-50 rounded" />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Decorative geometric shapes */}
-            <div className="absolute -z-10 top-10 -right-10 w-40 h-40 border border-brand-100/40 rounded-full" />
-            <div className="absolute -z-10 -bottom-10 -left-10 w-32 h-32 border border-brand-100/40 rotate-45" />
+          {/* Hero Logo Image with Dot Matrix Background */}
+          <div className="relative z-10 w-full rounded-2xl shadow-soft-lg overflow-hidden flex flex-col items-center justify-center p-12 animate-slide-up bg-white/80 backdrop-blur-sm border border-brand-100" style={{ minHeight: '420px' }}>
+            {/* Dot matrix background */}
+            <div className="absolute inset-0 z-0" style={{ backgroundImage: 'radial-gradient(#C2185B 2px, transparent 2px)', backgroundSize: '24px 24px', opacity: 0.1 }} />
+            
+            {/* The Logo */}
+            <img src="/hero-logo.png" alt="LanTURN Hero" className="relative z-10 w-full h-auto max-w-md object-contain drop-shadow-sm hover:scale-105 transition-transform duration-500" />
           </div>
         </div>
       </section>
