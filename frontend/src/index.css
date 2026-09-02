@@ -254,11 +254,16 @@
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* ── Scrollbar ──────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { @apply rounded-full bg-brand-200; }
-::-webkit-scrollbar-thumb:hover { @apply bg-brand-300; }
+/* ── Hide Scrollbar ───────────────────────────────────────────── */
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar { 
+  display: none; 
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
 
 /* ── Dark Theme Invert ─────────────────────────────────────────────── */
 html.dark-theme {
