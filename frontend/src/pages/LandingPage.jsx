@@ -129,12 +129,12 @@ export default function LandingPage() {
           </div>
 
           {/* Hero Logo Image with Dot Matrix Background */}
-          <div className="relative z-10 w-fit mx-auto rounded-2xl shadow-soft-lg overflow-hidden flex flex-col items-center justify-center p-8 md:p-12 animate-slide-up bg-white/80 backdrop-blur-sm border border-brand-100" style={{ minHeight: '380px' }}>
+          <div className="relative z-10 w-fit mx-auto rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col items-center justify-center p-8 md:p-12 animate-slide-up bg-transparent border-[6px] border-brand-900/10" style={{ minHeight: '380px' }}>
             {/* Dot matrix background */}
-            <div className="absolute inset-0 z-0" style={{ backgroundImage: 'radial-gradient(#C2185B 2px, transparent 2px)', backgroundSize: '24px 24px', opacity: 0.1 }} />
+            <div className="absolute inset-0 z-0 bg-white/10" style={{ backgroundImage: 'radial-gradient(rgba(136,14,79,0.3) 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
             
             {/* The Logo */}
-            <img src="/hero-logo.png" alt="LanTURN Hero" className="relative z-10 w-full h-auto max-w-sm object-contain drop-shadow-sm hover:scale-105 transition-transform duration-500" />
+            <img src="/hero-logo.png" alt="LanTURN Hero" className="relative z-10 w-full h-auto max-w-sm object-contain drop-shadow-[0_15px_15px_rgba(136,14,79,0.3)] hover:scale-105 transition-transform duration-500" />
           </div>
         </div>
       </section>
