@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { jobService, joobleService } from '../../services/job.service.js';
 import { applicationService } from '../../services/application.service.js';
@@ -147,14 +148,14 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
     : null;
   const isApplied = j.hasApplied || false;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onClose}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md animate-fade-in" />
+      <div className="absolute inset-0 bg-white/30 backdrop-blur-md animate-fade-in" />
 
       {/* Dialog */}
       <div
-        className="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up"
+        className="relative bg-white rounded-3xl shadow-soft-2xl ring-1 ring-brand-100 w-full max-w-2xl max-h-[90vh] overflow-hidden animate-slide-up flex flex-col"
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
@@ -544,7 +545,8 @@ function JobDetailDialog({ job, studentProfile, onClose, onApply, isApplying }) 
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
