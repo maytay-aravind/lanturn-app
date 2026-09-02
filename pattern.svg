@@ -1,0 +1,60 @@
+<svg width="320" height="320" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="lotusTile" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <!-- Background -->
+      <rect width="80" height="80" fill="#FFC107" />
+      
+      <!-- Lotus Dot Matrix Design (80x80 Tile) -->
+      <!-- Center dot -->
+      <circle cx="40" cy="40" r="1.5" fill="#880E4F" />
+      
+      <!-- Inner Petals -->
+      <circle cx="40" cy="32" r="1.5" fill="#880E4F" />
+      <circle cx="40" cy="48" r="1.5" fill="#880E4F" />
+      <circle cx="32" cy="40" r="1.5" fill="#880E4F" />
+      <circle cx="48" cy="40" r="1.5" fill="#880E4F" />
+      
+      <!-- Diagonals -->
+      <circle cx="34" cy="34" r="1.5" fill="#880E4F" />
+      <circle cx="46" cy="34" r="1.5" fill="#880E4F" />
+      <circle cx="34" cy="46" r="1.5" fill="#880E4F" />
+      <circle cx="46" cy="46" r="1.5" fill="#880E4F" />
+      
+      <!-- Outer Petal Outlines -->
+      <!-- Top -->
+      <circle cx="40" cy="24" r="1.5" fill="#880E4F" />
+      <circle cx="36" cy="20" r="1.5" fill="#880E4F" />
+      <circle cx="44" cy="20" r="1.5" fill="#880E4F" />
+      
+      <!-- Bottom -->
+      <circle cx="40" cy="56" r="1.5" fill="#880E4F" />
+      <circle cx="36" cy="60" r="1.5" fill="#880E4F" />
+      <circle cx="44" cy="60" r="1.5" fill="#880E4F" />
+      
+      <!-- Left -->
+      <circle cx="24" cy="40" r="1.5" fill="#880E4F" />
+      <circle cx="20" cy="36" r="1.5" fill="#880E4F" />
+      <circle cx="20" cy="44" r="1.5" fill="#880E4F" />
+      
+      <!-- Right -->
+      <circle cx="56" cy="40" r="1.5" fill="#880E4F" />
+      <circle cx="60" cy="36" r="1.5" fill="#880E4F" />
+      <circle cx="60" cy="44" r="1.5" fill="#880E4F" />
+      
+      <!-- Corner Dots for Connectivity -->
+      <circle cx="0" cy="0" r="1.5" fill="#880E4F" />
+      <circle cx="80" cy="0" r="1.5" fill="#880E4F" />
+      <circle cx="0" cy="80" r="1.5" fill="#880E4F" />
+      <circle cx="80" cy="80" r="1.5" fill="#880E4F" />
+      
+      <!-- Connecting accents -->
+      <circle cx="10" cy="40" r="1.2" fill="#880E4F" opacity="0.6"/>
+      <circle cx="70" cy="40" r="1.2" fill="#880E4F" opacity="0.6"/>
+      <circle cx="40" cy="10" r="1.2" fill="#880E4F" opacity="0.6"/>
+      <circle cx="40" cy="70" r="1.2" fill="#880E4F" opacity="0.6"/>
+    </pattern>
+  </defs>
+  
+  <!-- Render 4x4 Grid (320x320) -->
+  <rect width="320" height="320" fill="url(#lotusTile)" />
+</svg>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -1003,6 +1003,12 @@ export default function CareerAIslePage() {
   const [enrolling, setEnrolling] = useState(null);
   const [activeTab, setActiveTab] = useState(location.state?.roadmapId || null);
 
+  // Toggle green background on body for CareerAisle page
+  useEffect(() => {
+    document.body.classList.add('career-aisle-bg');
+    return () => document.body.classList.remove('career-aisle-bg');
+  }, []);
+
   const { data: domains = [] } = useQuery({
     queryKey: ['roadmaps', 'domains'],
     queryFn: roadmapService.listDomains,
@@ -1044,7 +1050,10 @@ export default function CareerAIslePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="relative">
+      {/* Translucent frosted glass backdrop behind all content */}
+      <div className="absolute inset-0 -mx-4 sm:-mx-6 -my-6 bg-white/40 backdrop-blur-md rounded-2xl pointer-events-none" style={{ zIndex: 0 }} />
+    <div className="space-y-6 relative" style={{ zIndex: 1 }}>
       {/* Page header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
@@ -1188,6 +1197,7 @@ export default function CareerAIslePage() {
           />
         )}
       </AnimatePresence>
+    </div>
     </div>
   );
 }
