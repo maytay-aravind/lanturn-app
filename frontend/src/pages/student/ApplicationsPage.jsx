@@ -8,7 +8,7 @@ import { timeAgo } from '../../lib/utils.js';
 import toast from 'react-hot-toast';
 import {
   Briefcase, ChevronRight, AlertCircle, FileText,
-  LayoutGrid, List, Clock, CheckCircle2, XCircle, Eye, UserCheck,
+  LayoutGrid, List, Clock, CheckCircle2, XCircle, Eye, UserCheck, ArrowDown
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -51,64 +51,69 @@ function KanbanColumn({ column, items, onWithdraw, withdrawPending, t }) {
   const Icon = column.icon;
 
   return (
-    <div className="flex-1 min-w-[240px] max-w-[320px] flex flex-col rounded-lg border-2 border-brand-200 bg-brand-50/80">
+    <div className="w-full flex flex-col rounded-3xl border border-white/60 bg-white/40 backdrop-blur-md shadow-soft-sm overflow-hidden">
       {/* Column header */}
-      <div className="px-4 py-3 border-b border-brand-200 flex items-center gap-2 flex-shrink-0">
+      <div className="px-6 py-4 border-b border-white/50 bg-white/60 backdrop-blur-md flex items-center gap-3 flex-shrink-0">
         <div
-          className="h-3 w-3 rounded-full flex-shrink-0"
+          className="h-3.5 w-3.5 rounded-full flex-shrink-0 ring-4 ring-white"
           style={{ backgroundColor: column.color }}
         />
-        <h3 className="text-sm font-bold text-brand-800 flex-1 truncate">
+        <h3 className="text-base font-bold text-brand-900 flex-1">
           {column.title}
         </h3>
-        <span className="text-xs font-semibold text-brand-400 bg-white rounded-full px-2 py-0.5 border border-brand-200">
+        <span className="text-sm font-semibold text-brand-700 bg-white shadow-sm rounded-full px-3 py-0.5 border border-brand-100">
           {items.length}
         </span>
       </div>
 
       {/* Cards */}
-      <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5 min-h-[100px] max-h-[60vh]">
-        {items.map((app) => (
-          <div
-            key={app.applicationId || app.id}
-            className="bg-white rounded-lg p-3.5 shadow-sm border border-brand-100 hover:shadow-md transition-shadow animate-slide-up"
-          >
-            <div className="flex items-start gap-2.5 mb-2">
-              <div className="h-8 w-8 rounded-lg bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 text-brand-700 font-bold text-sm">
-                {(app.companyName || '?').charAt(0).toUpperCase()}
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-brand-800 truncate">{app.jobTitle || 'Job'}</p>
-                <p className="text-[10px] text-brand-400 mt-0.5">{timeAgo(app.createdAt || app.appliedAt)}</p>
-              </div>
-            </div>
-
-            {app.coverLetter && (
-              <p className="text-[11px] text-brand-500 line-clamp-2 mb-2 pl-[42px]">{app.coverLetter}</p>
-            )}
-
-            {/* Withdraw button for submitted status */}
-            {(app.status === 'submitted' || app.status === 'pending') && (
-              <div className="pl-[42px]">
-                <button
-                  onClick={() => {
-                    if (confirm(t('apps.confirmWithdraw'))) {
-                      onWithdraw(app.applicationId || app.id);
-                    }
-                  }}
-                  disabled={withdrawPending}
-                  className="text-[10px] font-medium text-red-500 hover:text-red-700 transition-colors"
-                >
-                  {t('apps.withdraw')}
-                </button>
-              </div>
-            )}
+      <div className="p-5 bg-transparent min-h-[140px]">
+        {items.length === 0 ? (
+          <div className="h-full flex flex-col items-center justify-center text-brand-400 py-8 italic text-sm">
+            No applications in this stage
           </div>
-        ))}
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+            {items.map((app) => (
+              <div
+                key={app.applicationId || app.id}
+                className="bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-sm border border-brand-100 hover:shadow-md transition-shadow animate-slide-up flex flex-col justify-between h-full"
+              >
+                <div>
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="h-10 w-10 rounded-xl bg-brand-50 flex items-center justify-center flex-shrink-0 border border-brand-100 text-brand-700 font-bold text-sm">
+                      {(app.companyName || '?').charAt(0).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-bold text-brand-900 truncate">{app.jobTitle || 'Job'}</p>
+                      <p className="text-[11px] font-medium text-brand-500 mt-0.5">{app.companyName || 'Company'}</p>
+                      <p className="text-[10px] text-brand-400 mt-1">{timeAgo(app.createdAt || app.appliedAt)}</p>
+                    </div>
+                  </div>
 
-        {items.length === 0 && (
-          <div className="flex items-center justify-center h-16 text-xs text-brand-400 italic">
-            {t('apps.noApplications')}
+                  {app.coverLetter && (
+                    <p className="text-[12px] text-brand-600 line-clamp-3 mb-3 pl-[52px] leading-relaxed bg-brand-50/50 p-2 rounded-lg">{app.coverLetter}</p>
+                  )}
+                </div>
+
+                {/* Withdraw button for submitted status */}
+                {(app.status === 'submitted' || app.status === 'pending') && (
+                  <div className="mt-4 pt-3 border-t border-brand-100 flex justify-end">
+                    <button
+                      onClick={() => {
+                        if (confirm(t('apps.confirmWithdraw'))) {
+                          onWithdraw(app.applicationId || app.id);
+                        }
+                      }}
+                      disabled={withdrawPending}
+                      className="text-[11px] font-bold text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors"
+                    >
+                      {withdrawPending ? t('apps.withdrawing') : t('apps.withdraw')}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -213,16 +218,25 @@ export default function ApplicationsPage() {
         />
       ) : viewMode === 'kanban' ? (
         /* ── KANBAN VIEW ────────────────────────── */
-        <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
-          {KANBAN_COLUMNS.map((col) => (
-            <KanbanColumn
-              key={col.id}
-              column={col}
-              items={groupedByStatus[col.id] || []}
-              onWithdraw={(id) => withdrawMutation.mutate(id)}
-              withdrawPending={withdrawMutation.isPending}
-              t={t}
-            />
+        <div className="flex flex-col items-center w-full max-w-6xl mx-auto py-2">
+          {KANBAN_COLUMNS.map((col, index) => (
+            <div key={col.id} className="w-full flex flex-col items-center">
+              {index > 0 && (
+                <div className="flex flex-col items-center justify-center -my-1 z-10 text-brand-300">
+                  <div className="h-6 w-[2px] bg-brand-200"></div>
+                  <ArrowDown className="h-6 w-6 -mt-2 bg-white rounded-full text-brand-400" />
+                </div>
+              )}
+              <div className="w-full relative z-0">
+                <KanbanColumn
+                  column={col}
+                  items={groupedByStatus[col.id] || []}
+                  onWithdraw={(id) => withdrawMutation.mutate(id)}
+                  withdrawPending={withdrawMutation.isPending}
+                  t={t}
+                />
+              </div>
+            </div>
           ))}
         </div>
       ) : (

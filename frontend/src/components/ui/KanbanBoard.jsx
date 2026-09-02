@@ -10,12 +10,12 @@ import {
 } from '@dnd-kit/core';
 import {
   SortableContext,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useDroppable } from '@dnd-kit/core';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, ArrowDown } from 'lucide-react';
 
 /* ── Sortable Card Wrapper ───────────────────────────────────── */
 function SortableCard({ id, children }) {
@@ -49,38 +49,40 @@ function DroppableColumn({ column, items, renderCard, totalItems }) {
   return (
     <div
       ref={setNodeRef}
-      className={`flex-1 min-w-[260px] max-w-[340px] flex flex-col rounded-lg border-2 transition-all duration-200 ${
+      className={`w-full flex flex-col rounded-3xl border transition-all duration-200 overflow-hidden ${
         isOver
           ? 'border-indigo-400 bg-indigo-50/50 shadow-soft-lg shadow-indigo-100'
-          : 'border-brand-200 bg-brand-50/80'
+          : 'border-white/60 bg-white/40 backdrop-blur-md shadow-soft-sm'
       }`}
     >
       {/* Column header */}
-      <div className="px-4 py-3 border-b border-brand-200 flex items-center gap-2 flex-shrink-0">
+      <div className={`px-6 py-4 border-b flex items-center gap-3 flex-shrink-0 ${isOver ? 'border-indigo-200 bg-indigo-50' : 'border-white/50 bg-white/60 backdrop-blur-md'}`}>
         <div
-          className="h-3 w-3 rounded-full flex-shrink-0"
+          className="h-3.5 w-3.5 rounded-full flex-shrink-0 ring-4 ring-white"
           style={{ backgroundColor: column.color }}
         />
-        <h3 className="text-sm font-bold text-brand-800 flex-1 truncate">
+        <h3 className="text-base font-bold text-brand-900 flex-1">
           {column.title}
         </h3>
-        <span className="text-xs font-semibold text-brand-400 bg-white rounded-full px-2 py-0.5 border border-brand-200">
+        <span className="text-sm font-semibold text-brand-700 bg-white shadow-sm rounded-full px-3 py-0.5 border border-brand-100">
           {items.length}
         </span>
       </div>
 
       {/* Card list */}
-      <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5 min-h-[120px] max-h-[65vh]">
-        <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+      <div className="flex-1 p-5 min-h-[140px] bg-transparent">
+        <SortableContext items={items.map((i) => i.id)} strategy={rectSortingStrategy}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {items.map((item) => (
             <SortableCard key={item.id} id={item.id}>
               {renderCard(item)}
             </SortableCard>
           ))}
+          </div>
         </SortableContext>
 
         {items.length === 0 && (
-          <div className="flex items-center justify-center h-20 text-xs text-brand-400 italic">
+          <div className="flex items-center justify-center h-full min-h-[80px] text-xs text-brand-400 italic">
             Drop items here
           </div>
         )}
@@ -158,15 +160,24 @@ export default function KanbanBoard({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="flex gap-4 overflow-x-auto pb-4 snap-x">
-        {columns.map((col) => (
-          <DroppableColumn
-            key={col.id}
-            column={col}
-            items={itemsByColumn[col.id] || []}
-            renderCard={renderCard}
-            totalItems={items.length}
-          />
+      <div className="flex flex-col items-center w-full max-w-6xl mx-auto py-2">
+        {columns.map((col, index) => (
+          <div key={col.id} className="w-full flex flex-col items-center">
+            {index > 0 && (
+              <div className="flex flex-col items-center justify-center -my-1 z-10 text-brand-300">
+                <div className="h-6 w-[2px] bg-brand-200"></div>
+                <ArrowDown className="h-6 w-6 -mt-2 bg-white rounded-full text-brand-400" />
+              </div>
+            )}
+            <div className="w-full relative z-0">
+              <DroppableColumn
+                column={col}
+                items={itemsByColumn[col.id] || []}
+                renderCard={renderCard}
+                totalItems={items.length}
+              />
+            </div>
+          </div>
         ))}
       </div>
 
