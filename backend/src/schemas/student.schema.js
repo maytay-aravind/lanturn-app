@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
-const isoYear = z
-  .number()
-  .int()
-  .min(1980)
-  .max(2100);
+const isoYear = z.preprocess(
+  (val) => (val === '' ? undefined : val),
+  z.coerce.number().int().min(1980).max(2100)
+);
 
 const url = z.string().max(1000).or(z.literal('')).optional();
 

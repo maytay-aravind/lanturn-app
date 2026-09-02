@@ -27,7 +27,7 @@ export const employerProfileSchema = z
       .optional(),
     // New fields
     ceo: z.string().max(160).optional(),
-    foundedYear: z.coerce.number().int().min(1800).max(2100).optional().nullable(),
+    foundedYear: z.preprocess(val => val === '' ? undefined : val, z.coerce.number().int().min(1800).max(2100).optional().nullable()),
     headquarters: z.string().max(300).optional(),
     branches: z.array(z.string().max(200)).max(50).optional(),
     email: z.string().email().or(z.literal('')).optional(),
@@ -37,7 +37,7 @@ export const employerProfileSchema = z
     companyCulture: z.string().max(5000).optional(),
     officeImages: z.array(looseUrl).max(10).optional(),
     logoURL: looseUrl,
-    employeeCount: z.coerce.number().int().min(0).optional().nullable(),
+    employeeCount: z.preprocess(val => val === '' ? undefined : val, z.coerce.number().int().min(0).optional().nullable()),
     linkedin: looseUrl,
     achievements: z.array(z.string().max(200)).max(50).optional(),
   })
