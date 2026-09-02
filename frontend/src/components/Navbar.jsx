@@ -82,7 +82,7 @@ export default function Navbar() {
       {/* Logo / Back */}
       {isOnDashboard ? (
         <NavLink to="/" className="flex items-center gap-2 mr-2 flex-shrink-0">
-          <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
+          <img src="/logo.jpeg" alt="lanTURN Logo" className="logo-light h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
           <img src="/logo-dark.jpeg" alt="lanTURN Logo" className="logo-dark h-10 w-auto object-contain keep-color" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
           <span className="text-lg font-extrabold text-white hidden sm:flex items-center tracking-tight">
             lan<span className="relative">TURN<ArrowRight className="absolute inset-0 text-accent opacity-60 w-full h-full -z-10" strokeWidth={4} style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} /></span>

@@ -281,3 +281,40 @@ html.dark-theme .keep-color {
 .logo-dark { display: none; }
 html.dark-theme .logo-light { display: none !important; }
 html.dark-theme .logo-dark { display: inline-block !important; }
+
+/* ── Deepam Loader Animations ────────────────────────────────── */
+.deepam-flame {
+  transform-origin: 24px 33px;
+  animation: deepamFlicker 0.9s ease-in-out infinite alternate;
+}
+.deepam-flame-inner {
+  transform-origin: 24px 31px;
+  animation: deepamFlicker 0.7s ease-in-out 0.15s infinite alternate;
+}
+.deepam-glow {
+  animation: deepamGlow 1.4s ease-in-out infinite alternate;
+}
+.deepam-text {
+  animation: deepamTextPulse 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes deepamFlicker {
+  0%   { transform: scaleX(1) scaleY(1); opacity: 0.85; }
+  20%  { transform: scaleX(0.93) scaleY(1.05); opacity: 0.78; }
+  40%  { transform: scaleX(1.04) scaleY(0.95); opacity: 0.9; }
+  60%  { transform: scaleX(0.96) scaleY(1.07); opacity: 0.82; }
+  80%  { transform: scaleX(1.03) scaleY(0.97); opacity: 0.88; }
+  100% { transform: scaleX(0.98) scaleY(1.02); opacity: 0.84; }
+}
+
+@keyframes deepamGlow {
+  0%   { opacity: 0.15; transform: scale(0.9); }
+  50%  { opacity: 0.3;  transform: scale(1.15); }
+  100% { opacity: 0.2;  transform: scale(1); }
+}
+
+@keyframes deepamTextPulse {
+  0%   { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
