@@ -82,7 +82,7 @@ export default function Navbar() {
       {/* Logo / Back */}
       {isOnDashboard ? (
         <NavLink to="/" className="flex items-center gap-2 mr-2 flex-shrink-0">
-          <img src="/hero-logo.png" alt="lanTURN Logo" className="h-10 w-auto object-contain keep-color" />
+          <img src="/hero-logo.png" alt="lanTURN Logo" className="h-10 w-auto object-contain brightness-0 invert" />
           <span className="text-lg font-extrabold text-white hidden sm:flex items-center tracking-tight">
             lan<span className="relative">TURN<ArrowRight className="absolute inset-0 text-accent opacity-60 w-full h-full -z-10" strokeWidth={4} style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }} /></span>
           </span>
@@ -93,7 +93,7 @@ export default function Navbar() {
           className="flex items-center gap-2 h-9 px-3 rounded-md text-white/80 hover:bg-white/10 hover:text-white transition-colors flex-shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
-          <img src="/hero-logo.png" alt="lanTURN" className="h-7 w-auto object-contain keep-color" />
+          <img src="/hero-logo.png" alt="lanTURN" className="h-7 w-auto object-contain brightness-0 invert" />
         </button>
       )}
 
