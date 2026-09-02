@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3 } from 'lucide-react';
+import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3 } from 'lucide-react';
 
 const STATS = [
   { value: '500+', label: 'Placements' },
@@ -21,13 +22,32 @@ const FEATURES = [
 ];
 
 export default function LandingPage() {
+  // Parallax scroll driver for background flower pattern
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          document.body.style.setProperty('--scroll-y', String(window.scrollY));
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-surface-muted" style={{ backgroundImage: 'radial-gradient(circle at center, #E8E8E8 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
+    <div className="min-h-screen bg-transparent">
       {/* ── Nav ──────────────────────────────────────────── */}
       <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-brand-100" style={{ boxShadow: '0 1px 3px rgba(0,0,0,0.04)' }}>
         <div className="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
-          <Link to="/" className="font-headline text-2xl font-bold tracking-tighter text-brand-900 flex items-center gap-2">
-            LanTURN <span className="w-2 h-2 rounded-full bg-accent inline-block" />
+          <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
+            <img src="/logo.jpeg" alt="LanTURN Logo" className="h-10 w-auto object-contain" style={{ imageRendering: '-webkit-optimize-contrast', clipPath: 'inset(16%)', margin: '0 -14px' }} />
+            <span className="font-headline text-2xl font-bold tracking-tighter text-brand-900 flex items-center gap-1">
+              LanTURN <span className="w-2 h-2 rounded-full bg-accent inline-block" />
+            </span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <a href="#how-it-works" className="text-brand-400 hover:text-brand-900 transition-colors font-medium text-sm">How It Works</a>
@@ -35,8 +55,8 @@ export default function LandingPage() {
             <a href="#stats" className="text-brand-400 hover:text-brand-900 transition-colors font-medium text-sm">Stats</a>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/login" className="text-sm font-semibold text-brand-900 hover:text-accent transition-colors">Login</Link>
-            <Link to="/login" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2">
+            <Link to="/login" className="text-sm font-semibold text-brand-900 hover:text-accent transition-colors">Sign In</Link>
+            <Link to="/login?mode=signup" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2">
               Get Started
             </Link>
           </div>
@@ -46,7 +66,9 @@ export default function LandingPage() {
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative px-6 md:px-12 pt-32 pb-20 md:pt-40 md:pb-32 max-w-7xl mx-auto overflow-hidden">
         <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="z-10 animate-fade-in">
+          <div className="z-10 animate-fade-in relative">
+            {/* Semi-transparent backdrop for text readability over pattern */}
+            <div className="absolute -inset-8 bg-[#FFC107]/80 backdrop-blur-sm rounded-2xl -z-10" />
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-100 bg-white mb-8">
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               <span className="text-xs font-semibold tracking-wide uppercase text-brand-500">AI Placement Platform</span>
@@ -54,21 +76,24 @@ export default function LandingPage() {
             <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tight text-brand-900 leading-[1.1] mb-6">
               Your Career<br />Starts Here<span className="text-accent">.</span>
             </h1>
-            <p className="text-lg md:text-xl text-brand-400 mb-10 max-w-lg leading-relaxed">
+            <p className="text-lg md:text-xl text-brand-700 mb-10 max-w-lg leading-relaxed">
               AI-powered placement platform connecting students with the right employers based on skills, potential, and cultural fit.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Link
-                to="/login"
+                to="/login?mode=signup"
                 className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
               >
                 Get Started Free
                 <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block group-hover:scale-150 transition-transform" />
               </Link>
-              <button className="text-sm font-semibold bg-transparent text-brand-900 border border-brand-200 px-6 py-3.5 rounded-lg hover:bg-brand-50 transition-colors flex items-center gap-2">
-                <Play className="h-4 w-4" />
-                Watch Demo
-              </button>
+              <Link
+                to="/login"
+                className="text-sm font-semibold text-brand-900 border border-brand-200 bg-white/80 px-6 py-3.5 rounded-lg hover:bg-white transition-colors flex items-center gap-2"
+              >
+                Already a user?
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           </div>
 

@@ -237,17 +237,19 @@ export default function EmployerDashboard() {
   return (
     <div className="space-y-6">
       {/* ── Header ──────────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-brand-900">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 -mx-4 sm:-mx-6 -mt-6 px-6 sm:px-8 pt-8 pb-6 bg-brand-900 rounded-b-2xl border-b-4 border-accent shadow-soft-lg relative overflow-hidden">
+        {/* Subtle dot pattern on header */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
+        <div className="relative z-10">
+          <h1 className="text-2xl font-bold text-white">
             {t('empDash.welcomeBack', { name: profile?.companyName || 'Employer' })}
           </h1>
-          <p className="text-sm text-brand-400 mt-0.5">
+          <p className="text-sm text-white/60 mt-0.5">
             {profile?.industry && `${profile.industry} · `}
             {t('empDash.overview')}
           </p>
         </div>
-        <Link to="/employer/jobs" className="btn-primary btn-sm flex items-center gap-1.5 self-start">
+        <Link to="/employer/jobs" className="btn bg-accent text-brand-900 font-bold border-2 border-brand-900 shadow-soft-md hover:shadow-soft-lg btn-sm flex items-center gap-1.5 self-start relative z-10">
           <Briefcase className="h-3.5 w-3.5" /> {t('empDash.postJob')}
         </Link>
       </div>

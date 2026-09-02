@@ -403,21 +403,23 @@ export default function StudentDashboard() {
   return (
     <div className="space-y-8 animate-fade-in pb-12">
       {/* ── Header Row ──────────────────────────────────── */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-brand-100">
-        <div>
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-brand-100 bg-white mb-3 shadow-soft-sm">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 -mx-4 sm:-mx-6 -mt-6 px-6 sm:px-8 pt-8 bg-brand-900 rounded-b-2xl border-b-4 border-accent shadow-soft-lg relative overflow-hidden">
+        {/* Subtle dot pattern on header */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.5) 1px, transparent 1px)', backgroundSize: '12px 12px' }} />
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full border border-white/20 bg-white/10 mb-3">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            <span className="text-[11px] font-bold tracking-wide uppercase text-brand-600">Student Portal</span>
+            <span className="text-[11px] font-bold tracking-wide uppercase text-white/80">Student Portal</span>
           </div>
-          <h1 className="font-headline text-3xl md:text-4xl font-bold text-brand-900 tracking-tight">
+          <h1 className="font-headline text-3xl md:text-4xl font-bold text-white tracking-tight">
             {t('studentDash.welcomeBack', { name: displayName })}
           </h1>
-          <p className="text-brand-400 text-sm md:text-base mt-1">{t('studentDash.overview')}</p>
+          <p className="text-white/60 text-sm md:text-base mt-1">{t('studentDash.overview')}</p>
         </div>
 
         <Link
           to="/jobs"
-          className="btn-primary flex items-center gap-2 shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all self-start md:self-auto"
+          className="btn bg-accent text-brand-900 font-bold border-2 border-brand-900 shadow-soft-md hover:shadow-soft-lg hover:-translate-y-0.5 active:translate-y-0 transition-all self-start md:self-auto flex items-center gap-2 relative z-10"
         >
           <Target className="h-4 w-4" />
           {t('studentDash.findJobs')}

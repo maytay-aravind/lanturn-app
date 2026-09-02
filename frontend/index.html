@@ -15,7 +15,7 @@
 
     <!-- Inline critical loading styles so skeleton shows INSTANTLY -->
     <style>
-      body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #FAFAFA; }
+      body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #FFC107; }
       #root-loader {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         min-height: 100vh; gap: 16px; padding: 24px;
@@ -28,8 +28,8 @@
       /* Skeleton shell (visible before React mounts) */
       .skel-shell { max-width: 1024px; margin: 0 auto; padding: 80px 24px 24px; width: 100%; }
       .skel-row { display: flex; gap: 16px; margin-bottom: 16px; }
-      .skel-box { background: #E8E8E8; border-radius: 16px; animation: skel-pulse 1.5s ease-in-out infinite; }
-      .skel-nav { height: 56px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.04); position: fixed; top: 0; left: 0; right: 0; z-index: 50; }
+      .skel-box { background: rgba(255,255,255,0.5); border-radius: 16px; animation: skel-pulse 1.5s ease-in-out infinite; }
+      .skel-nav { height: 56px; background: rgba(136,14,79,0.9); box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: fixed; top: 0; left: 0; right: 0; z-index: 50; }
       @keyframes skel-pulse { 0%,100%{opacity:0.6} 50%{opacity:0.3} }
     </style>
   </head>

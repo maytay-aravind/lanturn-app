@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { useLanguage } from '../contexts/LanguageContext.jsx';
 import toast from 'react-hot-toast';
@@ -12,10 +12,11 @@ export default function LoginPage() {
     logout, firebaseUser, role, isOnboarded, loading,
   } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useLanguage();
 
   const [signingIn, setSigningIn] = useState(false);
-  const [mode, setMode] = useState('signin');           // 'signin' | 'signup'
+  const [mode, setMode] = useState(() => searchParams.get('mode') === 'signup' ? 'signup' : 'signin');           // 'signin' | 'signup'
   const [authMethod, setAuthMethod] = useState('email'); // 'email' | 'phone'
 
   // Email form state

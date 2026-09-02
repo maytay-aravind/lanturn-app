@@ -28,8 +28,24 @@ export default function Layout() {
     }
   }, [firebaseUser, role, isPublic, queryClient]);
 
+  // Parallax scroll driver — updates CSS custom property on body
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          document.body.style.setProperty('--scroll-y', String(window.scrollY));
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-surface-muted">
+    <div className="min-h-screen bg-transparent">
       {firebaseUser && !isPublic && <Navbar />}
       <main className={firebaseUser && !isPublic ? 'pt-14' : ''}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">

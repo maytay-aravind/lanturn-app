@@ -34,28 +34,28 @@ function PageLoader() {
     <div className="space-y-6 animate-pulse" style={{ minHeight: '60vh' }}>
       {/* Heading skeleton */}
       <div className="space-y-2">
-        <div className="h-7 w-56 bg-white/80 rounded-lg" />
-        <div className="h-4 w-80 bg-white/60 rounded-lg" />
+        <div className="h-7 w-56 bg-white/50 rounded-lg" />
+        <div className="h-4 w-80 bg-white/40 rounded-lg" />
       </div>
       {/* Stat cards skeleton */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[1, 2, 3, 4].map(i => (
-          <div key={i} className="bg-white rounded-lg p-5 space-y-3 shadow-soft-md border border-brand-100">
-            <div className="h-10 w-10 bg-brand-50 rounded-lg" />
-            <div className="h-3 w-20 bg-brand-50 rounded" />
-            <div className="h-6 w-16 bg-brand-100 rounded" />
+          <div key={i} className="bg-white/60 rounded-lg p-5 space-y-3 border border-white/30">
+            <div className="h-10 w-10 bg-white/40 rounded-lg" />
+            <div className="h-3 w-20 bg-white/30 rounded" />
+            <div className="h-6 w-16 bg-white/40 rounded" />
           </div>
         ))}
       </div>
       {/* Content cards skeleton */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-lg p-6 space-y-4 shadow-soft-md border border-brand-100">
-          <div className="h-4 w-40 bg-brand-100 rounded" />
-          <div className="h-28 w-full bg-brand-50 rounded-lg" />
+        <div className="bg-white/60 rounded-lg p-6 space-y-4 border border-white/30">
+          <div className="h-4 w-40 bg-white/40 rounded" />
+          <div className="h-28 w-full bg-white/30 rounded-lg" />
         </div>
-        <div className="bg-white rounded-lg p-6 space-y-4 shadow-soft-md border border-brand-100">
-          <div className="h-4 w-36 bg-brand-100 rounded" />
-          <div className="h-28 w-full bg-brand-50 rounded-lg" />
+        <div className="bg-white/60 rounded-lg p-6 space-y-4 border border-white/30">
+          <div className="h-4 w-36 bg-white/40 rounded" />
+          <div className="h-28 w-full bg-white/30 rounded-lg" />
         </div>
       </div>
     </div>
