@@ -13,7 +13,6 @@ import {
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
   { id: 'verification', label: 'Post Verification', icon: ShieldCheck },
-  { id: 'jobs', label: 'Job Management', icon: Briefcase },
   { id: 'users', label: 'User Management', icon: Users },
 ];
 
@@ -865,7 +864,7 @@ export default function AdminPage() {
       </div>
 
       {/* Tab Bar */}
-      <div className="flex items-center gap-1 overflow-x-auto pb-1 border-b border-brand-100">
+      <div className="bg-white/40 backdrop-blur-md border border-white/50 p-1.5 rounded-2xl shadow-soft-sm inline-flex items-center gap-1 overflow-x-auto mb-4">
         {TABS.map(tab => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -873,17 +872,14 @@ export default function AdminPage() {
             <button
               key={tab.id}
               onClick={() => switchTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-medium transition-all whitespace-nowrap relative ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
                 isActive
-                  ? 'text-brand-700 bg-brand-50'
-                  : 'text-brand-500 hover:text-brand-700 hover:bg-brand-50'
+                  ? 'bg-white text-brand-900 shadow-sm ring-1 ring-brand-100/50'
+                  : 'text-brand-600 hover:text-brand-900 hover:bg-white/60'
               }`}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className={`h-4.5 w-4.5 ${isActive ? 'text-accent' : 'opacity-70'}`} />
               {tab.label}
-              {isActive && (
-                <div className="absolute bottom-0 left-2 right-2 h-0.5 bg-brand-600 rounded-full" />
-              )}
             </button>
           );
         })}
@@ -893,7 +889,6 @@ export default function AdminPage() {
       <div>
         {activeTab === 'dashboard' && <DashboardTab />}
         {activeTab === 'verification' && <PostVerificationTab />}
-        {activeTab === 'jobs' && <JobsTab />}
         {activeTab === 'users' && <UsersTab />}
       </div>
     </div>
