@@ -59,57 +59,61 @@ function DeepamSmall({ className }) {
   );
 }
 
-/* ── Large page-level deepam (64×80px) ──────────────────────── */
+/* ── Large page-level deepam (64×80px) — centered with glass card ── */
 function DeepamLarge({ className }) {
   return (
-    <div className={`flex flex-col items-center justify-center gap-4 ${className}`} style={{ minHeight: '60vh' }}>
-      <svg
-        width="64"
-        height="80"
-        viewBox="0 0 48 64"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="deepam-page"
-      >
-        {/* Warm glow */}
-        <circle cx="24" cy="18" r="14" fill="#FFC107" opacity="0.2" className="deepam-glow" />
+    <div className={`fixed inset-0 z-40 flex items-center justify-center ${className}`}>
+      {/* Frosted glass card */}
+      <div className="bg-white/55 backdrop-blur-xl rounded-2xl px-10 py-8 shadow-lg ring-1 ring-white/50 flex flex-col items-center gap-4">
+        <svg
+          width="64"
+          height="80"
+          viewBox="0 0 48 64"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="deepam-page"
+        >
+          {/* Warm glow */}
+          <circle cx="24" cy="18" r="14" fill="#FFC107" opacity="0.2" className="deepam-glow" />
 
-        {/* Flame — outer orange */}
-        <path
-          d="M24 4C24 4 16 16 16 25C16 29.4 19.6 33 24 33C28.4 33 32 29.4 32 25C32 16 24 4 24 4Z"
-          fill="#FF9800"
-          className="deepam-flame"
-        />
-        {/* Flame — inner yellow */}
-        <path
-          d="M24 12C24 12 19 20 19 26C19 28.8 21.2 31 24 31C26.8 31 29 28.8 29 26C29 20 24 12 24 12Z"
-          fill="#FFC107"
-          className="deepam-flame-inner"
-        />
-        {/* Flame — core white */}
-        <ellipse cx="24" cy="28" rx="2.5" ry="4" fill="#FFF8E1" opacity="0.9" />
+          {/* Flame — outer orange */}
+          <path
+            d="M24 4C24 4 16 16 16 25C16 29.4 19.6 33 24 33C28.4 33 32 29.4 32 25C32 16 24 4 24 4Z"
+            fill="#FF9800"
+            className="deepam-flame"
+          />
+          {/* Flame — inner yellow */}
+          <path
+            d="M24 12C24 12 19 20 19 26C19 28.8 21.2 31 24 31C26.8 31 29 28.8 29 26C29 20 24 12 24 12Z"
+            fill="#FFC107"
+            className="deepam-flame-inner"
+          />
+          {/* Flame — core white */}
+          <ellipse cx="24" cy="28" rx="2.5" ry="4" fill="#FFF8E1" opacity="0.9" />
 
-        {/* Wick */}
-        <rect x="23" y="32" width="2" height="3" rx="1" fill="#5D4037" />
+          {/* Wick */}
+          <rect x="23" y="32" width="2" height="3" rx="1" fill="#5D4037" />
 
-        {/* Bowl body */}
-        <path d="M4 38C4 46.8 13 54 24 54C35 54 44 46.8 44 38H4Z" fill="#8D5524" />
-        {/* Bowl rim highlight */}
-        <path d="M6 38C6 40 14 42 24 42C34 42 42 40 42 38H6Z" fill="#F57C00" />
-        {/* Bowl decorative wave */}
-        <path d="M8 44C12 42 16 46 20 44C24 42 28 46 32 44C36 42 40 46 40 44" fill="none" stroke="#FFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
-        {/* Bowl decorative dots */}
-        <circle cx="14" cy="48" r="1.2" fill="#FFC107" opacity="0.5" />
-        <circle cx="24" cy="49" r="1.2" fill="#FFC107" opacity="0.5" />
-        <circle cx="34" cy="48" r="1.2" fill="#FFC107" opacity="0.5" />
+          {/* Bowl body */}
+          <path d="M4 38C4 46.8 13 54 24 54C35 54 44 46.8 44 38H4Z" fill="#8D5524" />
+          {/* Bowl rim highlight */}
+          <path d="M6 38C6 40 14 42 24 42C34 42 42 40 42 38H6Z" fill="#F57C00" />
+          {/* Bowl decorative wave */}
+          <path d="M8 44C12 42 16 46 20 44C24 42 28 46 32 44C36 42 40 46 40 44" fill="none" stroke="#FFF" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
+          {/* Bowl decorative dots */}
+          <circle cx="14" cy="48" r="1.2" fill="#FFC107" opacity="0.5" />
+          <circle cx="24" cy="49" r="1.2" fill="#FFC107" opacity="0.5" />
+          <circle cx="34" cy="48" r="1.2" fill="#FFC107" opacity="0.5" />
 
-        {/* Base */}
-        <ellipse cx="24" cy="54" rx="10" ry="2.5" fill="#6D3A0A" />
-      </svg>
+          {/* Base */}
+          <ellipse cx="24" cy="54" rx="10" ry="2.5" fill="#6D3A0A" />
+        </svg>
 
-      <p className="text-sm font-semibold text-brand-600 tracking-wide deepam-text">
-        Lighting the path…
-      </p>
+        <p className="text-sm font-semibold text-brand-600 tracking-wide deepam-text">
+          Lighting the path…
+        </p>
+      </div>
     </div>
   );
 }
+
