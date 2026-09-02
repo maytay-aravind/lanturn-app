@@ -49,7 +49,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 300vh; /* Extra height for parallax travel — covers deep scroll */
+    height: 120vh; /* Extra height for parallax travel */
     background-image: url('/bandhani-pattern.svg');
     background-size: 160px 140px;
     background-repeat: repeat;
@@ -58,15 +58,6 @@
     will-change: transform;
     transform: translateY(calc(var(--scroll-y, 0) * -0.3px));
     pointer-events: none;
-    filter: blur(1.5px); /* Soft dreamy blur on flower patterns */
-  }
-
-  /* CareerAisle page — override background to rich green */
-  body.career-aisle-bg {
-    background-color: #16a34a;
-  }
-  body.career-aisle-bg::before {
-    background-color: #16a34a;
   }
 
   h1,h2,h3,h4 { @apply font-semibold tracking-tight; }
