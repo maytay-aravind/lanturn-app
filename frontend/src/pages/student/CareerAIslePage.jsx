@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useDebounce } from '../../hooks/useDebounce.js';
 import { useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -163,6 +164,7 @@ const DIFFICULTIES = ['All', 'Beginner', 'Intermediate', 'Advanced'];
 // ── Senior UI/UX Domain Picker Modal ─────────────────────────
 function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling }) {
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 200);
   const [selectedCategory, setSelectedCategory] = useState('All Roles');
   const [difficultyFilter, setDifficultyFilter] = useState('All');
   const [previewDomain, setPreviewDomain] = useState(null);
@@ -177,14 +179,14 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
     return counts;
   }, [domains]);
 
-  // Filtered domains
+  // Filtered domains — debounced search for smooth typing on mobile
   const filtered = useMemo(() => {
     return domains.filter((d) => {
       const cat = getDomainCategory(d);
       const matchesSearch =
-        d.title.toLowerCase().includes(search.toLowerCase()) ||
-        d.description.toLowerCase().includes(search.toLowerCase()) ||
-        cat.toLowerCase().includes(search.toLowerCase());
+        d.title.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        d.description.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        cat.toLowerCase().includes(debouncedSearch.toLowerCase());
 
       const matchesCat =
         selectedCategory === 'All Roles' || cat === selectedCategory;
@@ -195,7 +197,7 @@ function DomainPickerModal({ domains, enrolledIds, onEnroll, onClose, enrolling 
 
       return matchesSearch && matchesCat && matchesDifficulty;
     });
-  }, [domains, search, selectedCategory, difficultyFilter]);
+  }, [domains, debouncedSearch, selectedCategory, difficultyFilter]);
 
   return (
     <motion.div

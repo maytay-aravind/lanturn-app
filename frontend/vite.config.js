@@ -55,22 +55,22 @@ export default defineConfig({
     port: 5173,
   },
   build: {
+    cssCodeSplit: true,
     // Split vendors into cacheable chunks — browser loads only what's needed
     rollupOptions: {
       output: {
         manualChunks: {
-          // React core (rarely changes → cached long-term)
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          // Firebase Auth SDK (heavy, ~200KB)
           'vendor-firebase': ['firebase/app', 'firebase/auth'],
-          // Data fetching
           'vendor-query': ['@tanstack/react-query'],
-          // UI utilities
           'vendor-ui': ['react-hot-toast', 'axios'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-charts': ['recharts'],
+          'vendor-dnd': ['@dnd-kit/core', '@dnd-kit/sortable', '@dnd-kit/utilities'],
         },
       },
     },
-    // Increase warning threshold since we've manually split
     chunkSizeWarningLimit: 300,
+    reportCompressedSize: false,
   },
 });

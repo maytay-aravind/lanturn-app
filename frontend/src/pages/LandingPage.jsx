@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3 } from 'lucide-react';
+import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const STATS = [
@@ -24,6 +24,7 @@ const FEATURES = [
 
 export default function LandingPage() {
   const { user } = useAuth();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   
   // Parallax scroll driver for background flower pattern
   useEffect(() => {
@@ -64,7 +65,7 @@ export default function LandingPage() {
               <a href="#features" className="text-brand-800 hover:text-brand-900 transition-colors font-semibold text-sm drop-shadow-sm">Features</a>
               <a href="#stats" className="text-brand-800 hover:text-brand-900 transition-colors font-semibold text-sm drop-shadow-sm">Stats</a>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-4">
               {user ? (
                 <Link to="/dashboard" className="text-sm font-semibold bg-brand-900 text-white px-5 py-2.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 shadow-md">
                   Return to Dashboard
@@ -78,13 +79,41 @@ export default function LandingPage() {
                 </>
               )}
             </div>
+            {/* Mobile hamburger */}
+            <button
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              className="md:hidden h-9 w-9 rounded-lg flex items-center justify-center text-brand-900 hover:bg-brand-900/10 transition-colors"
+              aria-label={mobileNavOpen ? 'Close menu' : 'Open menu'}
+            >
+              {mobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
+          {/* Mobile drawer */}
+          {mobileNavOpen && (
+            <div className="md:hidden border-t border-brand-100 bg-white/95 backdrop-blur-md animate-slide-up">
+              <div className="px-6 py-4 flex flex-col gap-3 max-w-7xl mx-auto">
+                <a href="#how-it-works" onClick={() => setMobileNavOpen(false)} className="text-sm font-semibold text-brand-800 py-2 hover:text-brand-900">How It Works</a>
+                <a href="#features" onClick={() => setMobileNavOpen(false)} className="text-sm font-semibold text-brand-800 py-2 hover:text-brand-900">Features</a>
+                <a href="#stats" onClick={() => setMobileNavOpen(false)} className="text-sm font-semibold text-brand-800 py-2 hover:text-brand-900">Stats</a>
+                <div className="pt-3 border-t border-brand-100 flex flex-col gap-2">
+                  {user ? (
+                    <Link to="/dashboard" onClick={() => setMobileNavOpen(false)} className="text-center text-sm font-semibold bg-brand-900 text-white px-5 py-3 rounded-lg">Return to Dashboard</Link>
+                  ) : (
+                    <>
+                      <Link to="/login" onClick={() => setMobileNavOpen(false)} className="text-center text-sm font-bold text-brand-900 py-2">Sign In</Link>
+                      <Link to="/login?mode=signup" onClick={() => setMobileNavOpen(false)} className="text-center text-sm font-semibold bg-brand-900 text-white px-5 py-3 rounded-lg">Get Started</Link>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative px-6 md:px-12 pt-32 pb-20 md:pt-40 md:pb-32 max-w-7xl mx-auto overflow-hidden">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+      <section className="relative px-4 sm:px-6 md:px-12 pt-28 sm:pt-32 pb-12 sm:pb-20 md:pt-40 md:pb-32 max-w-7xl mx-auto overflow-hidden">
+        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
           <div className="z-10 animate-fade-in relative">
             {/* Semi-transparent backdrop for text readability over pattern */}
             <div className="absolute -inset-8 bg-[#F5F0E8]/80 backdrop-blur-sm rounded-2xl -z-10" />
@@ -92,10 +121,10 @@ export default function LandingPage() {
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               <span className="text-xs font-semibold tracking-wide uppercase text-brand-500">AI Placement Platform</span>
             </div>
-            <h1 className="font-headline text-5xl md:text-7xl font-bold tracking-tight text-brand-900 leading-[1.1] mb-6">
+            <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-brand-900 leading-[1.05] mb-6">
               Your Career<br />Starts Here<span className="text-accent">.</span>
             </h1>
-            <p className="text-lg md:text-xl text-brand-700 mb-10 max-w-lg leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-brand-700 mb-8 sm:mb-10 max-w-lg leading-relaxed">
               AI-powered placement platform connecting students with the right employers based on skills, potential, and cultural fit.
             </p>
             <div className="flex flex-wrap items-center gap-4">
@@ -129,12 +158,11 @@ export default function LandingPage() {
           </div>
 
           {/* Hero Logo Image with Dot Matrix Background */}
-          <div className="relative z-10 w-fit mx-auto rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col items-center justify-center p-8 md:p-12 animate-slide-up bg-transparent border-[6px] border-brand-900/10" style={{ minHeight: '380px' }}>
+          <div className="relative z-10 w-full max-w-sm mx-auto rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 animate-slide-up bg-transparent border-[6px] border-brand-900/10" style={{ minHeight: '280px' }}>
             {/* Dot matrix background */}
             <div className="absolute inset-0 z-0 bg-white/10" style={{ backgroundImage: 'radial-gradient(rgba(136,14,79,0.3) 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
-            
             {/* The Logo */}
-            <img src="/hero-logo.png" alt="LanTURN Hero" className="relative z-10 w-full h-auto max-w-sm object-contain drop-shadow-[0_15px_15px_rgba(136,14,79,0.3)] hover:scale-105 transition-transform duration-500" />
+            <img src="/hero-logo.png" alt="LanTURN Hero" width="384" height="320" loading="eager" decoding="async" fetchPriority="high" className="relative z-10 w-full h-auto object-contain drop-shadow-[0_15px_15px_rgba(136,14,79,0.3)] hover:scale-105 transition-transform duration-500" />
           </div>
         </div>
       </section>
@@ -179,12 +207,13 @@ export default function LandingPage() {
             <h2 className="font-headline text-4xl font-bold text-brand-900 mb-4">How It Works</h2>
             <p className="text-brand-400 max-w-2xl mx-auto">Three simple steps to connect your potential with the perfect opportunity.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
             {STEPS.map((step, i) => (
               <div
                 key={step.num}
-                className="bg-surface-muted border border-brand-100 p-8 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all relative group"
-                style={{ transform: `translateY(${i * 24}px)` }}
+                className={`bg-surface-muted border border-brand-100 p-6 sm:p-8 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all relative group ${
+                  i === 1 ? 'md:translate-y-6' : i === 2 ? 'md:translate-y-12' : ''
+                }`}
               >
                 <div className="absolute -top-4 -left-4 w-12 h-12 bg-brand-900 text-white font-headline font-bold text-xl flex items-center justify-center rounded-lg shadow-soft-sm">
                   {step.num}

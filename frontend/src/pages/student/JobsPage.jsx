@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useDebounce } from '../../hooks/useDebounce.js';
 import { createPortal } from 'react-dom';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { jobService, joobleService } from '../../services/job.service.js';
@@ -672,6 +673,7 @@ function InternalJobCard({ job, studentProfile, onClick }) {
 function InternalJobsTab() {
   const { t } = useLanguage();
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 350);
   const [typeFilter, setTypeFilter] = useState('');
   const [page, setPage] = useState({ limit: 50, cursor: null });
   const [selectedJob, setSelectedJob] = useState(null);
@@ -683,8 +685,8 @@ function InternalJobsTab() {
   });
 
   const { data, isLoading, isFetching, refetch } = useQuery({
-    queryKey: ['jobs', search, typeFilter, page],
-    queryFn: () => jobService.list({ q: search || undefined, jobType: typeFilter || undefined, ...page }),
+    queryKey: ['jobs', debouncedSearch, typeFilter, page],
+    queryFn: () => jobService.list({ q: debouncedSearch || undefined, jobType: typeFilter || undefined, ...page }),
   });
 
   const rawJobs = data?.items ?? [];

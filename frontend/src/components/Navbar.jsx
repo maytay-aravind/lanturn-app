@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { notificationService } from '../services/notification.service.js';
 import {
   ArrowLeft, ArrowRight, Bell, LogOut, ChevronDown, Moon, Sun, Globe, User,
-  LayoutDashboard, Briefcase, FileText, Sparkles, Map,
+  LayoutDashboard, Briefcase, FileText, Sparkles, Map, Menu, X,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -31,6 +31,7 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme') === 'dark';
     if (saved) document.documentElement.classList.add('dark-theme');
@@ -97,9 +98,9 @@ export default function Navbar() {
         </button>
       )}
 
-      {/* Nav icons — expand on hover to show label */}
+      {/* Nav icons — expand on hover to show label (desktop) */}
       {navLinks.length > 0 && (
-        <nav className="hidden sm:flex items-center gap-1 ml-2">
+        <nav className="hidden lg:flex items-center gap-1 ml-2">
           {navLinks.map(({ to, icon: Icon, label }) => {
             const isActive = location.pathname === to || (to !== dashboardPath && location.pathname.startsWith(to));
             return (
@@ -123,6 +124,18 @@ export default function Navbar() {
       )}
 
       <div className="flex-1" />
+
+      {/* Mobile menu toggle — visible < lg when nav exists */}
+      {navLinks.length > 0 && (
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="lg:hidden h-9 w-9 rounded-md flex items-center justify-center text-white/80 hover:bg-white/10 hover:text-white transition-colors flex-shrink-0"
+          aria-label={mobileOpen ? 'Close navigation' : 'Open navigation'}
+          aria-expanded={mobileOpen}
+        >
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      )}
 
       {/* Actions */}
       <div className="flex items-center gap-1">
@@ -224,6 +237,30 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Mobile nav drawer */}
+      {mobileOpen && navLinks.length > 0 && (
+        <div className="lg:hidden absolute top-14 left-0 right-0 bg-brand-900 border-t border-white/10 shadow-xl z-40 animate-slide-up">
+          <nav className="flex flex-col p-2 gap-1">
+            {navLinks.map(({ to, icon: Icon, label }) => {
+              const isActive = location.pathname === to || (to !== dashboardPath && location.pathname.startsWith(to));
+              return (
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-colors ${
+                    isActive ? 'bg-accent text-brand-900 border-2 border-brand-900' : 'text-white/90 hover:bg-white/10 hover:text-white'
+                  }`}
+                >
+                  <Icon className="h-5 w-5 flex-shrink-0" />
+                  {label}
+                </NavLink>
+              );
+            })}
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
