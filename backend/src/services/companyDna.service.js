@@ -100,7 +100,7 @@ async function buildCompanyContext(employerUid) {
   }
 
   if (parts.length < 3) {
-    throw AppError.unprocessable('Company profile is too sparse to generate DNA. Please complete your company profile first (add description, technologies, benefits, etc.).');
+    throw AppError.unprocessable("We need a bit more information to analyze your Company DNA! Please go to your profile settings and fill out at least 3 fields (such as Company Description, Technologies, Culture, or Benefits) so our AI can generate an accurate report.");
   }
 
   return { text: parts.join('\n'), employer };
