@@ -151,6 +151,7 @@ export default function ApplicationsPage() {
   });
 
   return (
+    <div className="bg-white/60 backdrop-blur-lg rounded-2xl p-5 shadow-sm ring-1 ring-white/40">
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
@@ -278,6 +279,7 @@ export default function ApplicationsPage() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

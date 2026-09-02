@@ -28,36 +28,75 @@ const AIHiringAssistantPage = lazy(() => import('./pages/employer/AIHiringAssist
 const AdminPage = lazy(() => import('./pages/admin/AdminPage.jsx'));
 const AdminLoginPage = lazy(() => import('./pages/admin/AdminLoginPage.jsx'));
 
-// Skeleton shell shown while lazy page chunks load
+// Deepam (South Indian oil lamp) loader — flame flickers while page loads
 function PageLoader() {
   return (
-    <div className="space-y-6 animate-pulse" style={{ minHeight: '60vh' }}>
-      {/* Heading skeleton */}
-      <div className="space-y-2">
-        <div className="h-7 w-56 bg-white/50 rounded-lg" />
-        <div className="h-4 w-80 bg-white/40 rounded-lg" />
-      </div>
-      {/* Stat cards skeleton */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {[1, 2, 3, 4].map(i => (
-          <div key={i} className="bg-white/60 rounded-lg p-5 space-y-3 border border-white/30">
-            <div className="h-10 w-10 bg-white/40 rounded-lg" />
-            <div className="h-3 w-20 bg-white/30 rounded" />
-            <div className="h-6 w-16 bg-white/40 rounded" />
-          </div>
-        ))}
-      </div>
-      {/* Content cards skeleton */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white/60 rounded-lg p-6 space-y-4 border border-white/30">
-          <div className="h-4 w-40 bg-white/40 rounded" />
-          <div className="h-28 w-full bg-white/30 rounded-lg" />
-        </div>
-        <div className="bg-white/60 rounded-lg p-6 space-y-4 border border-white/30">
-          <div className="h-4 w-36 bg-white/40 rounded" />
-          <div className="h-28 w-full bg-white/30 rounded-lg" />
-        </div>
-      </div>
+    <div className="flex flex-col items-center justify-center gap-4" style={{ minHeight: '60vh' }}>
+      <svg width="64" height="80" viewBox="0 0 64 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="deepam-loader">
+        {/* Warm glow behind flame */}
+        <circle cx="32" cy="28" r="18" fill="#FFC107" opacity="0.25" className="deepam-glow" />
+
+        {/* Flame — outer orange */}
+        <path
+          d="M32 6 C28 16, 22 22, 22 30 C22 36, 26 40, 32 40 C38 40, 42 36, 42 30 C42 22, 36 16, 32 6Z"
+          fill="#FF9800"
+          className="deepam-flame"
+        />
+        {/* Flame — inner yellow */}
+        <path
+          d="M32 14 C30 20, 26 24, 26 30 C26 34, 28 37, 32 37 C36 37, 38 34, 38 30 C38 24, 34 20, 32 14Z"
+          fill="#FFC107"
+          className="deepam-flame-inner"
+        />
+        {/* Flame — core white */}
+        <ellipse cx="32" cy="32" rx="3" ry="5" fill="#FFF8E1" opacity="0.9" />
+
+        {/* Wick */}
+        <rect x="31" y="38" width="2" height="4" rx="1" fill="#5D4037" />
+
+        {/* Oil bowl */}
+        <ellipse cx="32" cy="46" rx="14" ry="4" fill="#880E4F" />
+        <ellipse cx="32" cy="45" rx="12" ry="3" fill="#AD1457" />
+        <ellipse cx="32" cy="44" rx="10" ry="2" fill="#C2185B" />
+
+        {/* Stand / base */}
+        <path d="M28 50 L24 68 L40 68 L36 50Z" fill="#880E4F" />
+        <ellipse cx="32" cy="68" rx="12" ry="3" fill="#6A1B4D" />
+        <ellipse cx="32" cy="67" rx="10" ry="2.5" fill="#880E4F" />
+
+        {/* Decorative dots on bowl */}
+        <circle cx="24" cy="44" r="1" fill="#FFC107" opacity="0.6" />
+        <circle cx="32" cy="42" r="1" fill="#FFC107" opacity="0.6" />
+        <circle cx="40" cy="44" r="1" fill="#FFC107" opacity="0.6" />
+      </svg>
+
+      <p className="text-sm font-semibold text-brand-600 tracking-wide animate-pulse">Lighting the path…</p>
+
+      <style>{`
+        .deepam-flame {
+          transform-origin: 32px 40px;
+          animation: flameFlicker 0.8s ease-in-out infinite alternate;
+        }
+        .deepam-flame-inner {
+          transform-origin: 32px 37px;
+          animation: flameFlicker 0.6s ease-in-out 0.1s infinite alternate;
+        }
+        .deepam-glow {
+          animation: glowPulse 1.2s ease-in-out infinite alternate;
+        }
+        @keyframes flameFlicker {
+          0%   { transform: scaleX(1) scaleY(1); opacity: 1; }
+          25%  { transform: scaleX(0.92) scaleY(1.04); opacity: 0.9; }
+          50%  { transform: scaleX(1.05) scaleY(0.96); opacity: 1; }
+          75%  { transform: scaleX(0.95) scaleY(1.06); opacity: 0.85; }
+          100% { transform: scaleX(1.02) scaleY(0.98); opacity: 0.95; }
+        }
+        @keyframes glowPulse {
+          0%   { r: 16; opacity: 0.2; }
+          50%  { r: 22; opacity: 0.35; }
+          100% { r: 18; opacity: 0.25; }
+        }
+      `}</style>
     </div>
   );
 }
