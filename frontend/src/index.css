@@ -298,6 +298,13 @@ html.dark-theme .keep-color {
 html.dark-theme .logo-light { display: none !important; }
 html.dark-theme .logo-dark { display: inline-block !important; }
 
+/* ── CareerAisle — mobile vertical override (desktop untouched) ─ */
+@media (max-width: 768px) {
+  .career-timeline-line { left: 16px !important; transform: none !important; }
+  .career-timeline-row { padding-left: 40px !important; }
+  .career-panel { width: 100% !important; max-width: none !important; }
+}
+
 /* ── Deepam Loader Animations ────────────────────────────────── */
 .deepam-flame {
   transform-origin: 24px 33px;

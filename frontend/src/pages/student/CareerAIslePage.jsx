@@ -710,8 +710,7 @@ function StagePanel({ stage, stageIndex, side, completedSet, onToggleTopic, pend
       animate={{ opacity: 1, x: 0, y: 0, boxShadow: '6px 6px 0px #0f172a' }}
       transition={{ delay: stageIndex * 0.08, duration: 0.45, type: 'spring', stiffness: 200, damping: 24 }}
       whileHover={{ scale: 1.02, x: -2, y: -2, boxShadow: '8px 8px 0px #0f172a' }}
-      className={`${panelBg} border-[3px] border-slate-900 rounded-lg overflow-hidden z-10`}
-      style={{ width: 380 }}
+      className={`${panelBg} border-[3px] border-slate-900 rounded-lg overflow-hidden z-10 w-full max-w-full md:w-[380px] md:max-w-[380px] career-panel`}
     >
       {/* Coloured top accent bar */}
       <motion.div
@@ -893,8 +892,8 @@ function RoadmapTimeline({ roadmap, onRemove }) {
 
       {/* Center alternating timeline */}
       <div className="relative py-8">
-        {/* Vertical center line (Background + Progress) */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-1.5 bg-brand-200 -translate-x-1/2 z-0 rounded-full overflow-hidden">
+        {/* Vertical line — center on desktop, left on mobile */}
+        <div className="career-timeline-line absolute left-4 md:left-1/2 top-0 bottom-0 w-1.5 bg-brand-200 md:-translate-x-1/2 z-0 rounded-full overflow-hidden">
           <motion.div
             initial={{ height: 0 }}
             animate={{ height: `${roadmap.percentComplete}%` }}
@@ -917,11 +916,10 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: si * 0.08, duration: 0.4 }}
-                className="relative flex items-center justify-center"
-                style={{ minHeight: 300, paddingBottom: 48 }}
+                className="career-timeline-row relative flex flex-col md:flex-row md:items-center md:justify-center md:min-h-[300px] pl-10 md:pl-0 pb-6 md:pb-12"
               >
-                {/* Left slot */}
-                <div className="flex-1 flex justify-end pr-10">
+                {/* Left slot — hidden on mobile when side is right, full-width vertical on mobile */}
+                <div className="flex-1 flex justify-start md:justify-end pr-0 md:pr-10 w-full md:w-auto order-2 md:order-none">
                   {side === 'left' && (
                     <StagePanel
                       stage={stage}
@@ -937,7 +935,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 </div>
 
                 {/* Center node */}
-                <div className="flex-shrink-0 flex flex-col items-center z-10">
+                <div className="career-timeline-node flex-shrink-0 flex flex-col items-start md:items-center z-10 order-1 md:order-none self-start md:self-center ml-6 md:ml-0 mb-3 md:mb-0 w-full md:w-auto">
                   {/* Stage pill node */}
                   <motion.div
                     layout
@@ -963,7 +961,7 @@ function RoadmapTimeline({ roadmap, onRemove }) {
                 </div>
 
                 {/* Right slot */}
-                <div className="flex-1 flex justify-start pl-10">
+                <div className="flex-1 flex justify-start md:pl-10 pl-0 w-full md:w-auto order-2 md:order-none">
                   {side === 'right' && (
                     <StagePanel
                       stage={stage}

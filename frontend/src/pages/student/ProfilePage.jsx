@@ -501,24 +501,27 @@ export default function ProfilePage() {
             </>
           )}
 
-          {/* Resume status inline */}
+          {/* Resume status inline — mobile: stacked + wrap, desktop: row */}
           <>
             <div className="divider my-4" />
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                <FileText className="h-4 w-4 text-emerald-600" />
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+              <div className="flex items-center gap-3 w-full sm:flex-1 min-w-0">
+                <div className="h-8 w-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                  <FileText className="h-4 w-4 text-emerald-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-emerald-800 truncate">
+                    {p.resumeUrl ? 'Resume uploaded' : 'No resume uploaded'}
+                  </p>
+                  {p.resumeUrl && <p className="text-xs text-emerald-600/70 sm:hidden">Tap a button below</p>}
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-emerald-800">
-                  {p.resumeUrl ? 'Resume uploaded' : 'No resume uploaded'}
-                </p>
-              </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:flex-shrink-0">
                 {p.resumeUrl && (
                   <button
                     onClick={handleViewResume}
                     disabled={viewingResume}
-                    className="btn-secondary btn-sm flex items-center gap-1.5"
+                    className="btn-secondary btn-sm flex-1 sm:flex-none min-w-[112px] justify-center flex items-center gap-1.5"
                   >
                     {viewingResume ? <Loader2 className="h-3 w-3 animate-spin" /> : <ExternalLink className="h-3 w-3" />}
                     {viewingResume ? 'Opening...' : 'View Resume'}
@@ -527,7 +530,7 @@ export default function ProfilePage() {
                 {p.resumeUrl && (
                   <button
                     onClick={() => navigate('/ai?tab=review')}
-                    className="btn-secondary btn-sm flex items-center gap-1.5 text-brand-600 ring-brand-200 hover:ring-brand-300 hover:bg-brand-50"
+                    className="btn-secondary btn-sm flex-1 sm:flex-none min-w-[96px] justify-center flex items-center gap-1.5 text-brand-600 ring-brand-200 hover:ring-brand-300 hover:bg-brand-50"
                   >
                     <BarChart3 className="h-3 w-3" />
                     AI Score
@@ -537,7 +540,7 @@ export default function ProfilePage() {
                   <button
                     onClick={handleExtract}
                     disabled={extracting}
-                    className="btn-primary btn-sm flex items-center gap-1.5"
+                    className="btn-primary btn-sm flex-1 sm:flex-none min-w-[104px] justify-center flex items-center gap-1.5"
                   >
                     {extracting
                       ? <Loader2 className="h-3 w-3 animate-spin" />
@@ -548,7 +551,7 @@ export default function ProfilePage() {
                 <button
                   onClick={() => resumeRef.current?.click()}
                   disabled={resumePct !== null}
-                  className="btn-primary btn-sm flex items-center gap-1.5"
+                  className="btn-primary btn-sm w-full sm:w-auto flex-none justify-center flex items-center gap-1.5 mt-1 sm:mt-0"
                 >
                   <Upload className="h-3 w-3" />
                   {p.resumeUrl ? 'Update' : 'Upload Resume'}
