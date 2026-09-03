@@ -269,24 +269,7 @@ export default function Navbar() {
         </>
       )}
 
-      {/* Bottom tab bar — mobile only, always visible for tab switching */}
-      {navLinks.length > 0 && (
-        <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-brand-900 flex justify-around items-center h-16 px-1 z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
-          {navLinks.map(({ to, icon: Icon, label }) => {
-            const isActive = location.pathname === to || (to !== dashboardPath && location.pathname.startsWith(to));
-            return (
-              <NavLink
-                key={to}
-                to={to}
-                className={`flex flex-col items-center justify-center gap-0.5 py-1 px-3 rounded-xl min-w-[56px] transition-colors ${isActive ? 'text-brand-900 bg-brand-50 ring-1 ring-brand-200' : 'text-brand-400 hover:text-brand-700'}`}
-              >
-                <Icon className={`h-5 w-5 ${isActive ? 'text-brand-900' : 'text-brand-400'}`} />
-                <span className={`text-[10px] font-bold leading-none tracking-wide ${isActive ? 'text-brand-900' : 'text-brand-400'}`}>{label}</span>
-              </NavLink>
-            );
-          })}
-        </nav>
-      )}
+
     </header>
   );
 }

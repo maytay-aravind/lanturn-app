@@ -44,11 +44,10 @@ export default function Layout() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const hasBottomNav = firebaseUser && !isPublic && role !== 'admin' && role != null;
   return (
     <div className="min-h-screen bg-transparent">
       {firebaseUser && !isPublic && <Navbar />}
-      <main className={`${firebaseUser && !isPublic ? 'pt-14' : ''} ${hasBottomNav ? 'pb-20 lg:pb-6' : ''}`}>
+      <main className={`${firebaseUser && !isPublic ? 'pt-14' : ''}`}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
           <Outlet />
         </div>
