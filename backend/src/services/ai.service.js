@@ -126,7 +126,8 @@ Output STRICT JSON only matching this schema:
 radarChart must contain exactly 6 items. Return only the JSON.`;
 
 const EXTRACT_PROMPT = `You are an AI extracting student profile data from a resume for a job-matching platform.
-Extract the data and map it to the following JSON schema. Do NOT invent information. If a field is missing, omit it or use null.
+Extract ONLY from the provided text. Do NOT guess, infer, or hallucinate any details. If information is not explicitly stated in the resume, you MUST omit the field or return null. Quote exactly from the document where possible.
+Extract the data and map it to the following JSON schema.
 Output STRICT JSON only:
 {
   "personal": { "name": "string", "phone": "string", "city": "string" },
@@ -330,7 +331,7 @@ export async function extractResumeData(uid) {
       systemPrompt: EXTRACT_PROMPT,
       userContent: resumeText,
       responseFormat: true,
-      temperature: 0.1,
+      temperature: 0.0,
     });
 
     log.info({ uid, keys: Object.keys(result || {}) }, 'Gemini extracted resume data');

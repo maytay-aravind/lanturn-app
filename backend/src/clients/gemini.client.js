@@ -5,7 +5,7 @@ import { AppError } from '#utils/httpErrors.js';
 const log = logger_for('gemini.client');
 
 const GEMINI_BASE = 'https://generativelanguage.googleapis.com/v1beta/models';
-const MODEL = 'gemini-3.6-flash';
+const MODEL = 'gemini-1.5-flash';
 
 /**
  * Call the Gemini API with a structured prompt.
@@ -22,7 +22,7 @@ export async function callGemini({ systemPrompt, userContent, responseFormat, te
     throw AppError.unprocessable('Gemini API key not configured.');
   }
 
-  const MODELS = [MODEL, 'gemini-1.5-flash', 'gemini-1.5-pro'];
+  const MODELS = [MODEL, 'gemini-1.5-flash-8b', 'gemini-1.5-flash'];
 
   const body = {
     contents: [
