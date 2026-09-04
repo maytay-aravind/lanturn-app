@@ -342,7 +342,7 @@ export default function LandingPage() {
         <div className="w-full h-full bg-white/70 backdrop-blur-md">
           <div className="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
             <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
-              <img src="/hero-logo.png" alt="LanTURN Logo" className="h-10 w-auto object-contain" />
+              <img src="/modi-pic.png" alt="LanTURN Logo" className="h-10 w-auto object-contain" />
               <span className="font-headline text-2xl font-bold tracking-tighter text-brand-900 flex items-center gap-1">
                 LanTURN <span className="w-2 h-2 rounded-full bg-accent inline-block" />
               </span>
@@ -449,7 +449,7 @@ export default function LandingPage() {
             {/* Dot matrix background */}
             <div className="absolute inset-0 z-0 bg-white/10" style={{ backgroundImage: 'radial-gradient(rgba(136,14,79,0.3) 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
             {/* The Logo */}
-            <img src="/hero-logo.png" alt="LanTURN Hero" width="384" height="320" loading="eager" decoding="async" fetchPriority="high" className="relative z-10 w-full h-auto object-contain drop-shadow-[0_15px_15px_rgba(136,14,79,0.3)] hover:scale-105 transition-transform duration-500" />
+            <img src="/modi-pic.png" alt="LanTURN Hero" width="384" height="320" loading="eager" decoding="async" fetchPriority="high" className="relative z-10 w-full h-auto object-contain drop-shadow-[0_15px_15px_rgba(136,14,79,0.3)] hover:scale-105 transition-transform duration-500" />
           </div>
         </div>
       </section>
