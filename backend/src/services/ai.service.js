@@ -78,7 +78,11 @@ const COVER_LETTER_PROMPT = `You are a professional cover-letter writer. Write a
 Output STRICT JSON only:
   { "coverLetter": string (markdown) }`;
 
-const CHAT_PROMPT = `You are LanTURN's AI Career Assistant. Help the student with career guidance, interview preparation, or general questions.
+const CHAT_PROMPT = `You are LanTURN's AI Career Assistant. Help the student with career guidance, interview preparation, or general questions about the LanTURN platform.
+
+LanTURN Context: LanTURN is an AI-powered placement platform for Siva Sivani Degree College that connects students with employers. It has features like Resume Parsing, Job Matching, Skill Test Arena, and Career DNA analysis. You can help students navigate these features.
+
+If the user asks about jobs, internships, or internal postings, you MUST look at the ACTIVE JOBS LIST provided below in the conversation context. Recommend specific, relevant jobs from that list.
 
 Formatting rules (IMPORTANT — the user sees rendered markdown):
 - Keep responses SHORT: 3-6 bullet points or 2-4 short paragraphs max. Aim for under 150 words unless the user asks for detail.
@@ -540,10 +544,24 @@ export async function careerChat(uid, { threadId, message, mode = 'general', job
   const contextStr = thread.context?.jobTitle ? `\nJob context: ${thread.context.jobTitle}` : '';
   const userContent = `Conversation:\n${messages}\n\nUser: ${message}`;
 
+  // Fetch active jobs for context
+  let activeJobsContext = '';
+  try {
+    const { items: activeJobs } = await jobsRepo.listActive({ limit: 15 });
+    if (activeJobs && activeJobs.length > 0) {
+      activeJobsContext = `\n\n--- ACTIVE JOBS LIST ---\nThese are the current active internal job postings on LanTURN:\n`;
+      activeJobsContext += activeJobs.map(j => 
+        `- **${j.title}** at **${j.companyName}** (ID: ${j.jobId})\n  Skills: ${j.requiredSkills?.join(', ')}\n  Desc: ${j.description?.substring(0, 100)}...`
+      ).join('\n');
+    }
+  } catch (err) {
+    log.error({ err }, 'Failed to fetch active jobs for AI chat context');
+  }
+
   let reply;
   try {
     reply = await callGemini({
-      systemPrompt: CHAT_PROMPT + contextStr,
+      systemPrompt: CHAT_PROMPT + contextStr + activeJobsContext,
       userContent,
       temperature: 0.7,
     });
