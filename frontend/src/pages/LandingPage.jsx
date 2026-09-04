@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3, Menu, X, Shield, ScrollText, Headphones, Mail, Phone, MapPin } from 'lucide-react';
+import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3, Menu, X, Shield, ScrollText, Headphones, Mail, Phone, MapPin, Settings, Network, Users, Gift, Info } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const STATS = [
-  { value: '500+', label: 'Placements' },
-  { value: '120+', label: 'Employers' },
-  { value: '95%', label: 'Match Rate' },
+  { value: '13947', label: 'Online Services', icon: Settings },
+  { value: '3680', label: 'Government Schemes', icon: Network },
+  { value: '2318', label: 'Citizen Engagements', icon: Users },
+  { value: '3980', label: 'Tourist Places', icon: MapPin },
+  { value: '1207', label: 'ODOP Products', icon: Gift },
+  { value: '18', label: 'Information Categories', icon: Info },
 ];
 
 const STEPS = [
@@ -485,15 +488,27 @@ export default function LandingPage() {
       </section>
 
       {/* ── Stats ────────────────────────────────────────── */}
-      <section className="py-20 bg-surface-muted border-b border-brand-100" id="stats">
+      <section className="py-12 bg-white border-b border-brand-100 shadow-sm relative z-20" id="stats">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-brand-100">
-            {STATS.map(s => (
-              <div key={s.label} className="text-center py-6 md:py-0">
-                <div className="font-headline text-5xl font-bold text-brand-900 mb-2 flex justify-center items-baseline gap-1">
-                  {s.value.replace(/[^0-9]/g, '')}<span className="text-accent text-4xl">{s.value.replace(/[0-9]/g, '')}</span>
+          <div className="text-center mb-8">
+            <p className="text-xs font-semibold uppercase tracking-widest text-brand-400">
+              Verified records from official government sites
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-4">
+            {STATS.map((s, i) => (
+              <div key={s.label} className="flex items-center gap-3 justify-center md:justify-start">
+                <div className="text-accent flex-shrink-0">
+                  <s.icon className="w-8 h-8 md:w-10 md:h-10 stroke-[1.5]" />
                 </div>
-                <p className="text-sm font-semibold uppercase tracking-wide text-brand-400">{s.label}</p>
+                <div className="flex flex-col text-left">
+                  <span className="font-headline text-xl md:text-2xl font-bold text-brand-900 leading-none mb-0.5 md:mb-1">
+                    {s.value}
+                  </span>
+                  <span className="text-[10px] md:text-xs font-medium text-brand-600 leading-tight md:leading-snug">
+                    {s.label}
+                  </span>
+                </div>
               </div>
             ))}
           </div>
