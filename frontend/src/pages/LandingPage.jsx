@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3, Menu, X } from 'lucide-react';
+import { ArrowRight, UserPlus, Cpu, Briefcase, FileText, Radar, MessageSquare, BarChart3, Menu, X, Shield, ScrollText, Headphones, Mail, Phone, MapPin } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 const STATS = [
@@ -22,9 +22,286 @@ const FEATURES = [
   { icon: BarChart3, title: 'Skill Analysis', desc: 'Identify gaps in your knowledge based on current industry demands and trends.' },
 ];
 
+/* ─── Modal Component ─────────────────────────────── */
+function Modal({ open, onClose, title, icon: Icon, children }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    if (open) {
+      document.addEventListener('keydown', onKey);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div className="absolute inset-0 bg-brand-900/50 backdrop-blur-sm" />
+      <div
+        className="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-fade-in"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-brand-100 flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-brand-100 flex items-center justify-center text-brand-900">
+            <Icon className="h-5 w-5" />
+          </div>
+          <h2 className="font-headline text-xl font-bold text-brand-900 flex-1">{title}</h2>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-brand-400 hover:bg-brand-100 hover:text-brand-900 transition-colors"
+            aria-label="Close"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="overflow-y-auto px-6 py-6 text-sm text-brand-700 leading-relaxed space-y-4 flex-1">
+          {children}
+        </div>
+        <div className="px-6 py-4 border-t border-brand-100 flex justify-end flex-shrink-0">
+          <button
+            onClick={onClose}
+            className="text-sm font-semibold bg-brand-900 text-white px-5 py-2 rounded-lg hover:bg-brand-800 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Privacy Policy Content ─────────────────────── */
+function PrivacyPolicyContent() {
+  return (
+    <>
+      <p className="text-brand-400 text-xs">Last updated: September 2025</p>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">1. Introduction</h3>
+        <p>LanTURN is an AI-powered career placement platform operated by <strong>Siva Sivani Degree College</strong>. This Privacy Policy explains how we collect, use, store, and protect your personal information. By registering or using LanTURN, you agree to the practices described herein.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">2. Information We Collect</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li><strong>Account Information:</strong> Name, college email, student/employee ID, and role (Student or Employer).</li>
+          <li><strong>Academic Data:</strong> Course details, semester, CGPA, transcripts, and certifications you voluntarily upload.</li>
+          <li><strong>Resume &amp; Portfolio:</strong> Documents, project links, and skills you submit for AI analysis and matching.</li>
+          <li><strong>Employer Data:</strong> Company name, job descriptions, hiring preferences, and contact details.</li>
+          <li><strong>Usage Data:</strong> Log data, pages visited, feature interactions, and AI chat transcripts (stored anonymously for model improvement).</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">3. How We Use Your Data</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>To provide AI-driven job matching and career recommendations personalised to your profile.</li>
+          <li>To enable employers to discover and connect with qualified student candidates.</li>
+          <li>To generate skill-gap analyses and interview preparation suggestions.</li>
+          <li>To send placement updates, application status notifications, and platform announcements.</li>
+          <li>To improve the accuracy of our matching algorithms through anonymised, aggregated analysis.</li>
+          <li>To comply with college placement-cell reporting and accreditation requirements.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">4. Data Sharing</h3>
+        <p>We do <strong>not</strong> sell your personal data. Your profile is shared with employers only when you explicitly apply to a role. Aggregated, anonymised statistics may be shared with college administration for placement reporting. We engage trusted third-party providers (e.g., cloud infrastructure, AI APIs) under strict data-processing agreements.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">5. Data Security</h3>
+        <p>LanTURN uses Firebase Authentication, encrypted data transmission (TLS/HTTPS), and role-based access controls. Please safeguard your login credentials and report any suspicious activity immediately.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">6. Data Retention</h3>
+        <p>Your data is retained for the duration of your enrolment or employer partnership, plus an archival period of up to 2 years for placement records. You may request deletion at any time by contacting the placement cell.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">7. Your Rights</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Access or download a copy of your personal data.</li>
+          <li>Request correction of inaccurate information.</li>
+          <li>Withdraw consent for AI-based profile analysis (this will limit matching features).</li>
+          <li>Request account and data deletion.</li>
+        </ul>
+        <p className="mt-2">Contact us at <strong>lanturn@sivasivani.edu.in</strong> to exercise these rights.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">8. Cookies</h3>
+        <p>LanTURN uses session cookies for authentication and local storage for user preferences. We do not use advertising or cross-site tracking cookies.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">9. Changes to This Policy</h3>
+        <p>Significant changes will be communicated via the platform or your registered email. Continued use of LanTURN after changes constitutes acceptance of the revised policy.</p>
+      </section>
+    </>
+  );
+}
+
+/* ─── Terms of Service Content ───────────────────── */
+function TermsContent() {
+  return (
+    <>
+      <p className="text-brand-400 text-xs">Effective date: September 2025</p>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">1. Acceptance of Terms</h3>
+        <p>By accessing or using LanTURN, you agree to be bound by these Terms of Service. LanTURN is an initiative of <strong>Siva Sivani Degree College</strong> intended exclusively for registered students, faculty, and partner employers.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">2. Eligibility</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li><strong>Students:</strong> Must be currently enrolled at Siva Sivani Degree College with a valid institutional email.</li>
+          <li><strong>Employers:</strong> Must be registered organisations approved by the college placement cell.</li>
+          <li>Users must be at least 18 years of age.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">3. Account Responsibilities</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>You are responsible for maintaining the confidentiality of your login credentials.</li>
+          <li>You must provide accurate and truthful information in your profile, resume, and applications.</li>
+          <li>Any misrepresentation of qualifications or identity may result in immediate account suspension and disciplinary action.</li>
+          <li>Notify the platform immediately of any unauthorised use of your account.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">4. Permitted Use</h3>
+        <p>LanTURN is provided solely for legitimate career placement and hiring activities including profile creation, job applications, AI-assisted career counselling, and communication between students and approved employer representatives.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">5. Prohibited Conduct</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Uploading false credentials, forged documents, or plagiarised content.</li>
+          <li>Attempting to reverse-engineer or scrape the platform's AI models or data.</li>
+          <li>Spamming other users or sending unsolicited communications.</li>
+          <li>Using the platform for any purpose unrelated to career placement.</li>
+          <li>Sharing login credentials with any third party.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">6. AI-Generated Content</h3>
+        <p>LanTURN uses AI to generate resume suggestions, interview tips, skill-gap analyses, and job matches. These outputs are for informational purposes only and do not constitute professional career, legal, or financial advice. The platform does not guarantee placement or employment outcomes.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">7. Intellectual Property</h3>
+        <p>All platform content, AI models, branding, and code are the intellectual property of LanTURN / Siva Sivani Degree College. Users retain ownership of uploaded content but grant LanTURN a non-exclusive licence to process it for platform functionality.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">8. Termination</h3>
+        <p>The college reserves the right to suspend or terminate accounts that violate these Terms. Graduates retain read-only access to their placement history for up to one year after graduation.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">9. Limitation of Liability</h3>
+        <p>LanTURN and Siva Sivani Degree College are not liable for any employment decisions made by employers, failed placements, or losses arising from reliance on AI-generated recommendations. The platform is provided "as is" without warranties of any kind.</p>
+      </section>
+
+      <section>
+        <h3 className="font-headline font-bold text-brand-900 text-base mb-2">10. Governing Law</h3>
+        <p>These Terms are governed by the laws of India. Any disputes shall be subject to the jurisdiction of courts in Secunderabad, Telangana.</p>
+      </section>
+    </>
+  );
+}
+
+/* ─── Contact Support Content ────────────────────── */
+function ContactContent() {
+  return (
+    <div className="space-y-6">
+      <p>Need help with LanTURN? Our placement support team is here to assist students and employers alike. Reach out through any of the channels below.</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="bg-surface-muted border border-brand-100 rounded-xl p-4 flex gap-3 items-start">
+          <div className="w-9 h-9 rounded-lg bg-brand-100 flex items-center justify-center text-brand-900 flex-shrink-0">
+            <Mail className="h-4 w-4" />
+          </div>
+          <div>
+            <p className="font-semibold text-brand-900 text-sm mb-0.5">Email Support</p>
+            <p className="text-brand-400 text-xs mb-1">We respond within 24 hours</p>
+            <a href="mailto:lanturn@sivasivani.edu.in" className="text-accent font-medium text-xs hover:underline">lanturn@sivasivani.edu.in</a>
+          </div>
+        </div>
+
+        <div className="bg-surface-muted border border-brand-100 rounded-xl p-4 flex gap-3 items-start">
+          <div className="w-9 h-9 rounded-lg bg-brand-100 flex items-center justify-center text-brand-900 flex-shrink-0">
+            <Phone className="h-4 w-4" />
+          </div>
+          <div>
+            <p className="font-semibold text-brand-900 text-sm mb-0.5">Placement Cell</p>
+            <p className="text-brand-400 text-xs mb-1">Mon – Sat, 9 AM – 5 PM</p>
+            <a href="tel:+914027906006" className="text-accent font-medium text-xs hover:underline">+91 40 2790 6006</a>
+          </div>
+        </div>
+
+        <div className="bg-surface-muted border border-brand-100 rounded-xl p-4 flex gap-3 items-start sm:col-span-2">
+          <div className="w-9 h-9 rounded-lg bg-brand-100 flex items-center justify-center text-brand-900 flex-shrink-0">
+            <MapPin className="h-4 w-4" />
+          </div>
+          <div>
+            <p className="font-semibold text-brand-900 text-sm mb-0.5">Placement Office</p>
+            <p className="text-brand-400 text-xs leading-relaxed">
+              Siva Sivani Degree College, Kompally,<br />
+              Secunderabad, Telangana – 500014, India
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="border-t border-brand-100 pt-4">
+        <h3 className="font-headline font-bold text-brand-900 text-sm mb-3">Frequently Asked Questions</h3>
+        <div className="space-y-3">
+          {[
+            { q: 'How do I reset my password?', a: 'Click "Sign In" on the homepage, then use the "Forgot password?" link. A reset email will be sent to your registered college email address.' },
+            { q: "My profile isn't showing job matches — why?", a: 'Ensure your profile is at least 80% complete: upload your resume, fill in your skills, and set your placement preferences. The AI needs sufficient data to generate accurate matches.' },
+            { q: "I'm an employer — how do I post a job?", a: 'Log in with your employer account, navigate to the Jobs tab, and click "Post New Job". Your listing will be reviewed by the placement cell before going live.' },
+            { q: 'Can I use LanTURN after graduating?', a: 'Graduates retain read-only access to their placement history and offer letters for up to one year after their graduation date.' },
+          ].map(({ q, a }) => (
+            <div key={q} className="bg-white border border-brand-100 rounded-lg p-3">
+              <p className="font-semibold text-brand-900 text-xs mb-1">{q}</p>
+              <p className="text-brand-500 text-xs leading-relaxed">{a}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-brand-900 rounded-xl p-4 text-white text-center">
+        <p className="text-sm font-semibold mb-1">Can't find what you need?</p>
+        <p className="text-white/70 text-xs mb-3">Drop us an email and the LanTURN support team will get back to you within one business day.</p>
+        <a
+          href="mailto:lanturn@sivasivani.edu.in"
+          className="inline-block bg-white text-brand-900 text-xs font-bold px-4 py-2 rounded-lg hover:bg-white/90 transition-colors"
+        >
+          Send an Email
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const { user } = useAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [modal, setModal] = useState(null); // 'privacy' | 'terms' | 'contact' | null
   
   // Parallax scroll driver for background flower pattern
   useEffect(() => {
@@ -44,6 +321,16 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-transparent">
+      {/* ── Modals ──────────────────────────────────────── */}
+      <Modal open={modal === 'privacy'} onClose={() => setModal(null)} title="Privacy Policy" icon={Shield}>
+        <PrivacyPolicyContent />
+      </Modal>
+      <Modal open={modal === 'terms'} onClose={() => setModal(null)} title="Terms of Service" icon={ScrollText}>
+        <TermsContent />
+      </Modal>
+      <Modal open={modal === 'contact'} onClose={() => setModal(null)} title="Contact Support" icon={Headphones}>
+        <ContactContent />
+      </Modal>
       {/* ── Nav ──────────────────────────────────────────── */}
       <nav 
         className="fixed top-0 w-full z-50 border-b border-brand-100 shadow-sm" 
@@ -289,9 +576,9 @@ export default function LandingPage() {
             <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
           </div>
           <div className="flex flex-wrap justify-center gap-6">
-            <a className="text-sm text-brand-400 hover:text-brand-900 transition-colors" href="#">Privacy Policy</a>
-            <a className="text-sm text-brand-400 hover:text-brand-900 transition-colors" href="#">Terms of Service</a>
-            <a className="text-sm text-brand-400 hover:text-brand-900 transition-colors" href="#">Contact Support</a>
+            <button onClick={() => setModal('privacy')} className="text-sm text-brand-400 hover:text-brand-900 transition-colors">Privacy Policy</button>
+            <button onClick={() => setModal('terms')} className="text-sm text-brand-400 hover:text-brand-900 transition-colors">Terms of Service</button>
+            <button onClick={() => setModal('contact')} className="text-sm text-brand-400 hover:text-brand-900 transition-colors">Contact Support</button>
           </div>
           <p className="text-sm text-brand-300">
             © {new Date().getFullYear()} LanTURN. AI-Powered Excellence.
