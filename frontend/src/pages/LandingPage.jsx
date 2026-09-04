@@ -540,8 +540,18 @@ export default function LandingPage() {
       </section>
 
       {/* ── Features Grid ────────────────────────────────── */}
-      <section className="py-24 bg-surface-muted border-t border-brand-100" id="features">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <section 
+        className="py-24 border-t border-brand-100 relative overflow-hidden" 
+        id="features"
+        style={{
+          backgroundImage: 'url(/indian-touch.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <div className="absolute inset-0 bg-white/90 backdrop-blur-[2px] pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
           <div className="mb-16">
             <h2 className="font-headline text-4xl font-bold text-brand-900 mb-4">Platform Features</h2>
             <p className="text-brand-400 max-w-2xl">The tools you need to accelerate your transition from campus to career.</p>
