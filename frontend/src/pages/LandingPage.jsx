@@ -501,23 +501,31 @@ export default function LandingPage() {
             <p className="text-brand-400 max-w-2xl mx-auto">Three simple steps to connect your potential with the perfect opportunity.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {STEPS.map((step, i) => (
-              <div
-                key={step.num}
-                className={`bg-surface-muted border border-brand-100 p-6 sm:p-8 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all relative group ${
-                  i === 1 ? 'md:translate-y-6' : i === 2 ? 'md:translate-y-12' : ''
-                }`}
-              >
-                <div className="absolute -top-4 -left-4 w-12 h-12 bg-brand-900 text-white font-headline font-bold text-xl flex items-center justify-center rounded-lg shadow-soft-sm">
-                  {step.num}
+            {STEPS.map((step, i) => {
+              const theme = i === 0 
+                ? { bg: 'bg-[#FF9933]', border: 'border-[#FF9933]', text: 'text-white', desc: 'text-orange-50', badgeBg: 'bg-white', badgeText: 'text-[#FF9933]', iconBg: 'bg-white/20', iconText: 'text-white', hoverIconBg: 'group-hover:bg-white', hoverIconText: 'group-hover:text-[#FF9933]' }
+                : i === 1
+                ? { bg: 'bg-white', border: 'border-gray-200', text: 'text-brand-900', desc: 'text-brand-500', badgeBg: 'bg-[#000080]', badgeText: 'text-white', iconBg: 'bg-blue-50', iconText: 'text-[#000080]', hoverIconBg: 'group-hover:bg-[#000080]', hoverIconText: 'group-hover:text-white' }
+                : { bg: 'bg-[#138808]', border: 'border-[#138808]', text: 'text-white', desc: 'text-green-50', badgeBg: 'bg-white', badgeText: 'text-[#138808]', iconBg: 'bg-white/20', iconText: 'text-white', hoverIconBg: 'group-hover:bg-white', hoverIconText: 'group-hover:text-[#138808]' };
+
+              return (
+                <div
+                  key={step.num}
+                  className={`${theme.bg} ${theme.border} border p-6 sm:p-8 rounded-lg shadow-soft-md hover:shadow-soft-lg transition-all relative group ${
+                    i === 1 ? 'md:translate-y-6' : i === 2 ? 'md:translate-y-12' : ''
+                  }`}
+                >
+                  <div className={`absolute -top-4 -left-4 w-12 h-12 ${theme.badgeBg} ${theme.badgeText} font-headline font-bold text-xl flex items-center justify-center rounded-lg shadow-soft-sm`}>
+                    {step.num}
+                  </div>
+                  <div className={`w-12 h-12 ${theme.iconBg} rounded-lg mb-6 flex items-center justify-center ${theme.iconText} ${theme.hoverIconBg} ${theme.hoverIconText} transition-colors`}>
+                    <step.icon className="h-5 w-5" />
+                  </div>
+                  <h3 className={`font-headline text-xl font-bold ${theme.text} mb-3`}>{step.title}</h3>
+                  <p className={`text-sm ${theme.desc} leading-relaxed`}>{step.desc}</p>
                 </div>
-                <div className="w-12 h-12 bg-brand-100 rounded-lg mb-6 flex items-center justify-center text-brand-900 group-hover:bg-brand-900 group-hover:text-white transition-colors">
-                  <step.icon className="h-5 w-5" />
-                </div>
-                <h3 className="font-headline text-xl font-bold text-brand-900 mb-3">{step.title}</h3>
-                <p className="text-sm text-brand-400 leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
         {/* Dot matrix overlay */}
