@@ -399,57 +399,63 @@ export default function LandingPage() {
       </nav>
 
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative px-4 sm:px-6 md:px-12 pt-28 sm:pt-32 pb-12 sm:pb-20 md:pt-40 md:pb-32 max-w-7xl mx-auto overflow-hidden">
-        <div className="grid md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-center">
-          <div className="z-10 animate-fade-in relative">
-            {/* Semi-transparent backdrop for text readability over pattern */}
-            <div className="absolute -inset-8 bg-[#F5F0E8]/80 backdrop-blur-sm rounded-2xl -z-10" />
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-100 bg-white mb-8">
-              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span className="text-xs font-semibold tracking-wide uppercase text-brand-500">AI Placement Platform</span>
-            </div>
-            <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-brand-900 leading-[1.05] mb-6">
-              Your Career<br />Starts Here<span className="text-accent">.</span>
-            </h1>
-            <p className="text-base sm:text-lg md:text-xl text-brand-700 mb-8 sm:mb-10 max-w-lg leading-relaxed">
-              AI-powered placement platform connecting students with the right employers based on skills, potential, and cultural fit.
-            </p>
-            <div className="flex flex-wrap items-center gap-4">
-              {user ? (
-                <Link
-                  to="/dashboard"
-                  className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
-                >
-                  Return to Dashboard
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              ) : (
-                <>
+      <section className="relative pt-28 sm:pt-32 md:pt-40 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+          <div className="grid md:grid-cols-2 gap-8 sm:gap-12 md:gap-16 items-end">
+            <div className="z-10 animate-fade-in relative pb-12 sm:pb-20 md:pb-32">
+              {/* Semi-transparent backdrop for text readability over pattern */}
+              <div className="absolute -inset-8 bg-[#F5F0E8]/80 backdrop-blur-sm rounded-2xl -z-10" />
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-brand-100 bg-white mb-8">
+                <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                <span className="text-xs font-semibold tracking-wide uppercase text-brand-500">AI Placement Platform</span>
+              </div>
+              <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight text-brand-900 leading-[1.05] mb-6">
+                Your Career<br />Starts Here<span className="text-accent">.</span>
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl text-brand-700 mb-8 sm:mb-10 max-w-lg leading-relaxed">
+                AI-powered placement platform connecting students with the right employers based on skills, potential, and cultural fit.
+              </p>
+              <div className="flex flex-wrap items-center gap-4">
+                {user ? (
                   <Link
-                    to="/login?mode=signup"
+                    to="/dashboard"
                     className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
                   >
-                    Get Started Free
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block group-hover:scale-150 transition-transform" />
+                    Return to Dashboard
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
-                  <Link
-                    to="/login"
-                    className="text-sm font-semibold text-brand-900 border border-brand-200 bg-white/80 px-6 py-3.5 rounded-lg hover:bg-white transition-colors flex items-center gap-2"
-                  >
-                    Already a user?
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </>
-              )}
+                ) : (
+                  <>
+                    <Link
+                      to="/login?mode=signup"
+                      className="text-sm font-semibold bg-brand-900 text-white px-6 py-3.5 rounded-lg hover:bg-brand-800 transition-all flex items-center gap-2 group shadow-soft-md hover:shadow-soft-lg"
+                    >
+                      Get Started Free
+                      <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block group-hover:scale-150 transition-transform" />
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="text-sm font-semibold text-brand-900 border border-brand-200 bg-white/80 px-6 py-3.5 rounded-lg hover:bg-white transition-colors flex items-center gap-2"
+                    >
+                      Already a user?
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* Hero Logo Image with Dot Matrix Background */}
-          <div className="relative z-10 w-full max-w-sm mx-auto rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden flex flex-col items-center justify-center p-6 sm:p-8 md:p-12 animate-slide-up bg-transparent border-[6px] border-brand-900/10" style={{ minHeight: '280px' }}>
-            {/* Dot matrix background */}
-            <div className="absolute inset-0 z-0 bg-white/10" style={{ backgroundImage: 'radial-gradient(rgba(136,14,79,0.3) 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
-            {/* The Logo */}
-            <img src="/modi-pic.png" alt="LanTURN Hero" width="384" height="320" loading="eager" decoding="async" fetchPriority="high" className="relative z-10 w-full h-auto object-contain drop-shadow-[0_15px_15px_rgba(136,14,79,0.3)] hover:scale-105 transition-transform duration-500" />
+            {/* Hero Image - Filled and bottom-aligned */}
+            <div className="relative z-10 w-full h-full flex flex-col justify-end items-center md:items-end animate-slide-up pt-8 md:pt-0">
+              <img 
+                src="/modi-pic.png" 
+                alt="LanTURN Hero" 
+                loading="eager" 
+                decoding="async" 
+                fetchPriority="high" 
+                className="w-full max-w-lg md:max-w-[120%] lg:max-w-[130%] h-auto object-contain object-bottom drop-shadow-[0_20px_20px_rgba(136,14,79,0.2)] origin-bottom hover:scale-[1.02] transition-transform duration-500 translate-y-px md:translate-x-8 lg:translate-x-12" 
+              />
+            </div>
           </div>
         </div>
       </section>
