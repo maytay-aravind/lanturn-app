@@ -342,7 +342,7 @@ export default function LandingPage() {
         <div className="w-full h-full bg-white/70 backdrop-blur-md">
           <div className="flex justify-between items-center px-6 md:px-12 py-4 max-w-7xl mx-auto">
             <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
-              <img src="/modi-pic.png" alt="LanTURN Logo" className="h-10 w-auto object-contain" />
+              <img src="/hero-logo.png" alt="LanTURN Logo" className="h-10 w-auto object-contain" />
               <span className="font-headline text-2xl font-bold tracking-tighter text-brand-900 flex items-center gap-1">
                 LanTURN <span className="w-2 h-2 rounded-full bg-accent inline-block" />
               </span>
