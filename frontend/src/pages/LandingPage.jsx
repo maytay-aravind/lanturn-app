@@ -464,15 +464,22 @@ export default function LandingPage() {
       <section 
         className="border-y border-brand-100 relative overflow-hidden"
         style={{ 
-          backgroundImage: 'url(/orange-pattern.jpg)', 
-          backgroundRepeat: 'repeat'
+          backgroundImage: 'url(/bandhani-pattern.svg)', 
+          backgroundRepeat: 'repeat',
+          backgroundSize: '400px'
         }}
       >
-        <div className="absolute inset-0 bg-white/70 backdrop-blur-sm pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row items-center justify-between gap-8 opacity-80 hover:opacity-100 transition-all duration-500 relative z-10">
-          <p className="text-sm font-bold uppercase tracking-wider text-brand-800 whitespace-nowrap drop-shadow-sm">Powered by</p>
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16 items-center">
-            <div className="font-headline font-black text-2xl md:text-3xl tracking-tighter text-brand-900 drop-shadow-sm text-center">Siva Sivani Degree College</div>
+        <div className="absolute inset-0 bg-[#F5F0E8]/90 backdrop-blur-sm pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row items-center justify-between gap-8 hover:opacity-100 transition-all duration-500 relative z-10">
+          <div className="flex items-center gap-4">
+            <p className="text-sm font-bold uppercase tracking-wider text-brand-800 whitespace-nowrap drop-shadow-sm">Powered by</p>
+            <img src="/flag.jpg" alt="Indian Flag" className="h-8 w-auto rounded-sm shadow-sm opacity-90" />
+          </div>
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8 items-center">
+            <div className="font-headline font-black text-xl md:text-2xl tracking-tighter text-brand-900 drop-shadow-sm text-center">Siva Sivani Degree College</div>
+            <div className="bg-white p-1.5 rounded-lg shadow-sm border border-brand-100">
+              <img src="/logo.jpeg" alt="College Logo" className="h-10 md:h-12 w-auto object-contain rounded" />
+            </div>
           </div>
         </div>
       </section>
